@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Pakiety
+</div>
+
+<!-- body start -->
+
+    <h2> Pakiety</h2>
+
+<p>
+<em>Pakiet</em> jest przestrzeni&#261; nazw identyfikowan&#261; po nazwie gdzie zdefiniowane s&#261; funkcje i zmienne.  
+</p>
+
+<a name="package"></a>
+
+<div class="box">
+<div class="synopsis"><b>package</b><tt>( )</tt> lub
+<dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em><span style="font-family: monospace;">nazwaPakietu</span></em><tt>)</tt> lub</dd></div>
+<div class="synopsis2"><tt>(<a href="../apidoc/pnuts/lang/Package.html">Package</a> </tt><em><span style="font-family: monospace;">pakiet</span></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>package()</tt> wywo&#322;ane z jednym argumentem zmienia bie&#380;&#261;cy pakiet na wskazany w parametrze.  <tt>package()</tt>wywo&#322;ane bez parametru zwraca bie&#380;&#261;cy pakiet jako obiekt&nbsp; <a href="../apidoc/pnuts/lang/Package.html">Package</a>&nbsp;.
+</p>
+
+<pre class="eg">package("foo")   ==&gt; package "foo"<br>package()        ==&gt; package "foo"<br>package("")      ==&gt; package ""<br>package()        ==&gt; package ""<br></pre>
+
+<a name="use"></a>
+
+<div class="box">
+<div class="synopsis"><b>use</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em><span style="font-family: monospace;">nazwaPakietu</span></em><tt>)</tt></div>
+</div>
+
+<p>Ta wbudowana funkcja importuje wszystkie funkcje z&nbsp; <a href="module.html">modu&#322;u</a>, <span style="font-style: italic;">nazwaPakietu</span><em></em>. Zaimportowane funkcje mog&#261; by&#263; wo&#322;ane bez podawania nazwy pakietu.  
+</p>
+
+<pre class="eg">package("foo")<br>function x() 100<br>y = 200<br><br>package("bar")<br>use("foo")<br>x ==&gt; function x<br>y ==&gt; error<br><br>package("")<br>x ==&gt; error<br>y ==&gt; error<br></pre>
+
+<div class="box">
+<div class="synopsis"><em><span style="font-family: monospace;">pakiet</span></em><tt> . symbol</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">pakiet</span></em><tt> . symbol =&nbsp;</tt><em>warto&#347;&#263;</em></div>
+</div>
+
+<pre class="eg">foo = 100<br>package().foo     ==&gt; 100<br>package().foo = 200<br>foo               ==&gt; 200<br>package().bar     ==&gt; null<br></pre>
+
+
+<div class="box">
+<div class="synopsis"><em>pakiet</em> <b>.defined</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>nazwaSymbolu</em> <tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>kontekst</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>Package.defined</tt> sprawdza czy podany symbol jest zdefiniowany w danym pakiecie.
+</p>
+
+<pre class="eg">getPackage("foo")<br>context = getContext()<br>findPackage("foo").defined("bar", context)   ==&gt; false<br>foo::bar = 100<br>findPackage("foo").defined("bar", context)   ==&gt; true<br></pre>
+
+<div class="box">
+<div class="synopsis"><em>pakiet</em> <b>.clear</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em><span style="font-family: monospace;">nazwaSymbolu</span></em><tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em><span style="font-family: monospace;">kontekst</span></em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>Package.clear</tt> metoda kasuje podany symbol z pakietu.
+</p>
+
+<pre class="eg">context = getContext()<br>findPackage("foo").defined("bar", context)   ==&gt; true<br>findPackage("foo").clear("bar", context)<br>findPackage("foo").defined("bar", context)   ==&gt; false<br></pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt; Pakiety
+</div>
+
+</body></html>

@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Image Viewing & Manupilation</div>
+
+    <h2>Image Viewing & Manupilation</h2>
+
+<a name=showImage></a>
+<div class="box">
+<div class="synopsis"><b>showImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt> {, int </tt><em>width</em><tt>, int </tt><em>height</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>showImage()</tt> displays an image in a window.  When <em>width</em> and <em>height</em> are specified and the image size is larger than that, a scroll bar appears within the frame.
+</p>
+
+<div class="eg">e.g.
+<pre>
+im = getToolkit().getImage("test.jpg")
+showImage(im)
+</pre>
+</div>
+
+
+<a name=readImage></a>
+<div class="box">
+<div class="synopsis"><b>readImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> } )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>url</em><tt> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>path</em><tt> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>readImage()</tt> reads an image from file, URL, or InputStream.
+</p>
+
+<div class="eg">e.g.
+<pre>
+im = readImage("test.png")
+showImage(im)
+</pre>
+</div>
+
+<p>
+This function requires <a href="http://jcp.org/jsr/detail/15.jsp">Image I/O API</a>, which is a part of JDK1.4.
+</p>
+
+<a name=writeImage></a>
+<div class="box">
+<div class="synopsis"><b>writeImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>path</em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>file</em> <tt>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> <em>output</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeImage()</tt> writes the specified <em>image</em> to a file or an OutputStream.
+</p>
+
+<div class="eg">e.g.
+<pre>
+im = readImage("test.png")
+writeImage(im, "test.bmp")
+</pre>
+</div>
+
+<p>
+This function requires <a href="http://jcp.org/jsr/detail/15.jsp">Image I/O API</a>, which is a
+part of JDK1.4.X.
+</p>
+
+<a name=makeImage></a>
+<div class="box">
+<div class="synopsis"><b>makeImage</b><tt>(int </tt><em>width</em><tt>, int </tt><em>height</em><tt>, </tt><a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> <em>drawFunc</em> <tt> {, int </tt><em>imageType</em><tt> })</tt></div>
+</div>
+
+<p>
+A Image object of the size <em>width</em> x <em>height</em> is created
+and the function <em>drawFunc</em> is called to draw something, if it is not null. 
+</p>
+
+<blockquote>
+<em>drawFunc</em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Graphics.html">Graphics</a> </tt><em>graphics</em><tt>)</tt>
+</blockquote>
+
+
+<p>
+<em>imageType</em> can be one of the following constants:
+</p>
+
+<ul>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_CUSTOM">TYPE_CUSTOM</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_INT_RGB">TYPE_INT_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_INT_ARGB">TYPE_INT_ARGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_INT_ARGB_PRE">TYPE_INT_ARGB_PRE</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_INT_BGR">TYPE_INT_BGR</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_3BYTE_BGR">TYPE_3BYTE_BGR</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR">TYPE_4BYTE_ABGR</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR_PRE">TYPE_4BYTE_ABGR_PRE</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_565_RGB">TYPE_565_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_555_RGB">TYPE_555_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_USHORT_555_RGB">TYPE_USHORT_555_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_BYTE_GRAY">TYPE_BYTE_GRAY</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_USHORT_GRAY">TYPE_USHORT_GRAY</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_BYTE_BINARY">TYPE_BYTE_BINARY</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/BufferedImage.html#TYPE_BYTE_INDEXED">TYPE_BYTE_INDEXED</a>
+</ul>
+
+<div class="eg">e.g.
+<pre>
+import("java.awt.Color")
+im = makeImage(100, 100, function (g){
+        g.setColor(Color::white)
+        g.fillRect(0, 0, 100, 100)
+        g.setColor(Color::blue)
+        g.fillOval(0, 0, 100, 100)
+     }, TYPE_INT_RGB)
+showImage(im)
+</pre>
+</div>
+
+<a name=filterImage></a>
+<div class="box">
+<div class="synopsis"><b>filterImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/ImageFilter.html">ImageFilter</a> <em>imageFilter</em> <tt>)</tt></div>
+</div>
+<p>
+<tt>filterImage()</tt> returns an image created by filtering the
+<em>image</em> with the <em>imageFilter</em>.
+</p>
+
+<a name=cropImage></a>
+<div class="box">
+<div class="synopsis"><b>cropImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, int x, int y, int w, int h)</tt></div>
+</div>
+<p>
+<tt>cropImage()</tt> crops the rectangular region (x, y, x + w, y + h)
+of the <em>image</em>.
+<p>
+
+<a name=scaleImage></a>
+<div class="box">
+<div class="synopsis"><b>scaleImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, double <em>x</em>, double <em>y</em>)</tt></div>
+</div>
+<p>
+<tt>scaleImage()</tt> transform the <em>image</em> with the scaling factor <em>x</em> and <em>y</em>.
+<p>
+
+<a name=rotateImage></a>
+<div class="box">
+<div class="synopsis"><b>rotateImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, double <em>theta</em> {, double <em>x</em>,double <em>y</em>} )</tt></div>
+</div>
+<p>
+<tt>rotateImage()</tt> rotates the <em>image</em> with a positive angle <em>theta</em> and rotates points (<em>x</em>, <em>y</em>).
+<p>
+
+<a name=flipImage></a>
+<div class="box">
+<div class="synopsis"><b>flipImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, boolean </tt><em>horizontal</em><tt>, boolean </tt><em>vertical</em><tt>)</tt></div>
+</div>
+<p>
+<tt>flipImage()</tt> flips the <em>image</em> vertically, if <em>vertical</em> is true, and  horizontally , if <em>horizontal</em> is true.
+<p>
+
+<a name=shearImage></a>
+<div class="box">
+<div class="synopsis"><b>shearImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, double </tt><em>x</em><tt>, double </tt><em>y</em><tt>)</tt></div>
+</div>
+<p>
+<tt>shearImage()</tt> applies shearing transformation to <em>image</em>.
+<p>
+
+<a name=grayImage></a>
+<div class="box">
+<div class="synopsis"><b>grayImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>)</tt></div>
+</div>
+<p>
+<tt>grayImage()</tt> converts <em>image</em> to a gray scale image.
+<p>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Image Viewing & Manupilation</div>
+
+  </body>
+</html>

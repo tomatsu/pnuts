@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Defining Functions/Generators in Java
+</div>
+
+<!-- body start -->
+
+<h2>Defining Functions/Generators in Java</h2>
+
+<h3>Functions in Java</h3>
+<p>
+Functions can be written in Java, following these steps.
+</p>
+<ul>
+<li>Always extends <a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> class.
+<li>Method <tt>public boolean defined(int)</tt> defines the valid number of parameters.
+<li>Method <tt>protected Object exec(Object[], Context)</tt> defines the body of the
+function.  When the number of parameters is invalid,
+<tt>undefined(args,context)</tt> should be called and returns null.
+</ul>
+
+<p>
+The following class implements a simple function just prints <tt>"hello"</tt>.
+Since this function has no parameter, <tt>defined()</tt> method
+returns true only when the argument is <tt>0</tt>.   The first part of <tt>exec()</tt> method checks
+if the number of parameters is correct. Then it prints <tt>"hello"</tt> to the standard output.  
+</p>
+
+<pre class="eg">
+import pnuts.lang.Context;
+import pnuts.lang.Package;
+
+public class hello extends PnutsFunction {
+    public hello(){
+       super("hello");
+    }
+
+    public boolean defined(int nargs){
+       return (nargs == 0);
+    }
+
+    protected Object exec(Object[] args, Context context){
+       int nargs = args.length;
+       if (nargs != 0){
+          undefined(args, context);
+	  return null;
+       }
+       System.out.println("hello");
+       return null;
+    }
+
+    public String toString(){
+       return "function hello()";
+    }
+}
+</pre>
+
+
+<h3>Generators in Java</h3>
+
+<p>
+<a href="lang.html#generator">Generators</a> can be written in Java, following these steps.
+</p>
+<ul>
+<li>Always extends <a href="../apidoc/pnuts/lang/Generator.html">Generator</a> class.
+<li>Method <tt>public Object accept(PnutsFunction <em>closure</em>, Context <em>context</em>)</tt> defines what objects are generated in what order.  The generated object should be passed to the <em>closure</em>'s call when it is generated.
+</ul>
+
+<p>
+The following class implements a simple generator that generates 10 integers from zero.
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+public class MyGenerator extends Generator {
+
+    public Object apply(PnutsFunction closure, Context context){
+	for (int i = 0; i < 10; i++){
+	    closure.call(new Object[]{new Integer(i)}, context);
+	}
+	return null;
+    }
+}
+</pre>
+
+<pre class="eg">
+for (i : MyGenerator()){
+  println(i)
+}
+</pre>
+
+<p>
+To use generated objects in Java, use Runtime.applyGenerator() method as follows.
+</p>
+
+<pre class="eg">
+import pnuts.lang.Runtime;
+
+Runtime.applyGenerator(generator,
+                       new PnutsFunction(){
+                             protected Object exec(Object[] args, Context ctx){
+                                     /*
+                                      * args[0] is the generated object
+                                      */
+                             }
+                       },
+                       context);
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Defining Functions/Generators in Java
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> コンテクスト
+</div>
+
+<!-- body start -->
+
+    <h2>コンテクスト</h2>
+
+<em>コンテクスト</em> とは、Pnuts の実行環境の内部的なデータを保持するオブジェクトで<a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a>クラスで表されます。コンテクストは次のような情報を含みます。
+
+<ul>
+<li>スタックフレーム（ASTインタープリタのみ）
+<li>カレントパッケージ
+<li>import された Java パッケージのリスト
+<li>print() 関数が出力する先の<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+<li>error() 関数が出力する先の<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+<li>プロンプトや評価結果を出力する先の<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+<li>load()がスクリプトを探すときに使う<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/ClassLoader.html">ClassLoader</a>
+<li><a href="pnuts_engine.html#impl">Implementation</a>オブジェクト
+<li><a href="#contextlocal">コンテクスト・ローカル変数</a>
+<li>use()で追加されたモジュール
+<li>load()で読み込まれたファイルのリスト
+<li><a href="#configuration">Configuration</a>
+</ul>
+
+<p>
+<tt>pnuts.lang.Context</tt>クラスに関する概略は <a href="api.html#context">Pnuts API の概略</a>を見てください。
+</p>
+
+<a name=getContext></a>
+
+<div class="box">
+<div class="synopsis"><b>getContext</b><tt>()</tt></div>
+</div>
+
+<p>
+実行中のコンテクストを求めます。
+コンテクストは、対話的セッションの開始時か、load() や loadFile() の呼び出し時に作成されます。それ以外の計算では、<tt>getContext()</tt>で得られるコンテクストを参照します。
+</p>
+
+
+<a name=eval></a>
+
+<div class="box">
+<div class="synopsis"><b>eval</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>expression</b></em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</b></em><tt> )</tt></div>
+<div class="synopsis"><b>load</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>scriptFile</b></em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</b></em><tt> )</tt></div>
+<div class="synopsis"><b>loadFile</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>scriptFile</b></em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</b></em><tt> )</tt></div>
+</div>
+
+<p>
+これらの関数に<em>context</em>が指定された場合、そのコンテクストのコピーが作られ、そのクローン（複製）を使ってスクリプトが実行されます。
+</p>
+<p>
+<em>context</em>が指定されない場合、カレント・コンテクストのクローンが作られ、そのクローンを使ってスクリプトが実行されます。この場合は、import() の状態とカレントパッケージは初期状態にリセットされます。
+</p>
+
+<a name="stream"></a>
+<h3>メッセージの出力先</h3>
+
+<p>
+コンテクスト毎に次の3種類の出力先を別々に指定できます。
+</p>
+
+<ul>
+<li>標準出力の表示先(OutputStreamまたはWriter)
+<li>エラーの表示先(Writer)
+<li>式の評価結果の表示先(Writer)
+</ul>
+
+<div class="box">
+<div class="synopsis"><em>context</em><tt> . </tt><b>setOutputStream</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>anOutputStream</b></em><tt>)</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getOutputStream</b><tt>()</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>setWriter</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a> </tt><em>aWriter</b></em><tt> )</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getWriter</b><tt>()</tt></div>
+
+<div class="synopsis"><em>context</em><tt> . </tt><b>setErrorWriter</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a> </tt><em>writer</b></em><tt>)</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getErrorWriter</b><tt>()</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>setTerminalWriter</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a> </tt><em>writer</b></em><tt>)</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getTerminalWriter</b><tt>()</tt></div>
+</div>
+
+<a name="contextlocal"></a>
+<h3>コンテクスト・ローカル変数</h3>
+
+<div class="box">
+<div class="synopsis"><em>context</em> . symbol</div>
+</div>
+
+<p>
+コンテクスト・ローカル変数は、コンテクストにバインドされた一種の環境変数です。関数呼び出しをまたいで状態を保持したい場合に用います。
+</p>
+
+例:
+<pre>
+function foo(){
+  getContext().foo = true
+}
+
+function bar(){
+  if (getContext().foo != null){
+    println("foo has been called")
+  }
+}
+</pre>
+
+<p>
+その他の属性については、<a href="api.html#context">Pnuts API の概略</a>を参照。
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> コンテクスト
+</div>
+
+  </body>
+</html>

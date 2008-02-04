@@ -1,0 +1,546 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.servlet モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.servlet</tt></div>
+
+<h2><tt>pnuts.servlet</tt>モジュール</h2>
+
+<p>
+<a href="../../../doc.ja/servlet.html">サーブレットスクリプト</a>は通常<tt>pnuts.servlet</tt>モジュールを利用して作成されます。このモジュールの関数を使うと、サーブレットをより簡単に作成できます。
+</p>
+
+<ul>
+<li>関数
+<ul>
+<li><a href="index.html#addCookie">addCookie</a>
+<li><a href="index.html#convertDynamicPage">convertDynamicPage</a>
+<li><a href="/doc.ja/debug_servlet.html">debug</a>
+<li><a href="index.html#encodeURL">encodeURL</a>
+<li><a href="index.html#escape">escape</a>
+<li><a href="index.html#decodeURL">decodeURL</a>
+<li><a href="index.html#forward">forward</a>
+<li><a href="index.html#getCookie">getCookie</a>
+<li><a href="index.html#getFile">getFile</a>
+<li><a href="index.html#getParameter">getParameter</a>
+<li><a href="index.html#getRequest">getRequest</a>
+<li><a href="index.html#getResponse">getResponse</a>
+<li><a href="index.html#getSession">getSession</a>
+<li><a href="index.html#getSessionMap">getSessionMap</a>
+<li><a href="index.html#getURL">getURL</a>
+<li><a href="index.html#makeQueryString">makeQueryString</a>
+<li><a href="index.html#parseQueryString">parseQueryString</a>
+<li><a href="index.html#readDynamicPage">readDynamicPage</a>
+<li><a href="index.html#readGetParameters">readGetParameters</a>
+<li><a href="index.html#readMultipartRequest">readMultipartRequest</a>
+<li><a href="index.html#readParameters">readParameters</a>
+<li><a href="index.html#readPostParameters">readPostParameters</a>
+<li><a href="index.html#requestScope">requestScope</a>
+<li><a href="index.html#sendPostRequest">sendPostRequest</a>
+<li><a href="index.html#sendRedirect">sendRedirect</a>
+<li><a href="index.html#unescape">unescape</a>
+</ul>
+<li><a href="../../apidoc/pnuts/servlet/package-summary.html">APIドキュメント</a>
+</ul>
+
+<a name=readPostParameters></a>
+<a name=readGetParameters></a>
+<a name=readParameters></a>
+
+<div class="box">
+<div class="synopsis"><b>readPostParameters</b><tt> (<a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> <em>request</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>encoding</em> })</tt></div>
+<div class="synopsis"><b>readGetParameters</b><tt> (<a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> <em>request</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>encoding</em>})</tt></div>
+<div class="synopsis"><b>readParameters</b><tt> (<a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> <em>request</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>encoding</em>})</tt></div>
+</div>
+
+<p>
+<tt>readPostParameters()</tt>はPOSTされたデータを読み込みます。
+<tt>readGetParameters()</tt>はGETパラメータを読み込みます。
+<tt>readParameters()</tt>はPOSTされたデータとGETパラメータを両方読み込みます。
+<p>
+これらの関数の戻り値は<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>オブジェクトで、<em>map</em><tt>.get("パラメータ名")</tt>でパラメータの値が得られます。また、<tt>.getAll("パラメータ名")</tt>ですべてのパラメータが得られます。
+
+<p>
+<em>encoding</em>には、<a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">Javaのエンコード名</a>を指定します。
+<em>encoding</em>を指定しない場合は、<a href="#encoding">入力用のデフォルトエンコーディング</a>が使われます。
+</p>
+<p>
+request.getParamter()のかわりにこれらの関数を敢えて使う理由は、ISO8859_1以外の文字コードのデータを受け取れるようにするためです。
+<tt>readParameters()</tt>や<tt>readPostParameters()</tt>を使う場合、request.getParameter()メソッドを使うことはできません。
+</p>
+
+<div class="eg">例
+<pre>
+response.setContentType("text/html; charset=ISO-2022-JP")
+
+if (request.getMethod() == "POST"){
+  postParam = readPostParameters(request, "ISO-2022-JP")
+  param1 = postParam.get("param1")
+  ...
+}
+</pre></div>
+
+<a name=getParameter></a>
+
+<div class="box">
+<div class="synopsis"><b>getParameter</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>param</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>getParameter()</tt> は、指定されたパラメータの値を取り出す関数です。
+次の式と大体同じ意味です。
+</p>
+<p>
+<em>encoding</em>には、<a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">Javaのエンコード名</a>を指定します。
+<em>encoding</em>を指定しない場合は、<a href="#encoding">入力用のデフォルトエンコーディング</a>が使われます。
+</p>
+
+<pre class="eg">
+readParameters().<em>param</em>
+readParameters(request, <em>encoding</em>).<em>param</em>
+</pre>
+
+<a name=makeQueryString></a>
+
+<div class="box">
+<div class="synopsis"><b>makeQueryString</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> <em>map</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>makeQueryString()</tt>は、{パラメータ, 値}のペアを持つ<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>オブジェクトから、<tt>x-www-form-urlencoded</tt>フォーマットのQuery
+Stringを作ります。
+</p>
+
+<p>
+<em>encoding</em>には、<a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">Javaのエンコード名</a>を指定します。
+<em>encoding</em>を指定しない場合は、<a href="#encoding">出力用のデフォルトエンコーディング</a>が使われます。
+</p>
+
+<a name=parseQueryString></a>
+
+<div class="box">
+<div class="synopsis"><b>parseQueryString</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>urlEncodedString</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>parseQueryString()</tt>は、<tt>x-www-form-urlencoded</tt>フォーマッ
+トの<em>queryString</em>から、{パラメータ, 値}のペアを持つ<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>を作ります。
+</p>
+
+<p>
+<em>encoding</em>には、<a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">Javaのエンコード名</a>を指定します。
+<em>encoding</em>を指定しない場合は、<a href="#encoding">入力用のデフォルトエンコーディング</a>が使われます。
+</p>
+
+<a name=encodeURL></a>
+
+<div class="box">
+<div class="synopsis"><b>encodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>str</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>encodeURL()</tt>は、生テキストから<tt>x-www-form-urlencoded</tt>フォーマットのテキストに変換します。
+</p>
+
+<p>
+<em>encoding</em>には、<a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">Javaのエンコード名</a>を指定します。
+<em>encoding</em>を指定しない場合は、<a href="#encoding">出力用のデフォルトエンコーディング</a>が使われます。
+</p>
+
+<div class="eg">例:
+<pre>
+encodeURL("How are you?", "UTF-8") ==> "How+are+you%3F"
+</pre></div>
+
+<a name=decodeURL></a>
+
+<div class="box">
+<div class="synopsis"><b>decodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoded</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>decodeURL()</tt>は、<tt>x-www-form-urlencoded</tt>フォーマットのテキストから生テキストに変換します。
+</p>
+
+<p>
+<em>encoding</em>には、<a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">Javaのエンコード名</a>を指定します。
+<em>encoding</em>を指定しない場合は、<a href="#encoding">入力用のデフォルトエンコーディング</a>が使われます。
+</p>
+
+<div class="eg">例:
+<pre>
+decodeURL("How+are+you%3F", "UTF-8") ==> "How are you?"
+</pre></div>
+
+<a name=addCookie></a>
+
+<div class="box">
+<div class="synopsis"><b>addCookie</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>value</em><tt> {, int </tt><em>maxAge</em><tt> })</tt></div>
+</div>
+
+<p>
+Cookieを追加します。<em>name</em>と<em>value</em>は、UTF8で<code>x-www-form-urlencoded</code>フォーマットに変換されます。
+</p>
+
+<a name=forward></a>
+
+<div class="box">
+<div class="synopsis"><b>forward</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>path</em><tt>)</tt></div>
+</div>
+
+<p>
+指定した<em>path</em>にリクエストをフォワードします。
+</p>
+
+<a name=getCookie></a>
+
+<div class="box">
+<div class="synopsis"><b>getCookie</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</em><tt>)</tt></div>
+</div>
+
+<p>
+Cookieの値を求めます。
+</p>
+
+<a name=getFile></a>
+
+<div class="box">
+<div class="synopsis"><b>getFile</b><tt> ( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>getFile()</tt>は、サーブレットスクリプトのあるディレクトリをカレントディレクトリとして<em>name</em>で指定されたファイルを表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">java.io.File</a>オブジェクトを返します。
+</p>
+
+<p>
+<em>name</em>にピリオド(.)が指定された場合は、サーブレットスクリプトのあるディレクトリを表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">java.io.File</a>オブジェクトを返します。
+</p>
+
+<p>
+引数が省略された場合、サーブレットスクリプトのファイルを表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">java.io.File</a>オブジェクトを返します。
+</p>
+
+<a name=getURL></a>
+
+<div class="box">
+<div class="synopsis"><b>getURL</b><tt>( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> } } )</tt> or</div>
+<div class="synopsis2">( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> } } )</tt>  or</div>
+<div class="synopsis2">( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> } } )</tt></div>
+</div>
+
+<p>
+引数が二つ指定された場合、<tt>getURL()</tt>は、最初の引数で指定された
+ベースURLと、2番目の引数で指定された相対パスから作られる<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">java.net.URL</a>オブジェクトを返します。
+<p>
+引数が一つ指定された場合、<tt>getURL()</tt>は、サーブレットスクリプトのあるディレクトリを基準として<em>path</em>で指定されたURLを表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">java.net.URL</a>オブジェクトを返します。
+</p>
+
+<p>
+<em>name</em>にピリオド(.)が指定された場合は、サーブレットスクリプトのあるディレクトリに対応する<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">java.net.URL</a>オブジェクトを返します。
+</p>
+<p>
+引数が省略された場合、サーブレットスクリプトのURLを表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">java.net.URL</a>オブジェクトを返します。
+</p>
+
+<a name=readMultipartRequest></a>
+
+<div class="box">
+<div class="synopsis"><b>readMultipartRequest</b><tt> ( { <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> <em>request</em>, } </div>
+<div class="synopsis2"><em>handler</em> (</div>
+<div class="synopsis3"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> <em>stream</em>, </div>
+<div class="synopsis3"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>nameAttribute</em>,</div>
+<div class="synopsis3"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>pathName</em>,</div>
+<div class="synopsis3"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>contentType</em></div>
+<div class="synopsis2"> ) )</tt></div>
+</div>
+</div>
+
+<p>
+<tt>readMultipartRequest()</tt> は、アップロードされたファイルを処理します。<em>handler</em>には次のような引数を取るコールバック関数を指定します。
+
+<blockquote>
+<dl>
+<dt><em>stream</em>
+<dd>アップロードされたファイルの内容を含むInputStream
+<dt><em>nameAttribute</em>
+<dd>&lt;INPUT TYPE=file&gt;タグのNAME属性
+<dt><em>pathName</em>
+<dd>アップロードされたファイルのもとのパス名
+<dt><em>contentType</em>
+<dd>CONTENT-TYPEを表す文字列
+</dl>
+</blockquote>
+
+<div class="eg">例: /save.pnut
+<pre>
+readMultipartRequest(
+  function (in, name, path, contentType){
+     i1 = path.lastIndexOf('/')
+     i2 = i2 = path.lastIndexOf('\\')
+     i = 0
+     if (i1 > i) i = i1
+     if (i2 > i) i = i2
+     filename = path[i+1..]
+     read(in, fd = open(File("/tmp", filename), "w"))
+     fd.close()
+  }
+)
+</pre></div>
+
+<div class="eg">upload.html
+<pre>
+&lt;FORM METHOD=POST ENCTYPE=multipart/form-data ACTION="/save.pnut"&gt;
+&lt;INPUT TYPE=file SIZE=30 NAME="upload"&gt;
+&lt;INPUT TYPE=reset VALUE="Clear the field"&gt;&lt;br&gt;
+&lt;INPUT TYPE=submit VALUE="Upload"&gt;
+&lt;/FORM&gt;
+</pre></div>
+
+<a name=getRequest></a>
+
+<div class="box">
+<div class="synopsis"><b>getRequest</b><tt> ( )</tt></div>
+</div>
+
+<p>
+<tt>getRequest()</tt> は、現在のリクエストを表す<a
+href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a>
+オブジェクトを返します。
+</p>
+
+<a name=getResponse></a>
+
+<div class="box">
+<div class="synopsis"><b>getResponse</b><tt> ( )</tt></div>
+</div>
+
+<p>
+<tt>getResponse()</tt> は、現在のレスポンスを表す<a
+href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletResponse.html">ServletResponse</a>
+オブジェクトを返します。
+</p>
+
+<a name=requestScope></a>
+<div class="box">
+<div class="synopsis"><b>requestScope</b><tt> ( )</tt></div>
+</div>
+
+<p>
+リクエスト・スコープ</a>を表す<tt>pnuts.lang.Package</tt>オブジェクトを返します。
+</p>
+
+<a name=sendRedirect></a>
+
+<div class="box">
+<div class="synopsis"><b>sendRedirect</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>url</em><tt> )</tt> or</div>
+<div class="synopsis2">( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt> )</tt></div>
+</div>
+
+<p>
+指定したURLへリダイレクトするようなレスポンスを返します。
+</p>
+
+<a name="getSession"></a>
+<a name="getSessionMap"></a>
+
+<div class="box">
+<div class="synopsis"><b>getSession</b><tt> ( { boolean <em>create</em> } )</tt></div>
+<div class="synopsis"><b>getSessionMap</b><tt> ( { boolean <em>create</em> } )</tt></div>
+</div>
+
+<p>
+<tt>getSession()</tt>は、現在のrequestから<a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>を作って返します。<em>create</em>がtrueの場合(デフォルト)には必要に応じてSessionを作成します。
+</p>
+
+<p>
+<tt>getSessionMap()</tt>は、同様に現在のrequestから<a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>を作り、その属性にアクセスできる<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>オブジェクトを返します。セッションが見つからない場合には、空の<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>を返します。
+</p>
+<div class="eg">例
+<pre>
+m = getSessionMap()
+check(m.userName, m.passsword)
+</pre>
+</div>
+
+<a name=escape></a>
+<a name=unescape></a>
+
+<div class="box">
+<div class="synopsis"><b>escape</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>str</em><tt> )</tt></div>
+<div class="synopsis"><b>unescape</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>str</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>escape()</tt>は、指定された文字列の中に含まれる、XML/HTMLの特殊文字をエスケープします。
+<tt>unescape()</tt>は、指定された文字列の中に含まれる、エスケープされたXML/HTMLの特殊文字を元にもどします。
+</p>
+
+<div class="eg">例
+<pre>
+escape(`&lt;a href="index.pnut"&gt;Home&lt;/a&gt;`)
+    ===> &amp;lt;a href=&amp;quot;index.pnut&amp;quote;&amp;gt;Home&amp;lt;/a&amp;gt;
+
+unescape("&amp;lt;a href=&amp;quot;index.pnut&amp;quote;&amp;gt;Home&amp;lt;/a&amp;gt;")
+    ===> &lt;a href="index.pnut"&gt;Home&lt;/a&gt;
+</pre></div>
+
+<a name=convertDynamicPage></a>
+
+<div class="box">
+<div class="synopsis"><b>convertDynamicPage</b><tt> ( (
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+)
+</tt><em>input</em></div>
+<div class="synopsis2"> { ,  (
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">OutputStream</a>
+|
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+|
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+|
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+)
+</tt><em>output</em> } <tt> )</tt></div>
+</div>
+
+<p>
+<tt>convertDynamicPage()</tt>は、&lt;% .. %&gt;というタグを含むHTMLファイルから、等価なスクリプトに変換します。
+</p>
+<p>
+<em>output</em>が指定された場合は、変換されたスクリプトをそこに書き込みます。
+そうでない場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/PipedReader.html">java.io.PipedReader</a> を返します。これは後で read() 関数で読み出すことができます。
+</p>
+
+<div class="eg">footer.pea
+<pre>
+&lt;HR&gt;&lt;%= Date() %&gt;
+</pre></div>
+
+<pre class="eg">
+read(convertDynamicPage(open("footer.pea")))
+
+==> print("&lt;HR&gt;", Date() )
+</pre>
+
+<a name="readDynamicPage"></a>
+
+<div class="box">
+<div class="synopsis"><b>readDynamicPage</b><tt> ( (
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+)
+</tt><em>input</em>
+{ , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>encoding</em>
+{ , boolean <em>reloadUpdatedScripts</em> } }
+<tt> )</tt></div>
+</div>
+
+<p>
+<tt>readDynamicPage()</tt>は、ダイナミック・ページを読み込み、 <a
+href="../../pnuts.lib/doc/compile.html#run"><tt>run()</tt></a>関数で実行可能な<a href="../../../apidoc/pnuts/lang/Executable.html">Executable</a> オブジェクトを返します。
+</p>
+<p>
+PnutsServletの<a href="../../../doc.ja/servlet.html#init-param">初期化パラメータ</a>の<tt>"compile"</tt>がtrueの場合には、読み込まれたページはコンパイルされます。
+</p>
+
+<pre class="eg">
+page = readDynamicPage("footer.pea")
+...
+run(page)
+</pre>
+
+<p>
+peaファイルの文字コードがシステムの標準でない場合、<em>encoding</em> に指定します。
+</p>
+<p>
+<em>reloadUpdatedScripts</em> が <tt>true</tt>の場合、変更されたpeaファイル（includeされたものも含む）を読み直します。
+</p>
+
+<a name="sendPostRequest"></a>
+
+<div class="box">
+<div class="synopsis"><b>sendPostRequest</b><tt> (
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+</tt><em>url</em>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL/api/java/util/Map.html">Map</a>
+</tt><em>parameters</em>,  <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>encoding</em> { , 
+  handler( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URLConnection.html">URLConnection</a>
+<em>urlConnection</em> } )</tt></div>
+</div>
+
+<p>
+<tt>sendPostRequest()</tt>は、指定された<em>url</em>にPOSTリクエストを送ります。
+</p>
+
+<pre class="eg">
+url = getURL("http://pnuts.org/wiki/index.pnut?action=find+in+content")
+params = map(`pattern="pnuts"`)
+sendPostRequest(url, params, "UTF-8", function (con) read(con.inputStream))
+</pre>
+
+<hr>
+<a name=encoding></a>
+<h3>エンコーディング名を省略した場合の振舞い</h3>
+
+<h4>入力用デフォルトエンコーディング</h4>
+
+<ol>
+<li>request.getCharacterEncoding()がnullでなければその値
+<li>response.getCharacterEncoding()がnullでなければその値
+<li>UTF8
+</ol>
+
+<h4>出力用デフォルトエンコーディング</h4>
+
+
+<ol>
+<li>response.getCharacterEncoding()がnullでなければその値
+<li>UTF8
+</ol>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.servlet</tt></div>
+
+  </body>
+</html>

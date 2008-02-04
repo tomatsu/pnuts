@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Podr&#281;cznik Pnuts</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h2>Subject-based Secure Scripting</h2>
+<h3>pnuts.security.JAASPnutsImpl class</h3>
+
+
+<p>
+<a href="../apidoc/pnuts/security/JAASPnutsImpl.html"><tt>pnuts.security.JAASPnutsImpl</tt></a> is a subclass of <a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a> class. It allows you to execute a script safely using a Subject authenticated with <a href="http://java.sun.com/products/jaas/">JAAS</a>, and User's security policy.
+<p>
+If JDK1.3 is running, <a href="http://java.sun.com/products/jaas/">JAAS</a> must be installed for this feature.  
+In addition,  you might want to install a service provider of a specific platform (Solaris or Windows NT).
+<p>
+
+<h4>An example on Unix</h4>
+
+<p>
+The following example illustrates how to control access to a property for a certain user account.
+In this case, "java.home" property can be read by testUser on Unix.
+
+</p>
+
+<div class="eg">
+${user.home}/.java.policy
+<pre>
+grant codebase "file:/c:/pnuts/pnuts.jar" {
+    permission java.security.AllPermission;
+};
+</pre>
+</div>
+
+<div class="eg">
+test.config 
+<pre>
+Unix {
+   com.sun.security.auth.module.UnixLoginModule required;
+};
+</pre>
+</div>
+
+<div class="eg">test_auth.policy
+<pre>
+grant Principal com.sun.security.auth.UnixPrincipal "testUser" {
+   permission java.util.PropertyPermission "java.home", "read";
+};
+</pre>
+</div>
+
+
+<div class="eg">
+try.pnut
+<pre>
+println(getProperty("java.home"))
+</pre>
+</div>
+
+
+<div class="eg">test.pnut
+<pre>
+import("pnuts.security.*")
+import("com.sun.security.auth.*")
+import("javax.security.auth.*")
+
+setProperty("java.security.auth.policy", "test_auth.policy")
+setProperty("java.security.auth.login.config", "test.config")
+
+subject = Subject()
+subject.getPrincipals().add(UnixPrincipal("testUser"))
+
+c = getContext().clone()
+c.setImplementation(JAASPnutsImpl(c.getImplementation(), null, subject))
+System::setSecurityManager(SecurityManager())
+
+load("try.pnut", c)
+</pre>
+</div>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+  </body>
+</html>

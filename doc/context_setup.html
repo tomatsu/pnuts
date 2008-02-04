@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Setting up a Context
+</div>
+
+<!-- body start -->
+
+<h2>Setting up a Context</h2>
+
+<p>
+As explained in '<a href="pnutsImpl.html">Customizing the Interpreter's
+Implementation</a>' and '<a href="configuration.html">Customizing the
+Behavior of Java API Access</a>', the way of executing scripts can be
+customized by setting attributes of a <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> object.
+It can be basically achieved by creating a Context object,  and then
+calling <tt>setImplementation()</tt> method or <tt>setConfiguration()</tt> method succeedingly.
+However, this procedure may be lengthly and not flexible enough in some
+cases. Pnuts API provides a couple of more convenient ways to set up contexts.
+</p>
+
+<h3>1. Properties</h3>
+<p>
+If <a href="command.html#properties">the predefined system
+properties</a> are defined when the Pnuts classes are first loaded,
+they are used to set up Context objects as the default settings.  For
+example, <tt>pnuts.lang.defaultPnutsImpl</tt> property defines the class name of
+the default Implementation object.
+</p>
+<pre class="eg">
+% java -Dpnuts.lang.defaultPnutsImpl=pnuts.compiler.CompilerPnutsImpl <em>MainClass</em>
+</pre>
+<p>
+If <a
+href="../apidoc/pnuts/lang/Pnuts.html#setDefaults(java.util.Properties)"><tt>Pnuts.setDefault()</tt></a>
+method is called before Context class is loaded, the specified
+Properties override the system properties.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static void <b>setDefaults</b>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Properties.html">Properties</a> </tt><em>properties</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.util.*;
+import java.io.*;
+
+public class Test {
+    public static void main(String[] args){
+        try {
+            Properties p = new Properties();
+	    p.load(Test.class.getResourceAsStream("test.properites"))
+            Pnuts.setDefaults(p);
+	    Context context = new Context();
+            ...
+        } catch (IOException e){
+	    ...
+        }
+    }
+}
+</pre>
+
+<p>
+This method allows to change the Context settings with a property
+file, without code modification.
+<p>
+Note that the default settings can not be changed once Pnuts API (especially Context class) are loaded.
+</p>
+
+
+<h3>2. The Constructor <tt>Context(Context)</tt></h3>
+
+<p>
+The constructor <tt>Context(Context)</tt> creates a Context object
+that inherits the settings of the specified Context.
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+public class Test {
+    static Context defaultContext;
+    static {
+       defaultContext = new Context();
+       defaultContext.usePackage("hibernate");
+    }
+
+    public Object execute(String script){
+	Context context = new Context(defaultContext);
+	try {
+	    return Pnuts.load(script, context);
+	} catch (Exception e){
+	    e.printStackTrace();
+	}
+    }
+}
+</pre>
+
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Setting up a Context
+</div>
+
+  </body>
+</html>

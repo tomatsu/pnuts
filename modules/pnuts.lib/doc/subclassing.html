@@ -1,0 +1,340 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Generating Java Classes</div>
+
+
+    <h2>Generating Java Classes</h2>
+
+<ul>
+<li><a href="#classGenerator">classGenerator</a>
+<li><a href="#subclass"><em>cg</em> . subclass</a>
+<li><a href="#interface"><em>cg</em> . interface</a>
+<li><a href="#beanclass"><em>cg</em> . beanclass</a>
+<li><a href="#getClassLoader"><em>cg</em> . getClassLoader</a>
+</ul>
+
+<a name="classGeneretor"></a>
+<div class="box">
+<div class="synopsis"><em>cg</em> = <b>classGenerator</b><tt>(
+{ ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ClassLoader.html">ClassLoader</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> ) </tt><em>parameter</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>classGenerator()</tt> returns an object that can be used to generate, load, and save the following kinds of Java classes.
+</p>
+
+<ul>
+<li>subclass
+<li>interface
+<li>JavaBeans
+</ul>
+
+<p>
+When <em>parameter</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ClassLoader.html">ClassLoader</a> object, <tt>classGenerator()</tt> returns a object that the ClassLoader's subclass is associated with.
+When no <em>parameter</em> is given, the value of Thread.currentThread.getContextClassLoader() is implicitly used.
+In both cases, a class loader is associated with the returned value, and used to load classes to be generated.
+If two or more classes have the same name, they can not be loaded with a single instance of class generator.
+<p>
+When <em>parameter</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> object or a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> object that represents a directory, generated class files are saved under the directory. 
+When <em>parameter</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a>, the generated class files are written to the output stream.
+</p>
+
+<h3>Generating Subclasses</h3>
+
+<a name="subclass"></a>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>subclass</b><tt>( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> className , }</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>supertypes</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> | <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> ) </tt><em>methods</b></em></div>
+<div class="synopsis2"><tt> { , boolean <em>hasThis</em> { , boolean <em>hasSuper</em> } } )</tt></dt></div>
+</div>
+
+<p>
+<tt>subclass()</tt> method of a class generator is used to generate a class that extends/implements the classes/interfaces specified to <em>supertypes</em>. 
+</p>
+
+<p>
+The parameter <em>methods</em> should be either a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">java.util.Map</a>
+or a <a href="../../../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a>
+that includes one or more methodName-function mappings.  If there is any
+method in the type hierarchy that can be overriden and matches with a methodName and the number of
+function parameters in the <em>package_object</em>, the generated class
+overrides the method to call the function.  Otherwise, a new public
+method, '<tt>public Object methodName(Object, ...)</tt>' for example, is defined in the generated class.
+</p>
+
+<div class="eg">e.g.
+<pre>
+cg = classGenerator()
+methods = map()
+method.hello = function () println("hello")
+helloClass = cg.subclass("Hello", Object, methods)
+a = helloClass()
+a.hello()
+</pre></div>
+
+<p>
+When both <em>hasThis</em> and <em>hasSuper</em> are <tt>true</tt>,
+the first parameter of each function is a reference to the instance (this) and the second parameter is a reference to <em>super</em>.
+</p>
+<p>
+When only <em>hasThis</em> is <tt>true</tt>, the first parameter of each function is a reference to the instance (this). Likewise, when only <em>hasSuper</em> is <tt>true</tt>, the first parameter of each function is a reference to <tt>super</tt>.
+
+<div class="eg">
+<pre>
+cg = classGenerator()
+hello = cg.subclass("Hello", Object, $(function toString(super) {println("called"); super.toString()}), false, true)
+hello()
+</pre>
+</div>
+
+<p>
+When <em>className</em> is omitted, the class name is auto-generated.
+</p>
+
+<a name="signature"></a>
+<h4>Method signature</h4>
+
+<p>
+When a name of a package element includes a method
+descriptor defined in <a href="http://java.sun.com/docs/books/vmspec/html/ClassFile.doc.html#7035">The Java Virtual Machine Specification</a>, 
+a method with the signature is defined.  For example, the following script defines
+a method '<tt>public void hello(String s)</tt> '.
+</p>
+
+<div class="eg">e.g.
+<pre>
+cg = classGenerator()
+methods = map()
+methods.set("hello(Ljava/lang/String;)V", function (x) println("hello " + x))
+helloClass = cg.subclass("Hello", Object, methods)
+a = helloClass()
+
+a.hello("world")
+</pre></div>
+
+<p>
+Exception information can be added just after the method descriptor,
+which are formatted in the same way as parameter types.
+<p>
+
+<div class="eg">e.g.
+<pre>
+cg = classGenerator()
+methods = map()
+methods.set("hello(Ljava/lang/String;)VLjava/rmi/RemoteException", function (x) println("hello " + x))
+helloClass = cg.subclass("Hello", class java.rmi.Remote, methods)
+a = helloClass()
+
+a.hello("world")
+</pre></div>
+
+
+<h4>Script Package</h4>
+
+<p>
+The following sample code illustrates how to use <a href="script_package.html">script packages</a> in <tt>subclass()</tt> calls.
+</p>
+
+<div class="eg">e.g.
+<pre>
+cg = classGenerator()
+helloClass = cg.subclass(Object, $(function hello () "hello"))
+a = helloClass()
+a.hello()  ==> "hello"
+</pre></div>
+
+<p>
+When a script package is constructed in a function, the functions in the
+script package can access the variables in the closure. This usage can avoid
+consuming name space by the functions in the script package.
+</p>
+
+<div class="eg">e.g.
+<pre>
+import("java.util.*")
+cg = classGenerator()
+
+function arrayEnum(array) $(
+  index = 0,
+  function hasMoreElements() index < array.length,
+  function nextElement() array[index++]
+)
+enum = cg.subclass(Enumeration, arrayEnum([1,2,3]))
+for (i : enum()) println(i)
+</pre></div>
+
+<h4>Saving Class Files</h4>
+<p>
+When either of String/File/ZipOutputStream is specified to <tt>classGenerator()</tt>'s parameter, generated class files are written to the destination.
+</p>
+<p>
+For example, the following script saves <tt>'Hello.class'</tt> under <tt>"/tmp"</tt>.
+</p>
+<pre class="eg">
+cg = classGenerator("/tmp")
+cg.subclass("Hello", Object, $(function hello() "hello"))
+</pre>
+
+<p>
+The static method <tt>attach(Context)</tt> must be called before calling a method of the generated class, so that the current context is attached to the class.
+</p>
+<pre class="eg">
+Hello::attach(getContext())
+Hello().hello() ==> "hello"
+</pre>
+<p>
+Limitations of when generated byte code is saved in a class file are:
+
+<ul>
+<li>The third argument, <em>methods</em>, must be serializable.
+<li>It is user's responsibility to reproduce the functions that were called by a method function.
+<li>Nested functions can not be used as a method function.
+</ul>
+
+<h4>Subclassing without using <tt>classGenerator()</tt></h4>
+
+<a name="subclass"></a>
+<a name="javaAdapter"></a>
+<div class="box">
+<div class="synopsis"><b>subclass</b><tt>( ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>supertypes</b></em> <tt>, ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> | <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> )
+</tt><em>methods</b></em> { , boolean <em>hasThis</em> { , boolean <em>hasSuper</em> } } <tt> )</tt></dt></div>
+<div class="synopsis"><b>javaAdapter</b><tt>( ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>supertypes</b></em> <tt>, ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> | <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> ) </tt><em>methods</b></em><tt> {, Object </tt><em>args</em><tt>, ... })</tt></div>
+</div>
+
+<p>
+When <tt>subclass()</tt> is called without using <tt>classGenerator()</tt>, a class that inherits/implements the specified types is generated and loaded to a newly created classloader, which will become the context's classloader.
+</p>
+<pre class="eg">
+methods = map()
+methods.hello = function () println("hello")
+subclass("A", Object, methods)
+A().hello()
+</pre>
+
+<p>
+<tt>javaAdapter()</tt> also generates a class in the same way and instantiates with the parameters that follows <em>methods</em>.  Unlike <tt>subclass()</tt>, <em>hasThis</em> and <em>hasSuper</em> can not be specified with <tt>javaAdapter()</tt> call.
+</p>
+
+<pre class="eg">
+methods = map()
+method.hello = function () println("hello")
+a = javaAdapter(Object, methods)
+a.hello()
+</pre>
+
+
+<h4>Limitations</h4>
+
+<p>
+<tt>subclass()</tt> and <tt>javaAdapter()</tt> have the following limitations.
+</p>
+
+<ul>
+<li>Can't define constructors.
+</ul>
+
+
+<a name="interface"></a>
+<h3>Generating Interfaces</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>interface</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,  ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>superInterfaces</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>[] </tt><em>signatures</b></em> <tt> )</tt></div>
+<div class="synopsis"><b>interface</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,  ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>superInterfaces</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>[] </tt><em>signatures</b></em> <tt> )</tt></div>
+</div>
+<p>
+<tt>interface()</tt> generates an Java interface that extends the specified super interfaces.
+<em>signatures</em> must be a String array that consists of <a href="#signature">'method signatures'</a> which is described in Java Virtual Machine Specification.
+</p>
+
+<p>
+When this function is called as a method of a class generator object, the generated code is loaded with the object.
+</p>
+<pre class="eg">
+cg = classGenerator()
+Hello = cg.interface("Hello", [], ["hello()V"])
+Hello.methods ==> [public abstract void Hello.hello()]
+</pre>
+
+<p>
+When this function is called without specifying a class generator object, the generated code is loaded to a newly created classloader, which will become the context's classloader.
+</p>
+
+<pre class="eg">
+interface("Hello", [], ["hello()V"])
+Hello.methods ==> [public abstract void Hello.hello()]
+</pre>
+
+<a name="beanclass"></a>
+<h3>JavaBeans</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>beanclass</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,  ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>superTypes</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> </tt><em>typeMap</b></em>  { , <em>constructorParams</em>[]  } <tt> )</tt></div>
+<div class="synopsis"> <b>beanclass</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,  ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] ) </tt><em>superTypes</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> </tt><em>typeMap</b></em> { , <em>constructorParams</em>[]  } <tt> )</tt></div>
+</div>
+
+<p>
+<tt>beanclass()</tt> generates a JavaBean class that has the specified Bean properties.
+<em>typeMap</em> must be a Map object that contains mappings fo {property name -> property type} .
+</p>
+<p>
+When this function is called as a method of a class generator object, the generated code is loaded with the object.
+</p>
+
+<pre class="eg">
+cg = classGenerator()
+Bean = cg.beanclass("Bean", [], map([["name", String]]))
+b = Bean()
+b.name = "foo"
+b.name     ==> "foo"
+</pre>
+
+<p>
+When this function is called without specifying a class generator object, the generated code is loaded to a newly created classloader, which will become the context's classloader.
+</p>
+
+<pre class="eg">
+beanclass("Bean", [], map([["name", String]]))
+b = Bean()
+b.name = "foo"
+b.name     ==> "foo"
+</pre>
+<p>
+When a sequence of bean property names is given to <em>constructorParams</em>, a constructor that initializes the properties is defined.
+</p>
+<pre class="eg">
+beanclass("Bean", [], map([["name", String]]), ["name"])
+b = Bean("foo")
+b.name     ==> "foo"
+</pre>
+
+<a name="getClassLoader"></a>
+<h3>ClassLoader</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>getClassLoader</b><tt>( )</tt></div>
+</div>
+
+<p>
+<tt>getClassLoader()</tt> method of a class genereator returns the ClassLoader associated with it.
+</p>
+
+<pre class="eg">
+cg = classGenerator()
+cg.getClassLoader()   ==> pnuts.lib.ClassFileLoader@f0eed6
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Subclassing Java Classes</div>
+
+  </body>
+</html>

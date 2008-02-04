@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body bgcolor="#ffffff">
+<!-- body start -->
+
+
+<h2>Kod &#378;r&oacute;d&#322;owy bazuj&#261;cy na chronionych skryptach</h2>
+
+<p>Polityka bezpiecze&#324;stwa w Javie bazuje na kodzie &#378;r&oacute;d&#322;owym kt&oacute;ry okre&#347;laj&#261; podpisy cyfrowe kodu
+(zobacz <a href="http://java.sun.com/j2se/1.5.0/docs/guide/security/index.html">Java2 Security</a>). Polityka bezpiecze&#324;stwa zediniowana jest w <a href="http://java.sun.com/j2se/1.5.0/docs/guide/security/PolicyFiles.html">Pliki polityki</a>.
+</p>
+
+<p>Opcja <tt>-s</tt> z linii polece&#324;&nbsp; <tt>pnuts</tt> pozwala na wykonanie skryptu w trybie chronionym.
+</p>
+
+<h3>Bezpieczne skryptowanie z uzyciem API Pnuts</h3>
+
+<p>
+klasa<tt> </tt><a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a> jest adapterem implementacji dodaj&#261;cym funkcjonalno&#347;&#263; ochrony przy uzyciu&nbsp; <a href="http://java.sun.com/j2se/1.5.0/docs/guide/security/">ochrony JDK</a>.
+Klasa domy&#347;lnie pozwala na bezpieczne wykonywanie zdalnych skrypt&oacute;w jako aplet&oacute;w.
+Polityka bezpiecze&#324;stwa bazuje na kodzie skryptu.
+</p>
+
+<p>Aby wykona&#263; bezpiecznie skrypt musi by&#263; zarejestrowany zarz&#261;dca
+bezpiecze&#324;stwa. Aby go zarejestrowa&#263; trzeba poda&#263; opcje z linii komend
+dla polecenia&nbsp; <tt>java</tt> lub wyko&#324;a&#263;&nbsp; '<tt>System.setSecyrityManager(new SecurityManager())</tt>' przed uruchomieniem skryptu.
+</p>
+<p>Dodatkowo do&nbsp; <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/security/AllPermission.html"><tt>java.security.AllPermission</tt></a> musi by&#263; przypisany URL pliku&nbsp; <tt>pnuts.jar</tt>.   Odbywa si&#281; to w nast&#281;puj&#261;cy spos&oacute;b.
+</p>
+<ul>
+<li>Skopiowa&#263;&nbsp; <tt>pnuts.jar</tt> do <tt>${JAVA_HOME}/jre/lib/ext/</tt>.
+</li><li>Podanie opcji komendy <tt>java</tt>&nbsp;&nbsp;<tt></tt> to the <tt>-Xbootclasspath</tt> na&nbsp;<tt>pnuts.jar</tt>
+</li><li>Bezpo&#347;redni&#261; definicj&#281; polityki
+
+<div class="eg">np. ${user.home}/.java.policy
+<pre>grant codebase "file:/c:/pnuts/pnuts.jar" {<br>    permission java.security.AllPermission;<br>};<br></pre></div>
+
+</li></ul>
+
+<p>Aby ustawi&#263; implemetacje kontekstu na tak&#261; kt&oacute;ra wykona
+bezpiecznie skrypt na platformie Java2 nazle&#380;y ustawi&#263; j&#261; nast&#281;puj&#261;co.
+</p>
+
+
+<pre class="eg">context.setImplementation(SecurePnutsImpl(context.getImplementation()));<br></pre>
+
+
+<h3>Przyk&#322;ad</h3>
+
+<p>Za&#322;&oacute;zmy &#380;e mam nast&#281;puj&#261;cy skrypt.
+</p>
+
+<div class="eg">file:/${user.home}/test1.pnut
+<pre>println(getProperty("java.home"))<br></pre>
+</div>
+
+<p>W celu wykonania skryptu na platformie Java2 nale&#380;y:
+</p>
+
+<div class="eg">test.pnut
+<pre>import pnuts.lang.*;<br>import pnuts.security.*;<br><br>...<br>if (System.getSecurityManager() == null){<br>   System.setSecurityManager(new SecurityManager());<br>}<br>Context context = new Context();<br>context.setImplementation(new SecurePnutsImpl(context.getImplementation()));<br><br>Pnuts.loadFile("test1.pnut", context);<br></pre>
+</div>
+
+<p>Od czasu &nbsp;gdy jest wymagane Since java.util.PropertyPermission
+w polityce bezpiecze&#324;stwa nazle&#380;y ustawi&#263; w&#322;a&#347;ciwo&#347;&#263; na&nbsp;
+"java.home", <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/security/AccessControlException.html">AccessControlException</a>, gdy tego nie b&#281;dzie nast&#281;pi b&#322;&#261;d.
+</p>
+
+<p>Skrypt powinien dzia&#322;a&#263; kiedy nastepuj&#261;ca regu&#322;a zostanie zdefiniowana.
+</p>
+
+<div class="eg">${user.home}/.java.policy
+<pre>grant codebase "file:${user.home}/-" {<br>   permission java.util.PropertyPermission "java.home", "read";<br>};<br></pre>
+</div>
+
+<p>Zasada daje zezwolenie na odczyt w&#322;a&#347;ciwo&#347;ci&nbsp; "<tt>java.home</tt>" przez skrtyp w katalogu&nbsp; "<tt>user.home</tt>".
+Mo&#380;na j&#261; zaspisa&#263; w pliku <tt>${user.home}/.java.policy</tt> lub poda&#263; plik w opcji&nbsp;&nbsp;<code>-Djava.security.policy=</code> polecenia <tt>java</tt>&nbsp;.
+</p>
+
+<!-- body end -->
+
+<hr noshade="noshade" size="1">
+<p>
+</p><center><h3>
+<a href="guide.html">Powr&oacute;t</a>
+</h3></center>
+<p>
+</p><hr noshade="noshade" size="1">
+  </body></html>

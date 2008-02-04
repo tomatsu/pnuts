@@ -1,0 +1,186 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts FAQ</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+    <center><h2>Pnuts FAQ</h2></center>
+
+<!-- body start -->
+
+<h3>0. Table of Contents</h3>
+
+<blockquote>
+<dl>
+<dt>1. General Questions</dt>
+<a href="#1.1"><div class=section>What's Pnuts?</div></a>
+<a href="#1.2"><div class=section>Java Programming Skill is required?</div></a>
+<a href="#1.3"><div class=section>What are the requirements to use Pnuts?</div></a>
+<a href="#1.5"><div class=section>Can I use Pnuts in my commercial products?</div></a>
+
+<dt>2. Technical Questions</dt>
+<a href="#2.1"><div class=section>What's the advantage?</div></a>
+<a href="#2.2"><div class=section>How fast can Pnuts run</div></a>
+<a href="#2.3"><div class=section>Why use different syntax than Java ?</div></a>
+<a href="#2.4"><div class=section>Can I convert a Pnuts script to Java source code or compile it to bytecode?</div></a>
+<a href="#2.5"><div class=section>How do I define Java classes?</div></a>
+<a href="#2.6"><div class=section>How do I use regular expression like in Perl?</div></a>
+
+</dl>
+</blockquote>
+
+<h3>1. General Questions</h3>
+
+<dl>
+<a name="1.1"></a>
+<dt><b>What's Pnuts?</b>
+
+<dd>
+Pnuts is a script language which can access Java APIs interactively.
+Pnuts can be embeded in a Java program as a scripting engine and be called easily from Java.
+<p>
+
+<a name="1.2"></a>
+<dt><b>Java Programming Skill is required?</b>
+
+<dd>
+It depends on how you use Pnuts.  If existing modules provides all you need to do, you do not have to call Java API directly.  In that case,  you do not need Java knowledge at all.  If you develop a new module or you want to do something that existing modules do not provide, you will need basic knowledge of Java API.
+<p>
+
+<a name="1.3"></a>
+<dt><b>What are the requirements to use Pnuts?</b>
+
+<dd>
+Pnuts runs on J2SE. It has been tested on the following environments.
+<ul>
+<li>Sun JDK1.3.1
+<li>Sun J2SDK1.4.2
+<li>Sun J2SDK1.5 beta
+<li>IBM JDK1.3
+<li>IBM JDK1.4
+<li>Mac OS X JDK1.4.2
+</ul>
+</p>
+<p>
+
+<a name="1.5"></a>
+<dt><b>Can I use Pnuts in my commercial products?</b>
+
+<dd>
+Sure. Under <a href="../LICENSE.txt">License Term</a>, you can distribute Pnuts with no royalty.
+</dl>
+
+<hr>
+
+<h3>2. Technical Questions</h3>
+
+<dl>
+<a name="2.1"></a>
+
+<dt><b>What's an advantage over other languages?</b>
+<dd>
+<dl>
+<dt>vs. legacy scripting languages
+<dd>Pnuts takes advantages of various Java functionalities, such as versatile APIs, garbage collection, and state-of-the-art virtual machine. Since Pnuts is written in Java, it runs on every platform that supports Java.
+<p>
+Existing scripting language systems ported to Java must have duplicated object models because they have to keep the compatibility.  When such a scripting system is embedded into an application, the programmer has to wrap/unwrap the two types of objects, which degrade the readability and the performance at the same time.
+<p>
+<dt>vs. other Java-based scripting languages
+<dd>
+The most notable feature of Pnuts is its extensible module system that enables one step higher level of programming than Java API programming.  With the module system, user can pick the necessary modules for his/her application, or add their own modules for the application if needed.
+
+<dt>vs. Java-only solution
+<dd>Pnuts comes with various kinds of modules that allows higher level programming.  User can utilize the functionalities of Java, not using Java API directly. It means that Pnuts can target broader user base.  For experienced Java programmers, Pnuts can be used as a tool that reduces the complexity of the system by combining the two languages in one application.
+</dl>
+</dd>
+
+<a name="2.2"></a>
+<dt><b>How fast can Pnuts run?</b>
+
+<dd>
+Pnuts is one of the <b>fastest</b> Java-based scripting engine.
+The performance of Pnuts is competitive or even superior to legacy scripting systems, such as Perl, Lua, etc.
+There are some links to benchmark results in <a href="http://pnuts.org/">Pnuts Home</a>.
+
+<a name="2.3"></a>
+<dt><b>Why use different syntax than Java ?</b>
+<dd>
+<dl>
+<dt>
+In Pnuts, "class <em>classname</em>" specifies a class, although
+	  just "<em>classname</em>" in Java.
+<dd>
+There is a problem when a global variable "java" is defined, for example,
+	    classes in "java" package can not be accessed properly.
+With a syntax that clarify the border of a class name and an instance variable,
+the problem can be solved.
+<p>
+</dd>
+
+<dt>
+Pnuts uses "::" to access static memebers.
+</dt>
+<dd>
+Pnuts does not have types for variables.
+And there is no distinction between a class as a type and a class as a Class
+	    object. The new syntax "::" allows to access a class as an
+	    ordinally object.
+</dd>
+</dl>
+<p>
+<a name="2.4"></a>
+<dt><b>Can I convert a Pnuts script to Java bytecode?</b>
+<dd>
+Pnuts runs with on-the-fly bytecode compiler by default.
+Also, Pnuts API provides a way to compile a script to Java class files.
+<p>
+
+<a name="2.5"></a>
+<dt><b>How do I create Java classes in a script?</b>
+<dd>
+<ul>
+<li>On version 1.2, syntax for <a href="lang.html#classdef">class definition</a> can be used to define Java classes.
+<li>On version 1.1, <a href="lang.html#subclass">'new' expression</a> allows you to extend a class and create an instance of the extended class.
+<li><a href="../modules/pnuts.lib/doc/subclassing.html">classGenerator()</a> function defined in pnuts.lib module allows you to define Java classes by mapping a function to a method or specifying JavaBeans properties.
+<li><a href="../extensions/jdtc/doc/index.html">jdtc module</a> provides functions to compile true Java code.
+</ul>
+<p>
+
+<a name="2.6"></a>
+<dt><b>How do I use regular expression like in Perl?</b>
+
+<dd>
+<a href="../modules/pnuts.regex/doc/index.html"><tt>pnuts.regex</tt></a> module provides functions that handles regular expressions.
+<p>
+
+</dl>
+<p>
+
+<!-- body end -->
+
+<div class="footer">
+<a href="http://pnuts.org/">Pnuts Home</a>
+<tt>|</tt>
+<a href="guide.html">Pnuts User's Guide</a>
+<tt>|</tt>
+<a href="lang-TOC.html">Pnuts Language</a>
+<tt>|</tt>
+<a href="quickref.html">Quick Reference</a>
+<tt>|</tt>
+<a href="../apidoc/index.html">API doc</a>
+<tt>|</tt>
+FAQ
+<tt>|</tt>
+<a href="/">Download</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">License</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">Contact Us</a>
+</div>
+
+  </body>
+</html>

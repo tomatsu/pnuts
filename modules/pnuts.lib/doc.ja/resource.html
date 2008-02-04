@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> File, URL, リソース</div>
+
+<h3>File</h3>
+
+<a name=getFile></a>
+
+<div class="box">
+<div class="synopsis"><b>getFile</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> } )</tt> or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> })</tt></div>
+</div>
+
+<p>
+<tt>getFile()</tt>は<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html"><tt>java.io.File</tt></a>オブジェクトを返します。2番目の引数<em>path</em>が指定されると、1番目の引数から得られるFileからの相対パスを表すFileオブジェクトになります。
+</p>
+
+<h3>URL</h3>
+
+<a name=getURL></a>
+<div class="box">
+<div class="synopsis"><b>getURL</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> } )</tt> or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> })</tt>  or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>path</em></a> })</tt></div>
+</div>
+
+<p>
+<tt>getURL()</tt> は、引数から得られるURLオブジェクトを返します。
+<em>path</em>が指定されると、1番目の引数から得られるURLからの相対URLになります。
+</p>
+
+<h3>リソース</h3>
+
+<p>
+リソースについては<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/resources/">http://java.sun.com/j2se/1.4/ja/docs/ja/guide/resources/</a> を参照してください。
+</p>
+
+<a name=getResource></a>
+<div class="box">
+<div class="synopsis"><b>getResource</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getResource()</tt>は、指定されたリソースを表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> オブジェクトを返します。
+</p>
+
+<div class="eg">
+例：
+<pre>
+rsrc = getResource("pnuts/lib/init.pnut")
+read(rsrc.openStream())
+
+printAll(getResource("pnuts/lib/init.pnut"))
+</pre></div>
+
+<h3>名前</h3>
+
+<a name="basename"></a>
+<div class="box">
+<div class="synopsis"><b>basename</b><tt>( (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>  | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>　) </tt><em>filename</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>suffix</em></a> } )</tt></div>
+</div>
+<p>
+ファイルのパス名からその拡張子を取り除いた部分を取り出す。
+</p>
+</p>
+<div class="eg">
+<pre>
+basename("/htdocs/index.html") ---> "index"
+basename("/htdocs/index.html", ".html") ---> "index"
+basename("/htdocs/index.html", ".txt") ---> "index.html"
+</pre>
+</div>
+
+<a name="dirname"></a>
+<div class="box">
+<div class="synopsis"><b>dirname</b><tt>( (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>  | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>　) </tt><em>filename</em><tt> )</tt></div>
+</div>
+<p>
+ファイルのパス名からそのディレクトリ名を取り出す。
+</p>
+</p>
+<div class="eg">
+<pre>
+dirname("/etc/passwd") ---> /etc
+dirname("/usr/local/bin/") ---> /usr/local
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> File, URL, リソース</div>
+
+  </body>
+</html>

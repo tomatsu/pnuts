@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h2>Package Permissions</h2>
+
+<p>
+Pnuts API provides a way to protect Pnuts packages against untrusted code, using <a href="http://java.sun.com/j2se/1.4/docs/guide/security/">Java2 security API</a>.
+</p>
+
+
+<h3><tt><a href="../apidoc/pnuts/security/SecurePackage.html">pnuts.security.SecurePackage</a></tt> class</h3>
+
+<p>
+<tt>pnuts.security.SecurePackage</tt> is a subclass of <tt>pnuts.lang.Package</tt>.
+When SecurityManager is set, <tt>pnuts.security.PackagePermission</tt>
+is required to add/remove a package or change package variable's value.
+</P>
+
+<p>
+To make <tt>pnuts.security.SecurePackage</tt> the default package
+class, define the property <tt>pnuts.package.factory</tt> as
+<tt>pnuts.security.SecurePackageFactory</tt> before <tt>pnuts.lang.Package</tt>
+class is initialized.
+</p>
+
+<pre class="eg">
+pnuts -J-Djava.security.manager -J-Dpnuts.package.factory=pnuts.security.SecurePackageFactory
+</pre>
+
+<h3><a href="../apidoc/pnuts/security/PackagePermission.html">pnuts.security.PackagePermission</a> class</h3>
+
+<div class="box">
+<div class="synopsis"><tt>public pnuts.security.PackagePermission(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>package</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>actions</em><tt>)</tt></div>
+</div>
+
+<p>
+The first parameter <em>package</em> is supposed to be a package name that
+      access is controled.   An asterisk
+      "<tt>*</tt>" may appear at the end of the name, following "<tt>::</tt>", "<tt>.</tt>",
+      or by itself, to signify a wildcard match.
+</p>
+<p>
+The second parameter <em>actions</em> is a comma-separated list of the following elements.
+</p>
+
+<dl>
+<dt><b>write</b></dt>
+<dd>permission of any action that modifies a package, except anonymous packages.
+<dt><b>add</b></dt>
+<dd>permission to register packages.
+<dt><b>remove</b></dt>
+<dd>permission to unregister packages.
+</dl>
+
+<p>
+For example, a script <a
+	href="../examples/awt/calculator.pnut">http://javacenter.sun.co.jp/pnuts/examples/awt/calculator.pnut</a> will try to register a new package named "calculator" and define functions in it.  To execute the script under Java2 security, PackagePermission("calculator", "write, add") should be granted in the effective security policy.
+</p>
+<p>
+The following is an example of a policy file that gives the permission needed
+      by the script.
+</p>
+
+<pre class="eg">
+grant codebase "http://javacenter.sun.co.jp/pnuts/examples/-" {
+      permission pnuts.security.PackagePermission "*", "write, add";
+};
+</pre>
+
+<p>
+The remote script runs in an access control context which is determined from the URL in roughly the same way as applets.
+The scripts, by default, can not access local file system, system
+      properties, and so on.  With a policy file, user can customize the security policy 
+</p>
+<p>
+When a remote script is executed in an anoymous package, the scripts can define variables in the global scope, because no permission is required to access anonymous packages.
+</p>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+  </body>
+</html>

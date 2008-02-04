@@ -1,0 +1,228 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Performance Hints
+</div>
+
+<!-- body start -->
+
+    <h1>Performance Hints</h1>
+
+<h4>Precompiling Scripts</h4>
+<p>
+Script loading could be a bit faster if the scripts are precompiled, because compilation overhead
+is eliminated.
+</p>
+<pre class="eg">
+% cd /usr/local/pnuts/modules
+% pnutsc -o pnuts-modules-C.jar pnuts-modules.jar
+</pre>
+
+Caveats:
+<ul>
+<li>Compiled scripts can not be inspected by a debugger.
+<li>There is no garrantee that the compiled code is compatible with different versions of Pnuts.
+</ul>
+
+<h3>String concatenation</h3>
+
+<p>
+String concatenation by <tt>+</tt> operator is relatively slow.
+</p>
+
+<pre class="eg">
+a = ""
+for (i : 1..10000){
+  a += "."
+}
+</pre>
+
+<p>
+This could be rewritten as follows procedure.
+</p>
+
+<p>
+First, define a function that prints all strings that you want to
+concatinate. Then call <a href="../modules/pnuts.text/doc/index.html#textGrab"><tt>textGrab()</tt></a>
+of the <tt>pnuts.text</tt> module, passing the function just defined.  This returns a function that returns the concatinated string.
+
+<pre class="eg">
+function f1(){
+  for (i : 1..10000){
+    print(".")
+  }
+}
+
+f2 = textGrab(f1)
+
+f2()
+</pre>
+
+<h3>Loop</h3>
+<p>
+The following loop expression with <tt>for</tt> statement is relatively slow,
+because of the overhead of operations on the counter variable.
+</p>
+
+<pre class="eg">
+for(i = 0; i < 1000000; i++){
+}
+</pre>
+
+<p>
+The new expression, for (i:start..end), is faster than the above one.
+</p>
+
+<div class="eg">e.g.
+<pre>
+for (i : 0..999999){
+
+}
+</pre>
+</div>
+
+<a name="beans"></a>
+<h3>Accessing Java Beans Properties</h3>
+
+<p>
+Method call such as getXXXX()/setXXXX() can be replaced by XXXX
+property access so that it gets faster.
+</p>
+
+<pre class="eg">
+now = Date()
+longValue = now.time
+</pre>
+
+
+<a name="callback"></a>
+<h3>Generator-style and Callback-style</h3>
+
+<p>
+When there is a heavy weight loop, consider writing in generator-style or callback style.
+</p>
+
+<p>
+For example, the code that reads lines sequencially in Pnuts could be
+rewritten in generator-style, using <a href="../modules/pnuts.text/doc/index.html#readLines"><tt>readLines()</tt></a> function, so that it can eliminate the overhead of method calls.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=45%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>Loop in Pnuts (slower)</th>
+  <th bgcolor=#eeeeee>Generator-Style (faster)</th>
+  <th bgcolor=#eeeeee>Callback-Style (even faster)</th>
+</tr>
+<tr class=wb>
+<td valign=top>
+<pre>
+while ((line = reader.readLine()) != null){
+    println(line)
+}
+</pre>
+ </td>
+ <td valign=top>
+<pre>
+for (line : readLines(reader)){
+   println(line)
+}
+</pre>
+ </td>
+<td class=wb  valign=top>
+<pre>
+readLines(reader, println)
+</pre>
+</td>
+
+</tr>
+<tr class=wb>
+<td valign=top>
+<pre>
+m = map()
+m.a = 1
+m.b = 2
+m.c = 3
+
+for (pair : m.entrySet()){
+   println(pair.key, "=", pair.value)
+}
+</pre>
+</td>
+<td valign=top>
+<pre>
+n/a
+</pre>
+</td>
+<td valign=top>
+<pre>
+m = map()
+m.a = 1
+m.b = 2
+m.c = 3
+
+mapFunction(function (k, v) println(k, "=", v), m)
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+
+<a name=choose></a>
+<h3>Choose an appropriate Implementation</h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/Implementation.html"><tt>pnuts.lang.Implementation</tt></a> class defines an interface of script interpreter's implementation. 
+ The following classes are implementation classes of the interface provided in the Pnuts distribution.
+<p>
+<blockquote>
+<dl>
+<dt><tt><a href="../apidoc/pnuts/lang/PnutsImpl.html">pnuts.lang.PnutsImpl</a></tt>
+<dd>AST interpreter
+<dt><tt><a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html">pnuts.compiler.CompilerPnutsImpl</a></tt>
+<dd>On-the-fly Compiler
+<dt><tt><a href="../apidoc/pnuts/ext/CachedPnutsImpl.html">pnuts.ext.CachedPnutsImpl</a></tt>
+<dd>Mixed mode, which caches compiled (or parsed) scripts and reuse them
+</dl>
+</blockquote>
+
+<p>
+On-the-fly compiler usually runs faster than AST interpreter.  It is appropriate for interactive use, since the compilation overhead does not matter.
+<p>
+If Pnuts is embedded in an application as a scripting engine and same scripts are executed over and over, mixed mode is the right choice. 
+Since on-the-fly compilation takes a few milliseconds to a few hundreds milliseconds depending on the size of scripts, caching the compiled code would improve the performance.
+<P>
+If the application uses a limited set of scripts, the combination of AST interpreter and precompiled scripts is efficient because there is no compilation overhead and the bytecode compiler package in Pnuts can be removed if needed.
+</p>
+
+<h3>When a method call or an instance creation is a bottle neck:</h3>
+<p>
+You might consider to use <a href="../modules/pnuts.lib/doc/proxy.html"><tt>makeProxy()</tt></a> function.
+</p>
+
+<h3>Implement a function or a loadable class in Java</h3>
+<p>
+If you need to eliminate the overhead of script execution caused by
+reflection API, method search, and so on, there is no reason to avoid
+implementing a function or a loadable class in Java.  See
+"<a href="function.html">How to define a function in Java</a>" and "<a href="loadable.html">Implementing Loadable Class in Java</a>".
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Performance Hints
+</div>
+
+  </body>
+</html>

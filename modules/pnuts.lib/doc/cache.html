@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Data Caching / Finalizer</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Data Caching</div>
+
+    <h2>Data Caching / Finalizer</h2>
+
+<a name=memcache></a>
+<div class="box">
+<div class="synopsis"><b>memcache</b><tt> ( </tt><em>factory</em> <tt>( ) )</tt> or</div>
+<div class="synopsis2"><tt> ( </tt><em>factory</em> <tt>( </tt><em>key</em><tt> ) )</tt></div>
+</div>
+
+<p>
+<tt>memcache()</tt> provides a cache mechanism using <tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ref/SoftReference.html">SoftReference</a></tt> class.
+</p>
+<p>
+If <em>factory()</em> is given as the argument, <tt>memcache()</tt> returns a function that returns a value computed by <em>factory()</em>, which is cached and reused until the cache is expired.
+</p>
+
+<pre class="eg">
+cache = memcache(function () Date())
+
+cache()    => Mon Dec 08 23:58:32 JST 2003
+cache()    => Mon Dec 08 23:58:32 JST 2003
+...
+cache()    => Tue Dec 09 00:00:21 JST 2003
+</pre>
+
+
+<p>
+If <em>factory(key)</em> is given as the argument, <tt>memcache()</tt> returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> object that can store and retrieve a key-value pair in the heap memory. The <tt>get()</tt> method of the cache object retrieves the cached data if it has not been expired. If the demanded data is expired or has not been stored yet, <em>factory</em> function is called, with the key that identifies the data,  and the resulting object is stored in the cache object.
+</p>
+
+<p>
+For example, the following code read a large text file "<tt>constitution.txt</tt>" into the memory cache.  
+When memory usage is high, the cached data may be reclaimed by GC.  If the cached data has been expired when <tt>get()</tt> is called, <tt>readText("constitution.txt")</tt> is called and the result is stored in the cache.  Consequently, the content of the file can be retrieved by <tt>get()</tt> method, whether it is expired or not.  
+</P>
+
+<pre class="eg">
+textCache = memcache(readText)
+
+txt = textCache["constitution.txt"]
+...
+</pre>
+
+<p>
+<tt>invalidate(</tt><em>key</em><tt>)</tt> method is used to delete cached data manually from the memory cache.
+<pre class="eg">
+textCache.invalidate("constitution.txt")
+</pre>
+
+<a name=LRUcache></a>
+<div class="box">
+<div class="synopsis"><b>LRUcache</b><tt> ( int </tt><em>size</em><tt> { , </tt><em>factory</em> <tt>( </tt><em>key</em><tt> ) { , <em>expiration_handler ( expired_object ) </em> } } )</tt></div>
+</div>
+
+<p>
+<tt>LRUcache()</tt> returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+object that can be used as a data cache based on the LRU algorithm.
+</p>
+<p>
+When <em>factory</em> is not specified, <tt>get()</tt> method of the cache object retrieves the cached data if it has not been expired. Otherwise, returns null.
+</p>
+<p>
+When <em>factory</em> is specified, <tt>get()</tt> method of the cache object retrieves the cached data if it has not been expired. If the demanded data is expired or has not been stored yet, <em>factory</em> function is called, with the key that identifies the data,  and the resulting object is stored in the cache object.
+</p>
+<p>
+The Map object can hold up to <em>size</em> data elements.  When more elements need to be stored, the least recently used data element get expired.
+</p>
+<p>
+<p>
+If <em>expiration_handler</em> is specified, it is called with the object to be expired.
+</p>
+
+</p>
+<p>
+The following example shows a way to pool SAX parsers.
+</p>
+
+<pre class="eg">
+import("javax.xml.parsers.*")
+
+function createSAXParser(properties){
+   factory = SAXParserFactory::newInstance()
+   if (properties != null) setBeanProperties(factory, properties)
+   factory.newSAXParser()
+}
+
+saxParserPool = LRUcache(4, createSAXParser)
+parser = saxParserPool[null]
+...
+</pre>
+
+<a name="setFinalizer"></a>
+<div class="box">
+<div class="synopsis"><b>setFinalizer</b><tt> ( <a href="../../../apidoc/pnuts/lang/Property.html">Property</a> </tt><em>package</em> <tt>, </tt><em>func ()</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>setFinalizer()</tt> registers the specified function as the finalization procedure of the specified <em>package</em>.
+When there is no reference to <em>package</em> and it is ready to reclaimed by GC, the registered function is called.
+</p>
+
+<pre class="eg">
+function newResource(x) {
+   pkg = $(
+     function get() x
+   )
+   setFinalizer(pkg, function () println(x, " was disposed"))
+   pkg
+}
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Data Caching</div>
+
+  </body>
+</html>

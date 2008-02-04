@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Menu</div>
+
+    <h2>Menu</h2>
+
+<a name=menubar></a>
+<div class="box">
+<div class="synopsis"><b>menubar</b><tt>(Object[] </tt><em>list</em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Frame.html">Frame</a> </tt><em>frame</em> <tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>bundleName</em><tt> } , Object[] </tt><em>list</em><tt>)  or </tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/javax/swing/JFrame.html">JFrame</a> </tt><em>jFrame</em> <tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>bundleName</em><tt> } , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] </tt><em>list</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>menubar()</tt> creates a menu bar. If <em>frame</em> or <em>jFrame</em> is specified
+      the menu bar is attached to the window. 
+<em>list</em> should be an array which is structured as follows.
+</p>
+
+<div class="box">
+<div class="synopsis"><i>list</i> ::= [<em>menuList</em>, ...]</div>
+<div class="synopsis"><i>menuList</i> ::= [<em>title</em>, <em>itemList</em>, ...]</div>
+<div class="synopsis"><i>itemList</i> ::= [<em>string</em>, <em>function</em>, <em>shortcut</em>]                or  [<em>string</em>, <em>function</em>]</div>
+<div class="synopsis"><i>shortcut</i> ::= character or KeyStroke(only with Swing)</div>
+</div>
+
+<p>
+If <em>bundleName</em> is specified, labels are localized using <a href="i18n.html#formatMessage">formatMessage()</a> function.
+<p>
+If <em>jFrame</em> is specified, it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/javax/swing/JMenuBar.html">javax.swing.JMenuBar</a> object, otherwise, it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/MenuBar.html">java.awt.MenuBar</a> Object.
+</p>
+
+<div class="eg">e.g.
+<pre>
+fr = frame("title")
+menubar(fr, [["File",
+              ["Open", open, 'o'],
+              ["Save", save, 's'],
+              ["Quit", quit, 'q']],
+ 	     ["Edit",
+	      ["Cut", cut, 'x'],
+	      ["Copy", copy, 'c'],
+	      ["Paste", paste, 'v']]])
+fr.show()
+</pre>
+</div>
+
+<a name=menu></a>
+<div class="box">
+<div class="synopsis"><b>menu</b><tt>( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>bundleName</em><tt>, } <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] </tt><em>menuList</em>)</tt></div>
+</div>
+
+<p>
+<tt>menu()</tt> creates a Menu object.
+If <em>bundleName</em> is specified, labels are localized using <a href="i18n.html#formatMessage">formatMessage()</a> function.
+</p>
+
+<div class="eg">e.g.
+<pre>
+menubar = ...
+menubar.setHelpMenu(menu(["Help", ["About...", about]]))
+fr = frame("title")
+fr.setMenuBar(menuBar)
+fr.show()
+</pre>
+</div>
+
+<a name=getMenuItem></a>
+<div class="box">
+<div class="synopsis"><b>getMenuItem</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/javax/swing/JMenuBar.html">JMenuBar</a> </tt><em>menuBar</em> <tt>, Object[] </tt><em>list</em>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/MenuBar.html">MenuBar</a> </tt><em>menuBar</em> <tt>, Object[] </tt><em>list</em>)</tt></div>
+</div> 
+
+<p>
+<tt>getMenuItem()</tt> refers to a menu item which is specified by a sequence of selections.
+</p>
+
+<div class="box">
+<div class="synopsis"><em>list</em> ::= [<em>string</em>, ... ]</div> 
+</div>
+
+
+<div class="eg">e.g.
+<pre>
+getMenuItem(menubar, ["File", "Open"]).setEnabled(false)
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Menu</div>
+
+  </body>
+</html>

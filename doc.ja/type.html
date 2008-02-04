@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> 数値型の変換
+</div>
+
+<!-- body start -->
+
+<h2>数値型の変換</h2>
+
+<div class="box">
+<div class="synopsis"><b>byte</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt> or <tt>(char </tt><em>character</b></em><tt>)</tt></div>
+<div class="synopsis"><dt><b>int</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt> or <tt>(char </tt><em>character</b></em><tt>)</tt></div>
+<div class="synopsis"><b>short</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt></div>
+<div class="synopsis"><b>long</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt></div>
+<div class="synopsis"><b>float</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt></div>
+<div class="synopsis"><b>double</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt></div>
+<div class="synopsis"><b>char</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</b></em><tt>)</tt></div>
+</div>
+
+<p>
+与えられたオブジェクトから、対応するプリミティブデータを表すオブジェクトに変換します。変換が失敗する場合はnullを返します。
+</p>
+
+<p>
+<div class="eg">
+例:
+<pre>
+byte(-126)    ==> new Byte(0x82)
+int("123") ==> new Integer(123)
+int("hello") ==> null
+double("123.456") ==> new Double(123.456)
+char(65)   ==> 'A'
+</pre>
+</div>
+  
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> 数値型の変換
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Calling Platform Commands</div>
+
+    <h2>Calling Platform Commands</h2>
+
+<a name=system></a>
+<div class="box">
+<div class="synopsis"><b>system</b>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>platformCommand</em> {, (<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> | <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>)
+<em>input</em> {, (<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>|<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a>)
+<em>output</em> } } )</div>
+</div>
+
+<p>
+<tt>system()</tt> executes an external command and prints the
+result. If the 2nd parameter <em>input</em> is specified, the data
+read from the stream is written to the standard input of the command.
+</p>
+
+<div class="eg">e.g. (1)
+<pre>
+> system("ls -l")
+...
+</pre>
+</div>
+
+<div class="eg">e.g.(2)
+<pre>
+> system("wc", open("file.txt"))
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Calling Platform Commands</div>
+
+  </body>
+</html>

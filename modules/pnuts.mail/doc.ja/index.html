@@ -1,0 +1,255 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.mail モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.mail</tt></div>
+
+<h2><tt>pnuts.mail</tt> モジュール</h2>
+
+<p>
+このモジュールは、スクリプトからEメールを送るために用いられます。
+このモジュールを使うには<a href="http://java.sun.com/products/javamail">Java Mail</a> APIが必要になります。
+</p>
+
+<ul>
+<li><a href="#emailAddress">emailAddress</a>
+<li><a href="#mimepart">mimepart</a>
+<li><a href="#sendEmail">sendEmail</a>
+<li><a href="#setMailCharset">setMailCharset</a>
+<li><a href="#openMailStore">openMailStore</a>
+<li><a href="#openMailFolder">openMailFolder</a>
+<li><a href="#getMessages">getMessages</a>
+<li><a href="#listMailFolders">listMailFolders</a>
+</ul>
+
+<h3>Emailの送信</h3>
+
+<a name=sendEmail></a>
+
+<div class="box">
+<div class="synopsis"><b>sendEmail</b> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> <em>map</em> ) or</div> 
+<div class="synopsis2">( <em>mailhost</em>, <em>subject</em>, <em>content</em>, <em>from</em>, <em>to</em> {, <em>cc</em>, <em>bcc</em>, <em>replyTo</em>, <em>charset</em>} )</div>
+</div>
+
+<p>
+<tt>sendEmail()</tt> はEmailを送ります。Mapが指定された場合は、次のキーが使われます。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>キー</th>
+  <th bgcolor=#eeeeee>値</th>
+</tr>
+<tr class=wb>
+<td><em>mailhost</em>
+<td><a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+(nullの場合は"localhost")
+<tr class=wb>
+<td><em>subject</em>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<tr class=wb>
+<td><em>content</em>
+<td><a
+href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/MimeMultipart.html">MimeMultipart</a>,
+<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/MimeBodyPart.html">MimeBodyPart</a>
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>, 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>, 
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>,　または、それらのオブジェクトの配列/Collection/Generator
+<tr class=wb>
+<td><em>charset</em>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<tr class=wb>
+<td><em>from</em>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> or <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>
+<tr class=wb>
+<td><em>to</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>, または、それらのオブジェクトの配列/Collection/Generator
+<tr class=wb>
+<td><em>cc</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>, または、それらのオブジェクトの配列/Collection/Generator
+<tr class=wb>
+<td><em>bcc</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>, または、それらのオブジェクトの配列/Collection/Generator
+<tr class=wb>
+<td><em>replyTo</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>, または、それらのオブジェクトの配列/Collection/Generator
+</td></tr>
+<tr class=wb>
+<td><em>userid</em>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</td></tr>
+<tr class=wb>
+<td><em>password</em>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</td></tr>
+<tr class=wb>
+<td><em>ssl</em>
+<td>boolean
+</td></tr>
+</table>
+</blockquote>
+
+<div class="eg">例:
+<pre>
+sendEmail("mailhost", "subject", "Hello!", "myname", "friends")
+</pre></div>
+<pre class="eg">
+m = map()
+m.mailhost = "foo.bar.com"
+m.subject = "test"
+m.from = "myname"
+m.to = "friends"
+m.content = "Hello!"
+sendEmail(m)
+</pre>
+
+<a name=emailAddress></a>
+
+<div class="box">
+<div class="synopsis"><b>emailAddress</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>address</em> { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>personal_information</em> } )</tt></div>
+</div>
+
+<p>
+<tt>emailAddress()</tt> は、<em>address</em> と<em>personal_information</em>(オプション)から、<a
+href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>オブジェクトを作ります。<em>personal_information</em>にASCII以外の文字が含まれる場合は、<tt>setMailCharset()</tt>で適切な文字コードを設定しておく必要があります。
+</p>
+
+<div class="eg">例：
+<pre>
+setMailCharset("ISO-2022-JP")
+
+emailAddress("foo@bar.com", "名前")
+</pre></div>
+
+<a name=setMailCharset></a>
+
+<div class="box">
+<div class="synopsis"><b>setMailCharset</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>charset</em> )</tt></div>
+</div>
+
+<p>
+<tt>setMailCharset()</tt> は、メールの内容、サブジェクト、アドレスの個人情報に対するデフォルトの文字コードセットを設定します。
+</p>
+
+<a name=mimepart></a>
+
+<div class="box">
+<div class="synopsis"><b>mimepart</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> <em>content</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>mimeType</em> )</tt></div>
+</div>
+
+<p>
+<tt>mimepart()</tt>は、<em>content</em> と <em>mimeType</em>から、<a
+href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/MimeBodyPart.html">MimeBodyPart</a>
+オブジェクトを作ります。
+</p>
+
+<div class="eg">例：
+<pre>
+html = mimepart("&lt;html&gt;...&lt;/html&gt;", "text/html")
+</pre></div>
+
+
+<h3>Emailの受信</h3>
+
+<a name=openMailStore></a>
+
+<div class="box">
+<div class="synopsis"><b>openMailStore</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> <em>url</em> {, <em>properties</em> } )</tt> or</div>
+<div class="synopsis2"><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>protocol</em>,  <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>host</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>userid</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>password</em> {, <em>properties</em> } ) </tt></div>
+</div>
+
+<p>
+<tt>openMailStore()</tt>は、URLやその他の必要な情報を指定して、メールの保存領域(Store)をopenします。
+<p>
+
+<div class="eg">例:
+<pre>
+store = openMailStore("imap", "mailhost", "id", "pass")
+</pre></div>
+
+<a name=openMailFolder></a>
+
+<div class="box">
+<div class="synopsis"><b>openMailFolder</b><tt> (<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Store.html">Store</a> <em>store</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>folderName</em>)</tt></div>
+</div>
+
+<p>
+<tt>openMailFolder()</tt>は、メールフォルダをopenします。
+<p>
+
+<div class="eg">例:
+<pre>
+folder = openMailFolder(store, "INBOX")
+</pre></div>
+
+<a name=getMessages></a>
+
+<div class="box">
+<div class="synopsis"><b>getMessages</b><tt> (<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Folder.html">Folder</a> <em>folder</em> {, <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html">FetchProfile.Item</a>[] <em>fetchProfile</em> { , <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Message.html">Message</a>[] messages } } )</tt></div>
+</div>
+
+<p>
+<tt>getMessages()</tt>は、指定したメールフォルダのメッセージを表す<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Message.html">Message</a>オブジェクトの配列を作成します。
+<p>
+<em>fetchProfile</em>がnull以外の場合、対応するメールヘッダがプリフェッチされます。
+</p>
+<p>
+fetchProfileを指定するときに便利な次のような変数が定義されています。
+</p>
+<blockquote>
+<dl>
+<dt>FETCH_ENVELOPE
+<dd>From, To, Cc, Bcc, ReplyTo, Subject and Date. See <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html#ENVELOPE">FetchProfile$Item::ENVELOPE</a>.
+<dt>FETCH_CONTENT_INFO
+<dd>ContentType, ContentDisposition, ContentDescription, Size and LineCount. See <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html#CONTENT_INFO">FetchProfile$Item::CONTENT_INFO</a>.
+<dt>FETCH_FLAGS
+<dd>See <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html#FLAGS">FetchProfile$Item::FLAGS</a>.
+</dl>
+</blockquote>
+<p>
+<em>fetchProfile</em>のデフォルト値は、[FETCH_FLAGS, FETCH_ENVELOPE]。
+</p>
+
+<div class="eg">例:
+<pre>
+messages = getMessages(folder)
+
+messages = getMessages(folder, [FETCH_ENVELOPE, FETCH_FLAGS, FETCH_CONTENT_INFO])
+</pre></div>
+
+<a name=listMailFolders></a>
+
+<div class="box">
+<div class="synopsis"><b>listMailFolders</b><tt> (<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Folder.html">Folder</a> <em>folder</em>, <em>callback</em>(folder) {, <em>enterFunc</em>() , <em>exitFunc</em>() } )</tt></div>
+</div>
+
+<p>
+<tt>listMailFolders()</tt>は、指定されたフォルダを根とするフォルダ階層をたどりながら、<em>callback</em>関数を呼び出します。<em>enterFunc</em>()と<em>exitFunc</em>()が指定された場合、サブフォルダに入ったときと出たときに、それぞれ呼び出されます。
+<p>
+
+<div class="eg">例:
+<pre>
+listMailFolders(folder, println)
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.mail</tt></div>
+
+  </body>
+</html>

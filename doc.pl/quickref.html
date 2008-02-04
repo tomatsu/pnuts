@@ -1,0 +1,272 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="pl"><head>
+    
+    <title>Pnuts &#346;ci&#261;gawka</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body bgcolor="#ffffff">
+
+<!-- body start -->
+
+<center>
+<table class="bg2" border="0" cellspacing="1">
+<tbody><tr>
+<th bgcolor="#eeeeee">Pnuts
+</th><th bgcolor="#eeeeee">Opis / odpowiadaj&#261;cy kod Java
+</th><th bgcolor="#eeeeee">Warunki
+</th></tr><tr class="wb">
+
+<td rowspan="2">
+<pre><em>cel</em> :: <em>x</em> ( ... )<br></pre>
+</td><td>Wywo&#322;uj&#281; funkcje <em>x</em> z pakietu&nbsp;<tt><em>cel</em></tt>
+</td><td>
+<p>Istnieje pakiet o nazwie "cel".<br>
+<em>x</em> jest funkcj&#261; zdefiniowan&#261; w tym pakiecie..
+</p>
+</td></tr><tr class="wb">
+<td>Wywo&#322;anie metody statycznej
+<pre><em>cel</em>.<em>x</em>(...);<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a>.
+</p>
+</td></tr><tr class="wb">
+
+<td rowspan="2">
+<pre><em>cel</em> :: <em>x</em>
+</pre>
+</td><td>Odwo&#322;anie do zmiennej&nbsp; <em>x</em> w pakiecie&nbsp;&nbsp;<em>cel</em>
+</td><td>
+<p>Istnieje pakiet o nazwie "cel".<br>
+<em>x</em> jest zmienn&#261; lub funkcj&#261; zdefiniowan&#261; w pakiecie.
+</p>
+</td></tr><tr class="wb">
+<td>Odwo&#322;anie do zmiennej ststycznej
+<pre><em>cel</em>.<em>x</em>;<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a>.
+</p>
+</td></tr><tr class="wb">
+
+<td rowspan="4">
+<pre><em>cel</em> . <em>x</em> ( ... )<br></pre>
+</td><td>Wywo&#322;anie metody x instancji Call the obiektu <tt><em>cel</em>&nbsp;</tt>
+</td><td>
+<p>
+<em>cel</em> jest obiektem klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a>.
+</p>
+</td></tr><tr class="wb">
+<td>Wywo&#322;anie metody klasy&nbsp;
+<pre><em>cel</em>.class.<em>x</em>(...);<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a>.
+</p>
+
+</td></tr><tr class="wb">
+<td>Wywo&#322;anie statycznej metody&nbsp; <em>x</em> klasy <tt><em>celClass</em></tt>
+<pre><em>celClass</em> . x (...);<br></pre>
+</td><td>
+<div>
+<em>cel</em> jest obiektem klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> kt&oacute;ra nie posiada pola (lub w&#322;a&#347;ciwo&#347;ci Bean) ale posiada statyczn&#261; metod&#281;&nbsp; x.</div><div><em></em>.</div>
+
+</td></tr><tr class="wb">
+<td>
+<pre>obj.invoke("nazwa",<br>           new Object[]{args},<br>           context)<br></pre>
+</td><td>
+<p>
+cel jest obiektem klasy&nbsp; <a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a>&nbsp;.
+</p>
+
+</td></tr><tr class="wb">
+<td rowspan="5">
+<pre><em>cel</em> . <em>x</em>
+<em>cel</em> . <em>x</em> = <em>value</em>
+</pre>
+</td>
+<td>
+<pre><em>cel</em>.get("<em>x</em>".intern())<br><em>cel</em>.set("<em>x</em>".intern(), <em>value</em>)<br></pre>
+</td><td>
+<em>cel</em>&nbsp;jest obiektem klasy <a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a>.
+</td></tr>
+
+<tr class="wb">
+<td>
+<pre><em>cel</em>.get("<em>x</em>", context)<br><em>cel</em>.set("<em>x</em>", <em>value</em>, context)<br></pre>
+</td><td>
+<em>cel</em>&nbsp;jest obiektem klasy <a href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a> lub <a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a>.
+</td></tr>
+<tr class="wb">
+<td>
+<pre><em>cel</em>.get("<em>x</em>")<br><em>cel</em>.set("<em>x</em>", <em>value</em>)<br></pre>
+</td><td>
+<em>cel</em>&nbsp;jest obiektem klasy java.util.Map.
+</td></tr>
+
+<tr class="wb">
+<td>
+<pre><em>cel</em>.getXxx()<br><em>cel</em>.setXxx(<em>value</em>)<br></pre>
+</td><td>
+<em>cel</em>&nbsp;jest obiektem kt&oacute;ry posiada w&#322;a&#347;ciwo&#347;&#263; JavaBeans property o nazwie 'xxx'.
+</td></tr>
+
+<tr class="wb">
+<td>Dost&#281;p do zmiennej statycznej
+<pre><em>celClass</em>.xxx<br><em>celClass</em>.xxx = value<br></pre>
+</td><td>
+<p>
+</p><div>None of above condition was satisfied</div>
+<div>cel&nbsp;jest obiektem klasy <tt>java.lang.Class</tt> reprezentowanym przez <span style="font-style: italic;">celClass</span> kt&oacute;ry posiada statyczn&#261; zmienn&#261; o nazwie&nbsp;'xxx'</div>
+<p></p>
+</td>
+
+</tr><tr class="wb">
+<td rowspan="3">
+<pre><em>cel</em> [<em>x</em>]<br><em>cel</em> [<em>x</em>] = value<br></pre>
+</td><td>Pobranie lub przypisanie elemnetu tablicy.
+<pre><em>cel</em>[<em>x</em>];<br><em>cel</em>[<em>x</em>] = value;<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest tablic&#261;.
+</p>
+
+</td></tr><tr class="wb">
+<td>
+<pre>indexed.get(<em>x</em>)<br>indexed.set(<em>x</em>, value)<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem <a href="../apidoc/pnuts/lang/Indexed.html"><tt>pnuts.lang.Indexed</tt></a> lub <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/List.html"><tt>java.util.List</tt></a>.
+</p>
+</td></tr><tr class="wb">
+<td>
+<pre>map.get(<em>key</em>)<br>map.put(<em>key</em>, value)<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html"><tt>java.util.Map</tt></a>.
+</p>
+
+</td></tr><tr class="wb">
+<td rowspan="2">
+<pre><em>cel</em> ( ... )<br></pre>
+</td><td>
+<pre>Wywo&#322;anie funkcji <em>cel</em>
+</pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem <a href="../apidoc/pnuts/lang/PnutsFunction.html"><tt>pnuts.lang.PnutsFunction</tt></a>.
+</p>
+</td></tr><tr class="wb">
+<td>
+<pre>Utworzenie instancji<br>
+new <em>cel</em>(...);<br></pre>
+</td><td>
+<p>
+<em>cel</em> jest obiektem klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a>.
+</p>
+</td></tr><tr class="wb">
+
+<td rowspan="3">
+<pre>for (i : <em>x</em>) <em>wyra&#380;enie</em>
+foreach i (<em>x</em>) <em>wyra&#380;enie</em>
+</pre>
+</td><td>
+<pre>while (<em>x</em>.hasNext()){<br>    Object i = <em>x</em>.next();<br>    <em>wyra&#380;enie</em>
+}
+</pre>
+</td><td>
+<p>
+<em>x</em> jest obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html"><tt>java.util.Iterator</tt></a>.
+</p>
+</td></tr><tr class="wb">
+<td>
+<pre>while (<em>x</em>.hasMoreElements()){<br>    Object i = <em>x</em>.nextElement();<br>    <em>wyra&#380;enie</em>
+}
+</pre>
+</td><td>
+<p>
+<em>x</em>&nbsp;jest obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumerator.html"><tt>java.util.Enumerator</tt></a>.
+</p>
+
+</td></tr><tr class="wb">
+<td>
+<pre>for (Iterator it = <em>x</em>.iterator();<br>    it.hasNext(); )<br>{<br>    Object i = <em>x</em>.next();<br>    <em>wyra&#380;enie</em>
+}
+</pre>
+</td><td>
+<p>
+<em>x</em>&nbsp;jest obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html"><tt>java.util.Collection</tt></a>.
+</p>
+
+</td></tr><tr class="wb">
+<td>
+<pre><em>cel</em> &lt; object<br><em>cel</em> == object<br></pre>
+</td><td>
+<pre><em>cel</em>.compareTo(object) &lt; 0<br><em>cel</em>.compareTo(object) == 0<br></pre>
+</td><td>
+<p>
+<em>cel</em>&nbsp;jest obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Comparable.html"><tt>java.lang.Comparable</tt></a> lub <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html"><tt>java.lang.String</tt></a>.
+</p>
+
+</td></tr><tr class="wb">
+
+<td>
+<pre>[1,2]<br></pre>
+</td><td>
+<pre>new Object[]{<br>  new Integer(1),<br>  new Integer(2)<br>}<br></pre>
+</td><td>
+<p>
+</p>
+
+</td></tr><tr class="wb">
+
+<td>
+<pre>(int[])[1,2]<br></pre>
+</td><td>
+<pre>new int[]{1, 2}<br></pre>
+</td><td>
+<p>
+</p>
+
+</td></tr><tr class="wb">
+<td>
+<pre>n1 + n2<br>n1 - n2<br>n1 * n2<br>n1 / n2<br></pre>
+</td><td>
+<pre>n1.add(n2)<br>n1.subtract(n2)<br>n1.multiply(n2)<br>n1.divide(n2)<br></pre>
+</td><td>
+<p>Kt&oacute;ry&#347; z&nbsp; n1 i n2 jest obiektem <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a>.
+</p>
+</td></tr><tr class="wb">
+<td>
+<pre>&lt;decimal&gt;&lt;unit&gt;<br>e.g. 1.2cm<br></pre>
+</td><td>
+<pre>factory.make(&lt;decimal&gt;, &lt;unit&gt;)<br></pre>
+</td><td>
+<p>Obiekt fabrykuj&#261;cy zarejestrowany dla&nbsp; &lt;unit&gt;&nbsp;.
+</p>
+<pre><a href="../apidoc/pnuts/lang/Context.html">Context</a>.registerQuantityFactory(<br>    &lt;unit&gt;, <br>    <a href="../apidoc/pnuts/lang/QuantityFactory.html">QuantityFactory</a>)<br></pre>
+</td></tr></tbody></table>Notacja Pnuts
+</center>
+
+<p>
+
+<!-- body end -->
+
+</p><div class="footer">
+<a href="http://pnuts.org/">Strona domowa Pnuts</a>
+<tt>|</tt> <a href="guide.html">Podr&#281;cznik</a>
+<tt>|</tt>
+<a href="lang-TOC.html">J&#281;zyk Pnuts</a>
+<tt>|</tt> &#346;ci&#261;gawka
+<tt>|</tt>
+<a href="../apidoc/index.html">Dokumentacja API</a>
+<tt>|</tt>
+<a href="faq.html">FAQ</a>
+<tt>|</tt> <a href="http://pnuts.org/snapshot/latest/">Pobieranie</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">Licencja</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">Kontakt</a>
+</div>
+
+</body></html>

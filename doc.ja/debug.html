@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> スクリプトのデバッグ
+</div>
+
+<!-- body start -->
+
+    <h2>スクリプトのデバッグ</h2>
+
+<h3>端末型デバッガ</h3>
+
+<div class="box">
+<code>
+<div><tt>C:\> pnuts -d { </tt><em>script</em><tt> }</tt></div>
+<div><tt>C:\> pnuts -d:</tt><em>file</em><tt> </tt> <em>scriptFile</em></div>
+<div><tt>C:\> pnuts -d:</tt><em>file</em><tt> </tt> -e <em>expression</em></div>
+</code>
+</div>
+
+<p>
+<tt>pnuts</tt> コマンドに<tt>-d</tt> オプションをつけるとデバッグモードでインタプリタを実行します。デバッグ・コマンドについては、<a href="#commands">「デバッグコマンド」</a>を参照。
+</p>
+
+<p>
+デバッガは、ASTインタプリタでのみ動作します。(コンパイラとは一緒に動作しません。)
+</p>
+
+
+<div class="eg">例: <pre>C:\> pnuts -d
+Pnuts interpreter Version 1.0beta4, 1.2.2 (Sun Microsystems Inc.)
+> 1
+# Stopped at ?:1
+ >>> 1
+debug>
+</pre></div>
+
+<p>
+<tt>-d:</tt><em>ファイル</em> が指定されると、<em>ファイル</em>からデバッグ・コマンドが読み込まれます。
+</p>
+
+<div class="eg">例:
+<pre>
+C:\> pnuts -d:trace.dbg -e 'getProperty("java.version")'
+reading /tmp/trace.dbg
+# Stopped at ?:1
+ >>> getProperty("java.version")
+debug> trace
+on
+debug> cont
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:1 >>> import("java.lang.System")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:2 >>> import("java.util.Properties")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:3 >>> import("java.io.InputStream")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:4 >>> import("java.io.File")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:5 >>> import("java.io.FileInputStream")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:7 >>> function setProperty(name, val) {
+ prop = System::getProperties()
+ if (val == null) {
+  prop.remove(name)
+ } else {
+  prop.put(name, val)
+ }
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:16 >>> function getProperty(name) {
+ System::getProperty(name)
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:20 >>> function loadProperties(resourceOrStream) {
+ loadProperties(resourceOrStream, Properties())
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:24 >>> function loadProperties(input, prop) {
+ if (input instanceof String) {
+  url = getResource(input)
+  if (url == null) {
+   return null
+  }
+  prop.load(openURL(url))
+ } else if (input instanceof File) {
+  prop.load(fd = open(input))
+  fd.close()
+ } else if (input instanceof InputStream) {
+  prop.load(input)
+ } else {
+  throw(IllegalArgumentException(string(input)))
+ }
+ prop
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:16 >>> {
+ System::getProperty(name)
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:17 >>> System::getProperty(name)
+# Returns "1.4.2"
+</pre>
+</div>
+
+<div class="eg">
+trace.dbg
+<pre>
+trace
+cont
+</pre>
+</div>
+
+<a name="commands"></a>
+<h4>デバッグ・コマンド</h4>
+<blockquote>
+<dl>
+<dt><tt>stop at {ファイル名:}行</tt>
+<dd>ファイル名:行で実行を中断する</dd>
+<dt><tt>stop in 関数{:Ｎ引数}</tt>
+<dd>関数が呼ばれたときに実行を中断する。Ｎ引数が指定された場合、Ｎ引数の関数を対象にする。
+<dt><tt>clear</tt>
+<dd>すべてのブレークポイントをクリアする。
+<dt><tt>cont</tt>
+<dd>実行を続ける。
+<dt><tt>trace</tt>
+<dd>トレースモードをトグルさせる。(デフォルトは false)
+<dt><tt>trace function {関数名}</tt>
+<dd>関数トレースモードをトグルさせる。(デフォルトは false)
+<dt><tt>step {NUM}</tt>
+<dd>NUM ステップ実行する。 (デフォルトは 1 ステップ)
+<dt><tt>step up</tt>
+<dd>実行中の関数から抜ける
+<dt><tt>next {NUM}</tt>
+<dd>NUM 行実行する (関数呼び出しを通過する)。  (デフォルトは 1 行)
+<dt><tt>help</tt>
+<dd>コマンドの要約を表示する。
+<dt><tt>?</tt>
+<dd><tt>help</tt>と同じ。
+<dt>&lt;その他&gt;
+<dd>Pnutsスクリプトとして評価します。
+</dl>
+</blockquote>
+
+<a name="visualDebug"></a>
+<h3>ビジュアル・デバッガ</h3>
+
+<p>
+<tt>pnuts</tt> コマンドの<tt>-vd</tt>オプションが指定された場合、端末型デバッガの変わりにビジュアル・デバッガが使われます。<tt>pnuts.debugger</tt>プロパティについては<a href="command.html#pnuts.debugger">「プロパティ」</a>を参照。
+</p>
+
+<div class="box">
+<div class="synopsis">
+pnuts <b>-vd</b> { target.pnut }
+</div>
+</div>
+<p>
+<center>
+<img src="../doc/images/debugger.png"></img>
+</center>
+
+<p>
+淡い青色の行は、現在の位置を表しています。オレンジ色は、その行にブレークポイントがあることを示します。
+ブレークポイントの設定および解除は、右クリックで行います。
+</p>
+
+<center>
+<img src="../doc/images/breakpoint.png"></img>
+</center>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> スクリプトのデバッグ
+</div>
+
+  </body>
+</html>

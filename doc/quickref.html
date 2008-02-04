@@ -1,0 +1,397 @@
+<html>
+  <head>
+    <title>Pnuts Quick Reference</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+<body bgcolor=#ffffff>
+
+<!-- body start -->
+
+<center>
+<table border=0 cellspacing=1 class=bg2>
+<tr>
+<th bgcolor=#eeeeee>Pnuts
+<th bgcolor=#eeeeee>Description / corresponding Java code
+<th bgcolor=#eeeeee>Conditions
+<tr class=wb>
+
+<td rowspan=2>
+<pre>
+<em>target</em> :: <em>x</em> ( ... )
+</pre>
+<td>
+Call the function <em>x</em> in the package <tt><em>target</em></tt>
+<td>
+<p>
+There is a package called "target"<br>
+<em>x</em> is a function defined in the package.
+</p>
+<tr class=wb>
+<td>
+Static method call
+<pre>
+<em>target</em>.<em>x</em>(...);
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object.
+</p>
+<tr class=wb>
+
+<td rowspan=2>
+<pre>
+<em>target</em> :: <em>x</em>
+</pre>
+<td>
+Reference to the variable <em>x</em> in the package <em>target</em>
+<td>
+<p>
+There is a package called "<em>target</em>".<br>
+<em>x</em> is a variable or function defined in the package.
+</p>
+<tr class=wb>
+<td>
+Reference to a static variable
+<pre>
+<em>target</em>.<em>x</em>;
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object.
+</p>
+<tr class=wb>
+
+<td rowspan=4>
+<pre>
+<em>target</em> . <em>x</em> ( ... )
+</pre>
+<td>
+Call the instance method <em>x</em> of <tt><em>target</em> object</tt>
+<td>
+<p>
+<em>target</em> is not a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object.
+</p>
+<tr class=wb>
+<td>
+Call the instance method of the Class object
+<pre>
+<em>target</em>.class.<em>x</em>(...);
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object.
+</p>
+
+<tr class=wb>
+<td>
+Call the static method <em>x</em> of <tt><em>targetClass</em> object</tt>
+<pre>
+<em>targetClass</em> . x (...);
+</pre>
+<td>
+<div>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object that represents <em>targetClass</em>.
+</div>
+<div><em>java.lang.Class</em> does not have the field <em>x</em> (or Bean Property <em>x</em>)</div>
+<div><em>targetClass</em> has a static method <em>x</em>.</div>
+
+<tr class=wb>
+<td>
+<pre>
+obj.invoke("name",
+           new Object[]{args},
+           context)
+</pre>
+<td>
+<p>
+target is a <a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a> object.
+</p>
+
+<tr class=wb>
+<td rowspan=5>
+<pre>
+<em>target</em> . <em>x</em>
+<em>target</em> . <em>x</em> = <em>value</em>
+</pre>
+</td>
+<td>
+<pre>
+<em>target</em>.get("<em>x</em>".intern())
+<em>target</em>.set("<em>x</em>".intern(), <em>value</em>)
+</pre>
+<td>
+<em>target</em> is a <a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a> object.
+</tr>
+
+<tr class=wb>
+<td>
+<pre>
+<em>target</em>.get("<em>x</em>", context)
+<em>target</em>.set("<em>x</em>", <em>value</em>, context)
+</pre>
+<td>
+<em>target</em> is a <a href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a> object or a <a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a> object.
+</tr>
+<tr class=wb>
+<td>
+<pre>
+<em>target</em>.get("<em>x</em>")
+<em>target</em>.set("<em>x</em>", <em>value</em>)
+</pre>
+<td>
+<em>target</em> is a java.util.Map object.
+</tr>
+
+<tr class=wb>
+<td>
+<pre>
+<em>target</em>.getXxx()
+<em>target</em>.setXxx(<em>value</em>)
+</pre>
+<td>
+<em>target</em> is an object that has the JavaBeans property 'xxx'.
+</tr>
+
+<tr class=wb>
+<td>
+Access to a static variable
+<pre>
+<em>targetClass</em>.xxx
+<em>targetClass</em>.xxx = value
+</pre>
+<td>
+<p>
+<div>None of above condition was satisfied</div>
+<div>target is a <tt>java.lang.Class</tt> object that represents <em>targetClass</em> class</div>
+<div><em>targetClass</em> has a static variable 'xxx'</div>
+</p>
+</td>
+
+<tr class=wb>
+<td rowspan=3>
+<pre>
+<em>target</em> [<em>x</em>]
+<em>target</em> [<em>x</em>] = value
+</pre>
+<td>
+Dereference of an array, or assignment of an element.
+<pre>
+<em>target</em>[<em>x</em>];
+<em>target</em>[<em>x</em>] = value;
+</pre>
+<td>
+<p>
+<em>target</em> is an array.
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+indexed.get(<em>x</em>)
+indexed.set(<em>x</em>, value)
+</pre>
+<td>
+<p>
+<em>target</em> is a <a
+href="../apidoc/pnuts/lang/Indexed.html"><tt>pnuts.lang.Indexed</tt></a>
+object or a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/List.html"><tt>java.util.List</tt></a> object.
+</p>
+<tr class=wb>
+<td>
+<pre>
+map.get(<em>key</em>)
+map.put(<em>key</em>, value)
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html"><tt>java.util.Map</tt></a>
+object.
+</p>
+
+<tr class=wb>
+<td rowspan=2>
+<pre>
+<em>target</em> ( ... )
+</pre>
+<td>
+<pre>
+Call the function <em>target</em>
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="../apidoc/pnuts/lang/PnutsFunction.html"><tt>pnuts.lang.PnutsFunction</tt></a> object.
+</p>
+<tr class=wb>
+<td>
+<pre>
+Create an instance<br>
+new <em>target</em>(...);
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object.
+</p>
+<tr class=wb>
+
+<td rowspan=3>
+<pre>
+for (i : <em>x</em>) <em>expression</em>
+foreach i (<em>x</em>) <em>expression</em>
+</pre>
+<td>
+<pre>
+while (<em>x</em>.hasNext()){
+    Object i = <em>x</em>.next();
+    <em>expression</em>
+}
+</pre>
+<td>
+<p>
+<em>x</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html"><tt>java.util.Iterator</tt></a> object.
+</p>
+<tr class=wb>
+<td>
+<pre>
+while (<em>x</em>.hasMoreElements()){
+    Object i = <em>x</em>.nextElement();
+    <em>expression</em>
+}
+</pre>
+<td>
+<p>
+<em>x</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumerator.html"><tt>java.util.Enumerator</tt></a> object.
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+for (Iterator it = <em>x</em>.iterator();
+    it.hasNext(); )
+{
+    Object i = <em>x</em>.next();
+    <em>expression</em>
+}
+</pre>
+<td>
+<p>
+<em>x</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html"><tt>java.util.Collection</tt></a> object.
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+<em>target</em> < object
+<em>target</em> == object
+</pre>
+<td>
+<pre>
+<em>target</em>.compareTo(object) < 0
+<em>target</em>.compareTo(object) == 0
+</pre>
+<td>
+<p>
+<em>target</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Comparable.html"><tt>java.lang.Comparable</tt></a> object or a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html"><tt>java.lang.String</tt></a> object.
+</p>
+
+<tr class=wb>
+
+<td>
+<pre>
+[1,2]
+</pre>
+<td>
+<pre>
+new Object[]{
+  new Integer(1),
+  new Integer(2)
+}
+</pre>
+<td>
+<p>
+</p>
+
+<tr class=wb>
+
+<td>
+<pre>
+(int[])[1,2]
+</pre>
+<td>
+<pre>
+new int[]{1, 2}
+</pre>
+<td>
+<p>
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+n1 + n2
+n1 - n2
+n1 * n2
+n1 / n2
+</pre>
+<td>
+<pre>
+n1.add(n2)
+n1.subtract(n2)
+n1.multiply(n2)
+n1.divide(n2)
+</pre>
+<td>
+<p>
+Either n1 or n2 a <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a> object.
+</p>
+<tr class=wb>
+<td>
+<pre>
+&lt;decimal&gt;&lt;unit&gt;
+e.g. 1.2cm
+</pre>
+<td>
+<pre>
+factory.make(&lt;decimal&gt;, &lt;unit&gt;)
+</pre>
+<td>
+<p>
+A factory object associated with &lt;unit&gt; is registered.
+</p>
+<pre>
+<a
+href="../apidoc/pnuts/lang/Context.html">Context</a>.registerQuantityFactory(
+    &lt;unit&gt;, 
+    <a href="../apidoc/pnuts/lang/QuantityFactory.html">QuantityFactory</a>)
+</pre>
+</table>
+Fig 1: Pnuts notation
+</center>
+</bgcolor>
+<p>
+
+<!-- body end -->
+
+<div class="footer">
+<a href="http://pnuts.org/">Pnuts Home</a>
+<tt>|</tt>
+<a href="guide.html">Pnuts User's Guide</a>
+<tt>|</tt>
+<a href="lang-TOC.html">Pnuts Language</a>
+<tt>|</tt>
+Quick Reference
+<tt>|</tt>
+<a href="../apidoc/index.html">API doc</a>
+<tt>|</tt>
+<a href="faq.html">FAQ</a>
+<tt>|</tt>
+<a href="/">Download</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">License</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">Contact Us</a>
+</div>
+
+</body>
+</html>

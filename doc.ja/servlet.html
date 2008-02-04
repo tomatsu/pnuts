@@ -1,0 +1,719 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK type="text/css" rel="stylesheet" href="stylesheet.css">
+  </head>
+
+
+<body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Webスクリプテイング
+</div>
+
+<!-- body start -->
+
+<h1>Webスクリプテイング</h1>
+
+<p>
+<a href="../modules/pnuts.servlet/doc.ja/index.html"><tt>pnuts.servlet</tt>モジュール</a>を使うと、ダイナミックなWebページを簡単に作成することができます。
+<p>
+<tt>pnuts.servlet</tt>モジュールは、2種類のスクリプトをサポートします。一つは、JSPやPHPのようにHTML文書にスクリプトを埋め込むタイプです。もう一つは、サーブレットやCGIと同様に、Webコンテンツの生成をプログラム(スクリプト)が主体的に行うタイプです。ここでは、前者を<b>ダイナミック・ページ</b>、後者を<b>サーブレット・スクリプト</b>と呼ぶことにします。また、web.xmlの設定だけでURLの書き換えを行えるような仕組みを提供しています。
+
+<ul>
+<li><a href="#preparation">1. 準備</a>
+<ul>
+<li><a href="#servlet-container">サーブレット・コンテナの準備</a>
+<li><a href="#required-files">必要なファイル</a>
+<li><a href="#configuration">web.xmlの設定</a>
+</ul>
+<li><a href="#concepts">2. 概念</a>
+<ul>
+<li><a href="#servlet_scripts">サーブレット・スクリプト</a>
+<li><a href="#classpath">クラスパス</a>
+<li><a href="#scope">変数のスコープ</a>
+<li><a href="#dynamic_pages">ダイナミック・ページ</a>
+</ul>
+<li><a href="#senarios">3. 用法</a>
+<ul>
+<li><a href="#3.1">サーブレット・スクリプト</a>
+<li><a href="#3.2">ダイナミック・ページ</a>
+<li><a href="#3.3">アクションとテンプレートが分離されたサーブレット・スクリプト</a>
+</ul>
+
+<li><a href="#url_rewrite">4. URLの書き換え</a>
+<ul>
+<li><a href="#url_rewrite_config">設定</a>
+</ul>
+</ul>
+
+<a name="preparation"></a>
+<h2>1. 準備</h2>
+
+<a name="servlet-container"></a>
+<h3>サーブレット・コンテナの準備</h3>
+
+<p>
+Pnutsサーブレットを動かすには、Servlet API 2.2以降に対応するサーブレッ
+ト・コンテナが必要になります。
+<li><a href="http://java.sun.com/products/servlet/industry.html#servers">http://java.sun.com/products/servlet/industry.html#servers</a>
+</p>
+
+<a name="required-files"></a>
+<h3>必要なファイル</h3>
+
+以下のファイルを、サーブレット・コンテナの適切な場所にコピーしてください。
+
+<UL>
+  <LI><tt>pnuts.jar</tt>
+  <LI><tt>pnuts-modules.jar</tt>
+</ul>
+
+たとえば、Tomcat-5.Xでは、<tt>common/lib/</tt>にコピーします。
+
+<a name="configuration"></a>
+<h3>web.xmlの設定</h3>
+
+<a name="servlet-class"></a>
+<h4>Servlet Class</h4>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Servlet class</th>
+<th bgcolor=#eeeeee>Description</th>
+<tr class="wb">
+      <td>pnuts.servlet.PnutsServlet</td>
+      <td>When this class is used, a servlet script is executed for each request.</td>
+<tr class="wb">
+      <td>pnuts.servlet.DynamicPageServlet</td>
+      <td>When this class is used, a template-based dynamic page is executed for each request.</td>
+</tr>
+</table>
+</blockquote>
+<p>
+Other than those servlet classes, <tt>pnuts.servlet.URLRewriteServlet</tt> class is used
+for <a href="#url_rewrite">URL rewriting</a>.
+
+
+<a name="init-param"></a>
+<h3>初期化パラメータ</h3>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>init-param</th>
+<th bgcolor=#eeeeee>意味</th>
+<tr class="wb">
+      <td>module</td>
+      <td>カンマで区切られた1つ以上のモジュール名が指定された場合は、それらのモジュールをコンテクストに追加します。</td>
+<tr class="wb">
+      <td>initialScript</td>
+      <td>指定された場合は、サーブレットが初期化されるときにそのスクリプトを読み込みます。</td>
+<tr class="wb">
+      <td>script</td>
+      <td>指定された場合は、リクエストのたびにそのスクリプトが実行されます。指定されない場合は、URLに対応するスクリプトが使われます。</td>
+<tr class="wb">
+      <td>locale
+      <td>デフォルトのロケール
+      <ul><li>通常は空文字を指定します。</li>
+      <li>Locale情報(言語、国、バリアント)を'_'で区切って指定します。</li></ul>
+<tr class="wb">
+      <td>timezone
+      <td>デフォルトのタイムゾーン
+<tr class="wb">
+      <td>compile
+      <td><tt>true</tt>の場合、サーブレット・スクリプトはJava バイトコードにコンパイルされます。
+<tr class="wb">
+      <td>encoding
+      <td>スクリプトの文字コード
+<tr class="wb">
+      <td>buffering
+      <td><tt>true</tt>の場合、コンテンツはバッファリングされ、<tt>Content-Length</tt>が設定されます。
+      デフォルトは<tt>true</tt>。
+<tr class="wb">
+      <td>execute-latest-script
+      <td><tt>true</tt>の場合, コンテンツのタイムスタンプが検査され、過去に読み込まれてから更新があった場合にのみ、スクリプトはコンパイルされloadされます。デフォルトは<tt>true</tt>。
+<tr class="wb">
+      <td>debug
+      <td><tt>true</tt>の場合、スタックトレースがログに表示されます。
+      デフォルトは<tt>false</tt>。
+<tr class="wb">
+      <td>isolation
+      <td><tt>true</tt>の場合、スクリプトは<a href="isolation.html">隔離されたスクリプト環境</a>で実行されます。
+      デフォルトは<tt>true</tt>。
+<tr class="wb">
+      <td>workdir</td>
+      <td>ダイナミック・ページから変換されたサーブレット・スクリプトを保存するサブディレクトリの名前。同じディレクトリに保存するには "." を指定します。このパラメータが指定されない場合は、サーブレット・スクリプトは保存されません。</td>
+<tr class="wb">
+      <td>error-page
+      <td>指定された場合、例外がcatchされなかったときにそのページを表示します。</a>.
+</table>
+</blockquote>
+
+<a name="example-web-xml"></a>
+<h4>web.xmlの例</h4>
+
+<div class="eg">
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/dtd/web-app_2_2.dtd"&gt;
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.PnutsServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;execute-latest-script&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;script&lt;/param-name&gt;
+            &lt;param-value&gt;scripts/index.pnut&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;module&lt;/param-name&gt;
+            &lt;param-value&gt;pnuts.servlet&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;compile&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;debug&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;includeLineNo&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;buffering&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+
+</pre>
+</div>
+
+<a name="concepts"></a>
+<h2>2. 概念</h2>
+
+<a name="servlet_scripts"></a>
+<h3>サーブレット・スクリプト</h3>
+<p>
+サーブレット・スクリプトでは、print()関数やprintln()関数の出力がサーブレットのレスポンスとしてクライアントに送られます。
+また、デフォルトの設定では、<a href="../modules/pnuts.servlet/doc.ja/index.html">pnuts.servletモジュール</a> が利用可能です。
+</p>
+<p>
+サーブレット・スクリプトでは、いくつかの変数があらかじめ定義されていますが、それ以外は通常のスクリプトと見た目は同じです。サーブレット・スクリプトのファイルの拡張子は、やはり<tt>.pnut</tt>です。
+ユーザは、コンパイルやインストールをすることなく、新しいサーブレットを試すことができます。
+</p>
+
+<div class="eg">
+例: test.pnut
+<pre>
+response.setContentType("text/html")
+print("&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;")
+for (i : 1..6) {
+    print("Hello, World!!")
+}
+print("&lt;/body&gt;&lt;/html&gt;")
+</pre></div>
+
+<h3>テキストでないドキュメント</h3>
+
+<p>
+print()やprintln()のデフォルトの出力先は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/PrintWriter.html">PrintWriter</a> オブジェクトです。メソッド呼び出し等で<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a>が必要であれば、かわりに<tt>response.getOutputStream()</tt>を使います。
+</p>
+
+<div class="eg">
+例 (<tt>${TOMCAT}/webapps/test/image.pnut</tt>)
+<pre>
+use("pnuts.awt")
+
+response.setContentType("image/png")
+
+import("java.awt.Color")
+im = <a href="../modules/pnuts.awt/doc.ja/image.html#makeImage">makeImage</a>(20, 20, function (g) {
+   g.setColor(Color::white)
+   g.fillRect(0, 0, 20, 20)
+   g.setColor(Color::orange)
+   g.fillOval(0, 0, 20, 20)
+})
+<a href="../modules/pnuts.awt/doc.ja/image.html#writeImage">writeImage</a>(im, "image/png", response.getOutputStream())
+</pre></div>
+
+
+<a name="classpath"></a>
+<h3>クラスパス</h3>
+
+<p>
+Webアプリケーションのクラスパス(WEB-INF/classes、WEB-INF/lib/*jar)の前に、サーブレット・スクリプトが置かれているディレクトリからクラスやリソースファイルを検索します。
+<p>
+
+
+<a name="scope"></a>
+<h3>変数のスコープ</h3>
+<p>
+サーブレット・スクリプトの変数のスコープには、次の3つがあります。
+</p>
+<ul>
+<li><a href="#script_scope">スクリプト・スコープ</a>
+<li><a href="#script_scope">リクエスト・スコープ</a>
+<li><a href="#session_scope">セッション・スコープ</a>
+</ul>
+
+<a name="script_scope"></a>
+<p>
+<b>スクリプト・スコープ</b>は、URLに指定されるスクリプトごとに作られる名前空間(Package)です。リクエストのたびに変化しない状態を保存したり、リクエストのたびに呼び出される関数を定義するために使います。
+<p>
+スクリプト・スコープでは、次の変数をスクリプトで使うことができます。
+<p>
+<blockquote>
+<dl>
+<dt><tt>this</tt>
+<dd><tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/Servlet.html">Servlet</a></tt> オブジェクト
+</dl>
+</blockquote>
+
+<a name="request_scope"></a>
+<p>
+<b>リクエスト・スコープ</b>は、リクエストごとに作られる名前空間
+(Package)で、あるスクリプト・スコープを親とします。
+リクエスト・スコープは、リクエストごとに変化する情報を一時的に保存するために使われます。
+サーブレット・スクリプトとしてURLに指定されるスクリプトは、このスコープで実行されます。
+</p>
+<p>
+リクエスト・スコープでは、次の変数をスクリプトで使うことができます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>request</tt>
+<dd><tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/Servlet.html#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)">Servlet.service()</a></tt> メソッドに渡される <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> オブジェクト
+<dt><tt>response</tt>
+<dd><tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/Servlet.html#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)">Servlet.service()</a></tt> メソッドに渡される <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletResponse.html">ServletResponse</a> オブジェクト
+</dl>
+</blockquote>
+
+<p>リクエスト・スコープから、<tt>load()</tt>、<tt>loadFile()</tt>等の関数でスクリプトを読み込むと、そのスクリプトは、親のスクリプト・スコープで実行されます。
+<p>
+リクエスト・スコープからは、親のスクリプト・スコープの変数を参照することはできますが、スクリプト・スコープからリクエスト・スコープの変数を参照することはできません。リクエスト・スコープ以外で、変数<tt>request</tt>、<tt>response</tt>を参照するには、関数<a
+href="../modules/pnuts.servlet/doc.ja/index.html#getRequest"><tt>getRequest()</tt></a>、<a href="../modules/pnuts.servlet/doc.ja/index.html#getResponse"><tt>getResponse()</tt></a>を使います。
+
+</p>
+<p>
+URLで指定されたスクリプト・ファイルとは別のファイルをリクエストスコープで実行したい場合は、<a href="../modules/pnuts.servlet/doc.ja/index.html#requestScope"><tt>requestScope()</tt></a>を呼び出すことで得られるPackageオブジェクトを使います。
+</p>
+
+<div class="eg">
+例
+<pre>
+package(requestScope())
+</pre></div>
+
+<p>
+また、リクエスト・スコープからスクリプト・スコープにアクセスするには、
+<a href="../modules/pnuts.lib/doc.ja/package_op.html#rootScope"><tt>rootScope()</tt></a>関数が返すPackageオブジェクトを利用します。
+</p>
+
+<div class="eg">
+例
+<pre>
+root = <a href="../modules/pnuts.lib/doc.ja/package_op.html#rootScope">rootScope</a>()
+if (root.a == null) root.a = 1 else root.a++
+println(root.a)
+</pre></div>
+
+
+<a name="session_scope"></a>
+<p>
+<b>セッション・スコープ</b> は、<a href="../modules/pnuts.servlet/doc.ja/index.html#getSession">getSession()</a>関数を呼び出すことで作成される名前空間です。複数のリクエストから共有されるだけでなく、複数のスクリプトからも共有されます。
+<p>
+
+<h4>特殊文字の処理</h4>
+
+<p>
+HTMLやXMLドキュメントのテンプレートの場合、タグを構成する&lt;、&gt;、&amp;等の特殊文字に注意する必要があります。
+</p>
+<p>
+<a href="../modules/pnuts.servlet/doc.ja/index.html#escape"><tt>escape()</tt></a>を使うと特殊文字の処理が簡単に行えます。
+</p>
+
+<pre class="eg">
+response.setContentType("text/html")
+
+head = "&lt;TABLE BORDER=1&gt;"
+row = template("&lt;TR&gt;&lt;TD&gt;%key%&lt;/TD&gt;&lt;TD&gt;%value%&lt;/TD&gt;&lt;/TR&gt;", "%([A-Za-z]+)%")
+footer = "&lt;/TABLE&gt;"
+
+props = System::getProperties()
+m = map()
+
+println(head)
+for (i : props.keys()){
+   m.key = <b>escape(i)</b>
+   m.value = <b>escape(string(props.get(i)))</b>
+   applyTemplate(row, m)()
+}
+println(footer)
+</pre>
+
+<p>
+また、ドキュメントにURLを埋め込む場合は、別のエンコード方法が必要になることに注意して下さい。次の例は、URLの一部になる文字列を<a href="../modules/pnuts.servlet/doc.ja/index.html#encodeURL"><tt>encodeURL()</tt></a>でエンコードしています。
+</p>
+
+<pre class="eg">
+templ = template("%link%",  "%([A-Za-z]+)%")
+
+m = map()
+m.link = "http://host/index.pnut?name=" + encodeURL("トルシエ")
+
+applyTemplate(templ, m)()
+</pre>
+
+<p>
+<a
+href="../modules/pnuts.servlet/doc.ja/index.html#makeQueryString"><tt>makeQueryString()</tt></a>を使って、MapからURLエンコードされたQuery
+Stringを作る方法もあります。
+</p>
+
+<pre class="eg">
+templ = template("%link%",  "%([A-Za-z]+)%")
+q = map()
+q.name = "トルシエ"
+
+m = map()
+m.link = "http://host/index.pnut?" + makeQueryString(q)
+
+applyTemplate(templ, m)()
+</pre>
+
+
+
+<a name="dynamic_pages"></a>
+<h2>ダイナミック・ページ</h2>
+
+<p>
+Pnutsのダイナミック・ページは、&lt;% と %&gt; で囲まれたタグを含むHTML文書です。ファイルの拡張子は<tt>.pea</tt>です。タグの中には、Pnutsの式を書くことができます。
+<p>
+ダイナミック・ページは、最初にリクエストを受け取ったときに、等価なサーブレット・スクリプトに変換され、ファイルとして保存されます。各リクエストに対しては、(もとの.peaファイルが更新されていないかぎり)変換後のサーブレット・スクリプトが実行されます。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb><td>&lt;%- ... %&gt;</td><td>コメント</tr>
+<tr class=wb><td>&lt;%= ... %&gt;</td><td>式を評価して結果を埋め込む</tr>
+<tr class=wb><td>&lt;% ... %&gt;</td><td>式を評価する(結果は埋め込まない)</tr>
+<tr class=wb><td>&lt;%@ ... %&gt;</td><td>ディレクティブ。<br>
+<tt>&lt%@ include file=".."%&gt;</tt>という記法でファイルを埋め込むことができます。<br>
+<tt>&lt%@ include expr=".."%&gt;</tt>という記法で式の実行結果をコンパイル時に埋め込むことができます。<br>
+<tt>&lt%@ escape %&gt;</tt> があると、それ以降の<tt>&lt;%=..%&gt;</tt>の表示の中の特殊文字をエスケープします。<br>
+<tt>&lt%@ no-escape %&gt;</tt> があると、それ以降の<tt>&lt;%=..%&gt;</tt>の表示の中の特殊文字がエスケープしません。
+</table>
+<center>タグの種類</center>
+</blockquote>
+
+<div class="eg">
+例: test.pea
+<pre>
+&lt;% response.setContentType("text/html") %&gt;
+&lt;% for (i : 1..6) { %&gt;
+    &lt;H&lt;%=i%&gt;&gt; &lt;%=i%&gt;: Hello, World!! &lt;/H&lt;%=i%&gt;&gt;&lt;p&gt;
+&lt;%}%&gt;
+</pre></div>
+
+
+<h4>HTML/PEA ファイルのインクルード</h4>
+<p>
+次のディレクティブは、<em>file</em>から変換されたサーブレット・スクリプトに置き換えられます。
+</p>
+
+<div class="box">
+<div class="synopsis">
+&lt;%@ include file="<em>file</em>" %&gt;
+</div>
+</div>
+<p>
+<div class="eg">
+test.pea
+<pre>
+&lt;% response.setContentType("text/html") %&gt;
+&lt;%@ include file="date.pea" %&gt;
+</pre>
+</div>
+<div class="eg">
+date.pea
+<pre>
+今 &lt;%= date()  %&gt;です。
+</pre>
+</div>
+
+<h4>コンパイル時に動的コンテンツを埋め込む</h4>
+
+<p>
+次のディレクティブは、コンパイル時に<em>expreesion</em>を実行した結果に置き換わります。
+</p>
+<div class="box">
+<div class="synopsis">
+&lt;%@ include expr="<em>expression</em>" %&gt;
+</div>
+</div>
+<p>
+<div class="eg">
+test.pea
+<pre>
+このページは &lt;%@ include expr="Date()" %&gt; にコンパイルされました。
+</pre></div>
+
+<a name="senarios"></a>
+<h2>3. 用法</h2>
+
+<a name="3.1"></a>
+<h3>3.1 サーブレット・スクリプト</h3>
+
+<tt>WEB-INF/web.xml</tt> の <tt>&lt;servlet-mapping&gt;</tt> 要素は、どのファイルがどのサーブレットを実行するかを定義します。
+<p>
+たとえば、次のweb.xmlは *.pnut ファイルにPnutsServletを対応付けます。
+</p>
+
+<div class="eg">WEB-INF/web.xml
+<pre>
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.PnutsServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.pnut&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+</div>
+
+ブラウザで*.pnutファイルを見ると、そのスクリプトが実行され、printされたメッセージが表示されます。
+
+<div class="eg">index.pnut
+<pre>
+response.setContentType("text/html")
+println("&lt;html&gt;&lt;body&gt;")
+println("Hello ", <a href="../modules/pnuts.servlet/doc/index.html#getParameter">getParameter</a>("name"))
+println("&lt;/body&gt;&lt;/html&gt;")
+</pre>
+</div>
+
+<a name="3.2"></a>
+<h3>3.2 ダイナミック・ページ</h3>
+<p>
+以下のweb.xmlでは、*.pea ファイルがDynamicPageServletに対応付けられます。
+</p>
+
+<div class="eg">WEB-INF/web.xml
+<pre>
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;dynamicPages&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.DynamicPageServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dynamicPages&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.pea&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+</div>
+
+ブラウザで *.pea ファイルを見ると、そのテンプレートが整形され、表示されます。
+
+<div class="eg">hello.pea
+<pre>
+&lt;html&gt;
+&lt;body&gt;
+Hello &lt;%= <a href="../modules/pnuts.servlet/doc.ja/index.html#getParameter">getParameter</a>("name")%&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</div>
+
+<a name="3.3"></a>
+<h3>3.3 アクションとテンプレートが分離されたサーブレット・スクリプト</h3>
+
+<div class="eg">WEB-INF/web.xml
+<pre>
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.PnutsServlet&lt;/servlet-class&gt;
+        <b>&lt;init-param&gt;
+            &lt;param-name&gt;initialScript&lt;/param-name&gt;
+            &lt;param-value&gt;setup.pnut&lt;/param-value&gt;
+        &lt;/init-param&gt;</b>
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;list/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+</div>
+
+このweb.xmlでは、サーブレットが初期化されるときに、次のスクリプトが実行されます。 
+
+<div class="eg">setup.pnut
+<pre>
+<a href="../modules/pnuts.servlet/doc.ja/index.html#setupActions">setupActions</a>("actions")
+<a href="../modules/pnuts.servlet/doc.ja/index.html#setupPages">setupPages</a>("templates")
+</pre>
+</div>
+
+<p>
+この<tt>setup.pnut</tt>は、"actions/"の下のスクリプトと、"templates/"の下のテンプレートをコンパイルします。
+すべてコンパイルされると、
+<ul>
+<li><tt>dispatch(</tt><em>actionスクリプト・ファイルのベースネーム</em><tt>)</tt>で、そのactionスクリプトが実行されます。
+<li><tt>render(</tt><em>テンプレート・ファイルのベースネーム</em><tt>)</tt>で、そのテンプレートが整形・表示されます。
+</ul>
+
+<div class="eg">actions/list.pnut
+<pre>
+name = path[1]     // name は、<a href="#request_scope">requestスコープ</a>に定義されます
+render("list")     // templates/list.pea を整形・表示
+</pre>
+</div>
+
+<div class="eg">templates/list.pea
+<pre>
+&lt;html&gt;
+  &lt;body&gt;
+   Hello &lt;%=<a href="../modules/pnuts.servlet/doc/index.html#escape">escape</a>(name)%&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</div>
+
+
+<div class="eg">index.pnut
+<pre>
+path = <a href="../modules/pnuts.servlet/doc/index.html#requestPath">requestPath</a>()
+if (size(path) > 1){
+   dispatch(path[0])      // "actions/<em>something</em>.pnut"を実行
+}
+</pre>
+</div>
+
+
+<a name="url_rewrite"></a>
+<h2>4. URLの書き換え</h2>
+
+普通の設定では、サーブレット・スクリプトは<tt>.pnut</tt>、ダイナミック・ページは<tt>.pea</tt>という拡張子のファイルに対して、それぞれに対応するサーブレットが呼び出されますが、URLの書き換えを行うことで、より簡単なURLでサーバーサイドのスクリプトを実行させることができます。例えば、
+<pre class="eg">
+http://localhost/help/encodeURL
+</pre>
+というURLが
+<pre class="eg">
+http://localhost/help.pnut?function=encodeURL
+</pre>
+のように内部的に書き換えられるような設定することによって、より簡単なURLで動的なページを表示させることができます。
+<p>
+
+<a name="url_rewrite_config"></a>
+<h3>設定</h3>
+
+URL書き換えを行うサーブレットとして、pnuts.servlet.URLRewriteServletクラスをweb.xmlに指定します。このサーブレットの初期化パラメータは以下のとおり。
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=80%>
+<tr class=wb>
+<th bgcolor=#eeeeee>init-param</th>
+<th bgcolor=#eeeeee>意味</th>
+<tr class="wb">
+      <td>configuration</td>
+      <td>設定ファイル名（デフォルトは WEB-INF/classes/url_rewrite.conf ）</td>
+</tr>
+<tr class="wb">
+      <td>verbose</td>
+      <td>"true"ならばURLの置換のログを出力</td>
+</tr>
+<tr class="wb">
+      <td>validating</td>
+      <td>"true"ならば設定ファイルのスキーマ検証を行う</td>
+</tr>
+</table>
+</blockquote>
+設定ファイルは、次のような構造のXML文書です。
+一番最初にURLにマッチした正規表現を置換文字列で置き換えます。
+一つもマッチしない場合や、<tt>exclude-pattern</tt>要素のパターンにマッチするURLは書き換えられません。
+<div class="eg">
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;url-rewrite&gt;
+  &lt;rewrite-rule&gt;
+    &lt;pattern&gt;正規表現&lt;/pattern&gt;
+    &lt;replacement&gt;置換文字列&lt;/replacement&gt;
+  &lt;/rewrite-rule&gt;
+  ...
+
+  &lt;exclude-pattern&gt;/scripts/*pnut&lt;/exclude-pattern&gt;
+  ...
+&lt;/url-rewrite&gt;
+</pre>
+</div>
+
+
+以下は、設定例です。
+<p>
+<div class="eg">WEB-INF/classes/url_rewrite.conf
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;url-rewrite&gt;
+  &lt;rewrite-rule&gt;
+    &lt;pattern&gt;[^/]*/help/(\w+)&lt;/pattern&gt;
+    &lt;replacement&gt;help.pnut?function=$1&lt;/replacement&gt;
+  &lt;/rewrite-rule&gt;
+&lt;/url-rewrite&gt;
+</pre>
+</div>
+<div class="eg">web.xml
+<pre>
+ &lt;web-app&gt;
+    ...
+    &lt;servlet&gt;
+      &lt;servlet-name&gt;url_rewrite&lt;/servlet-name&gt;
+      &lt;servlet-class&gt;
+       pnuts.servlet.URLRewriteServlet
+      &lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;url-pattern&gt;help*&lt;/url-pattern&gt;
+        &lt;servlet-name&gt;url_rewrite&lt;/servlet-name&gt;
+    &lt;/servlet-mapping&gt;
+    ...
+</pre>
+</div>
+
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Webスクリプテイング
+</div>
+
+  </body>
+</html>

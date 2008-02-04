@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.regexモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.regex</tt></div>
+
+<h2><tt>pnuts.regex</tt>モジュール</h2>
+
+<p>
+<TT>pnuts.regex</TT> モジュールは、 特定の正規表現APIに依存しない形で、正規表現の関数を提供します。
+</p>
+<P>
+J2SE1.4では、デフォルトで標準の正規表現APIが使われます。
+それ以前のJREではサードパーティが提供する正規表現パッケージが必要になります。
+<p>
+システム・プロパティ<tt>pnuts.regex.module</tt>が定義されている場合はそのモジュールを使用し、定義されていない場合はプロパティファイル"pnuts/regex/regex.properties"にあらかじめ指定されたリストの中から利用可能な正規表現APIを探します。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=65%>
+<tr class=wb>
+<th bgcolor=#eeeeee>正規表現API</th>
+<th bgcolor=#eeeeee>モジュール名</th>
+<tr class="wb">
+<td class=wb>JSR51 (J2SE1.4.X)</td>
+<td class=wb><tt>pnuts.regex.jsr51</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://jregex.sourceforge.net/">JRegex</a></td>
+<td class=wb><tt>jregex</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://jakarta.apache.org/oro/">Jakarta ORO</a></td>
+<td class=wb><tt>jakarta-oro</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://www.alphaworks.ibm.com/tech/regex4j">Regex4J</a></td>
+<td class=wb><tt>regex4j</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://jakarta.apache.org/regexp/">Jakarta Regexp</a></td>
+<td class=wb><tt>jakarta-regexp</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://www.cacas.org/java/gnu/regexp/">GNU Regexp</a></td>
+<td class=wb><tt>gnu-regexp</tt></td>
+<tr class="wb">
+<td class=wb>Regexp API in Xerces XML parser</td>
+<td class=wb><tt>xerces-regexp</tt></td>
+</tr>
+</table>
+</blockquote>
+
+<h3>索引</h3>
+
+<ul>
+<li><a href="regex.html#getMatch">getMatch</a>
+<li><a href="regex.html#getMatches">getMatches</a>
+<li><a href="regex.html#getMatchStart">getMatchStart</a>
+<li><a href="regex.html#getMatchEnd">getMatchEnd</a>
+<li><a href="regex.html#getMatchCount">getMatchCount</a>
+<li><a href="regex.html#getNumberOfGroups">getNumberOfGroups</a>
+<li><a href="regex.html#match">match</a>
+<li><a href="regex.html#matchAll">matchAll</a>
+<li><a href="regex.html#formatMatch">formatMatch</a>
+<li><a href="regex.html#regex">regex</a>
+<li><a href="regex.html#split">split</a>
+<li><a href="regex.html#substitute">substitute</a>
+<li><a href="regex.html#whichRegexAPI">whichRegexAPI</a>
+</ul>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.regex</tt></div>
+
+
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> load可能なクラス
+</div>
+
+<!-- body start -->
+
+<a name=module></a>
+<h3>load可能なクラス</h3>
+
+<p>
+拡張子'.pnut' が省略されると、Pnuts インタプリタは、Java のクラスを、コンパイル済みのスクリプトとして読み込もうとします。この場合、そのクラスは、<a href="../apidoc/pnuts/lang/Runtime.html"><tt>pnuts.lang.Executable</tt></a>インタフェースの実装クラスでなければなりません。
+</p>
+
+<p>
+load可能なクラスのクラス名は、スクリプト名の'<tt>/</tt>'を'<tt>.</tt>'で置き換えたものです。たとえば、スクリプトの名前が"<tt>lib/stream</tt>"の場合、<tt>lib.stream</tt>
+クラスがもしあれば読み込まれます。そのクラスがない場合は、lib/stream.pnutを読み込みます。
+</p>
+
+<P>
+<a
+href="../apidoc/pnuts/lang/Executable.html"><tt>pnuts.lang.Executable</tt></a>の実装クラスでは、<tt>run(Context)</tt>メソッドを定義します。
+</P>
+
+<pre class="eg">
+package my.package;
+import pnuts.lang.*;
+
+public class init implements Executable {
+    public Object run(Context context){
+    }
+}
+</pre>
+
+<p>
+<tt>load("my/package/init")</tt> で、このクラスが読み込まれ、<tt>run(Context)</tt> メソッドが実行されます。</p>
+
+<p>
+コンパイル済みのスクリプトが読み込まれたかどうかを確かめるには、<tt>pnuts</tt>コ
+マンドのオプション <tt>-v </tt>を指定するか、プロパティ<tt>pnuts.verbose</tt>を
+指定します。
+</p>
+
+<div class="eg">コンパイル済みスクリプトが使われる場合:
+<pre>
+% pnuts -v -r my/package/init
+[loading my.package.init class]
+</pre></div>
+
+
+<div class="eg">コンパイル済みスクリプトが使われない場合:
+<pre>
+% pnuts -v -r my/package/init
+[loading file:/C:/test/my/package/init.pnut]
+</pre></div>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> load可能なクラス
+</div>
+
+  </body>
+</html>

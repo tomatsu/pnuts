@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> スクリプトの挿入</div>
+
+    <h2>スクリプトの挿入</h2>
+
+
+<a name=include></a>
+<a name=includeFile></a>
+<div class="box">
+<div class="synopsis"><b>include</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>scriptName</em>)</tt></div>
+<div class="synopsis"><b>includeFile</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>fileName</em>)</tt></div>
+</div>
+
+<p>
+<tt>include()</tt> は、スクリプト<em>scriptName</em> を現在のコンテクストで実行します。
+<tt>includeFile()</tt> スクリプトファイルを現在のコンテクストで実行します。
+<tt>load()</tt> や <tt>loadFile()</tt>と違い、カレントパッケージやimport()状態はデフォルト値にリセットされません。
+</p>
+
+<p>
+次の例では、<tt>["foo.bar", "java.lang.*", "*"]</tt> が表示されます。
+</p>
+
+<div class="eg">
+<pre>println(format(import()))
+</pre>
+<center>showImport.pnut</center>
+</div>
+
+<div class="eg">
+<pre>import("foo.bar")
+function test(){
+  includeFile("showImport.pnut")
+}
+</pre>
+<center>test.pnut</center>
+</div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> スクリプトの挿入</div>
+
+  </body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Getting Started
+</div>
+
+<!-- body start -->
+
+    <h1>Getting Started</h1>
+
+<p>
+This Pnuts User's Guide describes basic usage of Pnuts environment.  Readers will learn what kind of functions are available and how to integrate Pnuts into Java applications.
+</p>
+<p>
+This section explains some prerequisites to read the rest of the guide.
+</p>
+
+<h3>Runtime Environment</h3>
+
+<p>Pnuts runs on JRE (Java Runtime Environment)
+version 1.2 or higher. The Pnuts distribution
+does not include JRE, which means that you
+need to install a JRE (or JDK) on your computer
+before using Pnuts. If you have two or more
+JREs installed, you can pick one to use Pnuts
+every time you start a Pnuts interpreter
+by setting environment variable PATH.<p>In addition to JRE, <tt>pnuts.jar</tt> file is required to run the Pnuts interpreter.
+The <tt>pnuts.jar</tt> contains classes of Pnuts API which
+are used to implement the <tt>pnuts</tt> command, in addition, developers can call them directly to incorporate the Pnuts' functionality into their applications.
+</p>
+
+
+<h3>Functions</h3>
+<p>
+Pnuts functions fall into two categories: built-in functions and others.
+It is important to distinguish them.  Built-in functions are guaranteed to be
+      available even if no module or script is loaded. <a href="lang.html#builtin">The Language
+	Specification</a> defines the built-in functions.  
+</p>
+<H3>Modules</H3>
+<P>Module is a set of reusable functions which
+are used for a particular purpose, or are
+interrelated. User can choose necessary modules
+at run time, so that he/she can take advantage
+of existing modules without worrying about name confliction.
+Each module is packaged as a separate JAR file,
+which should be added to <em>CLASSPATH</em> or located in
+the directory <tt>${PNUTS_HOME}/modules/</tt>.
+</P>
+
+<P>Several modules are included in the Pnuts
+distribution. By default, a couple of general-purpose
+modules are chosen when Pnuts interpreter
+starts. User can specify the startup module
+in the environment variable(PNUTS_MODULE).
+See &quot;<A href="module.html">Modules</A>&quot; for more information of each module.
+</P>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Getting Started
+</div>
+  </body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.beansモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnutsユーザーズガイド
+</a> -> <a href="index.html"><tt>pnuts.beans</tt></a> -> 関数</div>
+
+    <h2><tt>pnuts.beans</tt> モジュール</h2>
+
+<a name="1"></a>
+<h3>Beanプロパティのへのアクセス</h3>
+
+<a name=getBeanProperty></a>
+<a name=setBeanProperty></a>
+<div class="box">
+<div class="synopsis"><b>getBeanProperty</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>property</em> <tt>)</tt></div>
+<div class="synopsis"><b>setBeanProperty</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>property</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>value</em><tt>)</tt></div>
+</div>
+<p>
+<tt>getBeanProperty()</tt> は、指定されたオブジェクトのBeanプロパティを読みます。
+<tt>setBeanProperty()</tt> は、指定されたオブジェクトのBeanプロパティを変更します。
+</p>
+
+<a name=setBeanProperties></a>
+<div class="box">
+<div class="synopsis"><b>setBeanProperties</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a>
+</tt><em>bean</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a>
+[ ]</tt> <em>array</b></em><tt>)</tt> or</div> 
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>bean</b></em> <tt>, <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> </tt><em>pkg</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>expression_list</em><tt>)</tt></div>
+</div>
+
+<p>
+第２引数が配列の場合、その配列の中のkey-valueペアを使って、<em>bean</em>のプロパティを設定します。
+</p>
+
+<pre class="eg">
+c1 = JCheckBox("Button1")
+setBeanProperties(c1, [["mnemonic", '1'],
+                       ["actionCommand", "Button1"],
+                       ["selected", true]])
+</pre>
+
+<p>
+第２引数が<a href="../../../apidoc/pnuts/lang/Package.html">Package</a> または、Map オブジェクトの場合、そのオブジェクトの中のkey-valueペアで<em>bean</em>のプロパティを設定します。
+</p>
+
+<pre class="eg">
+ta = JTextArea(row[i])
+setBeanProperties(ta, map([["alignmentX", Component::LEFT_ALIGNMENT],
+	                   ["background", Color::black],
+		           ["foreground", Color::white],
+		           ["lineWrap", true],
+		           ["wrapStyleWord", true],
+		           ["editable",false]]))
+</pre>
+
+<p>
+第２引数が <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> オブジェクトの場合、その式が一時的なパッケージで実行され、定義されたkey-valueペアを使ってbeanプロパティを設定します。
+</p>
+
+<pre class="eg">
+setBeanProperties(ta, `name="foo"; alignmentX=Component::LEFT_ALIGNMENT`) 
+</pre>
+
+<a name=getBeanProperties></a>
+<div class="box">
+<div class="synopsis"><b>getBeanProperties</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>getBeanProperties()</tt> は、Beanプロパティの「キー・値」のペアを
+表す HashMap オブジェクトを返します。
+</p>
+
+<a name="2"></a>
+    <h3>イベント・コールバック</h3>
+
+<a name=bind></a>
+<a name=unbind></a>
+
+<div class="box">
+<div class="synopsis"><b>bind</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>component</em> <tt>,</div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>action</em> <tt>,</div>
+<div class="synopsis2"></tt><em>callBackFunction</em><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/EventObject.html">EventObject</a> </tt><em>eventObject</em><tt>))</tt></div>
+<div class="synopsis"><b>unbind</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>component</em> <tt>,</div>
+<div class="synopsis2"><a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>action</em> { <tt>, </div>
+<div class="synopsis2"></tt><em>callBackFunction</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/EventObject.html">EventObject</a>
+</tt><em>eventObject</em> }<tt>))</tt></div>
+</div>
+
+<p>
+<tt>bind()</tt>は、<em>component</em>に対するコールバックルーチンを定義します。
+<em>component</em> に対して <em>action</em> に関するイベントが発生したときに <em>function</em>が呼び出されます。
+</p>
+
+<p>
+<tt>unbind()</tt> は、<em>component</em>に対するコールバックルーチンを削除します。
+</p>
+
+<div class="eg">例:
+<pre>
+import("java.awt.*")
+f = frame("title")
+f.setLayout(FlowLayout())
+f.add(b1 = Button("OK"))
+f.show()
+bind(b1, "actionPerformed", function (e) println("helle"))
+</pre></div>
+
+<p>
+<em>action</em> は次のいずれかです。
+
+<ol>
+<li>リスナクラスのメソッド名
+<li>リスナクラスのフルネーム + "." + メソッド名
+</ol>
+
+<div class="eg">例:
+<pre>
+"actionPerformed"
+"java.awt.event.ActionListener.actionPerformed"
+</pre></div>
+
+
+<a name="3"></a>
+<h3>Beans のディスクリプタ(property, method, event)の列挙</h3>
+
+<a name=properties></a>
+<a name=events></a>
+<a name=methods></a>
+<div class="box">
+<div class="synopsis"><b>properties</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</b></em><tt>)</tt></div>
+<div class="synopsis"><b>events</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</b></em><tt>)</tt></div>
+<div class="synopsis"><b>methods</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</b></em><tt>)</tt></div>
+</div>
+
+<pre class="eg">
+properties(class java.awt.Component)
+  ==> ["enabled", "foreground", "visible", "background", "font", "name"]
+
+events(class java.awt.Button)
+  ==> ["action"]
+</pre>
+
+
+<a name="4"></a>
+<h3>イベントリスナの型とメソッド名</h3>
+
+<a name=listenerMethodNames></a>
+<a name=listenerType></a>
+
+<div class="box">
+<div class="synopsis"><b>listenerType</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>eventName</em>)</tt></div>
+<div class="synopsis"><b>listenerMethodNames</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>eventName</em><tt>)</tt></div>
+</div>
+
+<pre class="eg">
+listenerType (class java.awt.Button, "action")   ==> java.awt.event.ActionListener interface
+listenerMethodNames (class java.awt.Button, "action")   ==> ["actionPerformed"]
+</pre>
+
+<a name=6></a>
+<h3>BeanをXMLにエンコード/デコードする</h3>
+
+<a name=encodeBean></a>
+<a name=decodeBean></a>
+<div class="box">
+<div class="synopsis"><b>encodeBean</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+</tt><em>bean</em> <tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em> }<tt>)</tt></div>
+<div class="synopsis"><b>decodeBean</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>encodeBean()</tt> は、指定されたBeanオブジェクトから,そのXML表現を生成します。
+<em>output</em>が指定された場合、生成されるXMLドキュメントはそのoutput streamに書き込まれます。
+<em>output</em>が省略された場合、生成されたXMLドキュメントを含むInputStreamを返します。
+<p>
+<tt>decodeBean()</tt> は、指定されたInputStreamからエンコードされたデータを読み込んで、Beanオブジェクトを復元します。
+</p>
+<p>
+<em>これらの関数はJ2sdk1.4.0以降で利用できます。</em>
+</p>
+
+<a name=7></a>
+<h3>Beanクラスを生成する</h3>
+
+<a name=generateBeanClass></a>
+<div class="box">
+<div class="synopsis"><b>generateBeanClass</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>
+</tt><em>typeMap</em> <tt>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>className</em> { , ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> )
+</tt><em>superClass</em> { , ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String[]</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class[]</a> )
+</tt><em>interfaces</em> { , (
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStram.html">OutputStream</a> </tt><em>outputStream</em> |
+<tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>  </tt><em>destinationFile</em> | <tt>
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">String</a> </tt><em>destinationFile</em> ) } } }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>generateBeanClass()</tt>は、Beanクラスを生成します。<em>typeMap</em>には、{プロパティ名, プロパティの型}のマップを指定します。5番目の引数が指定された場合、生成されたバイトコードはそのオブジェクトに書き込まれます。そうでない場合、バイトコードは読み込まれてその結果生成されるクラスを返します。<em>superClass</em> や <em>interfaces</em> が指定された場合は、それらはスーパークラス名またはインタフェース名として使われます。
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnutsユーザーズガイド
+</a> -> <a href="index.html"><tt>pnuts.beans</tt></a> -> 関数</div>
+
+  </body>
+</html>

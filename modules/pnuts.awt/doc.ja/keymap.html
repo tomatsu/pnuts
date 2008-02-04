@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> キーマップ</div>
+
+    <h2>キーマップ</h2>
+
+<a name=defineKey></a>
+<div class="box">
+<div class="synopsis"><b>defineKey</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/javax/swing/JComponent.html">JComponent</a> </tt><em>jComponent</b></em><tt> , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>keystroke</b></em> <tt>, <a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> </tt><em>func</b></em><tt> {</tt> , int </tt><em>condition</b></em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/javax/swing/JComponent.html">JComponent</a> </tt><em>jComponent</b></em><tt> , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>keystroke</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/javax/swing/Action.html">Action</a> </tt><em>action</b></em><tt> {</tt> , int </tt><em>condition</b></em><tt> } )</tt></div>
+</div>
+<p>
+<tt>defineKey()</tt> は、キー入力<em>keystroke</em>に対して、<em>func</em> または<em>action</em>が起動されるように登録します。 (Swing を利用することを前提にします。)
+</p>
+
+<p>
+<em>keystroke</em> は<a href="http://java.sun.com/products/jfc/swingdoc-api/com/sun/java/swing/KeyStroke.html#getKeyStroke(java.lang.String)">KeyStroke::getKeyStroke(String)メソッド</a>に渡されて、<a href="http://java.sun.com/products/jfc/swingdoc-api/com/sun/java/swing/KeyStroke.html">KeyStroke</a> オブジェクトが作られます。
+
+<p>
+<em>condition</em> は次のいずれかです。
+<UL>
+<LI>JComponent::UNDEFINED_CONDITION
+<LI>JComponent::WHEN_ANCESTOR_OF_FOCUSED_COMPONENT
+<LI>JComponent::WHEN_FOCUSED
+<LI>JComponent::WHEN_IN_FUCUSED_WINDOW
+</UL>
+</p>
+
+<div class="eg">例:
+<pre>
+defineKey(JTextPane(), "control alt K", function (e) println(e))
+defineKey(JTextPane(), "released X", function (e) println(e))
+</pre></div>
+
+<a name=getKeyStroke></a>
+<div class="box">
+<div class="synopsis">
+<b>getKeyStroke</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>keystroke</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>getKeyStroke()</tt> は、<a href="http://java.sun.com/products/jfc/swingdoc-api/com/sun/java/swing/KeyStroke.html#getKeyStroke(java.lang.String)">KeyStroke::getKeyStroke(String)メソッド</a>を使って、文字列 <em>keystroke</em>から swing の <a href="http://java.sun.com/products/jfc/swingdoc-api/com/sun/java/swing/KeyStroke.html">KeyStroke</a> オブジェクトを作ります。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> キーマップ</div>
+
+  </body>
+</html>

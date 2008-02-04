@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.ioモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> エンコーダ・デコーダ</div>
+
+    <h2>エンコーダ・デコーダ</h2>
+
+<a name=base64encode></a>
+<a name=base64decode></a>
+
+<div class="box">
+<div class="synopsis"><b>base64encode</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">OutputStream</a> </tt><em>output</b></em><tt> })</tt></div>
+<div class="synopsis"><b>base64decode</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</b></em><tt> })</tt></div>
+<div class="synopsis"><b>base64encode</b><tt>(byte[]</tt> <em>input</b></em><tt>)</tt></div>
+<div class="synopsis"><b>base64decode</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></tt> <em>input</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>base64encode()</tt>は、InputStreamが指定された場合、<em>input</em>からデータを読み込んでBASE64でエンコードします。
+<em>output</em>が指定された場合、エンコードされたデータがそこに書き込まれます。
+指定されない場合、java.io.PipedInputStream オブジェクトを返します。後で<a href="stream.html"><tt>read()</tt></a> 関数で読み出すことができます。
+</p>
+<p>
+パラメータにbyte配列が指定された場合は、BASE64でエンコードした結果の文字列を返します。
+</p>
+<p>
+<tt>base64decode()</tt>は、 InputStreamが指定された場合、<em>input</em>からデータを読み込んでBASE64でデコードします。
+<em>output</em>が指定された場合、デコードされたデータがそこに書き込まれます。
+指定されない場合、java.io.PipedInputStream オブジェクトを返します。後で<a href="stream.html"><tt>read()</tt></a> 関数で読み出すことができます。
+</p>
+<p>
+パラメータに文字列が指定された場合は、BASE64でデコードした結果のbyte配列を返します。
+</p>
+
+<pre class="eg">
+read(base64encode(open("pnuts.bat")))
+</pre>
+<p>
+これらの関数は、それぞれ sun.misc.BASE64Encoder クラスと sun.misc.BASE64Decoder クラスに依存します。
+</p>
+
+<a name=uuencode></a>
+<a name=uudecode></a>
+<div class="box">
+<div class="synopsis"><b>uuencode</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</b></em><tt> } })</tt></div>
+<div class="synopsis"><b>uudecode</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</b></em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>uuencode()</tt>は、 <em>input</em>ストリームからデータを読み込んでuuencodeでエンコードします。
+<em>output</em>が指定された場合、エンコードされたデータがそこに書き込まれます。
+指定されない場合、java.io.PipedInputStream オブジェクトを返します。後で<a href="stream.html"><tt>read()</tt></a> 関数で読み出すことができます。
+<em>name</em>が指定された場合、その名前が出力に反映されます。
+</p>
+<p>
+<tt>uudecode()</tt>は、 <em>input</em>ストリームからデータを読み込んでuudecodeでデコードします。
+<em>output</em>が指定された場合、デコードされたデータがそこに書き込まれます。
+指定されない場合、java.io.PipedInputStream オブジェクトを返します。後で<a href="stream.html"><tt>read()</tt></a> 関数で読み出すことができます。
+</p>
+<p>
+これらの関数は、それぞれ sun.misc.UUEncoder クラスと sun.misc.UUDecoder クラスに依存します。
+</p>
+
+<a name=stringToUnicode></a>
+<a name=unicodeToString></a>
+
+<div class="box">
+<div class="synopsis"><b>stringToUnicode</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</b></em><tt>)</tt></div>
+<div class="synopsis"><b>unicodeToString</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>stringToUnicode()</tt> は、文字列を unicode-escape されたシーケンスに変換されます。
+</p>
+<p>
+<tt>unicodeToString()</tt> は unicode-escape されたシーケンスを対応する文字列に変換します。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> エンコーダ・デコーダ</div>
+
+  </body>
+</html>

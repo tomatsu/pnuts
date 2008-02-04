@@ -1,0 +1,558 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.servlet module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.servlet</tt></div>
+
+
+<h2><tt>pnuts.servlet</tt> module</h2>
+
+<p>
+<tt>pnuts.servlet</tt> module is used for <a href="../../../doc/servlet.html">Web Scripting</a>.  This module requires J2SE environment.
+</p>
+
+<ul>
+<li>Functions
+<ul>
+<li><a href="index.html#addCookie">addCookie</a>
+<li><a href="index.html#convertDynamicPage">convertDynamicPage</a>
+<li><a href="/doc/debug_servlet.html">debug</a>
+<li><a href="index.html#encodeURL">encodeURL</a>
+<li><a href="index.html#escape">escape</a>
+<li><a href="index.html#decodeURL">decodeURL</a>
+<li><a href="index.html#forward">forward</a>
+<li><a href="index.html#getCookie">getCookie</a>
+<li><a href="index.html#getFile">getFile</a>
+<li><a href="index.html#getParameter">getParameter</a>
+<li><a href="index.html#getRequest">getRequest</a>
+<li><a href="index.html#getResponse">getResponse</a>
+<li><a href="index.html#getSession">getSession</a>
+<li><a href="index.html#getSessionMap">getSessionMap</a>
+<li><a href="index.html#getURL">getURL</a>
+<li><a href="index.html#makeQueryString">makeQueryString</a>
+<li><a href="index.html#parseQueryString">parseQueryString</a>
+<li><a href="index.html#readDynamicPage">readDynamicPage</a>
+<li><a href="index.html#readGetParameters">readGetParameters</a>
+<li><a href="index.html#readMultipartRequest">readMultipartRequest</a>
+<li><a href="index.html#readParameters">readParameters</a>
+<li><a href="index.html#readPostParameters">readPostParameters</a>
+<li><a href="index.html#requestScope">requestScope</a>
+<li><a href="index.html#sendPostRequest">sendPostRequest</a>
+<li><a href="index.html#sendRedirect">sendRedirect</a>
+<li><a href="index.html#unescape">unescape</a>
+</ul>
+<li><a href="../../apidoc/pnuts/servlet/package-summary.html">API Documents</a>
+</ul>
+
+<a name=readParameters></a>
+<a name=readGetParameters></a>
+<a name=readPostParameters></a>
+<div class="box">
+<div class="synopsis"><b>readParameters</b><tt> ( { <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> </tt><em>request</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> }})</tt></div>
+<div class="synopsis"><b>readGetParameters</b><tt> ( { <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> </tt><em>request</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> }})</tt></div>
+<div class="synopsis"><b>readPostParameters</b><tt> ( { <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> </tt><em>request</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> }})</tt></div>
+</div>
+
+<p>
+<tt>readPostParameters()</tt> reads the POST data sent by web client.
+<tt>readGetParameters()</tt> reads GET parameters.  
+<tt>readParameters()</tt> reads both POST data and GET parameters.  
+<p>
+The return value is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> object that stores key-value pairs of Servlet Parameters.
+<p>
+<em>encoding</em> is one of Java's <a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">encoding name</a>.
+When <em>encoding</em> is omitted, <a href="#encoding">'The default
+encoding for input'</a> is used.
+</p>
+
+<p>
+<tt>readPostParameters()</tt> and <tt>readParameters()</tt> can not be mixed with <tt>ServletRequest.getParameter()</tt> method. 
+</p>
+
+<div class="eg"><pre>
+response.setContentType("text/html; charset=UTF8")
+
+if (request.getMethod() == "POST"){
+  postParam = readPostParameters(request, "UTF8")
+  param1 = postParam.get("param1")
+  ...
+}
+</pre>
+</div>
+
+<a name=getParameter></a>
+<div class="box">
+<div class="synopsis"><b>getParameter</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>param</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>getParameter()</tt> is a convenient function which retrieve the
+value of the specified parameter.  This function is roughly same as the following expression.
+</p>
+
+<pre class="eg">
+readParameters().<em>param</em>
+readParameters(request, <em>encoding</em>).<em>param</em>
+</pre>
+
+
+<p>
+<em>encoding</em> is one of Java's <a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">encoding name</a>.
+When <em>encoding</em> is omitted, <a href="#encoding">'The default
+encoding for input'</a> is used.
+</p>
+
+<a name=makeQueryString></a>
+<div class="box">
+<div class="synopsis"><b>makeQueryString</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> </tt><em>map</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>makeQueryString()</tt> returns a query string in
+<tt>x-www-form-urlencoded</tt> format, from the specified <em>map</em>
+which defines parameter-value pairs .
+</p>
+
+<p>
+<em>encoding</em> is one of Java's <a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">encoding name</a>.
+When <em>encoding</em> is omitted, <a href="#encoding">'The default
+encoding for output'</a> is used.
+</p>
+
+<a name=parseQueryString></a>
+<div class="box">
+<div class="synopsis"><b>parseQueryString</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>queryString</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>parseQueryString()</tt> makes a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> object which holds
+parameter-value pairs from <em>queryString</em> in <tt>x-www-form-urlencoded</tt> format.
+</p>
+<p>
+<em>encoding</em> is one of Java's <a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">encoding name</a>.
+When <em>encoding</em> is omitted, <a href="#encoding">'The default
+encoding for input'</a> is used.
+</p>
+
+<a name=encodeURL></a>
+<div class="box">
+<div class="synopsis"><b>encodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>str</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>encodeURL()</tt> converts a plain text to <tt>x-www-form-urlencoded</tt> text.
+</p>
+<p>
+<em>encoding</em> is one of Java's <a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">encoding name</a>.
+When <em>encoding</em> is omitted, <a href="#encoding">'The default
+encoding for output'</a> is used.
+</p>
+<div class="eg">
+<pre>
+encodeURL("How are you?", "UTF-8") ==> "How+are+you%3F"
+</pre>
+</div>
+
+
+<a name=decodeURL></a>
+<div class="box">
+<div class="synopsis"><b>decodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>urlEncodedString</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>decodeURL()</tt> converts <tt>x-www-form-urlencoded</tt> text to plain text.
+</p>
+
+<p>
+<em>encoding</em> is one of Java's <a href="http://www.javasoft.com/products/jdk/1.1/docs/guide/intl/encoding.doc.html">encoding name</a>.
+When <em>encoding</em> is omitted, <a href="#encoding">'The default
+encoding for input'</a> is used.
+</p>
+<div class="eg">
+<pre>
+decodeURL("How+are+you%3F", "UTF-8") ==> "How are you?"
+</pre>
+</div>
+
+
+<a name=addCookie></a>
+<div class="box">
+<div class="synopsis"><b>addCookie</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>value</em><tt> {, int </tt><em>maxAge</em><tt> })</tt></div>
+</div>
+<p>
+<tt>addCookie()</tt> adds a Cookie.  <em>name</em> and <em>value</em> are encoded in UTF8 and then translated into <tt>x-www-form-urlencoded</tt> format.
+</p>
+
+<a name=forward></a>
+<div class="box">
+<div class="synopsis"><b>forward</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>path</em><tt>)</tt></div>
+</div>
+
+<p>
+Forwards a request to another resource (servlet script file, or other file) on the server.
+</p>
+
+<a name=getCookie></a>
+<div class="box">
+<div class="synopsis"><b>getCookie</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getCookie()</tt> gets a Cookie value.  It assumes that the cookie <em>name</em> and the value are encoded in UTF8 and transformed into <tt>x-www-form-urlencoded</tt> format.
+</p>
+
+<a name=getFile></a>
+<div class="box">
+<div class="synopsis"><b>getFile</b><tt> ( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em></tt> } )</tt></div>
+</div>
+
+<p>
+When no argument is specified, <tt>getFile()</tt> returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">java.io.File</a>
+object which represents the servlet script file.</p>
+<p>
+When one argument is given, it returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">java.io.File</a>
+object which represents the file in the servlet directory.
+</p>
+
+<p>
+To execute a part of servlet script exclusively, use <a href="sync.html"><tt>sync()</tt></a> function with the value of getFile() function.  For example, a simple access counter can be written as follows.
+</p>
+
+<div class="eg">
+<pre>
+function _addCount(){
+   count = readCount()
+   writeCount(++count)
+}
+addCount = sync(_addCount, <b>getFile()</b>)
+addCount()
+</pre>
+</div>
+
+Alternatively,
+
+<pre class="eg">
+addCount = sync(function (){
+                 count = readCount()
+                 writeCount(++count)
+                }, <b>getFile()</b>)
+addCount()
+</pre>
+
+
+<a name=getURL></a>
+<div class="box">
+<div class="synopsis"><b>getURL</b><tt>( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>path</em><tt></a> } } )</tt> or</div>
+<div class="synopsis2">( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>path</em><tt></a> } } )</tt>  or</div>
+<div class="synopsis2">( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>path</em><tt></a> } })</tt></div>
+</div>
+<p>
+<tt>getURL()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">java.net.URL</a>
+object.  If two arguments are specified, the resulting URL is made up of the base URL specified in the 1st argument and the relative path specifed in the 2nd argument.
+<p>
+If one argument is specifed, it returns the URL specified as <em>path</em>, which is
+relative to the base URL of the servlet script.
+</p>
+
+<p>
+When a period (.) is specified for <em>name</em>, it returns the base
+URL of the servlet script.
+</p>
+<p>
+When no parameter is specified, it returns the URL of the servlet script.
+</p>
+
+<a name=readMultipartRequest></a>
+<div class="box">
+<div class="synopsis"><b>readMultipartRequest</b><tt> ( { <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> </tt><em>request</em><tt>, } </tt></div>
+<div class="synopsis2"></tt><em>handler</em><tt> (</tt></div>
+<div class="synopsis3"><tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>stream</em><tt>, </tt></div>
+<div class="synopsis3"><tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>nameAttribute</em><tt>,</tt></div>
+<div class="synopsis3"><tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>pathName</em><tt>,</tt></div>
+<div class="synopsis3"><tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>contentType</em></div>
+<div class="synopsis2"> ) )</tt></div>
+</div>
+
+<p>
+<tt>readMultipartRequest()</tt> processes a multipart request such as file uploads.  <em>handler</em> should be a callback function which takes the following parameters.
+
+<blockquote>
+<dl>
+<dt><em>stream</em>
+<dd>InputStream of the uploaded contents
+<dt><em>nameAttribute</em>
+<dd>The NAME attribute of &lt;INPUT TYPE=file&gt; tag
+<dt><em>pathName</em>
+<dd>The original path name of the uploaded file.
+<dt><em>contentType</em>
+<dd>CONTENT-TYPE header value
+</dl>
+</blockquote>
+</blockquote>
+
+</p>
+
+<pre class="eg">
+readMultipartRequest(
+  function (in, name, path, contentType){
+     i1 = path.lastIndexOf('/')
+     i2 = i2 = path.lastIndexOf('\\')
+     i = 0
+     if (i1 > i) i = i1
+     if (i2 > i) i = i2
+     filename = path[i+1..]
+     read(in, fd = open(File("/tmp", filename), "w"))
+     fd.close()
+  }
+)
+</pre>
+
+<p>
+
+<pre class="eg">
+&lt;FORM METHOD=POST ENCTYPE=multipart/form-data ACTION="/save.pnut"&gt;
+&lt;INPUT TYPE=file SIZE=30 NAME="upload"&gt;
+&lt;INPUT TYPE=reset VALUE="Clear the field"&gt;&lt;br&gt;
+&lt;INPUT TYPE=submit VALUE="Upload"&gt;
+&lt;/FORM&gt;
+</pre>
+
+<a name=getRequest></a>
+<div class="box">
+<div class="synopsis"><b>getRequest</b><tt> ( )</tt></div>
+</div>
+<p>
+<tt>getRequest()</tt> returns the <a
+href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> object
+which represents the current request.
+</p>
+
+<a name=getResponse></a>
+<div class="box">
+<div class="synopsis"><b>getResponse</b><tt> ( )</tt></div>
+</div>
+<p>
+<tt>getResponse()</tt> returns the <a
+href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletResponse.html">ServletResponse</a>
+object which represents the current response.
+</p>
+
+<a name=requestScope></a>
+<div class="box">
+<div class="synopsis"><b>requestScope</b><tt> ( )</tt></div>
+</div>
+<p>
+Returns a pnuts.lang.Package object that represents the request scope.
+</p>
+
+<a name=sendRedirect></a>
+<div class="box">
+<div class="synopsis"><b>sendRedirect</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>url</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt> )</tt></div>
+</div>
+<p>
+<tt>sendRedirect()</tt> sends a temporary redirect response to the client using the specified redirect location URL.
+</p>
+
+<a name="getSession"></a>
+<a name="getSessionMap"></a>
+<div class="box">
+<div class="synopsis"><b>getSession</b><tt> ( { boolean <em>create</em> } )</tt></div>
+<div class="synopsis"><b>getSessionMap</b><tt> ( { boolean <em>create</em> } )</tt></div>
+</div>
+
+<p>
+<tt>getSession()</tt> returns the current <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a> associated with the current request or, if there is no current session and <em>create</em> is <tt>true</tt> (default), returns a new session.  If <em>create</em> is <tt>false</tt> and the request has no valid <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>, this function returns null.
+<p>
+<p>
+<tt>getSessionMap()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> object to access the current <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/http/HttpSession.html">HttpSession</a>.  If no session is found, this function returns an empty <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> object.
+</p>
+<div class="eg">e.g.
+<pre>
+m = getSessionMap()
+check(m.userName, m.passsword)
+</pre>
+</div>
+
+<a name=escape></a>
+<a name=unescape></a>
+<div class="box">
+<div class="synopsis"><b>escape</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>str</em><tt> )</tt></div>
+<div class="synopsis"><b>unescape</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>str</em><tt> )</tt></div>
+</div>
+<p>
+<tt>escape()</tt> replaces the special characters included in the
+specified string with their escaped form.
+<tt>unescape()</tt> replaces all escaped characters included in the
+specifed string with their literal form.
+</p>
+
+<div class="eg"><pre>
+escape(`&lt;a href="index.pnut"&gt;Home&lt;/a&gt;`)
+    ===> &amp;lt;a href=&amp;quot;index.pnut&amp;quote;&amp;gt;Home&amp;lt;/a&amp;gt;
+
+unescape("&amp;lt;a href=&amp;quot;index.pnut&amp;quote;&amp;gt;Home&amp;lt;/a&amp;gt;")
+    ===> &lt;a href="index.pnut"&gt;Home&lt;/a&gt;
+</pre>
+</div>
+
+<a name=convertDynamicPage></a>
+
+<div class="box">
+<div class="synopsis"><b>convertDynamicPage</b><tt> ( </tt></div>
+<div class="synopsis2"><tt>(
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+)
+</tt><em>input</em><tt></div>
+<div class="synopsis2"> { ,  (
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">OutputStream</a>
+|
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>
+|
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+|
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+)
+</tt><em>output</em> } <tt> )</tt></div>
+</div>
+
+<p>
+<tt>convertDynamicPage()</tt> converts a HTML file which special tag elements, &lt;%
+.. %&gt, are embedded, to the equivalent script.
+</p>
+<p>
+If <em>output</em> is specified, the converted data is written to the stream.
+Otherwise, it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedReader.html">java.io.PipedReader</a> object which can be read with <a href="stream.html"><tt>read()</tt></a> function. 
+</p>
+
+<div class="eg">footer.pea
+<pre>
+&lt;HR&gt;&lt;%= Date() %&gt;
+</pre>
+</div>
+
+<pre class="eg">
+read(convertDynamicPage(open("footer.pea")))
+
+==> print("&lt;HR&gt;", Date() )
+</pre>
+
+<a name="readDynamicPage"></a>
+<div class="box">
+<div class="synopsis"><b>readDynamicPage</b><tt> ( (
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+| 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+)
+</tt><em>input</em>
+{ , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em>
+{ , boolean <em>reloadUpdatedScripts</em> } }
+<tt> )</tt></div>
+</div>
+<p>
+<tt>readDynamicPage()</tt> reads a dynamic page and returns an <a
+href="../../../apidoc/pnuts/lang/Executable.html">Executable</a>
+object, which can be executed by <a href="../../pnuts.lib/doc/compile.html#run"><tt>run()</tt></a> function.
+</p>
+<p>
+When the <a href="../../../doc/servlet.html#init-param">servlet
+initial parameter</a> '<tt>compile</tt>' is true, the given dynamic page is compiled.
+</p>
+
+
+<pre class="eg">
+page = readDynamicPage("footer.pea")
+...
+run(page)
+</pre>
+
+<p>
+If the character encoding of the input is not the system encoding, it should be specified in <em>encoding</em> .
+</p>
+<p>
+When <em>reloadUpdatedScripts</em> is <tt>true</tt>, the last modified time of .pea files are checked, and if any .pea file included has been updated since last loaded, the whole page will be re-constructed.
+</p>
+
+<a name="sendPostRequest"></a>
+<div class="box">
+<div class="synopsis"><b>sendPostRequest</b><tt> (
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+</tt><em>parameters</em><tt>,  <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>encoding</em><tt> { , 
+  </tt><em>handler( </em><tt><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URLConnection.html">URLConnection</a>
+</tt><em>urlConnection )</em><tt>} )</tt></div>
+</div>
+
+<p>
+<tt>sendPostRequest()</tt> sends a POST request to the specified <em>url</em>.
+</p>
+
+<pre class="eg">
+url = getURL("http://pnuts.org/wiki/index.pnut?action=find+in+content")
+params = map(`pattern="pnuts"`)
+sendPostRequest(url, params, "UTF-8", function (con) read(con.inputStream))
+</pre>
+
+
+<hr>
+<a name=encoding></a>
+
+<h4>The default encoding for input</h4>
+
+<ol>
+<li>The result of <tt>request.getCharacterEncoding()</tt>, if it is non-null.
+<li>The result of <tt>response.getCharacterEncoding()</tt>, if it is non-null.
+<li>UTF8
+</ol>
+
+<h4>The default encoding for output</h4>
+
+
+<ol>
+<li>The result of <tt>response.getCharacterEncoding()</tt>, if it is non-null.
+<li>UTF8
+</ol>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.servlet</tt></div>
+
+  </body>
+</html>

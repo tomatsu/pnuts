@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.io module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> Character Encoder/Decoder</div>
+
+    <h2>Character Encoder/Decoder</h2>
+
+<a name=base64encode></a>
+<a name=base64decode></a>
+<div class="box">
+<div class="synopsis"><b>base64encode</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">OutputStream</a> </tt><em>output</em><tt> })</tt></div>
+<div class="synopsis"><b>base64decode</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>base64encode(input)</tt> encodes data read from <em>input</em> stream using BASE64.
+If <em>output</em> is specified, the encoded data is written to it.  Otherwise
+      it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">java.io.PipedInputStream</a> object which can be read by <a
+	href="stream.html"><tt>read()</tt></a> function.
+</p>
+<p>
+<tt>base64decode(input)</tt> decodes data read from <em>input</em> stream using BASE64.
+If <em>output</em> is specified, the decoded data is written to it.  Otherwise
+      it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">java.io.PipedInputStream</a> object which can be read by <a
+	href="stream.html"><tt>read()</tt></a> function.
+</p>
+
+<pre class="eg">
+read(base64encode(open("pnuts.bat")))
+</pre>
+
+<p>
+These functions depend on sun.misc.BASE64Encoder class and
+      sun.misc.BASE64Decoder class respectively.
+</p>
+
+<a name=uuencode></a>
+<a name=uudecode></a>
+<div class="box">
+<div class="synopsis"><b>uuencode</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt> } })</tt></div>
+<div class="synopsis"><b>uudecode</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>uuencode(input)</tt> encodes data read from <em>input</em> stream using "uuencode".
+If <em>output</em> is specified, the encoded data is written to it.  Otherwise
+      it returns a java.io.PipedInputStream object which can be read by <a
+	href="stream.html"><tt>read()</tt></a> function.  If <em>name</em> is specified
+the name will be included in the output. 
+</p>
+<p>
+<tt>uudecode(input)</tt> decodes data read from <em>input</em> stream using "uudecode".
+If <em>output</em> is specified, the decoded data is written to it.  Otherwise
+      it returns a java.io.PipedInputStream object which can be read by <a
+	href="stream.html"><tt>read()</tt></a> function.
+</p>
+<pre class="eg">
+read(uuencode(getResource("/init.pnut").openStream()))
+</pre>
+
+<p>
+These functions depend on sun.misc.UUEncoder class and
+      sun.misc.UUDecoder class respectively.
+</p>
+
+<a name=stringToUnicode</a>
+<a name=unicodeToString></a>
+<div class="box">
+<div class="synopsis"><b>stringToUnicode</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+<div class="synopsis"><b>unicodeToString</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>stringToUnicode()</tt> converts a string to its unicode-escaped sequence.
+</p>
+<p>
+<tt>unicodeToString()</tt> converts a unicode-escaped sequence to the
+      corresponding string.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> Character Encoder/Decoder</div>
+
+  </body>
+</html>

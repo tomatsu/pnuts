@@ -1,0 +1,718 @@
+<html>
+    <head>
+     <title>Pnuts ユーザーズガイド</title>
+     <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+     <META Http-Equiv="Content-Style-Type" Content="text/css">
+     <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body> 
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Pnuts API の概略
+</div>
+
+<!-- body start -->
+
+<h2>Pnuts API の概略</h2>
+
+<h3>はじめに </h3>
+<p>
+Pnuts API は、Java プログラムから Pnuts の機能を利用するための API です。この API を利用する際に特別な初期化の手続き等は必要なく、Java プログラムの任意の場所で利用することができます。Pnutsインタープリタは、それを利用する Java プログラムと仮想機械のスレッド資源とオブジェクト空間を共有します。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>クラス</th>
+<th bgcolor=#eeeeee>説明</th>
+<tr class="wb">
+  <td class=wb>pnuts.lang.Pnuts</td>
+  <td class=wb>スクリプトを実行するためのpublic staticメソッドを提供</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.Context</td>
+  <td class=wb>スクリプト実行の環境</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.Package</td>
+  <td class=wb>関数の外側の名前空間</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.PnutsFunction</td>
+  <td class=wb>Pnutsの関数</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.PnutsException</td>
+  <td class=wb>スクリプト実行時の例外</td>
+</tr>
+</table>
+<center>Pnuts APIの中心的なクラス</center>
+</blockquote>
+
+
+<h3><a href="../apidoc/pnuts/lang/Pnuts.html">pnuts.lang.Pnuts</a></h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/Pnuts.html">pnuts.lang.Pnuts</a> クラスには、インタープリタの実行を開始するためのメソッドがあります。
+</p>
+
+<p>
+実行できるスクリプトの種類は、次のとおりです。
+</p>
+<ul>
+<li>スクリプト文字列
+<li>URL
+<li>リソース名
+<li>ローカルファイル
+<li>InputStream
+<li>Reader
+</ul>
+
+<h4><em>スクリプト(文字列)の実行</em></h4>
+
+<p>
+スクリプト文字列を実行するには、<a href="../apidoc/pnuts/lang/Pnuts.html#eval(java.lang.String, pnuts.lang.Context)"><tt>Pnuts.eval()</tt></a>メソッドを使います。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Object <b>eval</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>exp</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+次の例は、<a href="../apidoc/pnuts/lang/Pnuts.html#eval(java.lang.String, pnuts.lang.Context)"><tt>Pnuts.eval()</tt></a> メソッドを利用する単純な例です。スクリプト(文字列)と、最初に生成したContextオブジェクト(後述)を、<a href="../apidoc/pnuts/lang/Pnuts.html#eval(java.lang.String, pnuts.lang.Context)"><tt>Pnuts.eval()</tt></a>メソッドに渡しています。
+</p>
+
+<div class="eg">
+例:
+<pre>
+import pnuts.lang.*;
+import java.math.*;
+
+class Foo {
+   public static void main(String arg[]){
+       Context context = new Context();
+       BigInteger bint = (BigInteger)Pnuts.eval("1<<100", context);
+       ...
+   }
+}
+</pre></div>
+
+<h4><em>スクリプト(ローカルファイル)の実行</em></h4>
+
+<dl>
+<dt><tt>public static Object <b>loadFile</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>filename</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a>
+<em>context</em> <tt>) throws FileNotFoundException;</tt></dt>
+</dl>
+
+<h4><em>スクリプト(InputStream/Reader/URL/リソース)の実行</em></h4>
+
+<dl>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> <em>in</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a> <em>in</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> <em>scriptURL</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+resource , <a href="../apidoc/pnuts/lang/Context.html">Context</a>
+<em>context</em> <tt>) throws FileNotFoundException;</tt></dt>
+</dl>
+
+<h4><em>スクリプト(InputStream/Reader)のパーズ</em></h4>
+
+<p>
+スクリプト(InputStream/Reader)をパーズする(実行はしない)には、<a href="../apidoc/pnuts/lang/Pnuts.html#parse(java.io.InputStream)"><tt>Pnuts.parse(InputStream/Reader)</tt></a> メソッドを使います。
+<tt>pnuts.lang.Pnuts</tt> クラスのインスタンスを生成できるのは、このメソッドだけです。
+<tt>pnuts.lang.Pnuts</tt> クラスのインスタンスは <tt>run(Context)</tt> メソッドで実行できます。
+</p>
+
+
+<blockquote>
+<dl>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> <em>in</em> <tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a> <em>in</em> <tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+<em>in</em>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> <em>scriptSource</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>) throws ParseException;</tt></dt>
+<dt><tt>public Object <b>run</b>(</tt> <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+次のプログラムは、はじめにスクリプトのパーズだけを行い、後で実行する方法を示します。文法エラーを処理するには、ParseExceptionをcatchします。
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.io.*;
+
+class ParseTest {
+  public static void main(String a[]){
+     Pnuts p = null;
+     try {
+        p = Pnuts.parse(new FileInputStream(a[0]));
+     } catch (ParseException e1){
+        ...
+     } catch (IOException e2){
+        ...
+     }
+     ...
+     p.run(new Context());
+  }
+}
+</pre>
+
+<a name="ParseEnvironment"></a>
+<h4>複数の文法エラーの取得</h4>
+<p>
+複数の文法エラーを取得するには、次のメソッドのいずれかを用います。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a> <em>in</em> , <a href="../apidoc/pnuts/lang/ParseEnvironment.html">ParseEnvironment</a> <em>env</em><tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+<em>in</em>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> <em>scriptSource</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em>, <a href="../apidoc/pnuts/lang/ParseEnvironment.html">ParseEnvironment</a> <em>env</em><tt>) throws ParseException;</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.io.*;
+
+public class Test {
+    public static void main(String[] args) throws IOException {
+	try {
+	    FileReader r = new FileReader(args[0]);
+	    Pnuts.parse(r, new ParseEnvironment(){
+		    public void handleParseException(ParseException e) throws ParseException {
+			System.out.println(e);
+		    }
+		});
+	} catch (ParseException e){
+	    throw new Error(); // never happens
+	}
+    }
+}
+</pre>
+
+<h4>スクリプト・ソース</h4>
+<p>
+スクリプト・ソースは、Pnutsオブジェクトの属性の一つで、スクリプトの場所(通常はURL)を表します。
+
+</p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>getScriptSource</b>();</tt></dt>
+<dt><tt>public void <b>setScriptSource</b>(Object scriptSource);</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+スクリプト・ソースの情報は、おもにデバッガが使います。
+</p>
+
+<h3><a href="../apidoc/pnuts/lang/PnutsFunction.html">pnuts.lang.PnutsFunction</a></h3>
+
+<p>
+PnutsFunctionは、Pnutsの関数を表します。<a href="../apidoc/pnuts/lang/PnutsFunction.html#call(java.lang.Object[], pnuts.lang.Context)"><tt>PnutsFunction.call()</tt></a>メソッドを使うと Pnuts の関数を実行することができます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>call</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a>[] <em>args</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+class Foo {
+   public static void main(String arg[]){
+       Context context = new Context();
+       PnutsFunction func = (PnutsFunction)Pnuts.eval("function foo() 100", context);
+       ...
+       System.out.println(func.<b>call</b>(new Object[]{}, context));
+   }
+}
+</pre>
+
+<p>
+<a href="function.html">Javaによる関数の定義</a>を参照。
+</p>
+
+<a name="package"></a>
+<h3><a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a></h3>
+<p>
+パッケージは、複数の再利用可能なスクリプトを同時に利用するときに名前の衝突を防ぐための名前空間です。1つのパッケージは1つの記号表を持ちます。
+</p>
+
+<h4>パッケージ階層</h4>
+
+<p>
+Packageクラスには、パッケージ名と親パッケージをパラメータに取るコンストラクタがあります。
+これらのコンストラクタを呼び出すことで、<a href="lang.html#package_hierarchy">パッケージ階層</a>が、暗黙的または明示的に作られます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public <b>Package</b>();</tt></dt>
+<dt><tt>public <b>Package</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>name</em><tt> );</tt></dt>
+<dt><tt>public <b>Package</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>name</em>, <a href="../apidoc/pnuts/lang/Package.html">Package</a> <em>parent</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+
+<a name="root_package"></a>
+<p>
+パッケージ階層の中で親パッケージを持たないパッケージのことを<b>ルート・パッケージ</b>と呼びます。<em>parent</em>に明示的に<tt>null</tt>が指定された場合、そのパッケージ自身が新たなルートパッケージになります。スクリプトの中でload()やloadFile()等により別のスクリプトを読み込むと、そのスクリプトは、カレント・パッケージを基準としたルート・パッケージで実行を開始します。
+</p>
+
+<p>
+コンストラクタで、<em>parent</em>が指定されない場合は、グローバル・パッケージと呼ばれる特別なルート・パッケージが親パッケージになります。<tt>pnuts</tt>コマンドからスクリプトを実行する場合には、、グローバル・パッケージがカレント・パッケージの状態でスクリプトが実行され、グローバル・パッケージ以外にルート・パッケージを作成する必要性はあまりありません。
+</p>
+<p>
+しかし、<a href="isolation.html">隔離されたスクリプト実行環境</a>には、グローバル・パッケージ以外のルート・パッケージが必要になります。スクリプト実行環境ごとに、ルート・パッケージが用意され、そのルート・パッケージ以下の階層(以下、<b>パッケージ・ツリー</b>と呼ぶ)に、そのスクリプト実行環境で定義されるすべての名前が互いに干渉しないように保存されます。
+</p>
+<p>
+グローバル・パッケージは、pnuts.lang.Packageクラスのstatic変数から参照されるので、GCの対象になることはありませんが、それ以外のルート・パッケージは、通常のオブジェクトと同様に、他のどのオブジェクトからも参照されなくなるとGCの対象になります。
+</p>
+
+
+<h4>サブパッケージの参照(作成)</h4>
+<p>
+Package オブジェクトを作るために、次のメソッドがよく使われます。<em>pkgName</em>という名のパッケージがない場合はそのパッケージが作成されます。作成されたパッケージは、(カレントパッケージを基準とした)ルートパッケージに管理され、パッケージ名で識別されます。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Package <b>getPackage</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>pkgName</em>, Context <em>context</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<h4>記号表へのアクセス</h4>
+
+<p>
+次のメソッドはパッケージに含まれる記号に対するアクセスメソッドです。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public Object <b>get</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>set</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> <em>value</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+<dt><tt>public boolean <b>defined</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+<dt><tt>public void <b>clear</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>
+<tt>get()</tt>メソッドだけは、変数定義が見付かるまでパッケージ階層を遡ります。それ以外のメソッドは、そのPackage内の記号表にだけアクセスします。
+
+<p>
+これらのメソッドのパラメータ<tt>symbol</tt>は、intern()されたStringオブジェクトでなければなりません。
+</p>
+
+
+<h4>AutoloadHook</h4>
+
+<p>
+Autoloadの機能を利用すると、変数が参照されるまで変数の値を代入するのを遅らせることができます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>autoload</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>file</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>autoload</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="../apidoc/pnuts/lang/AutoloadHook.html">AutoloadHook</a> <em>hook</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<a href="../apidoc/pnuts/lang/Package.html#get(java.lang.String, pnuts.lang.Context)">Package.get(String, Context)</a>は、記号表内に変数が未定義の場合に、<a href="../apidoc/pnuts/lang/Package.html#autoload(java.lang.String, pnuts.lang.AutoloadHook)"><tt>autoload()</tt></a>メソッドでその変数のAutoloadフックが登録されていれば、そのフックを起動します。Autoloadフックが登録されていない場合や、Autoloadフックを起動しても変数が定義されない場合は、親Packageを遡って同じ処理を繰り返します。
+
+<h4>モジュールとの関係</h4>
+
+<p>
+<a href="../apidoc/pnuts/lang/Context.html#usePackage(java.lang.String)">Context.usePackage()</a>メソッドを呼び出して、未登録のモジュールを登録しようとすると、そのモジュールの初期化スクリプトが実行されます。その時に、カレントパッケージを含むパッケージ木の中で、モジュールに対応するサブパッケージが自動的に作成され、その中にモジュールの関数が定義されます。
+</p>
+<p>
+Packageオブジェクトは、モジュールとして使われる場合には、モジュールが公開する名前を保持しています。モジュールの初期化スクリプトは、モジュールが公開する名前を<a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)">Package.export()</a>メソッドで登録します。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>export</b>(</tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>
+モジュールの初期化スクリプトの実行が終わったときに、一つも名前が公開されなかった場合は、
+Pacakgeに定義された(匿名でない)関数が自動的に公開されます。
+</p>
+<p>
+また、<a href="../apidoc/pnuts/ext/ModuleBase.html">pnuts.ext.ModuleBase</a>クラスの<a href="../apidoc/pnuts/ext/ModuleBase.html#autoload(java.lang.String[], java.lang.String, pnuts.lang.Context)">autoload()</a>メソッドや<a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadFunction(java.lang.String, pnuts.lang.Context)">autoloadFunction()</a>メソッドは、処理の中でexport()</a>メソッドを呼んでいるため、それらのメソッドを用いる場合は直接export()メソッドを呼ぶ必要はありません。
+</p>
+
+<a name="context"></a>
+<h3><a href="../apidoc/pnuts/lang/Context.html">pnuts.lang.Context</a></h3>
+<p>
+Contextオブジェクトは、実行前に設定される各種の情報や、実行中に変化する状態を保持します。
+スクリプトを実行する際に指定されたContextは、実行中のスクリプトから常に参照されます。
+</p>
+Context オブジェクトは次のような Pnuts の実行環境の内部状態を保持します。
+<ul>
+<li>スタックフレーム（ASTインタープリタのみ）
+<li>パッケージの状態（今どのパッケージか）
+<li>import された Java パッケージのリスト
+<li>write() 関数が出力する先の OutputStream
+<li>print() 関数が出力する先の PrintWriter
+<li>error() 関数が出力する先の PrintWriter
+<li>プロンプトや評価結果を出力する先の PrintWriter
+<li>load()がスクリプトを探すときに使う ClassLoader
+<li><a href="pnutsImpl.html">Implementation</a>オブジェクト
+<li><a href="#contextlocal">コンテクスト・ローカル変数</a>
+<li>use()で追加されたモジュール
+<li>load()で読み込まれたファイルのリスト
+</ul>
+<p>
+スクリプトを実行するためには、最初に明示的にContextオブジェクトを作成する必要があります。
+</P>
+
+<blockquote>
+<dl>
+<dt><tt>public <b>Context</b>();</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Package.html">Package</a> <em>pkg</em><tt>);</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a
+href="../apidoc/pnuts/lang/Package.html">Package</a> <em>pkg</em>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a>
+<em>source</em><tt>);</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>template</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+Context クラスのデフォルトコンストラクタは、グローバル・パッケージをカレント・パッケージとする Context オブジェクトを生成します。コンストラクタ <tt>Context(Package</tt> <em>anPackage</em><tt>)</tt>は、Contextを生成しカレント・パッケージを指定します。
+</p>
+
+<p>
+<a href="../apidoc/pnuts/lang/Pnuts.html#eval(java.lang.String, pnuts.lang.Context)"><tt>Pnuts.eval()</tt></a>や<a href="../apidoc/pnuts/lang/Pnuts.html#load(java.io.Reader, pnuts.lang.Context)"><tt>Pnuts.load()</tt></a>のパラメータにContextを指定することで、複数のインタープリタに同じ Context を渡すこともできます。また、同時に複数のスレッドから利用することもできます。
+</p>
+
+
+<a name=clone></a>
+<h4>クローン</h4>
+
+<p>
+スクリプトから組み込み関数<tt>eval()</tt>、<tt>load()</tt>、<tt>require()</tt>、<tt>loadFile()</tt>が呼ばれると、使用中のContextのクローン（複製）が作られて渡されます。
+</p>
+
+<p>
+Contextオブジェクトには、クローン間で共有される属性、クローンを作成する度にコピーされる属性、クローンを作成する度に初期値にリセットされる属性があります。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>属性</th>
+  <th bgcolor=#eeeeee>クローン作成時の動作</th>
+</tr>
+<tr class=wb>
+  <td class=wb><a href="context.html#classloader">クラスローダ</a></td>
+  <td class=wb align=center>共有</td>
+<tr class=wb>
+  <td class=wb><tt>use()</tt>で追加されたモジュール</td>
+  <td class=wb align=center>共有</td>
+<tr class=wb>
+  <td class=wb><tt>load()</tt>で読み込まれたファイルのリスト</td>
+  <td class=wb align=center>共有</td>
+<tr class=wb>
+  <td class=wb><a href="context.html#stream">メッセージの出力先</a></td>
+  <td class=wb align=center>コピー</td>
+<tr class=wb>
+  <td class=wb><a href="context.html#environment">コンテクスト・ローカル変数</a></td>
+  <td class=wb align=center>コピー</td>
+<tr class=wb>
+  <td class=wb><a href="pnutsImpl.html">Implementationオブジェクト</a></td>
+  <td class=wb align=center>コピー</td>
+</tr>
+<tr class=wb>
+  <td class=wb><a href="#configuration">Configuration</a></td>
+  <td class=wb align=center>コピー</td>
+</tr>
+<tr class="wb">
+  <td class=wb><a href="#encoding">文字コード</a></td>
+  <td class=wb align=center>コピー</td>
+<tr class=wb>
+  <td class=wb>import された Java パッケージのリスト</td>
+  <td class=wb align=center>リセット</td>
+</tr>
+<tr class=wb>
+  <td class=wb>カレント・パッケージ</td>
+  <td class=wb align=center>リセット</td>
+</tr>
+</table>
+</blockquote>
+
+<p>
+クローン間で共有される属性は、あるクローンで値を修正すると、同じ種から作られたクローンすべてに影響します。
+</p>
+<p>
+クローンの度にコピーされる属性は、子孫に同じ値を継承しますが、親や先祖のコンテクストには影響を与えません。
+</p>
+<p>
+組み込み関数<tt>load()</tt>、<tt>require()</tt>、<tt>loadFile()</tt>が呼ばれると、カレントパッケージをパッケージ階層の一番上のパッケージ（通常はグローバル・パッケージ）に設定し、importの状態を初期値(java.lang.*と*)に戻した上で、指定されたスクリプトが実行されます。
+</p>
+
+
+<p>
+すべての属性をコピーしたい場合（共有したくない場合）は、コンストラクタ<a href="../apidoc/pnuts/lang/Context.html#Context(pnuts.lang.Context)"><tt>Context(Context)</tt></a>を使います。
+<p>
+
+
+<h4>メッセージの出力先</h4>
+
+<p>
+Context オブジェクトには次の3種類の出力先を別々に指定できます。
+</p>
+
+<ul>
+<li>標準出力の表示先
+<blockquote>
+<dl>
+<dt><tt>public OutputStream  <b>getOutputStream</b> ();</tt></dt>
+<dt><tt>public void <b>setOutputStream</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> <em>out</em>);</dt>
+<dt><tt>public PrintWriter <b>getWriter</b> ();</tt></dt>
+<dt><tt>public void <b>setWriter</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a> <em>writer</em>);</dt>
+</dl>
+</blockquote>
+
+<li>エラーの表示先
+<blockquote>
+<dl>
+<dt><tt>public PrintWriter <b>getErrorWriter</b> ();</tt></dt> 
+<dt><tt>public void <b>setErrorWriter</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a> <em>out</em><tt> );</tt></dt>
+</dl>
+</blockquote>
+
+<li>式の評価結果の表示先
+<blockquote>
+<dl>
+<dt><tt>public PrintWriter <b>getTerminalWriter</b> ();</tt></dt>
+<dt><tt>public void <b>setTerminalWriter</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a> <em>out</em><tt> );</tt></dt>
+</dl>
+</blockquote>
+</ul>
+</blockquote>
+
+<a name="contextlocal"></a>
+<h4>コンテクスト・ローカル変数</h4>
+
+<p>
+コンテクスト・ローカル変数は、コンテクストにバインドされた一種の環境変数です。関数呼び出しをまたいで状態を保持したい場合に用います。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>set</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em> <tt>, Object <em>value</em><tt>);</tt></dt> 
+<dt><tt>public Object <b>get</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>symbol</em> <tt>);</tt></dt> 
+</dl>
+</blockquote>
+
+<p>
+パラメータ<em>symbol</em> は、intern()された文字列でなければならないことに注意して下さい。
+</p>
+
+<p>
+コンテクスト・ローカル変数は、Contextオブジェクトに対するフィールド・アクセス式でアクセスできます。
+</p>
+
+<pre class="eg">
+context = getContext()
+context.foo       ==> null
+context.foo = date()
+</pre>
+
+
+<a name="encoding"></a>
+<h4>文字コード</h4>
+
+<p>
+Contextはある文字コードを使うことを宣言することができます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setScriptEncoding</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>ecoding</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <b>getScriptEncoding</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<h4>クラスローダ</h4>
+
+<p>
+クラスローダをコンテクストに対応付けることができます。クラス名を解決するためや、load()関数がスクリプトを探すために使われます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setClassLoader</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/ClassLoader.html">ClassLoader</a> <em>loader</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/ClassLoader.html">ClassLoader</a> <b>getClassLoader</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<h4>Implementation オブジェクト</h4>
+
+<p>
+「<a href="pnutsImpl.html">インタプリタ実装のカスタマイズ</a>」を参照。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>setImplementation</b> (</tt><a href="../apidoc/pnuts/lang/Implementation.html">Implementation</a> <em>impl</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="../apidoc/pnuts/lang/Implementation.html">Implementation</a> <b>getImplementation</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<a name=configuration></a>
+<h4>Configuration</h4>
+
+<p>
+Configurationは、メソッドやフィールド候補の範囲や、フィールド参照のセ
+マンティクスを定義したものです。</p>
+
+<blockquote>
+<dl>
+<dt><em>context</em> . <b>setConfiguration</b><tt> ( <a href="../apidoc/pnuts/lang/Configuration.html">Configuration</a> </tt><em>impl</em> <tt> )</tt></det>
+<dt><em>context</em> . <b>getConfiguration</b><tt> (  )</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+<a href="configuration.html">「Java APIアクセスのカスタマイズ」</a>を参照。
+</p>
+
+<h4>モジュール</h4>
+
+<p>
+<tt>use()</tt>関数およびContext.usePackage()メソッドは、実行中のContextに対して<a href="module.html">モジュール</a>を登録します。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public boolean <b>usePackage</b> (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>name</em> <tt>);</tt></dt> 
+<dt><tt>public String[] <b>usedPackages</b> ();</tt></dt> 
+<dt><tt>public void <b>clearPackages</b> ();</tt></dt> 
+</dl>
+</blockquote>
+<p>
+<tt>usePackage()</tt> は、モジュールをコンテクストに登録し、モジュールの初期化スクリプトを実行します。
+<tt>usedPackages()</tt> は、登録済みのモジュール名のリストを返します。
+<tt>clearPackages()</tt> は、モジュールをリセットします。
+</p>
+<p>
+Contextは、登録ずみのモジュールのリストを保持していて、モジュールが提供する関数を参照する際に、そのリストから関数を検索します。モジュール関数の定義は、ContextではなくPackageが保持します。
+</p>
+
+
+<h4><tt>eval()</tt>と <tt>Pnuts::eval()</tt>の違い</h4>
+
+<blockquote>
+<dl>
+<dt><tt>eval(<em>expr</em>)</tt>
+<dd>実行時の Context のコピーを使って<em>expr</em>を評価
+<dt><tt>eval(<em>expr</em>, <em>context</em>)</tt>
+<dd><em>context</em>のコピーを使って<em>expr</em>を評価
+<dt><tt>Pnuts::eval(<em>expr</em>)</tt>
+<dd>新に作成した Context を使って<em>expr</em>を評価
+<dd><tt>Pnuts::eval(<em>expr</em>, Context())</tt>と等価
+<dt><tt>Pnuts::eval(<em>expr</em>, <em>context</em>)</tt>
+<dd><em>context</em>を使って<em>expr</em>を評価
+</dl>
+</blockquote>
+
+<p>
+<tt>Pnuts::eval(</tt><em>expr</em><tt>, </tt><em>context</em><tt>)</tt>に実行中の Context を与えると、import() 関数などで呼び出し側のコンテクストに影響を与えることが可能です。
+一方、eval() はコピーを使いますので、import()や package()関数でもとの Context を変更することはできません。
+</p>
+
+<a name="exception"></a>
+<h3><a href="../apidoc/pnuts/lang/PnutsException.html">pnuts.lang.PnutsException</a></h3>
+
+<p>
+<tt>Pnuts.eval()</tt>, <tt>Pnuts.load()</tt>, または <tt>Pnuts.loadFile()</tt> メソッドをつうじてスクリプトを実行中に例外が送出された場合、その例外は呼び出し元に伝わります。
+</p>
+
+<p>
+送出される例外は <a href="../apidoc/pnuts/lang/PnutsException.html"><tt>pnuts.lang.PnutsException</tt></a> で、実際の例外をカプセル化します。元の例外を取り出すには、<a href="../apidoc/pnuts/lang/PnutsException.html#getThrowable()"><tt>PnutsException.getThrowable()</tt></a>メソッドを呼び出します。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public Throwable <b>getThrowable</b>();</tt></dt>
+</dl>
+</blockquote>
+
+<div class="eg">
+例:
+<pre>
+import pnuts.lang.*;
+import java.io.*;
+
+class Foo {
+   public static void main(String arg[]){
+      try {
+         Object ret = Pnuts.eval(arg[0], new Context());
+	 System.out.println("ret = " + ret);
+      } catch (<b>PnuteException</b> e){
+	 if (e.<b>getThrowable</b>() instanceof IOException){
+	   e.printStackTrace();
+	 } else {
+	   System.out.println("caught: " + e);
+	 }
+      }
+   }
+}
+</pre></div>
+
+<p>
+<a href="../apidoc/pnuts/lang/PnutsException.html#getScriptSource()"><tt>getScriptSource()</tt></a>は、エラーのあったスクリプトのソースを返します。通常は、URLオブジェクトです。
+<a href="../apidoc/pnuts/lang/PnutsException.html#getLine()"><tt>getLine()</tt></a>は、エラーのあった行番号を返します。
+<p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>getScriptSource</b>();</tt></dt>
+<dt><tt>public int <b>getLine</b>();</tt></dt>
+</dl>
+</blockquote>
+<p>
+<a
+href="../apidoc/pnuts/lang/Pnuts.html#run(pnuts.lang.Context)"><tt>Pnuts.run(Context)</tt></a>で実行されるスクリプトで発生したエラーに関する情報を得るためには、<a href="../apidoc/pnuts/lang/Pnuts.html#setScriptSource(java.lang.Object)"><tt>Pnuts.setScriptSource()</tt></a>で、スクリプト・ソース<em>source</em>を指定しておく必要があります。
+<p>
+
+<div class="eg">
+例:
+<pre>
+import pnuts.lang.*;
+import java.io.*;
+
+class Foo {
+   public static void main(String arg[]){
+      try {
+         File file = new File(arg[0]);
+         FileInputStream in = new FileInputStream(file);
+         Pnuts expr = Pnuts.parse(in);
+	 expr.setScriptSource(file);
+	 expr.run(new Context());
+      } catch (PnuteException e){
+         System.out.println(e.getScriptSource() + ": " + e.getLine());
+      }
+   }
+}
+</pre></div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Pnuts API の概略
+</div>
+
+</body>
+</html>

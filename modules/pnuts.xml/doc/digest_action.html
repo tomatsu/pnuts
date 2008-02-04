@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xml module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a
+href="digest.html">Digesting XML Documents</a> -> Predefined DigestAction classes</div>
+
+<h2>Predefined DigestAction classes</h2>
+<p>
+The predefined DigestAction classes are included in <a
+href="../../apidoc/pnuts/xml/action/package-summary.html">pnuts.xml.action</a>
+package.  See also <a href="digest_usage.html">"Example Usage of
+DigestReader"</a> for the usage.
+</p>
+
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>Class</th>
+  <th bgcolor=#eeeeee>Description</th>
+</tr>
+<tr class=wb>
+<td><div><a
+href="../../apidoc/pnuts/xml/action/ListAction.html">ListAction</a></td>
+<td>This action creates
+a List object and adds it to the object on the stack top, in a way that
+depends on the type of the object.
+<ul>
+<li>If a List object is on the stack top, the created object is added to the List object.
+<li>If a Map object is on the stack top, a map entry of {<em>keyword</em> => the created object} is added to the Map object.
+<li>Otherwise,  this action assigns the created object to the Bean
+property whose name is the <em>keyword</em>.  In this case, the Bean property must be of java.util.List type.
+</ul>
+</div>
+<div>Some elements may be added to the created List object, according to
+the following rules.
+</div>
+<ul>
+<li>If the content of the element is not empty, the content is added to the List object.
+<li>If the element has one or more child-elements, the values produced
+by those elements are added to the List object.
+<li>If the element has one or more attributes, a Map object of
+{attribute's name => the value} is created and added to the List object.
+</ul>
+</div>
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/MapAction.html">MapAction</a></t>
+<td>This action creates a Map object and adds it to the object on the
+stack top, in a way that depends on the type of the object.
+<ul>
+<li>If a List object is on the stack top, an another Map object of {<em>keyword</em> =>
+the created Map object} is created and added to the List object.
+<li>If a Map object is on the stack top, a map entry of
+{<em>keyword</em> => the created Map object} is added to the Map object.
+<li>Otherwise, this action assigns the created Map object to the Bean
+property whose name is the <em>keyword</em>.  In this case, the Bean property must be of java.util.Map type.
+</ul>
+If the element has one or more attributes, a map entry of {attribute's
+name=>the value} is added to the created Map object.
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/TextAction.html">TextAction</a></td>
+<td>This action adds a map entry of {<em>keyword</em> => the content of the
+element} to the object on the stack top, in a way that depends on the type of
+the object.
+<ul>
+<li>If a List object is on the stack top, a Map object with
+a {<em>keyword</em> => content} entry is created and pushed onto the stack.
+<li>If a Map object is on the stack top, a map entry of
+{<em>keyword</em> => content} is added to the Map object.
+<li>Otherwise, this action assigns the element's content to the Bean
+property whose name is the <em>keyword</em>.
+If the property is of a primitive type, the content is automatically
+converted to the appropriate value.
+</ul>
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/BeanAction.html">BeanAction</a></td>
+<td>This action creates an instance of the class, which was passed to the
+constructor, and adds it to the object on the stack top, in a way that
+depends on the type of the object. Then it pushes the object on the stack.
+<ul>
+<li>If a List object is on the stack top, the created object is added
+to the List.
+<li>If a Map object is on the stack top, a map entry of
+{<em>keyword</em> => the created object} is added to the Map.
+<li>Otherwise, this action assigns the created object to the Bean
+property whose name is the <em>keyword</em>.  The type of the Bean property must match the type of the
+created object.
+</ul>
+If the element has one or more attributes, this action assigns the
+attribute's value to the Bean property, whose name is the name of the
+attribute.  If the Bean property is of a primitive type, the attribute's
+value is automatically converted to the appropriate value.
+</td>
+<tr class=wb>
+<td><a
+href="../../apidoc/pnuts/xml/action/BeanPropertyAction.html">BeanPropertyAction</a></td>
+<td>This action sets a Bean property of the object on the stack top,
+using <em>keyword</em> and the content of the element.
+<ul>
+<li>If a List object is on the stack top,  it creates an instance of
+the class passed to the constructor,  and push it onto the stack. 
+<li>Regardless of the type of the stack top object,  if
+the element has non-empty content,  this action assigns the content's
+value to the Bean property whose name is the <em>keyword</em>.  If the
+Bean property is of a primitive type, the content's value is
+automatically converted to the appropriate value.
+</ul>
+</td>
+<tr class=wb><td><em><a
+href="../../apidoc/pnuts/xml/action/SimpleCallAction.html">SimpleCallAction</a></em></td>
+<td>This action does some computation with the element's attributes as
+the parameters.  A subclass defines a concrete implementation.
+</td>
+<tr class=wb><td><em><a
+href="../../apidoc/pnuts/xml/action/ElementCallAction.html">ElementCallAction</a></em></td>
+<td>This action calls an abstract method passing the keyword assigned to the path, the element's attributes, and the text element.
+A subclass defines a concrete implementation.
+</td>
+<tr class=wb><td><em><a
+href="../../apidoc/pnuts/xml/action/CallAction.html">CallAction</a></em></td><td>This
+action does some computation using values popped out of the stack.   A subclass defines a concrete implementation.
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/ParameterAction.html">ParameterAction</a></td>
+<td>This action pushes the element's content to the stack, which
+should be used by CallAction afterwards.</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/AddMapAction.html">AddMapAction</a></td>
+<td>This action constructs a Map object from values that two child-elements
+produce.  This action is created with a <em>keyword</em> and the <em>value</em>.
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a
+href="digest.html">Digesting XML Documents</a> -> Predefined DigestAction classes</div>
+
+  </body>
+</html>

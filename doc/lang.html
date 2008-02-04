@@ -1,0 +1,3284 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <TITLE>The Pnuts Language</TITLE>
+  <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <META Http-Equiv="Content-Style-Type" Content="text/css">
+  <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+</head>
+<body>
+
+<div class="nav"><a href="lang-TOC.html">Table of Contents</a> -> The Pnuts Language</div>
+
+<!-- body start -->
+
+<center><h1>The Pnuts Language</h1></center>
+<center>version 1.2.1</center>
+
+<a name=basics></a>
+<h2>1. Basic Concepts</h2>
+
+<a name=structure></a>
+<h3>Basic Program Structure</h3>
+
+<h4>Sequence of Expressions</h4>
+<p>
+The most common style of Pnuts programs is <em>sequence of expressions</em>.
+When a script is executed, expressions in the script are evaluated one by one and the
+result of the last expression becomes the result of the whole execution.
+</p>
+<div class="eg">
+<pre>
+<em>expression 1</em>
+<em>expression 2</em>
+...
+<em>expression n</em>
+</pre></div>
+
+<h4>Class Definitions</h4>
+<p>
+Pnuts can create Java classes without compiling programs to bytecode explicitly.
+A scripted class file, which has a common file name extension '<tt>.pnc</tt>',
+is compiled and loaded by a specialized class loader when it is needed.
+</p>
+<div class="eg">e.g.
+<pre>
+class A {
+  int field_1 = 0
+  int method (parameter){
+    ...
+  }
+}
+</pre></div>
+<p>
+The details of class definition syntax is described in <a href="#classdef">section 4</a>.
+
+<a name=expression></a>
+<h3>Expressions</h3>
+<p>
+Expression is the smallest program unit in the Pnuts language.  When an expression is evaluated, it returns an object as the result.
+<p>
+
+<a name=variables></a>
+<h3>Variables</h3>
+<p>
+An expression consisting of an identifier is a variable reference.
+The value of the variable reference is the value stored in the location to which the variable is bound. 
+Variables have no static type; i.e. arbitrary objects can be the value.
+A variable is created when assignment to the identifier first occurs
+in a certain variable scope.
+<p>
+<div class="eg">e.g.
+<pre>
+year = 2002
+</pre></div>
+</p>
+
+<a name=functions></a>
+<h3>Functions</h3>
+
+<p>
+Function is defined by the name, a parameter list, and a sequence of expressions.
+Function is first class object, that is, functions can be assigned to
+a variable.
+</p>
+<p>
+<div class="eg">e.g.
+<pre>
+function double(n) {
+    n * 2
+}
+</pre></div>
+</p>
+<p>
+Functions are identified by the name and the number of formal
+parameters. 
+Functions of the same name are grouped into one entity which is
+referenced by the name.
+When a function is called, specifying the function name and actual
+arguments, first the function group of the name is referenced, then 
+Pnuts runtime system searches a function definition that matches the number of arguments.
+If the function is found, it is executed with the given arguments.
+</p>
+<p>
+Functions can be nested and have static (lexical) scope.
+</p>
+
+<div class="eg">e.g.(1)
+<pre>
+function f(){
+   x = 0
+   function set(value) x = value
+   function get() x
+   ::set = set
+   ::get = get
+}
+
+f()
+set(100)
+get()               ---> 100
+f()
+get()               ---> 0
+</pre></div>
+<p>
+<div class="eg">e.g.(2)
+<pre>
+function inc(x) ++x
+function abs(x) if (x < 0) -x else x
+
+function compose (f1, f2) return (function (x) f1(f2(x)))
+compose(inc, abs)(-100)      ---> 101
+compose(abs, inc)(-100)      ---> 99
+</pre></div>
+
+<a name=packages></a>
+<h3>Packages</h3>
+
+<p>
+Package provides a name space for variables and functions.  Every function and variable belongs to a package. 
+There is always a package which is called "current package".
+</p>
+
+<p>
+Functions are executed in the package in which the functions are defined.
+</p>
+
+<a name="package_hierarchy"></a>
+<a name="root_package"></a>
+<a name="global_package"></a>
+<h4>Package Hierarchy</h4>
+<p>
+Packages can have a parent package.  When a read access to a package variable occurs, the value is returned if it is defined in the package. If not, Pnuts runtime tries to find it from its parent package.
+<p>
+Write access has nothing to do with package hierarchy.   When a write access occurs, the value is
+written to the target package, regardless of the package hierarchy.
+<p>
+The package that has no parent is called a <em>root package</em>. The default <em>root package</em> is called <em>gloabl package</em>.
+<p>
+The function <a href="#packaging"><tt>package(name)</tt></a> creates a package that the global package is its parent package, except that the global package has no parent package. When the parameter of <a href="#packaging"><tt>package()</tt></a> function is a string separated by the delimiter "<tt>::</tt>", the corresponding package hierarchy will be created.
+</p>
+
+<a name=context></a>
+<h3>Contexts</h3>
+
+<a href="context.html">Context</a> is responsible for managing an internal state of a script execution.
+A context is created when a script is executed, and pass around during the execution. When another script is
+loaded, a clone of the context is created and used in the loaded script.
+</p>
+
+<a name="modules"></a>
+<h3>Modules</h3>
+
+<p>
+<em>Module</em> is a set of reusable scripts which can be utilized by calling the <a href="#use"><tt>use()</tt></a> builtin function . User can choose necessary modules at run time, so that he/she can take advantage of existing modules, reducing the possibility of name confliction. 
+</p>
+
+<p>
+Each module is usually packaged into a JAR file, which might be added to CLASSPATH or copied to ${PNUTS_HOME}/modules/.
+<p>
+<em>Module</em> is implemented as an extension to a <em>package</em>.  Module has one-to-one relationship with Package.
+Names (functions/variables) exported by a module are defined in a certain package. 
+<p>
+So why module is useful?  To reference an object in a package by its name, you have to change the <em>current package</em> to the package.  If there are many packages each of which defines different names, you would have to change the <em>current package</em> very often in order to reference the objects by those names, which is not practical.
+<p>
+Names in a module can be referenced by their names, when the module is used in the context, no matter which package is selected as the <em>current package</em>.
+
+<p>
+<b><em>Initialization Script</em></b>
+</p>
+<p>When use() is called, the corresponding initialization
+script with the specified package name is loaded.
+Module's functions must be available when the initialization script is
+loaded.
+<p>
+The name of initialization script is made
+by substituting "::" and "." in the package
+name with "/".
+For example, when the package name is "<tt>a.b.c</tt>", the script "<tt>a/b/c/init</tt>" is loaded.</p>
+<p>
+<b><em>Which names are exported</em></b>
+<p>
+By default, symbols that references a function defined as the name are automatically exported.
+<p>
+With Pnuts API, module authors can define which names are exported.
+</p>
+<b><em>Name conflict</em></b>
+</p>
+<p>
+If a name is registered from two or more modules, the last value is always taken.
+</p>
+<b><em>Modules and Contexts</em></b>
+
+<p>
+<a href="context.html">Context</a> is responsible for managing a list of registered modules.
+</p>
+<p>
+A module list is shared by context clones, that is, scripts called by
+load() function	reference the same module list as the caller.  In
+addition, modules registered in the callee context are also visible in
+the caller context, since they reference the same module list.
+</p>
+<p>
+<img src="../doc/images/modulelist.png"></img>
+</p>
+
+<a name=branch_module_list></a>
+<b><em>Branching Module List</em></b>
+<p>
+When multiple modules define functions of the same name, the most recently
+registered module takes precedence.
+Functions of a module registered earlier may be hidden by other modules.
+It is offen undesirable that sripts may behave differently depending
+on what kind of module list is used. 
+<p>
+To avoid the problem, it is recommended to reset the module
+list in the module initialization, by calling  <a href="lang.html#use">use(null)</a>, so that the
+module does not depend on what kind of module list is in use at the initializlation.
+</p>
+<img src="../doc/images/modulelist2.png"></img>
+<p>
+Once a branch of the module list is created, subsequently registered modules are added
+to the new module list on the context (they are not added to the original module list).
+</p>
+<p>
+For example, if module A uses module B before branching the module
+list and uses module C after that, the context that uses module A can
+also utilize module B, but not C.  The context	in which module A is
+defined can utilize module C, but not B.
+<p>
+
+<pre class="eg">
+use(B)
+use(null)
+use(C)
+</pre>
+
+<div>Initialization of module A</div>
+</blockquote>
+
+<p>
+<b><em>Modules and Function Calls</em></b>
+</p>
+<p>
+Function is executed with the module list that were in use when the function was defined.
+</p>
+<p>
+Suppose the following two script files are loaded.
+</p>
+<div class="eg">m1.pnut
+<pre>
+use("pnuts.lib")
+function mymap() map()
+</pre>
+</div>
+
+<div class="eg">m2.pnut
+<pre>
+use("functional")
+map        ---> function map(func, list) // in "functional"
+mymap()    ---> {}                     // map() in "pnuts.lib"
+</pre>
+</div>
+
+<p>
+Both <tt>"pnuts.lib"</tt> and <tt>"functional"</tt> module define <tt>map()</tt> function.
+Since the symbol is resolved with the module list that was in use when the function was defined,
+<tt>map</tt> in <tt>mymap()</tt> references <tt>map</tt> in
+<tt>"pnuts.lib"</tt> module, regardless of the order in which those
+scripts are loaded.
+</p>
+
+
+<a name=scope></a>
+<h3>Scope Rules</h3>
+<h4>Definition of Scope Classes</h4>
+<dl>
+  <dt>Static Scope
+  <dd>
+  <dl>
+    <dt>Local Scope
+    <dt>Top Level Scope
+  </dl>
+  <dt>Non-static Scope
+  <dd>
+  <dl>
+    <dt>Current package
+    <dt>Builtin functions
+    <dt>Module functions
+    <dt>Imported classes
+    <dt>Package hierarchy
+  </dl>
+</dl>
+
+<h4>Local Scope</h4>
+
+<em>Local scope</em> is a static scope class for variables which are
+declared in a function.
+Local Variables are declared in a local scope by assigning any value to the variable.
+Local variables are available only in the function that declared them.
+</p>
+
+<div class="eg">e.g.
+<pre>
+a = 1
+function t1(){
+  a = 0
+  println(a)
+}
+t1()  // 0
+println(a) // 1
+</pre></div>
+<p>
+Local variables declared in a conditional statement are initialized to <tt>null</tt> if the assignment statement is not executed.
+</p>
+
+<div class="eg">e.g.
+<pre>
+function t1(){
+  if (false){
+      a = 0
+  }
+  println(a)
+}
+
+function t2(){
+  while (false){
+      a = 0
+  }
+  println(a)
+}
+
+t1()    // null
+t2()    // null
+</pre></div>
+
+<P>
+If the functions are nested, a variable declared in an outer function can be read
+and write in inner functions.</p>
+
+<div class="eg">e.g.
+<pre>
+a = 1
+function t1(){
+  a = 0
+  function t2(){
+    a = 4
+  }
+  t2()
+  println(a + " should be 4")
+}
+</pre></div>
+
+<p>The scope of counter variable of for/foreach
+statement falls into Local Scope,
+but it does not affect the outer scope.</p>
+
+<div class="eg">e.g.
+<pre>
+function t3 (){
+  a = 2
+  for (a : 0..9){
+    println(a)
+  }
+  println(a + " should be 2")
+}
+</pre>
+</div>
+
+
+<h4>Top Level Scope</h4>
+
+<a name="resolution"></a><em>Top level scope</em> is a scope class for variables which are
+declared outside functions.  When a referenced variable is not defined in the local scope, then the interpreter looks for the name in Top Level Scope.
+</p>
+<p>Name resolution of Top Level Scope variables
+is taken place in the following order.</p>
+<ol>
+  <li>Current Package
+  <li>Module functions and Builtin functions
+  <li>Imported classes
+  <li>Package hierarchy
+</ol>
+<p>When a variable is declared in a Top Level
+Scope, the variable is defined in the current
+package.</p>
+<p>
+When Top Level Scope variables are referenced in a Local Scope,
+it is not guaranteed that variables are resolved for every reference.
+Some implementation may resolve the variables once in the beginning of the local scope (where
+the scope class changes from top-level scope to local scope).
+Other implementaion may resolve the variable for every reference.
+However, it is not recommended to write scripts that depend on a particular behavior.
+</p>
+<p>
+For instance, the following function calls <tt>import()</tt> within
+the definition.  It may fail to resolve the name '<tt>HashMap</tt>' if
+variables are resolved in the beginning of the local scope. Therefore,
+this usage is not recommended.
+</p>
+
+<pre class="eg">
+function foo(){
+  import("java.util.HashMap")
+  HashMap()
+}
+</pre>
+
+
+<a name=lexicalElements></a>
+<h2>2. Lexical Elements</h2>
+
+<a name=keywords></a>
+<h3>Reserved Keywords</h3>
+
+<table width=400>
+<tr align=center>
+<td><tt>function</tt></td>
+<td><tt>if</tt></td>
+<td><tt>else</tt></td>
+<td><tt>while</tt></td>
+<td><tt>do</tt></td>
+<td><tt>for</tt></td>
+<td><tt>foreach</tt></td>
+<td><tt>switch</tt></td>
+<td><tt>case</tt></td>
+<td><tt>default</tt></td>
+<td><tt>break</tt></td>
+<td><tt>new</tt></td>
+<td><tt>yield</tt></td>
+</tr>
+<tr align=center>
+<td><tt>null</TT></td>
+<td><tt>try</TT></td>
+<td><tt>catch</TT></td>
+<td><tt>finally</TT></td>
+<td><tt>continue</tt></td>
+<td><tt>return</tt></td>
+<td><tt>true</tt></td>
+<td><tt>false</tt></td>
+<td><tt>instanceof</tt></td>
+<td><tt>class</tt></td>
+<td><tt>import</tt></td>
+<td><tt>macro</tt></td>
+<td><tt>throw</tt></td>
+<td><tt>static</tt></td>
+</tr>
+</table>
+
+<a name=comments></a>
+<h3>Comments in Code</h3>
+
+Text following <tt>//</tt> up to the end of the line is ignored by the interpreter, as is text between <tt>/*</tt> and the next <tt>*/</tt>.
+
+<a name=character></a>
+<h3>Character Literal</h3>
+
+<p>
+A character is an expression that presents <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Character.html"><tt>java.lang.Character</tt></a> object.
+The lexical rule is the almost same as Java language. 
+</p>
+<div class="eg">e.g.
+<pre>
+'A'
+</pre>
+</div>
+
+The followings are special characters.
+
+<pre class="eg">
+'\''       ---> '
+'\n'       ---> LF
+'\t'       ---> TAB
+'\r'       ---> CR
+'\f'       ---> ^L
+'\b'       ---> ^H
+'\\'       ---> \
+'\0'       ---> NUL
+</pre>
+
+Unicode escape sequence can be used in a Character Literal.
+
+<pre class="eg">
+'\u0041'   ---> 'A'
+</pre>
+
+<a name=string></a>
+<h3>String Literal</h3>
+<p>
+Sequence of character literals enclosed in &quot;(double quotes) is a String Literal, which represents a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> object.
+</p>
+<pre class="eg">
+> "foo"
+"foo"
+
+> "\b"
+"^H"
+</pre>
+
+Unicode escape sequence can be used as a part of a String Literal.
+
+<pre class="eg">
+"\u0041B"     ---> "AB"
+</pre>
+
+String between \( and \) is interpreted as an expression and the result of its execution is embedded between the strings of both sides.
+
+<pre class="eg">
+"Date: \(date()\)"     ---> "Date: Fri May 11 00:11:31 GMT 2007"
+</pre>
+
+
+<a name="backquote"></a>
+<p>
+Characters enclosed in ` (backquote) is String Literal to express a
+verbatim string.
+</p>
+
+<pre class="eg">
+`x = "A"`     ---> "x = \"A\""
+`ABC\`        ---> "ABC\\"
+</pre>
+
+
+<a name=integer></a>
+<h3>Integer</h3>
+
+<p>
+An integer is not restricted within '<tt>long</tt>' precision. The class of the number object is assigned automatically depending on the value.
+When the integer is between Integer.MAX_VALUE and Integer.MIN_VALUE, the class is <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Integer.html"><tt>java.lang.Integer</tt></a>. When the integer is between Long.MAX_VALUE and <tt>Long.MIN_VALUE</tt>, the class is <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Long.html"><tt>java.lang.Long</tt></a>. Otherwise, the number is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/math/BigInteger.html"><tt>java.math.BigInteger</tt></a> object.
+</p>
+
+<p>
+In <a href="http://java.sun.com/products/personaljava/">Personal Java</a>
+environment in which java.math package is not supported, numbers out of <em>long</em> precision are represented as <em>Double</em> objects.
+</p>
+
+<h4>Decimal Integer</h4>
+
+<blockquote>
+("0" | ["1"-"9"] (["0"-"9"])*)
+</blockquote>
+
+<div class="eg">e.g. <pre>
+123
+12345678901234567890
+123L
+</pre></div>
+
+<h4>Hexadecimal Integer</h4>
+
+<blockquote>
+<div><code>"#" (["0"-"9","a"-"f","A"-"F"])+</code></div>
+<div><code>"0" ("X"|"x") (["0"-"9","a"-"f","A"-"F"])+</code></div>
+</blockquote>
+
+<div class="eg">e.g. <pre>
+#ffff
+#ffff0000
+0xff
+</pre></div>
+
+<p>
+When the number is between Byte.MAX_VALUE and Byte.MIN_VALUE,
+"#ff" style makes Byte object while "0xff" style makes Integer object.
+</p>
+
+<h4>Octal Integer</h4>
+
+<div class="eg">e.g. <pre>
+0777
+0177L
+</pre></div>
+
+
+<a name=floating></a>
+<h3>Floating Point Number</h3>
+
+<p>
+Floating point numbers are represented by <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Double.html"><tt>java.lang.Double</tt></a> or <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Float.html"><tt>java.lang.Float</tt></a> objects.
+</p>
+
+<div class="eg">e.g. <pre>
+123F       ---> new Float(123.0)
+123f       ---> new Float(123.0)
+123D       ---> new Double(123.0)
+123d       ---> new Double(123.0)
+123.0      ---> new Double(123.0)
+123.0f     ---> new Float(123.0)
+1.23E-4    ---> new Double(1.23E-4)
+1.23E-4f   ---> new Float(1.23E-4)
+</pre></div>
+
+<a name=decimal></a>
+<h3>Multi-precision Decimal Number</h3>
+
+<p>
+Multi-precision decimal numbers are represented by <a href="http://java.sun.com/j2se/1.4/docs/api/java/math/BigDecimal.html"><tt>java.math.BigDecimal</tt></a> objects.
+</p>
+
+<div class="eg">e.g. <pre>
+123.0B       ---> new BigDecimal("123.0")
+123.0E-4B    ---> new BigDecimal("0.00123")
+
+1.2 * 3      ---> 3.5999999999999996
+1.2B * 3     ---> 3.6
+</pre></div>
+
+<p>
+In <a href="http://java.sun.com/products/personaljava/">Personal Java</a>
+environment in which java.math package is not supported, the suffix 'B' is ignored.
+</p>
+
+<a name=boolean></a>
+<h3>Boolean Literal</h3>
+
+Boolean Literal is either of these words, which represents <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Boolean.html"><tt>java.lang.Boolean</tt></a> objects.
+
+<blockquote>
+<DL>
+  <dt><tt>true</tt></dt>
+  <dt><tt>false</tt></dt>
+</DL>
+</blockquote>
+
+<a name=null></a>
+<h3>Null Literal</h3>
+<p>
+<tt>null</tt> represents Java's null.
+</p>
+
+<a name=classliteral></a>
+<h3>Class Literal</h3>
+<p>
+Class literal represents a class as in Java language, but it does not have a value by itself.
+It is used in <a href="#new">new expression</a> and a catch part of <a href="#try">try/catch/finally statement</a>.
+</p>
+<pre class="eg">
+java.util.Integer
+</pre>
+
+<a name=typeLiteral></a>
+<h3>Type Literal</h3>
+<p>
+Type literal represents a type as in Java language, but it does not have a value by itself.
+It is used in <a href="#cast">cast expression</a> and <a href="#instanceof">instanceof expression</a>.
+A type literal can be an array typea, a primitive type, as well as a class literal.
+</p>
+<pre class="eg">
+int
+int[]
+java.util.Integer
+</pre>
+
+<a name=class></a>
+<h3>Class</h3>
+
+<div class="box">
+<div class="synopsis">class <em>class_literal</em></div>
+<div class="synopsis">class ( "<em>class_literal</em>" )</div>
+</div>
+
+<p>
+The value of a class reference is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> object for this class.  For example, 
+</p>
+
+<pre class="eg">
+class java.lang.Object      ---> java.lang.Object class
+</pre>
+
+
+<p>
+Inner classes are denoted by '$'-separeted names.
+</p>
+
+<pre class="eg">
+class Toplevel$Inner       ---> Toplevel.Inner class
+</pre>
+
+<p>
+As in Java, <a href="#import"><tt>import</tt></a> statement simplifies the way of referencing classes.
+</p>
+<p>
+On JDK1.1, classes are searched by the class loader which has loaded the Pnuts runtime itself. 
+On J2SE/J2EE, the System Class Loader is used.
+When a ClassLoader is set by <a href="../apidoc/pnuts/lang/Context.html#setClassLoader(java.lang.ClassLoader, pnuts.lang.Context)"><tt>Context.setClassLoader()</tt></a> method, it is used as default class loader.
+</p>
+
+<a name=expressions></a>
+<h2>3. Expressions</h2>
+
+<a name="arithmetic"></a>
+<h3>Arithmetic Operators</h3>
+
+<p>
+Semantics of following arithmetic operations are basically the same as Java.
+</p>
+
+<table width=300>
+<tr align=center>
+<td><tt>+</tt></td>
+<td><tt>-</tt></td>
+<td><tt>*</tt></td>
+<td><tt>/</tt></td>
+<td><tt>%</tt></td>
+</tr>
+</table>
+
+<h4>Type Transition</h4>
+
+<p>
+Here is a type transition table for binary arithmetic operations.
+</p>
+
+<table border=0 cellspacing=1 cellpadding=3 class=bg3 width=95%>
+<tr class=wb>
+ <td></td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Character</td>
+ <td>Short</td>
+ <td>Byte</td>
+</tr>
+<tr class=wb>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+</tr>
+<tr class=wb>
+ <td>BigInteger</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+</tr>
+<tr class=wb>
+ <td>Double</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+</tr>
+<tr class=wb>
+ <td>Float</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+</tr>
+<tr class=wb>
+ <td>Long</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Long</td>
+ <td>Long</td>
+ <td>Long</td>
+ <td>Long</td>
+</tr>
+<tr class=wb>
+ <td>Integer</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+<tr class=wb>
+ <td>Character</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+<tr class=wb>
+ <td>Short</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+<tr class=wb>
+ <td>Byte</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+</table>
+
+<h4>Pre Increment/Decrement Operator</h4>
+
+
+<div class="box">
+<div class="synopsis"><tt>++</tt> <em>expression</em></div>
+<div class="synopsis"><tt>--</tt> <em>expression</em></div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+a = 0
+++a    ---> 1
+a      ---> 1
+</pre>
+</div>
+
+<h4>Post-Increment/Decrement Operator</h4>
+
+<div class="box">
+<div class="synopsis"><em>expression</em> <tt>++</tt> </div>
+<div class="synopsis"><em>expression</em> <tt>--</tt> </div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+a = 0
+a++       ---> 0
+a         ---> 1
+a = a++
+a         ---> 1
+</pre>
+</div>
+
+<a name=comparison></a>
+<h3>Comparison Operators</h3>
+
+<table width=300>
+<tr align=center>
+<td><tt>==</tt></td>
+<td><tt>!=</tt></td>
+<td><tt>&lt;</tt></td>
+<td><tt>&lt;=</tt></td>
+<td><tt>&gt;</tt></td>
+<td><tt>&gt;=</tt></td>
+</tr>
+</table>
+
+<p>
+If both parameters are <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> objects, they are compared each other as a number.
+</p>
+<pre class="eg">
+1 == 1.0        ---> true
+</pre>
+
+<p>
+If one of the parameters is a <a href="../apidoc/pnuts/lang/Numeric.html">Numeric</a> object and the other is <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> or <a href="../apidoc/pnuts/lang/Numeric.html">Numeric</a>, they are compared each other with <tt>Numeric.compareTo()</tt> method.
+</p>
+<p>
+If both sides of a comparison operator are String object, the result is
+based on <tt>String.compareTo()</tt> method.
+</p>
+
+<div class="eg">e.g.
+<pre>
+"A" < "AB"         ---> true
+</pre></div>
+
+<p>
+If both paramters are arrays, the elements are recursively compared by <tt>Object.equals(Object)</tt> method.
+In this case, only == and != are valid.
+</p>
+
+<pre class="eg">
+[1,[2,3]] == [1,[2,3]]    ---> true
+[1,2,3] == [1,2]          ---> false
+</pre>
+
+<p>
+If one of the parameters is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Comparable.html"><tt>java.lang.Comparable</tt></a> object, the result is based
+on <tt>Comparable.compareTo()</tt> method.
+</p>
+
+<p>
+Otherwise, comparison operations are based on <tt>Object.equals()</tt> method.
+In this case, only == and != are valid.
+</p>
+<div class="eg">e.g.
+<pre>
+1 == 1                ---> true
+Object() == Object()  ---> false    
+</pre></div>
+
+<a name=logical></a>
+<h3>Logical Operators</h3>
+
+The following operators are for Boolean objects.
+
+<p>
+<table width=200>
+<tr align=center>
+<td><tt>&&</tt></td>
+<td><tt>||</tt></td>
+<td><tt>!</tt></td>
+</tr>
+</table>
+<div class="eg">e.g.
+<pre>
+!(1 == 2)            ---> true
+1 == 1 && 2 == 2     ---> true
+1 == 1 || 1 == 2     ---> true
+</pre></div>
+
+<p>
+If operands are not boolean, they is implicitly converted to a boolean value with <a href="#conversion_to_boolean">the conversion rules</a>.
+</p>
+
+<a name=bitwise></a>
+<h3>Bitwise Operators</h3>
+
+The following operators are for <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> objects.
+
+<p>
+<table width=300>
+<tr align=center>
+<td><tt>&</tt></td>
+<td><tt>|</tt></td>
+<td><tt>~</tt></td>
+<td><tt>^</tt></td>
+<td><tt>&gt;&gt;</tt></td>
+<td><tt>&lt;&lt;</tt></td>
+<td><tt>&lt;&lt;&lt;</tt></td>
+</tr>
+</table>
+<div class="eg">e.g.
+<pre>
+1 << 100    ---> 1267650600228229401496703205376
+</pre>
+</div>
+
+<a name=ternary></a>
+<h3>Ternary Operator</h3>
+<div class="box">
+<div class="synopsis"><em>condition</em><tt> ? </tt><em>expression</em> : <em>expression</em></div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+pnuts_version.startsWith("1.1") ? 1 : 0
+</pre>
+</div>
+
+<p>
+If the value of <em>condition</em> is not a boolean, it is implicitly converted to a boolean value with <a href="#conversion_to_boolean">the conversion rules</a>.
+</p>
+
+<a name=assignment></a>
+<h3>Assignment</h3>
+
+<div class="box">
+<div class="synopsis"><em>identifier</em><tt> = </tt><em>expression</em></div>
+<div class="synopsis"><em>expression</em><tt> . </tt><em>identifier</em><tt> = </tt><em>expression</em></div>
+<div class="synopsis"><em>expression</em><tt> :: </tt><em>identifier</em><tt> = </tt><em>expression</em></div>
+<div class="synopsis"><em>expression</em><tt> [ </tt><em>expression</em><tt> ] = </tt><em>expression</em></div>
+</div>
+
+
+<h4>Operation and Assignment</h4>
+
+<p>
+<table width=400>
+<tr align=center>
+<td><tt>*=</tt></td>
+<td><tt>/=</tt></td>
+<td><tt>+=</tt></td>
+<td><tt>-=</tt></td>
+<td><tt>%=</tt></td>
+<td><tt>&=</tt></td>
+</tr>
+<tr align=center>
+<td><tt>|=</tt></td>
+<td><tt>~=</tt></td>
+<td><tt>^=</tt></td>
+<td><tt>&gt;&gt;=</tt></td>
+<td><tt>&lt;&lt;=</tt></td>
+<td><tt>&lt;&lt;&lt;=</tt></td>
+</tr>
+</table>
+<p>
+These operators are applicable to <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> objects.
+</p>
+
+
+<a name="parallel_assign"></a>
+<h4>Parallel Assignment</h4>
+
+<div class="box">
+<div class="synopsis"><em>identifier1</em> , <em>identifier2</em> , ... = <em>expression</em></div>
+</div>
+<p>
+Equivalent to the following pseudo code.
+<pre class="eg">
+<em>identifier1</em> = try {<em>expression</em>[0]} catch (IndexOutOfBoundsException e){}
+<em>identifier2</em> = try {<em>expression</em>[1]} catch (IndexOutOfBoundsException e){}
+...
+null
+</pre>
+
+
+<a name=array></a>
+<h3>Arrays</h3>
+
+<h4>Array Expression</h4>
+
+
+<div class="box">
+<div class="synopsis">[ <em>expression</em> , ... ]</div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+[1, 2, 3]
+</pre>
+</div>
+
+Elements of an array can be of different types.
+
+<pre class="eg">
+["one", 1, '\u3042', null]
+</pre>
+
+<h4>Nested Array</h4>
+<pre class="eg">
+ [1, [2, ["yes", "no"], null]]  ---> new Object[]{
+                                          new Integer(1),
+                                          new Object[]{
+                                            new Integer(2),
+                                            new Object[]{
+                                              "yes",
+                                              "no"
+                                            },
+                                            null
+                                          }
+                                        }
+</pre>
+
+<a name=arrayType></a>
+<h4>Array Type</h4>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> ( [  ] )+</div>
+</div>
+
+<div class="eg">e.g.<pre>
+type1 = class java.lang.Object[]  ---> java.lang.Object[] class
+type2 = int[][]                   ---> int[][] type
+</pre></div>
+
+<a name=arrayInstance></a>
+<h4>Array Instance</h4>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> ( [ <em>integer</em> ] )+</div>
+<div class="synopsis"><tt> new </tt><em>class_literal</em> ( [ <em>integer</em>  ] )+</div>
+</div>
+
+<div class="eg">e.g.<pre>
+type = class java.lang.Object
+array1 = type[1]        ---> [null]    // new Object[1]
+array2 = int[3][2]      ---> [[0, 0], [0, 0], [0, 0]]
+array3 = new int[3][2]   //  same as above
+</pre></div>
+
+<h4>Array Length</h4>
+Array objects have a <tt>length</tt> field which contains how many elements are in the array.
+
+
+<pre class="eg">
+[1, 2, 3].length      ---> 3
+</pre>
+
+<a name="list"></a>
+<h4>List</h4>
+<div class="box">
+<div class="synopsis">{ <em>expression</em> , ... }</div>
+</div>
+<div class="eg">e.g.
+<pre>
+{1, 2, 3}
+</pre></div>
+
+<a name="arrayIndex"></a>
+<h4>Array Dereference</h4>
+
+<div class="box">
+<div class="synopsis"<em>array</em> [ <em>expression</em> ]</div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+a = [1, 2, 3]
+a[0]      ---> 1
+a[0] = 10
+a[0]      ---> 10
+</pre></div>
+
+<p>
+Array elements are assignable.
+</p>
+<div class="eg">e.g.
+<pre>
+a = [1, 2, 3]
+a[0] = 100
+a       ---> [100, 2, 3]
+</pre></div>
+
+<p>
+If <em>expression</em> results in a negative integer <em>idx</em>, and the size of the array is <em>len</em>, 
+<tt>a[</tt><em>idx</em><tt>]</tt> is interpreted as <tt>a[</tt><em>idx</em><tt> + </tt><em>len</em><tt>]</tt>.
+
+<div class="eg">e.g.
+<pre>
+a = [1, 2, 3]
+a[-1] => 3
+a[-2] => 2
+a[-3] => 1
+a[-4] => error
+</pre></div>
+<p>
+On Java2 environment, <I>array</I> can also be a <CODE>java.util.List</CODE> object.
+
+
+<h4>Subsection of Array</h4>
+
+<div class="box">
+<div class="synopsis"><em>array</em> [ <em>startIndex</em> ..]</div>
+<div class="synopsis"><em>array</em> [ <em>startIndex</em> .. <em>endIndex</em> ]</div>
+</div>
+
+<p>
+This operation extracts a subsection from startIndex to endIndex
+startIndex.  If the range has no intersection with 0..array.length, it
+returns an empty array.
+</p>
+
+<pre class="eg">
+foo = [1, 2, 3]
+foo[1..]       ---> [2, 3]
+foo[1, 1]      ---> [2]
+</pre>
+
+<P>On Java2 environment, <I>array</I> can also be a <CODE>java.util.List</CODE> object.</P>
+
+<a name="selection"></a>
+<h4>Selection of Elements</h4>
+
+<div class="box">
+<div class="synopsis"><em>target</em> [ <em>predicate</em>(elem) ]</div>
+<div class="synopsis"><em>target</em> [ <em>expression</em> ]</div>
+</div>
+
+<p>
+When <em>target</em> is either an array, a collection, or a geneartor, and <em>predicate</em> is a function with one parameter, this expression returns a geneartor that generates the only elements in <em>target</em> that satisfy the <em>predicate</em>.
+</p>
+<div class="eg">
+<pre>
+x = list([1,2,3])
+for (i : x[function (x) x % 2 == 0]) {
+   println(i)
+}
+</pre></div>
+
+<p>
+When <em>expression</em> is a boolean expression, the expression is converted to a function of one parameter, then it does the same as <em>predicate(elem)</em>.
+If <em>expression</em> is a comparison expression (<em>lval</em> <em>compare_op</em> <em>rval</em>), the leftmost identifier of <em>lval</em> is interpreted as an instance field name.
+
+<div class="eg">
+<pre>
+x = list()
+import java.awt.Button
+for (i : 1..10) x.add(Button())
+
+x[name == "button0"]
+
+ --->
+
+x[function (i) {i.name == "button0"}]
+</pre></div>
+
+<div class="eg">
+<pre>
+x[name == "button0" || name == "button1"]
+
+ --->
+
+x[function (i) {i.name == "button0" || i.name == "button1"}]
+</pre></div>
+
+
+<p>
+If <em>expression</em> is a unary boolean expression ( ! <em>val</em> ), 
+the leftmost identifer of <em>val</em> is interpreted as the name of a <em>target</em>'s field.
+</p>
+
+<div class="eg">
+<pre>
+x[!visible]
+
+  --->
+
+x[function (i) {!i.visible}]
+</pre></div>
+
+
+<h4>Substring</h4>
+
+<div class="box">
+<div class="synopsis"><em>string</em> [ <em>startIndex</em> ..]</div>
+<div class="synopsis"><em>string</em> [ <em>startIndex</em> .. <em>endIndex</em> ]</div>
+</div>
+
+<pre class="eg">
+foo = "123"
+foo[1..]        ---> foo.substring(1)  ---> "23"
+foo[1..1]       ---> foo.sunstring(1, 2) ---> "2"
+</pre>
+
+<h4>A Character in a String</h4>
+
+<div class="box">
+<div class="synopsis"><em>string</em> [ <em>index</em> ]</div>
+</div>
+
+<p>
+This operation extracts a substring from startIndex to endIndex
+startIndex.  If the range has no intersection with 0..string.length(),
+it returns an empty string.
+</p>
+
+<pre class="eg">
+foo = "123"
+foo[1]   --->   foo.charAt(1)    --->  '2'
+</pre>
+
+<a name="map"></a>
+<h4>Map Expression</h4>
+
+<div class="box">
+<div class="synopsis">{<em>key</em> => <em>value</em> , ...}</div>
+</div>
+<p>
+When one or more key-value mappings are specified in this expression, a <tt>java.util.HashMap</tt> object that contains the mappings is created and returned.
+</p>
+<pre class="eg">
+{ "name"=>"Sae",  "age" => 1 }
+</pre>
+
+<a name="map_elements"></a>
+<h4>Map Elements</h4>
+
+<div class="box">
+<div class="synopsis"><em>map</em> [ <em>key</em> ]</div>
+<div class="synopsis"><em>map</em> [ <em>key</em> ] = <em>value</em></div>
+</div>
+
+<P>On Java2 environment, elements of <CODE>java.util.Map</CODE>
+objects can be accessed specifiying a key between a pair of bracket.
+</p>
+
+<pre class="eg">
+foo = map()
+foo["age"] = 24
+foo["age"]         ---> 24
+</pre>
+<p>
+
+<a name=concatenation></a>
+<h3>+ operation for objects other than Numbers</h3>
+
+<h4>Arrays/Collections</h4>
+
+<div class="box">
+<div class="synopsis">
+<div><em>array1</em> + <em>array2</em></div>
+<div><em>array</em> + <em>collection</em></div>
+<div><em>collection</em> + <em>array</em></div>
+<div><em>collection1</em> + <em>collection2</em></div>
+</div>
+</div>
+
+<p>
+This operation concatenates two objects.
+</p>
+
+<div class="eg">e.g.
+<pre>
+[1, 2, 3] + [4, 5, 6]     ---> [1, 2, 3, 4, 5, 6]
+</pre>
+</div>
+
+<p>
+The type of the result is the same as the first object.  Therefore, all
+elements of the second object must be of the component type of the first object.
+</p>
+
+<pre class="eg">
+int[0] + [1, 2, 3]     ---> [1, 2, 3]
+</pre>
+
+<p>
+Note that <em>collection1</em> and <em>collection2</em> are Set objects,
+the result will be UNION of two Sets.
+</p>
+
+<h4>Map</h4>
+
+<div class="box">
+<div class="synopsis"><em>map</em> + <em>map</em></div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+{1=>2, 2=>3} + {2=>4, 3=>5}    --> {1=>2, 2=>4, 3=>5}
+</pre>
+</div>
+
+<h4>String</h4>
+
+<div class="box">
+<div class="synopsis"><em>string</em> + <em>string</em></div>
+</div>
+
+<pre class="eg">
+foo = "ABC"
+bar = "DEF"
+foo + bar      ---> "ABCDEF"
+</pre>
+
+<h3>- operation for objects other than Numbers</h3>
+
+<div class="box">
+<div class="synopsis">
+<div><em>array1</em> - <em>array2</em></div>
+<div><em>array</em> - <em>collection</em></div>
+<div><em>collection</em> - <em>array</em></div>
+<div><em>collection1</em> - <em>collection2</em></div>
+</div>
+</div>
+<p>
+Returns a collection or an array that contains the elements of the first object
+except the elements of the second object.
+<p>
+The type of the result is the same as the first object.
+</p>
+
+<pre class="eg">
+[1,1,1,2] - [1]   ---> [2]
+[1,1,1,2] - [2]   ---> [1,1,1]
+[1,1,1,2] - [1,3]   ---> [2]
+</pre>
+
+<h3>* operation for Set objects</h3>
+
+<div class="box">
+<div class="synopsis">
+<div><em>set1</em> * <em>set2</em></div>
+</div>
+</div>
+<p>
+Returns an intersection of two sets.
+
+<pre class="eg">
+set([1,2]) * set([1,3])   ---> [1]
+</pre>
+
+<a name="new"></a>
+
+<a name="instanceCreation"></a>
+<h3>Instance Creation</h3>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> ( <em>expression</em>, ... )</div>
+<div class="synopsis"><tt>new</tt> <em>class_literal</em> ( <em>expression</em>, ... )</div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+new java.awt.Point(10, 20)
+
+Point = class java.awt.Point
+Point(10, 20)
+
+import java.awt.Point
+new Point(10, 20)
+</pre>
+</div>
+
+<a name="inline_classdef"></a>
+<h3>Inline Class Definition</h3>
+
+<div class="box">
+<div class="synopsis"><tt>class</tt> <em>class_literal</em> [ <tt>extends</tt> <em>superclass</em> ]
+[ <tt>implements</tt> <em>interface</em>... ] </div>
+<div class="synopsis"><tt>{</tt></div>
+(
+<div class="synopsis2">[ <em>type</em> ] <em>fieldName</em> [ = <em>initialValue</em> ] </div>
+|
+<div class="synopsis2">[ <em>type</em> ] <em>methodName</em> ([<em>type</em>] <em>var</em>...) { .. } </div>
+)*
+<div class="synopsis">}</div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+class Person {
+  int age; String name
+  Person(age, name){
+     this.age=age; this.name=name
+  }
+}
+</pre>
+</div>
+
+See also <a href="#classdef">Class Definitions</a> section of this document.
+
+<a name="subclass"></a>
+<h3>Subclass Creation</h3>
+
+<div class="box">
+<div class="synopsis"><tt>new</tt> <em>class_literal</em> ( <em>expression</em>, ... ) {</div>
+<div class="synopsis2">[ <em>type</em> ] <em>identifier</em> ( [ <em>type</em> ] <em>identifier</em> ... ) {</div>
+<div class="synopsis2">... }</div>
+<div class="synopsis">... }</div>
+</div>
+
+<p>
+When zero or more method definition surrounded by a pair of curly braces follow a <em>new expression</em>, a subclass of the class is dynamically created and an instance is created.
+</p>
+<div class="eg">e.g.
+<pre>
+import java.awt.event.*
+new WindowAdapter(){
+  windowClosing(e){
+    e.source.dispose()
+  }
+}
+</pre>
+</div>
+<p>
+If a special variable '<tt>this</tt>' is used as the target of a method call, the method in the class is called, as in Java language.
+</p>
+<div class="eg">e.g.
+<pre>
+x = new Object(){
+  test(){
+    this.toString()
+  }
+}
+x.test()
+</pre>
+</div>
+
+<p>
+If a special variable '<tt>super</tt>' is used as the target of a method call, the method in the super class is called, as in Java language.
+</p>
+<div class="eg">e.g.
+<pre>
+x = new Object(){
+  toString(){
+    "blah " + super.toString()
+  }
+}
+x.toString()
+</pre>
+</div>
+
+<p>
+Code in method bodies can access the lexical scope as normal nested functions.
+</p>
+<div class="eg">e.g.
+<pre>
+function test(n){
+ x = new Object(){
+       test(){
+          println(n)
+       }
+    }
+ x.test()
+}
+test(100)
+</pre>
+</div>
+
+<a name="beandef"></a>
+<h3>Java Beans Creation</h3>
+
+<div class="box">
+<div class="synopsis"><em>class_literal</em> <tt>{</tt> </div>
+<div class="synopsis2"><em>fieldName</em> <tt>:</tt> <em>expression</em> or</div>
+<div class="synopsis2"><em>fieldName</em> <tt>::</tt> <em>expression</em></div>
+<div class="synopsis2">...</div>
+<div class="synopsis"><tt>}</tt></div>
+</div>
+<div class="eg">e.g.
+<pre>
+btn = java.awt.Button {
+        label : "OK"
+      }
+</pre>
+</div>
+The example above is interpreted as follows.
+
+<div class="eg">
+<pre>
+btn = new java.awt.Button()
+btn.label = "OK"
+btn
+</pre>
+</div>
+<p>
+<em>The following spec is still experimental.</em>
+<p>
+If the special separator <tt>::</tt> is used, whenever any Bean Property appears in <em>expression</em> is modified, 
+the <em>fieldName</em> is redefined using the updated Bean Property's value.  
+</p>
+<div class="eg">
+<pre>
+import javax.swing.*
+
+f = JFrame();
+f.name = "foo"
+btn = JButton {
+  text :: f.name
+}
+btn.text --> "foo"
+
+f.name = "bar"
+btn.text ---> "bar"
+</pre>
+</div>
+<p>
+In addition, if <tt>::</tt> is followed by a single Bean Property expression, 
+the synchronization is bi-directional.  
+</p>
+
+<div class="eg">
+<pre>
+btn.text = "zzz"
+f.name --> "zzz"
+</pre>
+</div>
+<p>
+Those are implemented using ProperyChangeListener/ProperyChangeEvent mechanism of JavaBeans.
+</p>
+
+<a name="instanceof"></a>
+<h3>instanceof</h3>
+
+<div class="box">
+<div class="synopsis"><em>object</em> <tt>instanceof</tt> <em>type</em></div>
+</div>
+
+<p>
+If <em>object</em> is an instance of <em>type</em> it returns true.
+Otherwise false.
+</p>
+
+<div class="eg">e.g.
+<pre>
+"hello" instanceof String     ---> true
+[1] instanceof int[]          ---> false
+</pre>
+</div>
+
+<a name="cast"></a>
+<h3>Cast Expression</h3>
+
+<div class="box">
+<div class="synopsis">( <em>type</em> ) <em>expression</em></div>
+</div>
+
+<p>
+When <em>type</em> a primitive type or an array type, the value of <em>expression</em> is converted to the appropriate type.  
+</p>
+<pre class="eg">
+(int)1.0d
+</pre>
+
+<p>
+When the value of <em>expression</em> is instance of the class/type no conversion is made.
+</p>
+<pre class="eg">
+(java.lang.Object)1.0
+</pre>
+
+<p>
+When <em>expression</em> can not be converted to the class/type, ClassCastException is thrown.
+</p>
+
+<pre class="eg">
+(java.util.Vector)1.0
+  ---> java.lang.ClassCastException : (java.util.Vector)1.0
+</pre>
+<p>
+When a cast expression is used as a parameter of <a href="#instanceCreation">constructor</a>, 
+<a href="#instanceMethod">instance method</a>, or <a href="#staticMethod">static method</a>,
+the type information is used to choose an appropriate method/constructor.
+</p>
+<pre class="eg">
+String.valueOf((char[])[1,2,3])
+</pre>
+
+<a name="predefined"></a>
+<h3>Predefined Variables</h3>
+
+<blockquote>
+<table width=400>
+<tr align=center>
+<td><tt>byte</tt></td>
+<td><tt>short</tt></td>
+<td><tt>char</tt></td>
+<td><tt>int</tt></td>
+<td><tt>long</tt></td>
+<td><tt>float</tt></td>
+<td><tt>double</tt></td>
+<td><tt>boolean</tt></td>
+</tr>
+</table>
+</blockquote>
+<p>
+These variables are defined as the corresponding Class object.
+</p>
+
+<a name=primitive></a>
+<h3>Conversion to Primitive Types</h3>
+
+<p>
+Class objects of primitive types behave like functions to convert into objects
+of the corresponding classes.
+</p>
+
+
+<div class="box">
+<div class="synopsis"><em>primitive</em> ( <em>expression</em> )</div>
+</div>
+
+<p>
+If <em>expression</em> is a string of a decimal number, these functions parse
+the number and return it.  If <em>expression</em> is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a>, it is converted 
+to the specified type.
+If <em>expression</em> is a character, <tt>int()</tt>, <tt>byte()</tt>, and <tt>short()</tt> return the code
+point of the character.
+</p>
+<div class="eg">e.g.
+<pre>
+int(" 1 ")    --->  1
+int('1')      --->  49
+</pre>
+</div>
+
+
+<p>
+If <em>primitive</em> is <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Character.html"><tt>java.lang.Character</tt></a> and the result of <em>expression</em> is between 0 and 0xffff, the function returns the character at the code point.  Otherwise, an exception is thrown.
+</p>
+<div class="eg">e.g.
+<pre>
+char(65)    --->  'A'
+</pre>
+</div>
+
+<a name=conversion_to_boolean></a>
+<h3>Conversion to boolean value</h3>
+
+When the type is boolean, the argument is converted to a boolean value under the following rules.
+
+<ul>
+<li>If the argument is a Boolean object (or a boolean value), the value is returned as it is.
+<li>If the argument is a Number, return true if the number is not zero.
+<li>If the argument is a String, return true if the string is non-empty string.
+<li>If the argument is an object of other classes, return true if the argument is not null.
+</ul>
+
+<div class="eg">e.g.
+<pre>
+boolean(true)      ---> true
+boolean(false)     ---> false
+boolean(-1)        ---> true
+boolean(0)         ---> false
+boolean("non-empty")  ---> true
+boolean("")        ---> false
+boolean("false")   ---> true
+boolean(new Object())  ---> true
+boolean(null)      ---> false
+</pre>
+</div>
+
+<div class="box">
+<div class="synopsis"><em>primitive</em> ( <em>string</em> {, <em>radix</em> })</div>
+</div>
+
+<p>
+When the type is either of int, byte, short, or long, the radix of the number can be specified as the 2nd parameter.
+</p>
+
+<div class="eg">e.g.
+<pre>
+int("20", 16)    --> 32
+long("cafebabe", 16)    --> 3405691582
+</pre>
+</div>
+
+<a name=instanceField></a>
+<h3>Instance Field</h3>
+
+<div class="box">
+<div class="synopsis"><em>expression</em> . <em>identifier</em></div>
+</div>
+
+<p>
+The default behavior of field access operaion is basically an access
+to a Java Beans property,  except that some object types have their own behavior.
+
+</p>
+<dl>
+<dt>1. java.util.Map
+<dd>Lookup an association with <em>identifier</em> 
+<dt>2. pnuts.lang.Context
+<dd>See <a href="api.html">Pnuts API</a>
+<dt>3. pnuts.lang.Property
+<dd>See <a href="api.html">Pnuts API</a>
+<dt>4. <em>identifier</em> is a Java Bean property's name
+<dd>Access to the Java Beans property
+<dt>5. When the target object is a Class object
+<dd>Access to the static field of the class
+</dl>
+
+<div class="eg">e.g.
+<pre>
+import java.awt.Button
+btn = Button("hello")
+btn.label    ---> "hello"
+</pre>
+</div>
+
+<p>
+Field access expression can be customized by Pnuts API. See <a
+href="configuration.html">'Customizing the Behavior of Java API Access'</a>.
+</p>
+
+<a name=staticField></a>
+<h3>Static Field</h3>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> <tt>::</tt> <em>identifier</em></div>
+</div>
+
+<p>
+Returns the value of the static field. Only public fields can be referenced with this expression.
+</p>
+
+<div class="eg">e.g.
+<pre>
+class java.awt.Color::blue
+</pre>
+</div>
+
+<p>
+Public fields can be assigned as well.
+</p>
+
+
+<a name="instanceMethod"></a>
+<h3>Instance Method Invocation</h3>
+
+<div class="box">
+<div class="synopsis"><em>expression</em> . <em>identifier</em> (  <em>expression</em> , ...  )</div>
+</div>
+<p>
+Calls an instance method of the value of <em>expression</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+"ABC".length()       ---> 3
+"ABC".getClass()     ---> java.lang.String class
+</pre>
+</div>
+<p>
+If the value of <em>expression</em> is a Class object and <em>identifier</em> is not a instance method but a static method, then this expression calls the static method.
+</p>
+
+<a name="staticMethod"></a>
+<h3>Static Method Invocation</h3>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> <tt>::</tt> <em>identifier</em> (  <em>expression</em> , ...  )</div>
+</div>
+
+<p>
+Calls a static method of the <em>class_object</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+class java.lang.System::gc()
+</pre>
+</div>
+
+<a name=typeMapping></a>
+<h3>Type Mapping and Conversion</h3>
+
+<p>
+Primitive types of Java, int, long, etc., are wrapped by Number subclasses.
+When a Java method returns a primitive type value, the script takes the value as 
+a Wrapper object similar to java.lang.Integer.
+If Java methods take primitive type parameter, the actual parameter from script is
+converted to fit the signature.
+</p>
+
+<div class="eg">e.g.
+<pre>
+str = "ABCDE"
+str.charAt(1)        ---> 'B'
+</pre>
+</div>
+
+<p>
+Array types in Java, such as int[], byte[], are represented as is in Pnuts.
+When Java methods take an array parameter and type conversion from the
+actual parameter is needed, a new array is created to fit the method
+signature then applied to the method.
+</p>
+
+<div class="eg">e.g.
+<pre>
+array = "Hello".toCharArray()   ---> ['H','e','l','l','o']
+array.getClass()                ---> char[] type
+String(['H','e','l','l','o'])   ---> "Hello"
+</pre>
+</div>
+
+
+<a name=conditional></a>
+<h3>Conditional Flow</h3>
+
+<a name=if></a>
+<a name=else></a>
+<h4>if-else</h4>
+
+<div class="box">
+<div class="synopsis"><b>if</b> ( <em>condition</em> )  <em>expression-block</em></div>
+<div class="synopsis"><b>else if</b> ( <em>condition</em> )  <em>expression-block</em></div>
+<div class="synopsis">...</div>
+<div class="synopsis"><b>else</b> <em>expression-block</em></div>
+</div>
+
+<pre class="eg">
+foo = [1, 2, 3]
+if (foo.length > 5){
+    1
+} else if (foo.length > 4){
+    2
+} else {
+    3
+}           ---> 3
+
+value = if (foo.length > 3) 1 else 2
+value       ---> 2
+</pre>
+<p>
+If the value of <em>condition</em> is not a boolean, it is implicitly converted to a boolean value with <a href="#conversion_to_boolean">the conversion rules</a>.
+</p>
+
+<a name=switch></a>
+<a name=case></a>
+<a name=default></a>
+
+<h4>Switch</h4>
+
+<div class="box">
+<div class="synopsis"><b>switch</b> ( <em>expression</em> ) {</div>
+<div class="synopsis">case <em>expression</em> : <em>expression-block</em></div>
+<div class="synopsis">...</div>
+<div class="synopsis">default : <em>expression-block</em></div>
+<div class="synopsis">}</div>
+</div>
+<p>
+Matching is done by the <tt>equals()</tt> method.
+</p>
+
+<a name=break></a>
+<h4>break</h4>
+
+<div class="box">
+<div class="synopsis"><b>break</b> [ <em>expression</em> ]</div>
+</div>
+
+<p>
+"break" without <em>expression</em> is equivalent to "break null".
+</p>
+
+<a name=while></a>
+<h4>While</h4>
+
+<div class="box">
+<div class="synopsis"><b>while</b> ( <em>condition</em> )  <em>expression-block</em></div>
+</div>
+
+<pre class="eg">
+while (sum > 0){
+    sum = sum - 1
+}
+</pre>
+<p>
+If the value of <em>condition</em> is not a boolean, it is implicitly converted to a boolean value with <a href="#conversion_to_boolean">the conversion rules</a>.
+</p>
+
+<a name=dowhile></a>
+<h4>do .. while</h4>
+
+<div class="box">
+<div class="synopsis"><b>do</b> { <em>expression-block</em> } <b>while</b> ( <em>condition</em> )  </div>
+</div>
+
+<pre class="eg">
+x = 0
+do {
+  println(x++)
+} while (i < 10)
+</pre>
+<p>
+If the value of <em>condition</em> is not a boolean, it is implicitly converted to a boolean value with <a href="#conversion_to_boolean">the conversion rules</a>.
+</p>
+
+<a name="for"></a>
+<h4>For</h4>
+
+<div class="box">
+<div class="synopsis"><b>for</b> ( [ <em>identifier</em> = <em>expression</em> , ... ] ; [ <em>condition</em> ] ; [ <em>expression</em> , ... ] )  <em>expression-block</em></div>
+</div>
+
+<pre class="eg">
+j = 0
+for (i : 0..4){
+   j = j + i
+}
+
+for (; j > 0; j--){
+   println(j)
+}
+</pre>
+<p>
+If the value of <em>condition</em> is not a boolean, it is implicitly converted to a boolean value with <a href="#conversion_to_boolean">the conversion rules</a>.
+</p>
+
+<div class="box">
+<div><b>for</b> ( <em>identifier</em> : <em>integerStart</em> .. <em>integerEnd</em> )  <em>expression-block</em></div>
+<div><b>for</b> ( <em>identifier</em> : <em>expression</em> )  <em>expression-block</em></div>
+</div>
+
+<p>
+In the former type of for statement, a series of integers from <em>integerStart</em> to <em>integerEnd</em> are assigned to <em>identifier</em> one bye one and <em>expression-block</em> is executed.
+</p>
+<p>
+In the second type, each element of <em>expression</em> is assigned to <em>identifier</em> and <em>expression-block</em> is executed. <em>expression</em> can be either of following objects:
+</p>
+
+<ul>
+<li>java.util.Enumeration
+<li>java.util.Iterator
+<li>java.util.Collection
+<li>java.util.Map
+<li>Object[] or primitive array
+<li>java.lang.String
+<li>java.lang.CharSequence (1.4+)
+<li>pnuts.lang.Generator
+</ul>
+
+
+<pre class="eg">
+for (i : 1..3) println(i)       ---> 123
+
+for (i : 3..1) println(i)       ---> 321
+
+for (i : [1, 2, 3]) println(i)  ---> 123
+</pre>
+
+<a name="multivar_for"></a>
+<div class="box">
+<div><b>for</b> ( <em>identifier_1</em> , ..., <em>identifier_N</em> : <em>expression</em> )  <em>expression-block</em></div>
+</div>
+<p>
+If two or more variables are specified, it is roughly same as the following pseudo code.
+</p>
+<pre class="eg">
+for (tmp : <em>expression</em>) {
+  <em>identifier_1</em> = try { tmp[0]} catch (IndexOutOfBoundsException e){}
+  ...
+  <em>identifier_N</em> = try { tmp[N-1]} catch (IndexOutOfBoundsException e){}
+
+  <em>expression-block</em>
+}
+</pre>
+
+
+<a name=foreach></a>
+<h4>Foreach</h4>
+
+<div class="box">
+<div class="synopsis"><b>foreach</b> <em>identifier</em> <em>array-expression</em> <em>expression-block</em></div>
+<div class="synopsis"><b>foreach</b> <em>identifier</em> ( <em>array</em> ) <em>expression-block</em></div>
+<div class="synopsis"><b>foreach</b> <em>identifier</em> ( <em>java.util.Enumeration</em> )  <em>expression-block</em></div>
+<div class="synopsis"><b>foreach</b> <em>identifier</em> ( <em>java.util.Iterator</em> )  <em>expression-block</em></div>
+<div class="synopsis"><b>foreach</b> <em>identifier</em> ( <em>java.util.Collection</em> )  <em>expression-block</em></div>
+</div>
+
+<p>
+<tt>foreach i (expr)</tt> is a synonym of <tt>for (i:expr)</tt>.
+</p>
+
+<pre class="eg">
+sum = 0
+foreach i [1, 2, 3] {
+    sum = sum + i
+}
+sum          ---> 6
+
+sum = 0
+vec = class java.util.Vector()
+vec.addElement(1)
+vec.addElement(2)
+vec.addElement(3)
+foreach i (vec.elements()) {
+    sum = sum + i
+}
+sum          ---> 6
+</pre>
+
+<a name=continue></a>
+<h4>continue</h4>
+
+<div class="box">
+<div class="synopsis"><b>continue</b></div>
+</div>
+
+<pre class="eg">
+for (i : 0..9){
+   if (i > 2){
+      continue
+   }
+   println(i)
+}
+</pre>
+
+<a name=return></a>
+<h4>return</h4>
+
+<div class="box">
+<div class="synopsis"><b>return</b> [ <em>expression</em> ]</div>
+</div>
+
+<p>
+When <tt>return</tt> is evaluated in a function, the function returns the value of
+<em>expression</em>.
+When <tt>return</tt> is evaluated at the top level, the interpreter session
+returns the value of <em>expression</em>, which is equivalent to <a href="#quit"><tt>quit(</tt><em>expressoin</em><tt>)</tt></a>.
+</p>
+<p>
+"return" without <em>expression</em> is equivalent to "return null".
+</p>
+
+<a name="try"></a>
+<h4>try/catch/finally</h4>
+
+<div class="box">
+<div class="synopsis"><b>try</b> { <em>expression-block-1</em> }</div>
+<div class="synopsis2">[ <b>catch</b> (<em>class_literal</em> <em>var</em>){ <em>expression-block-2</em> } ]*</div>
+<div class="synopsis2">[ <b>finally</b> { <em>expression-block-3</em> } ]</div>
+</div>
+
+<p>
+<pre class="eg">
+try {
+   throw ("blah")
+} catch (java.io.IOException e1){
+   println(1)
+} catch (Exception e2){
+   println(2)
+} finally {
+   println(3)
+}
+</pre>
+
+<a name="function"></a>
+<h3>Functions</h3>
+
+<h4>Definition</h4>
+
+<div class="box">
+<div class="synopsis"><b>function</b> [ <em>identifier</em> ] ( <em>identifier</em>, ...) <em>expression-block</em></div>
+<div class="synopsis"><b>function</b> [ <em>identifier</em> ] ( <em>identifier</em>, ..., <em>identifier</em> [ ] ) <em>expression-block</em></div>
+</div>
+
+<p>
+If <em>identifier</em> is specified, a function of the name is defined.
+In this case, the defined function is identified by the name and the number of
+formal parameters.
+</p>
+<p>
+If <em>identifier</em> is not specified, a unique ID is generated automatically
+for the function.
+</p>
+<div class="eg">e.g.
+<pre>
+f = function (e) e.getSource().dispose()
+</pre>
+</div>
+
+<a name="closure"></a>
+<h4>Syntax sugar for anonymous function</h4>
+
+<div class="box">
+<div class="synopsis"><b><tt>{</tt></b> <em>parameter-list</em> <b><tt>-&gt;</tt></b> <em>expression-block</em> <b><tt>}</tt></b></div>
+</div>
+
+<div class="eg">
+<pre>
+{a,b -> a + b}      // equivalent to function (a,b) a + b
+</pre>
+</div>
+
+<a name="vararg"></a>
+<h4>Variable-length Parameters</h4>
+
+<p>
+If a function definition has one or more parameters and the last one is followed by "[]", the function can
+take variable-length arguments.
+</p>
+
+<div class="eg">e.g.
+<pre>
+function f(args[]) args
+f()             ---> []
+f(1)            ---> [1]
+f(1,2,3)        ---> [1, 2, 3]
+
+function g(a,b[]) b
+g(1)          --> []
+g(1,2)        --> [2]
+g(1,2,3)      --> [2,3]
+</pre>
+</div>
+<p>
+When variable-length parameter function is defined which is not an anonymous function, the definition may overwrite the previously defined variable-length parameter function.
+</p>
+<div class="eg">e.g.
+<pre>
+function f(args[]) args
+..
+function f(a,b,c[]) c   // f(args[]) is no longer available
+f()             --> error
+f(1,2)          --> []
+f(1,2,3)        --> [3]
+f(1,2,3,4)      --> [3,4]
+</pre></div>
+
+<p>
+When a function with certain number of parameter is called, it is always called
+even if one with an arbitrary number of parameter is defined.
+</p>
+
+<div class="eg">e.g.
+<pre>
+function f(args[]) args
+
+function f(arg)  arg
+f(1)            ---> 1       // f(arg) takes precedence
+f(1,2,3)        ---> [1, 2, 3]
+</pre></div>
+
+<a name="function_scope"></a>
+<h4>Scope Rule of Function Definition</h4>
+
+<p>
+When multiple functions of the same name are defined in a certain scope, they are composed into one function object.
+</p>
+
+<div class="eg">e.g.
+<pre>
+function f() 1
+function f(a) a
+
+x = f
+x() / ---> 1
+x(100) / ---> 100
+</pre>
+</div>
+
+<p>
+When functions with the name are defined in nested local scopes, the function in the outer scope can also be available in the inner scope, but the function in the inner scope is not visble to the outer scope.
+</p>
+<div class="eg">
+<pre>
+function scope1(){
+   function f() 1
+
+   function scope2(){
+      function f(a) a
+      f() // --> 1
+   }
+
+   scope2()
+   f()  // --> 1
+   f(100)  // --> error
+}
+</pre>
+</div>
+
+When functions are defined in both a local scope and its package scope with the same name, function call in a local-scope causes the function's lookup in local-to-toplevel order.
+Function definition in local scope never affect top-level functions.
+
+<div class="eg">
+<pre>
+function f() 1
+function g(){
+  function f(a) a
+  f(100)  // --> 100
+  f()  // --> 1
+}
+
+f()      // --> 1
+f(100)   // --> not found
+</pre>
+</div>
+
+Functions in a different package can be redefined at the top-level, with a different number of parameters.
+
+<div class="eg">
+<pre>
+use("pnuts.lib")
+function string(a, b){
+   string(b)
+}
+</pre>
+</div>
+
+When a top-level function is defined in a different package, it may be hidden by local function of the same name.
+
+<div class="eg">
+<pre>
+function g(){
+   function string(a, b) string(a) // --> no such function: string (1)
+   string(1, 2)
+}
+</pre>
+</div>
+
+In order to be able to temporarily redefine a function defined in a different package,
+the function should be assigned to a local variable.
+
+<div class="eg">e.g.
+<pre>
+function g(){
+   string = string
+   function string(a, b) string(a + b)
+   string(1, 2)
+}
+</pre>
+</div>
+
+<h4>Function Call</h4>
+
+<div class="box">
+<div class="synopsis"><em>function</em> ( <em>expression</em>, ... )</div>
+</div>
+
+<p>
+A function call causes <em>function body</em> to be evaluated replacing the formal
+parameter with the actual arguments.
+</p>
+
+<a name="package"></a>
+<h3>Package</h3>
+
+<div class="box">
+<div class="synopsis"><em>package</em> <tt>::</tt> <em>variable</em></div>
+<div class="synopsis"><em>package</em> <tt>::</tt> <em>function</em> ( ... )</div>
+</div>
+
+<p>
+Variables and functions in <em>aPackage</em> can be referred by "<em>aPackage</em> <tt>::</tt> <em>variableName</em>", if the package name is valid Pnuts identifier.
+</p>
+
+
+<a name="generator"></a>
+<h3>Generators</h3>
+
+<a name=yield></a>
+<h4>yield</h4>
+
+<div class="box">
+<div class="synopsis"><b>yield</b> <em>expression</em> </div>
+</div>
+
+<p>
+If a function contains one or more 'yield' expression, it returns a special object called "generator" without executing the definition.
+The generator will be used by for/foreach statement to retrieve each value yielded by the generator.
+</p>
+
+<pre class="eg">
+function integerGenerator(min, max){
+   for (i: min..max) yield i
+}
+
+g = integerGenerator(0, 3)    ---> generator
+
+for (i : g){
+    println(i)
+}
+ ---> 0
+      1
+      2
+      3
+</pre>
+
+<h4>subsequence generator</h4>
+
+<div class="box">
+<div class="synopsis"><em>generator</em> [ <em>startIndex</em> ..]</div>
+<div class="synopsis"><em>generator</em> [ <em>startIndex</em> .. <em>endIndex</em> ]</div>
+</div>
+<p>
+subsequence generator expression returns a Generator object that generates the sequence from <em>startIndex</em>'th to <em>endIndex</em>'th (when specified) of the original sequence generated by <em>generator</em>.
+</p>
+<pre class="eg">
+function g(n){
+  for(i:0..n) yield i
+}
+x = g(100)
+for (i: x[90..]) println(i)
+</pre>
+
+<h4>Index access to a generator</h4>
+
+<div class="box">
+<div class="synopsis"><em>generator</em> [ int <em>N</em> ]</div>
+<div class="synopsis"><em>generator</em> [ <em>predicate(elem)</em> ]</div>
+<div class="synopsis"><em>generator</em> [ <em>expression</em> ]</div>
+</div>
+
+<p>
+When an integer is specified, it returns N'th generated object. It returns <tt>null</tt> if <em>generator</em> does not generate N objects.
+</p>
+
+<pre class="eg">
+function range(start, end){
+  for(i:start..end) yield i
+}
+x = range(1, 100)
+x[90]                  ---> 90
+x[200]                 ---> null
+</pre>
+
+<p>
+When a function <em>predicate</em> is specified, it returns a generator that generates the only elements that the function returns <em>true</em>.
+</p>
+
+<pre class="eg">
+function range(start, end){
+  for(i:start..end) yield i
+}
+x = range(1, 100)
+list(x[function (x) x < 4])     ---> 1,2,3
+</pre>
+
+<p>
+When <em>expression</em> is a boolean expression, the expression is converted to a function of one parameter, then does the same as <em>predicate(elem)</em>.
+If <em>expression</em> is a comparison expression (<em>lval</em> <em>compare_op</em> <em>rval</em>), the leftmost identifier of <em>lval</em> is interpreted as an instance field name.
+See <a href="#selection">'Selection of Elements'</a>.
+</p>
+
+<pre class="eg">
+import java.awt.Button
+function buttons(n) {for (i : 1..n) yield(Button())}
+x = buttons(10)
+printAll(x[name == "button0"])
+</pre>
+
+
+<a name="composite_generator"></a>
+<h4>Plus(+) operator for generators</h4>
+
+<div class="box">
+<div class="synopsis"><em>generator1</em> + <em>generator2</em></div>
+</div>
+<p>
+<tt>+</tt> operation for two Generators creates a new generator that
+generates a series of objects using <em>generator1</em> and <em>generator2</em> in turn.
+</p>
+<pre class="eg">
+x = range(1, 10)
+even = x[function (x) x % 2 == 0]
+odd = x[function (x) x % 2 != 0]
+printAll(even + odd)
+</pre>
+
+<div class="box">
+<div class="synopsis"><em>generator</em> . <em>identifier</em></div>
+</div>
+
+<p>
+A read access to an instance field of <em>generator</em> returns a new generator that generates the results of instance field accesst to each elements. See also <a href=#instanceField>'Instance Field'</a>.
+</p>
+<pre class="eg">
+import java.awt.Button
+function buttons(n) {for (i : 1..n) yield(Button())}
+x = buttons(10)
+printAll(x.name)
+</pre>
+
+<p>
+A write access to an instance field of <em>generator</em> modifies the instance field of each of generated object.
+</p>
+
+<pre class="eg">
+import java.awt.Button
+buttons = [Button(),Button(),Button()]
+function generator(elements) for (i:elements) yield i
+generator(buttons).name = "new name"
+printAll(generator(buttons).name)
+</pre>
+
+<a name="classdef"></a>
+<h2>4. Class Definitions</h2>
+
+<div class="box">
+<div class="synopsis"><tt>class</tt> <em>class_literal</em> [ <tt>extends</tt> <em>superclass</em> ]
+[ <tt>implements</tt> <em>interface</em>... ] </div>
+<div class="synopsis"><tt>{</tt></div>
+(
+<div class="synopsis2"><em>type</em> <em>fieldName</em> [ = <em>initialValue</em> ] </div>
+|
+<div class="synopsis2"><em>fieldName</em> = <em>initialValue</em> </div>
+|
+<div class="synopsis2">[ <em>type</em> ] <em>methodName</em> ([<em>type</em>] <em>var</em>...) { .. } </div>
+)*
+<div class="synopsis">}</div>
+</div>
+
+<p>
+Class definitions are written in a similar way as Java language.
+</p>
+
+<p>
+The differences from Java language are:
+</p>
+<ul>
+<li>Only public class can be defined - no package private classes, nor interfaces
+<li>Fields are associated with JavaBeans properties
+<li>Type of fields/methods/parameters are optional
+<li>There is no static fields/methods
+<li>There is no exception declaration
+<li>There is no this() and super() call in constructors
+<li>Instead, constructors that just calls super() are automatically generated
+</ul>
+
+<a name="classdeffile"></a>
+<h3>Class Definition Files</h3>
+
+Class definition file, also know as <b>scripted class</b>, defines a Java class which is supposed to be loaded by a specialized class loader.
+Class definition file has a common file name extension '<tt>.pnc</tt>'.
+
+<p>
+The grammar of class definition files is specified as below.
+
+<div class="box">
+<div class="synopsis">[ <tt>package</tt> <em>package_name</em> ]</div>
+<div class="synopsis">( <tt>import</tt> <em>class_name</em> )*</div>
+<div class="synopsis"><tt>class</tt> <em>class_literal</em> [ <tt>extends</tt> <em>superclass</em> ]
+[ <tt>implements</tt> <em>interface</em>... ] { ... }</div>
+</div>
+
+<div class="eg">e.g. (<tt>util/mymap.pnc</tt>)
+<pre>
+package util
+import java.util.*
+import java.io.*
+class mymap extends TreeMap implements Serializable {
+  get(key){
+    if ((v = super.get(key)) == null){
+      super.put(key, v = set())
+    }
+    v
+  }
+}
+</pre></div>
+
+<a name="inline_classdef2"></a>
+<h3>Inline Class Definition</h3>
+<p>
+Class definition can also be used as an expression.  When class definition is used as an expression, the class is loaded by a newly created class loader, which means that care must be taken for class dependency.
+</p>
+
+
+<a name="builtin"></a>
+<h2>5. Built-in Functions</h2>
+<P>Ten primitive operations are provided as
+built-in functions, which
+ can not be redefine by the User.</P>
+<blockquote>
+<table width=400>
+  
+    <tr align=center>
+      <td><tt>import</tt></td>
+      <td><tt>package</tt></td>
+      <td><tt>getContext</tt></td>
+      <td><tt>class</tt></td>
+      <td><tt>throw</tt></td>
+      <td><tt>catch</tt></td>
+      <td><tt>finally</tt></td>
+      <td><tt>use</tt></td>
+      <td><tt>unuse</tt></td>
+    </tr>
+    <tr align=center>
+      <td><tt>load</tt></td>
+      <td><tt>autoload</tt></td>
+      <td><tt>require</tt></td>
+      <td><tt>loadFile</tt></td>
+      <td><tt>eval</tt></td>
+      <td><tt>defined</tt></td>
+      <td><tt>quit</tt></td>
+    </tr>
+  
+</table>
+</blockquote>
+<a name="import"></a>
+
+<div class="box">
+<div class="synopsis"><b>import</b>("<em>class_literal</em>")</div>
+<div class="synopsis"><b>import</b> <em>class_literal</em></div>
+<div class="synopsis"><b>import static</b> <em>static_member_literal</em></div>
+</div>
+
+<p>import() registers <em>class_literal</em> for the current context.
+If an undefined variable is referenced, the
+variable is checked if
+the name is registered with this function.</p>
+<p><em>class_literal</em> can be wildcard like <tt>"java.awt.*"</tt>.</p>
+<p>Initially <tt>"java.lang.*"</tt> and default package (<tt>"*"</tt>) are
+registered.  Classes are searched from the
+latest imported class. 
+But a wildcard name does not override a specific
+class name.</p>
+<blockquote>
+<pre>
+Object                ---> java.lang.Object class
+import("org.omg.CORBA.*")
+Object                ---> org.omg.CORBA.Object interface
+import("java.lang.Object")
+Object                ---> java.lang.Object class
+import("org.omg.CORBA.*")
+Object                ---> java.lang.Object class
+</pre>
+</blockquote>
+<p>When the parameter <em>class_litral</em> is null, all class names are unregistered.</p>
+
+<tt>import static</tt> alllows access to static fields/methods without specifying the class.
+
+<div class="eg">e.g.
+<pre>
+import static java.awt.Color.*
+blue  --> java.awt.Color[r=0,g=0,b=255]
+
+import static java.util.ResourceBundle.*
+getBundle("pnuts.lang.pnuts")
+</pre></div>
+
+
+<div class="box">
+<div class="synopsis"><b>import</b>()</div>
+</div>
+<p>Get the list of imported classes and package
+names.</p>
+
+<pre class="eg">
+import()               ---> ["java.lang.*", "*"]
+import("org.omg.CORBA.Object")
+import()               ---> [org.omg.CORBA.Object interface, "java.lang.*", "*"]
+import(null)
+import()               ---> []
+</pre>
+
+<p>
+<tt>import()</tt> must be used in Top Level Scope.
+</p>
+
+<a name=packaging></a>
+<div class="box">
+<div class="synopsis"><b>package</b> ( <em>nameString</em> or <em>package</em> )</div>
+</div>
+<p>Enter the specified package.  If <em>nameString</em> is specified but
+the package does not exist, it creates the
+package and enters the package.  This function returns <tt>null</tt>.
+</p>
+
+<div class="eg">e.g.(1)
+<pre>
+package()           ---> package ""
+a = 1
+package("foo")      ---> enter package "foo"
+a                   ---> 1
+a = 2
+a                   ---> 2
+::a                 ---> 1
+package("")         ---> enter package ""
+a                   ---> 1
+foo::a              ---> 2
+</pre>
+</div>
+
+<div class="eg">e.g.(2)
+<pre>
+package()           ---> package ""
+function f() 1
+package("foo")      ---> enter package "foo"
+f()                 ---> 1
+function f() 2
+f()                 ---> 2
+::f()               ---> 1
+package("")         ---> enter package ""
+f()                 ---> 1
+foo::f()            ---> 2
+</pre>
+</div>
+
+<div class="box">
+<div class="synopsis"><b>package</b><tt>()</tt></div>
+</div>  
+
+<p>Get the current package.</p>
+
+<div class="eg">e.g.
+<pre>
+package()           ---> package ""
+package("foo")
+package()           ---> package "foo"
+package("")
+package()           ---> package ""
+</pre>
+</div>
+<a name="use"></a>
+<div class="box">
+<div class="synopsis"><b>use</b> ( { <em>module</em> } )</div>
+</div>
+<p>When <em>module</em> is a String object, the module is added to the current context under the following procedure.
+<ul>
+<li>If the module has not been initialized, the initialization script is executed.  The module is registered to the current context and become available, only if the initialization was successful.
+<li>If the module is already initialized but not registered in the current context, the module is added to the module list of the context.
+</ul>
+<p>
+When a module is successfully used, the functions that the module defines are implicity exported by default.
+</p>
+<p>
+<tt>use()</tt> returns true if the module was successfully registered to the context.
+<p>
+For example,
+
+<div class="eg">foo/init.pnut
+<pre>
+function x() 100
+</pre>
+</div>
+
+<div class="eg">
+<pre>
+ use("foo")    ---> true
+ x             ---> function x() 100
+</pre></div>
+
+<p>When <em>module</em> is a Package object, the Package is marked as a module and added to the module list of the current context.  See "<a href="module.html#dynamic_modules">Dymamic Modules</a>".
+
+<p>When <em>module</em> is <tt>null</tt>, un-registers the all packages in the current context.  See <a href="#branch_module_list">"Branching Module List"</a>.</p>
+<p>
+When <em>module</em> is omitted, the list of currently used module names are returned as a string array.
+<div class="eg">e.g.
+<pre>
+use()          --->  ["foo"]
+</pre></div>
+
+<p>See <a href="#modules">"Modules"</a> for the basic concepts, and <a
+href="module.html">"Pnuts User's Guide"</a> to learn how to make your own module.</p>
+
+<a name="unuse"></a>
+<div class="box">
+<div class="synopsis"><b>unuse</b> ( <em>module</em> )</div>
+</div>
+
+<p>
+<tt>unuse()</tt> removes the specified module from the current module list if it has been used.  Returns true if a module is removed.
+</p>
+
+<a name=context></a>
+<div class="box">
+<div class="synopsis"><b>getContext</b> ()</div>
+</div>
+<p><em>Context</em> is an internal object in Pnuts interpreter.
+It retains
+following information;</p>
+<ul>
+  <li>Which Pnuts-package being used
+  <li>Imported Java-package list
+  <li>OutputStream to which print() function write
+  data
+  <li>OutputStream to which error() function write
+  data
+  <li>etc.
+</ul>
+<p>The result of <tt>getContext()</tt> is of <a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a> class, which is
+described in the <a href="../apidoc/pnuts/lang/Context.html">API doc</a>.</p>
+<div class="eg">e.g.
+<pre>
+getContext().setOutputStream(System::out)
+</pre></div>
+<p>Refer to <a href="context.html">"Pnuts User's Guide"</a> for more details.</p>
+<P><a name=loading></a></P>
+<div class="box">
+<div class="synopsis"><b>loadFile</b> ( <em>file_name</em> [ , <em>context</em> ] )</div>
+<div class="synopsis"><b>load</b> ( <em>resource</em> [ , <em>context</em> ] )</div>
+<div class="synopsis"><b>require</b> ( <em>resource</em> )</div>
+<div class="synopsis"><b>autoload</b> ( <em>symbol</em> , <em>resource</em> )</div>
+</div>
+  
+<p><tt>loadFile()</tt> reads a script from local file system.
+<tt>load()</tt> reads a script which is found by a class
+loader.
+These functions return the result of the
+last expression.</p>
+
+<p>When scripts are executed, the imported classes are reset to the
+default setting and the current package is reset to the topmost
+package of the package hierarchy.
+
+<div class="eg">e.g.
+<pre>
+loadFile("/home/my.pnut")
+load("examples/pnutsLayout.pnut")
+</pre></div>
+<p><tt>require()</tt> reads a script file if the file has not
+been read or has been updated since last loaded.</p>
+<p><tt>autoload()</tt> registers a symbol-to-script mapping to the
+current package.  If the symbol is not defined in the package when
+accessed, the associated script is loaded.</p>
+
+<p>Refer to <a href="loading.html">"Pnuts User's Guide"</a> for more details.</p>
+<P><a name=eval></a></P>
+<div class="box">
+<div class="synopsis"><b>eval</b> ( <em>string</em> )</div>
+<div class="synopsis"><b>eval</b> ( <em>string</em>, <em>package</em> )</div>
+<div class="synopsis"><b>eval</b> ( <em>string</em>, <em>context</em> )</div>
+</div>
+
+<div class="eg">e.g.
+<pre>
+foo = "YES"
+eval("foo.length()")    ---> 3
+</pre></div>
+<p>When <em>package</em> is specified, <em>string</em> is evaluaged in a new
+Context that <em>package</em> is the current package.</p>
+<pre class="eg">
+eval("a = 100", "pkg")
+pkg::a             ---> 100
+</pre>
+<P>
+<a name=exception></a>
+<a name=throw></a>
+<div class="box">
+<div class="synopsis"><b>throw</b> ( <em>exception</em> or <em>string</em> ) </div>
+<div class="synopsis"><b>throw</b> <em>exception</em> or <em>string</em></div>
+</div>
+
+<p>Throws the specified <em>exception</em> or RuntimeException if String
+object is specified.</p>
+<div class="eg">e.g.
+<pre>
+throw("be careful")
+throw(FileNotFoundException())
+</pre></div>
+
+<div class="eg">e.g.
+<pre>
+throw new java.io.IOException("message")
+</pre>
+</div>
+
+<P><a name=catch></a></P>
+<div class="box">
+<div class="synopsis"><b>catch</b> ( <em>exceptionClass</em><tt>, </tt><em>function</em> )</div>
+</div>
+<p>
+When <tt>catch()</tt> is used not in try/catch statements, it defines an exception handler in the current scope.  When 
+one of the registered exception is thrown,
+the corresponding handler is
+executed and the function immediately returns
+the result of the handler.</p>
+<p>The scope of exception handler is same as
+that of variables.</p>
+<div class="eg">e.g.
+<pre>
+function func(){
+  catch(FileNotFoundException, function (e) "Don't care")
+  println(1)
+  FileInputStream("file doesn't exist")
+  println(2)
+}
+
+> func()
+1
+"Don't care"
+
+> FileInputStream("file doesn't exist")
+java.io.FileNotFoundException  : "file doesn't exist"
+</pre></div>
+<p>When <em>function</em> is null the exception handler is unregistered.</p>
+
+
+<P><a name=finally></a></P>
+<div class="box">
+<div class="synopsis"><b>finally</b> ( [ </tt><em>tryFunction</em>  , ] </tt><em>finallyFunction</em> )</div>
+</div>  
+<p>
+When both <em>tryFunction</em> and <em>finallyFunction</em> are specified, <em>tryFunction()</em> is executed first, then <em>finallyFunction()</em> is executed, whether <em>tryFunction()</em> succeeded or not.
+
+<pre class="eg">
+try {
+    <em>tryFunction()</em>
+} finally {
+    <em>functionFunction()</em>
+}
+</pre>
+<p>
+When only <em>finallyFunction</em> is specified, <tt>finally()</tt> registers a function that is executed when the execution context gets out of the current scope.
+
+</p>
+<pre class="eg">
+function test(){
+   finally(function () println("done"))
+   println("start")
+}
+
+> test()
+start
+done
+</pre>
+
+<P><a name="defined"></a></P>
+<div class="box">
+<div class="synopsis"><b>defined</b> ( <em>symbol</em> )</div>
+</div>
+
+<p><tt>defined()</tt> checks if the specified symbol has been
+defined at
+an arbitrary scope.</p>
+<div class="eg">e.g.
+<pre>
+> defined("X")
+false
+> X = 100
+100
+> defined("X")
+true
+> X = null
+null
+> defined("X")
+true
+</pre></div>
+<p><tt>defined()</tt> also checks availability of a class.</p>
+<div class="eg">e.g.
+<pre>
+> defined("Window")
+false
+> import("java.awt.Window")
+null
+> defined("Window")
+true
+</pre></div>
+<P><a name=class></a></P>
+<div class="box">
+<div class="synopsis"><b>class</b> ( "<em>class_literal</em>" )</div>
+</div>
+
+<p>If a class with the specified name exists,
+returns the Class object. Otherwise it returns null.</p>
+<P><a name=quit></a></P>
+<div class="box">
+<div class="synopsis"><b>quit</b> ( [ <em>expression</em> ] )</div>
+</div>
+
+<p><tt>quit()</tt> terminates the current execution without reading EOF.
+</p>
+<p>When <em>expression</em> is specified as a parameter, the interpreter
+session
+returns the value.  See <a href="api.html">Pnuts API</a> for details.</p>
+<div class="eg">e.g.
+<pre>
+(in Java)
+   Object ret = Pnuts.load(System.in, true, new Context());
+   System.out.println("ret = " + ret);
+
+(in Pnuts)
+   quit(123)
+
+------------
+   ret = 123
+</pre></div>
+<P>Note that this function can not terminate
+the entire program when a
+non-daemon thread, like AWT-EventDispatcher,
+is running even if the main
+thread is stopped.</P>
+<a name="sugar"></a>
+<h2>6. Syntax Extensions</h2>
+<p>When an object which implements one of special
+interfaces appears in an arithmetic
+operation or a member access expression,
+the corresponding method of the
+interface is called, so that it simplifies
+the script in which lengthy method
+call was needed.
+<p><a name=arithmeticExtension></a></p>
+<h3>Arithmetic Operations</h3>
+<p>When a <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a> object is in an arithmetic operation, the
+corresponding method is called.</p>
+
+<pre class="eg">
+public interface Numeric {
+    Object add(Object o);
+    Object subtract(Object o);
+    Object multiply(Object o);
+    Object divide(Object o);
+    Object negate();
+    Object inverse();
+    int compareTo(Object o);
+
+    int NOT_EQUAL = 2;
+    int LEFT_IS_BIGGER = 1;
+    int RIGHT_IS_BIGGER = -1;
+    int EQUAL = 0;
+}
+</pre>
+
+<p>When the first operand of an arithmetic operation
+is <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a> object, 
+the corresponding method is called.</p>
+<div class="eg">e.g.:
+<pre>
+Numeric n1, n2;
+n1 + n2     --->  n1.add(n2)
+n1 - n2     --->  n1.subtract(n2)
+n1 * n2     --->  n1.multiply(n2)
+n1 / n2     --->  n1.divide(n2)
+n1 > n2     --->  n1.compareTo(n2) == LEFT_IS_BIGGER
+- n1        --->  n1.negate()
+</pre></div>
+<p>The "+" and "*" operators are assumed to
+be commutative. So if the second
+operand is Numeric object and the first operand
+is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> object, the order of the operation is reversed.</p>
+<p>When the second operand of "-" is Numeric
+object and the first operand is
+a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> object, the second operand is negated and
+then added to the first operand.</p>
+<p>When the second operand of "/" is Numeric
+object and the first operand is
+a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> object, the second operand is inversed and
+then multiplied to the first operand.</p>
+
+<a name="units"></a></P>
+<h3>Units</h3>
+<P><a href="../apidoc/pnuts/lang/QuantityFactory.html">QuantityFactory</a> is defined as follows.</P>
+<pre class="eg">
+package pnuts.lang;
+
+public interface QuantityFactory {
+   public Object make(Number number, String unitName);
+}
+</pre>
+<p>Unit name should be registered with <a href="../apidoc/pnuts/lang/Context.html#registerQuantityFactory(java.lang.String, pnuts.lang.QuantityFactory)"><tt>Context.registerQuantityFactory(String, QuantityFactory)</tt></a> method. When a defined unit name follows
+a decimal number literal, the method <tt>QuantityFactory.make()</tt> of the corresponding QuantityFactory object
+is called and the return value is the result
+of the expression.
+<p>The result of <tt>make()</tt> method is typically a Numeric object. In
+that case the arithmetic operations can be
+applied to the quantity.</p>
+<pre class="eg">
+10cm - 1in       ---> 7.460cm
+0.5cm - 0.1in    ---> 0.246cm
+</pre>
+
+<P><a name="indexed"></a></P>
+<h3>Index Access</h3>
+<p>Index access to <a href="../apidoc/pnuts/lang/Indexed.html"><tt>pnuts.lang.Indexed</tt></a>
+object causes a method call of the interface.</p>
+<p><tt>pnuts.lang.Indexed</tt> interface is defined as follows.</p>
+<pre class="eg">
+package pnuts.lang;
+
+public interface Indexed {
+    void set(int idx, Object value);
+    Object get(int idx);
+}
+</pre>
+<div class="eg">e.g.
+<pre>
+i1 = anIndexed
+i1[0]          --->  i1.get(0)
+i1[0] = 18     --->  i1.set(0, 18)
+</pre></div>
+<p>In J2SE environment, index access to <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/List.html"><tt>java.util.List</tt></a> object causes a method call of <tt>List.get(int)</tt> and <tt>List.set(int, Object)</tt>.
+
+<P><a name=member></a></P>
+<h3>Member Access</h3>
+<p>Member access to <a
+href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a>
+object causes a method call of: <tt>get()</tt> or <tt>set()</tt>.</p>
+<p><tt>pnuts.lang.Property</tt> interface is defined as follows.</p>
+<pre class="eg">
+package pnuts.lang;
+
+public interface Property {
+    void set(String name, Object value, Context context);
+    Object get(String name, Context context);
+}
+</pre>
+<div class="eg">e.g.
+<pre>
+p1 = aProperty
+p1.name          --->  p1.get("name")
+p1.age = 18      --->  p1.set("age", 18)
+</pre></div>
+<p>Note that <a href="../apidoc/pnuts/lang/Package.html"><tt>pnuts.lang.Package</tt></a> class implements
+<a href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a> interface. Therefore, dot notation can be
+used for Package objects.</p>
+<div class="eg">e.g.
+<pre>
+package(&quot;foo&quot;)
+p1 = package()
+package(&quot;&quot;)
+p1.msg = &quot;yes&quot;   == p1.set(&quot;msg&quot;, &quot;yes&quot;) == foo::msg = &quot;yes&quot;</pre></div>
+<p>In J2SE environment, field access to <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html"><tt>java.util.Map</tt></a> object causes a method call of <tt>Map.get(Object)</tt> and <tt>Map.put(Object, Object)</tt>.
+
+<P><a name=methodCall></a></P>
+<h3>Method Call</h3>
+<p>Method call of <a
+href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a> 
+object causes a call of the <tt>invoke()</tt> method.</p>
+<p><tt>pnuts.lang.AbstractData</tt> interface is defined as follows.</p>
+<pre class="eg">
+package pnuts.lang;
+
+public interface AbstractData extends Property {
+    Object invoke(String name, Object args[], Context context);
+}
+</pre>
+<div class="eg">e.g.
+<pre>
+o1 = anAbstractData
+o1.work(1,2,3)   --->  p1.invoke("work", [1,2,3], getContext())
+</pre></div>
+
+<P><a name=syntax></a></P>
+<h2>7. Syntax Rule</h2>
+<p>
+The syntax of Pnuts language is defined as the following definition,
+which is basically EBNF but partly uses JavaCC notation.
+</p>
+
+<pre class=wb>
+INTEGER_LITERAL =  DECIMAL_LITERAL | HEX_LITERAL1 | HEX_LITERAL2 ;
+DECIMAL_LITERAL = ("0"-"9")+, ( LETTER )* ;
+HEX_LITERAL1 = "#", ("0"-"9","a"-"f","A"-"F")+ ;
+HEX_LITERAL2 = "0", ("x" | "X"), ("0"-"9"|"a"-"f"|"A"-"F")+, ( LETTER )*;
+FLOATING_POINT_LITERAL = ("0"-"9")+, ".", ("0"-"9")+, [ EXPONENT ], ( LETTER )* |
+                           ".", ("0"-"9")+, [ EXPONENT ],  ( LETTER )* |
+                          ("0"-"9")+,  EXPONENT, ( LETTER )* ;
+EXPONENT = ( "e" |"E" ), ["+" | "-"], ("0"-"9")+ ;
+UNICODE_ESCAPE = ("u" | "U"),
+                 ( "0"-"9" | "a"-"f" | "A"-"F"),
+                 ( "0"-"9" | "a"-"f" | "A"-"F"),
+                 ( "0"-"9" | "a"-"f" | "A"-"F"),
+                 ( "0"-"9" | "a"-"f" | "A"-"F") ;
+CHARACTER_LITERAL = "'", ( ~["'","\\","\n","\r"] |
+                           "\\" ( "n" | "t" | "b" | "r" | "f" | "0" |
+                           "\\" | "'" | "\"" | UNICODE_ESCAPE ) ) "'" ;
+STRING_LITERAL = "\""( ( ~["\"","\\"]) |
+                           ("\\" ( "\\" | (~["\\"]) ) ) )* "\"" ;
+STRING_LITERAL2 = "`" ( ~["`"] )* "`" ;
+IDENTIFIER = LETTER ( LETTER | DIGIT )* ;
+LETTER = "\u0024" | "\u0040"-"\u005a" | "\u005f" | "\u0061"-"\u007a" | "\u0080"-"\uffff" ;
+DIGIT = "0"-"9" ;
+IDENTIFIER: LETTER ( LETTER | DIGIT )* ;
+COMMAND_HEADER = "#!" (~["\n","\r"])* ("\r\n" | "\n" | "\r") ;
+EOL = "\r" | "\n" "\r\n" ;
+Eol = ( EOL )* ;
+StartSet = [ COMMAND_HEADER ] Eol ( (ExpressionList ( EOL [ ExpressionList ] )* EOF)  |
+                                       EOF ) ;
+Start = [ ExpressionList ] ( EOL | EOF ) ;
+ExpressionList =  Expression (";" [ Expression ] )* |
+                    ";" ;
+Expression = MultiAssignLHS "=" Expression |
+             ConditionalExpression [ Assignment ] |
+             StatementExpression ;
+MultiAssignLHS = IdNode "," IdNode ("," IdNode )*
+ArgumentExpression = ConditionalExpression [ Assignment ] |
+               StatementExpression ;
+PrimaryExpression = PrimaryPrefix ( PrimarySuffix )* ;
+IdNode = [ "::" ] IDENTIFIER ;
+PrimaryPrefix = Literal | IdNode | MapElements | Class | New |
+                "[" ListElements "]" |
+                "{" ListElements "}" |
+                "(" Eol Expression Eol ")" ;
+ListElements = Eol [ ArgumentExpression Eol ( "," Eol ArgumentExpression Eol )* ] ;
+MapElements = "{" Eol MapElement ("," Eol MapElement)* Eol "}" ;
+MapElement = Expression "=&gt;" Expression ;
+Class = "class" [ ClassName ] ;
+New = "new" ClassName ( (" ListElements ")" [ ClassDefBody ] |
+                          ( ArraySuffix )+ [ "{" ListElements "}" ] ) ;
+ClassDef = "class" ClassName
+           [ "extends" ClassName ]
+           [ "implements" ClassName ( "," ClassName)* ]
+           ClassDefBody
+ClassDefBody = "{" Eol (MethodDef|FieldDef)* "}" ;
+MethodDef = [ ClassName ] IDENTIFIER TypedParamList Eol Block2 Eol ;
+FieldDef = [ ClassName ] IDENTIFIER [ "=" Expression ]
+ArraySuffix = "[" Eol ( "]" | Expression Eol "]" ) ;
+ClassName = Package ( "." Package )* ;
+Package = IDENTIFIER ;
+MethodNode = "." IDENTIFIER "("  ListElements ")" ;
+StaticMethodNode = "::" IDENTIFIER "("  ListElements ")" ;
+MemberNode = "." ( IDENTIFIER | "class" ) ;
+StaticMemberNode = "::" IDENTIFIER ;
+ApplicationNode = "(" ListElements ")" ;
+PrimarySuffix = "[" Eol ( "]" |
+                          Expression Eol ( ".." Eol ( "]" |
+                             	                      Expression Eol "]" ) |
+                                           "]" ) ) |
+                   MethodNode | StaticMethodNode | MemberNode |
+                   StaticMemberNode | ApplicationNode ;
+Literal = INTEGER_LITERAL | FLOATING_POINT_LITERAL | CHARACTER_LITERAL |
+            STRING_LITERAL | STRING_LITERAL2 | BooleanLiteral | NullLiteral ;
+BooleanLiteral = "true" | "false" ;
+NullLiteral = "null" ;
+Assignment = ("=" | "*=" | "%=" | "/=" | "+=" | "-=" | "&lt;&lt;=" | "&gt;&gt;=" | "&gt;&gt;&gt;=" | "&amp;=" | "^=" | "|=")   Eol Expression ;
+ConditionalExpression = ConditionalOrExpression [ "?" Eol Expression ":" Eol ConditionalExpression ] ;
+ConditionalOrExpression = ConditionalAndExpression ( Eol "||" Eol ConditionalAndExpression )* ;
+ConditionalAndExpression = InclusiveOrExpression ( Eol "&amp;&amp;" Eol InclusiveOrExpression  )* ;
+InclusiveOrExpression = ExclusiveOrExpression ( Eol "|" Eol ExclusiveOrExpression  )* ;
+ExclusiveOrExpression = AndExpression ( Eol "^" Eol AndExpression )* ;
+AndExpression = EqualityExpression ( Eol "&amp;" Eol EqualityExpression  )* ;
+EqualityExpression = InstanceofExpression ( Eol ( "==" Eol InstanceofExpression |
+                                                    "!=" Eol InstanceofExpression ) )* ;
+InstanceofExpression = RelationalExpression [ Eol "instanceof" Type ] ;
+RelationalExpression = ShiftExpression ( Eol (  ("&lt;" | "&gt;" | "&lt;=" | "&gt;=") Eol ShiftExpression )*;
+ShiftExpression = AdditiveExpression ( Eol ( ( "&lt;&lt;" | "&gt;&gt;" | "&gt;&gt;&gt;" ) Eol AdditiveExpression ))*;
+AdditiveExpression = MultiplicativeExpression ( Eol ( ( "+" | "-" ) Eol MultiplicativeExpression ))*;
+MultiplicativeExpression = UnaryExpression ( Eol ( ("*" | "/" | "%") Eol UnaryExpression ))* ;
+UnaryExpression = "+" UnaryExpression |
+                    "-" UnaryExpression |
+                    "++" PrimaryExpression |
+                    "--" PrimaryExpression |
+                     UnaryExpressionNotPlusMinus ;
+UnaryExpressionNotPlusMinus = "~" UnaryExpression |
+                                "!" UnaryExpression |
+                                CastExpression |
+                                PostOpe ;
+CastExpression = "(" Eol Type Eol ")" UnaryExpressionNotPlusMinus ;
+Type = ClassName (PrimarySuffix)* ;
+PostOpe = PrimaryExpression  [ "++" | "--" ] ;
+StatementExpression = IfStatement | WhileStatement | DoStatement | ForeachStatement |
+                      ForStatement | SwitchStatement | Break | Continue | Return |
+                      Yield | FunctionStatement | TryStatement | CatchNode |
+                      FinallyNode | Import | ThrowNode ;
+Break =  "break" [ Expression ] ;
+Continue = "continue" ;
+Return = "return" [ Expression ] ;
+Yield = "yield" [ Expression ] ;
+Import = "import"  [ "static" ]  [ Package ( "." Package )* ["." "*" ] |
+                                      "*") |
+                                      "(" [ Expression ] ")" ] ;
+Block = "{" Eol [ Expression ((";" |EOL) [ Expression ] )* ] "}" |
+          Expression (";" [ Expression ] )*  |
+          ";" ;
+Block2 = "{" Eol [ Expression ((";" |EOL) [ Expression ] )* ] "}" ;
+IfStatement = "if" Eol "(" Eol Expression Eol ")" Eol Block ( ElseIfNode )* [ ElseNode ] ;
+ElseIfNode = Eol "else" "if" "(" Eol Expression Eol ")" Eol Block ;
+ElseNode = Eol "else" Eol Block ;
+WhileStatement = "while" Eol "(" Eol Expression Eol ")" Eol Block ;
+TryStatement = "try" Eol Block2 ( Eol CatchBlock )* [ Eol FinallyBlock ] ;
+CatchBlock =  "catch" "(" ClassName IDENTIFIER ")" Eol Block2 ;
+CatchNode =  "catch" [ "(" Eol Expression Eol "," Eol Expression Eol ")" ] ;
+FinallyNode = "finally" [ "(" Eol Expression Eol [ "," Eol Expression Eol ] ")" ] ;
+ThrowNode = "throw" [ Expression ] ;
+FinallyBlock = "finally" Eol Block2 ;
+DoStatement = "do" Eol Block2 Eol "while" Eol "(" Eol Expression Eol ")"  ;
+ForStatement = "for" Eol "(" Eol ( ForEnum |
+                                     [ ForInit ] ";" Eol [ Expression Eol ] ";" Eol [ ForUpdate ] ) ")" Eol Block ;
+ForEnum = IDENTIFIER (, IDENTIFIER)* Eol ":" Eol Expression Eol [ ".." Eol Expression Eol ] ;
+ForInit = Local Eol ( "," Eol Local Eol )* ;
+ForUpdate =  Expression Eol ( "," Eol Expression Eol )* ;
+Local = IDENTIFIER "=" Eol Expression ;
+ForeachStatement = "foreach" Eol t1 = IDENTIFIER ( "[" ListElements "]" |
+                                                    "(" Eol Expression Eol ")" ) Eol Block ;
+SwitchStatement = "switch" Eol "(" Eol  Expression Eol ")"  Eol
+                   "{" Eol ( SwitchLabel SwitchBlock )*  "}" ;
+SwitchBlock = Block2 | [ Expression ] ( (";" | EOL ) [ Expression ] )* ;
+SwitchLabel = "case" Expression ":" | "default" ":" ;
+FunctionStatement = "function" [ IDENTIFIER ] ParamList Eol Block ;
+ParamList = "(" [ Param ( "," Param )* [ "[" "]" ]) ] ")" ;
+Param = Eol IDENTIFIER Eol ;
+TypedParam = Param | ClassName Param ;
+TypedParamList = "(" ( ")" | TypedParam ("," TypedParam  )* ")" ) ;
+</pre>
+<!-- body end -->
+
+
+
+</ul>
+<div class="nav2"><a href="lang-TOC.html">Table of Contents</a> -> The Pnuts Language</div>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="applyTemplate">index.html#applyTemplate</function>
+ <function name="formatTemplate">index.html#formatTemplate</function>
+ <function name="printf">index.html#printf</function>
+ <function name="readLine">index.html#readLine</function>
+ <function name="readLines">index.html#readLines</function>
+ <function name="sprintf">index.html#sprintf</function>
+ <function name="template">index.html#template</function>
+ <function name="textGrab">index.html#textGrab</function>
+</reference>

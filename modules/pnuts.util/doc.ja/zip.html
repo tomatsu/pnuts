@@ -1,0 +1,339 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.utilモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ZIPファイル</div>
+
+    <h2>ZIPファイル</h2>
+
+<a name="readZip"></a>
+
+<div class="box">
+<div class="synopsis"><b>readZip</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>fileName</b></em><tt> {,  </tt><em>entryHandler</em><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>) } )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</b></em><tt> {, </tt><em>entryHandler</em><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>)} )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> {, </tt><em>entryHandler</em><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>)} )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>inputStream</b></em><tt> {, </tt><em>entryHandler</em><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>)} )</tt></div>
+</div>
+
+<p>
+<em>entryHandler</em> が省略された場合、ZIPファイルの内容が表示されます。
+</p>
+<pre class="eg">
+&gt; readZip("pnuts.jar")
+       0 Fri May 05 18:30:30 JST 2000 pnuts/
+       0 Fri May 05 18:30:30 JST 2000 pnuts/awt/
+    2869 Tue May 30 16:08:32 JST 2000 pnuts/awt/DialogOutputStream.class
+    4980 Fri May 05 18:30:30 JST 2000 pnuts/awt/Layout.class
+....
+</pre>
+
+<p>
+<em>entryHandler</em> が指定された場合、Zip ファイルの各エントリを表す ZipEntry オブジェクトと、各エントリの内容を読み込むための ZipInputStream を引数にしてその関数が呼ばれます。
+</p>
+<p>
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a>の主なプロパティは次のとおり。
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>型</th>
+<th bgcolor=#eeeeee>プロパティ名</th>
+<th bgcolor=#eeeeee>備考</th>
+</tr>
+<tr class=wb>
+      <td>String</td>
+      <td>name</td>
+      <td></td>
+</tr>
+<tr class=wb>
+      <td>long</td>
+      <td>time</td>
+      <td></td>
+</tr>
+<tr class=wb>
+      <td>boolean</td>
+      <td>directory</td>
+      <td></td>
+</tr>
+<tr class=wb>
+      <td>long</td>
+      <td>size</td>
+      <td>参照する前に、<em>input</em>をEOFまで読むか、<em>input</em><tt>.closeEntry()</tt>を呼び出すことが必要</td>
+</tr>
+<tr class=wb>
+      <td>long</td>
+      <td>compressedSize</td>
+      <td>同上</td>
+</tr>
+</table>
+</blockquote>
+
+<p>
+たとえば、次の関数はZIPファイルの中のある名前にマッチするファイルの内容をOutputStreamに書き出します。
+<p>
+
+<pre class="eg">
+function extract(zipfile, name, out){
+  readZip(zipfile, function (e, in) if (e.name == name) read(in, out))
+}
+</pre>
+
+<a name="readZipEntries"></a>
+
+<div class="box">
+<div class="synopsis"><b>readZipEntries</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>fileName</b></em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>inputStream</b></em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>readZipEntries()</tt>は、ZIPファイルに含まれるファイルの参照（以下のプロパティを持つ）を生成するジェネレータを返します。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>プロパティ名</th>
+<th bgcolor=#eeeeee>型</th>
+</tr>
+<tr class=wb>
+      <td>input</td>
+      <td>InputStream</td>
+</tr>
+<tr class=wb>
+      <td>entry</td>
+      <td>ZipEntry</td>
+</tr>
+<tr class=wb>
+      <td>entry.name</td>
+      <td>String</td>
+</tr>
+<tr class=wb>
+      <td>entry.time</td>
+      <td>long</td>
+</tr>
+<tr class=wb>
+      <td>entry.directory</td>
+      <td>boolean</td>
+</tr>
+<tr class=wb>
+      <td>entry.size</td>
+      <td>long</td>
+</tr>
+<tr class=wb>
+      <td>entry.compressedSize</td>
+      <td>long</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">例:
+<pre>
+for (e : readZipEntries(zfile)){
+   println(e.entry.name)
+}
+</pre></div>
+
+
+<a name="openZip"></a>
+
+<div class="box">
+<div class="synopsis"><b>openZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>in</b></em><tt>)</tt> or</div>
+<div><dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>out</b></em><tt>)</tt> or</div>
+<div><dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>file</b></em> , <em>mode</em><tt>)</tt> or</div>
+<div><dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em> , <em>mode</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>openZip()</tt> は、InputStream が指定されると、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipInputStream.html"><tt>ZipInputStream</tt></a>オブジェクトを返し、 OutputStreamが指定されると、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html"><tt>ZipOutputStream</tt></a> オブジェクトを返します。
+</p>
+
+<a name="extractZip"></a>
+
+<div class="box">
+<div class="synopsis"><b>extractZip</b><tt>(</div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>fileName</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>file</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> <em>input</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> <em>url</em> ),</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>fileName</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>file</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> <em>zout</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> <em>output</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> <em>writer</em> ), </tt></div>
+<div class="synopsis2"> {, </tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>entryName</em> | <em>matchFunction</em><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>entryName</em><tt>) ) } )</tt></div>
+</div>
+
+<p>
+<tt>extractZip()</tt>は、ZIPファイルの指定されたエントリを幾通りかのやりかたで取り出します。
+<p>
+最初の引数には ZIP ファイルまたはその入力ストリームを指定します。
+</p>
+
+<p>
+第３引数に<em>entryName</em> が指定された場合、<em>entryName</em> にマッチするZIPエントリが取り出されます。<em>matchFunction</em> が指定された場合、その関数が<tt>true</tt>を返すZIPエントリが取り出されます。
+</p>
+
+<pre class="eg">
+function matchFunction(entryName) ...
+</pre>
+
+
+
+<p>
+引数が２つだけ指定された場合、すべてのZIPエントリが取り出されます。
+</p>
+
+<div class="eg">例：
+<pre>
+extractZip("foo.zip", ".")
+</pre>
+</div>
+
+
+<p>
+第２引数に、既存のディレクトリを表す<em>fileName</em>または、ディレクトリを表す<em>file</em>が指定された場合、ZIP ファイルのエントリはそのディレクトリに保存されます。
+第２引数に、既存のディレクトリでない<em>fileName</em>または<em>file</em>が指定された場合、ZIP ファイルのエントリはそのZIPファイルに保存されます。
+<p>
+<div class="eg">例：
+<pre>
+extractZip("rt.jar", "script.jar", function (n) n.startsWith("javax/script/"))
+</pre>
+</div>
+
+<p>
+第２引数に<em>zout</em>が指定された場合は、ZIPファイルのエントリはそのZipOutputStreamに書き込まれます。
+<p>
+<div class="eg">例：
+<pre>
+zout = openZip(open("jarfile", "w"))
+extractZip("pnuts.jar", zout, function (n) n.startsWith("javax/script/"))
+zout.close()
+</pre>
+</div>
+<p>
+第２引数に<em>output</em> または <em>writer</em> が指定された場合は、そのストリームに書き込まれます。
+</p>
+<div class="eg">例：
+<pre>
+extractZip("pnuts.jar", getContext().getOutputStream(), "pnuts/lang/pnuts.properties")
+</pre>
+</div>
+
+
+<a name="writeZip"></a>
+
+<div class="box">
+<div class="synopsis"><b>writeZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt>, (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String[]</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>) <em>fileList</em><tt>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>outputStream</b></em><tt>, (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String[]</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> ) <em>fileList</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>, (</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String[]</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> ) <em>fileList</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>zout</b></em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a> <em>zipEntry</em><tt> , </tt><em>streamHandler (zout) </em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeZip()</tt>は、<em>fileList</em>または<em>directory</em>に含まれるすべてのファイルからZIPファイルを作り、ファイル<em>fileName</em>に保存するか、または<em>outputStream</em>に書き出します。
+</p>
+
+<div class="eg">例
+<pre>
+writeZip("foo.zip", ["foo.txt", "bar.class"])
+
+writeZip("classes.jar", "classes")
+</pre></div>
+
+<p>
+３引数の<tt>writeZip()</tt> は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipEntry.html">ZipEntry</a>を指定された<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a>に追加し、そのエントリに対するデータを作成するために<em>streamHandler</em>を呼び出します。
+</p>
+
+<a name="writeZipEntries"></a>
+
+<div class="box">
+<div class="synopsis"><b>writeZipEntries</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt>, </tt><em>entries</em><tt>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>outputStream</b></em><tt>, </tt><em>entries</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>, </tt><em>entries</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>zout</b></em><tt>, </tt><em>entries</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeZipEntries()</tt>は、ZIPファイルに含めたいファイルの参照（以下のプロパティを持つ）を生成するジェネレータを<em>entries</em>に指定して、ZIPファイルを作成します。
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>プロパティ名</th>
+<th bgcolor=#eeeeee>型</th>
+</tr>
+<tr class=wb>
+      <td>input</td>
+      <td>InputStream　（open()の引数になれるもの）,　<tt>null</tt></td>
+</tr>
+<tr class=wb>
+      <td>entry.name</td>
+      <td>String</td>
+</tr>
+<tr class=wb>
+      <td>entry.time</td>
+      <td>long</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">例:
+<pre>
+function fileEntries(dir){
+    for (i : dir.files()){
+      f = File(i)
+      yield {"entry"=>{"name"=>f.name, "time"=>f.lastModified()},
+             "input"=>isDirectory(f) ? null : f}
+    }
+}
+writeZipEntries(filename, fileEntries("src"))
+</pre></div>
+
+<a name="updateZip"></a>
+
+<div class="box">
+<div class="synopsis"><b>updateZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>zipfile</b></em><tt> ,  <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>entryName</b></em><tt> , </tt><em>streamHandler (zout) </em><tt> )</tt></dt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>zipfile</b></em><tt> ,  <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>entryName</b></em><tt> , </tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>updateZip()</tt> は、指定されたZIPファイル ( <em>zipfile</em> ) のエントリ ( <em>entryName</em> ) を、関数 <em>streamHandler</em>の出力データ、または、ファイル<em>fileName</em>の内容で置き換えます。
+
+
+<p>
+３番目の引数が null の場合、ZIPファイルからそのZIP エントリが削除されます。
+３番目の引数が null でなく <em>entryName</em> が ZIP ファイルに含まれない場合、新しいZIP エントリが追加されます。
+</p>
+
+<a name="mergeZip"></a>
+
+<div class="box">
+<div class="synopsys"><b>mergeZip</b><tt>(<em>files</em> [], </tt><em>output</b></em>)</tt></div>
+</div>
+
+<p>
+<tt>mergeZip()</tt> は、<em>files</em>に指定されたZipファイル（またはJARファイル）を<a href="#readZip"><tt>readZip()</tt></a>で順に読み込み、<em>output</em>に書き出します。ただし、ZIPエントリ名が重複する場合は、最初の内容だけが書き込まれます。
+<p>
+
+<div class="eg">例
+<pre>
+mergeZip(["foo.zip", "bar.jar"], "new.zip")
+mergeZip([openURL("http://host/updated.jar"), "original.jar"], "new.jar")
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ZIPファイル</div>
+
+  </body>
+</html>

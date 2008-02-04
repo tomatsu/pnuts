@@ -1,0 +1,103 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> インタプリタ実装のカスタマイズ
+</div>
+
+<!-- body start -->
+
+<h2>インタプリタ実装のカスタマイズ</h2>
+
+<p>
+通常スクリプトはJavaバイトコードにコンパイルされて実行されますが、スクリプトが実行されるまでの手順はContextの属性(pnutsImpl)を設定することでカスタマイズできます。
+たとえば、Javaバイトコードにコンパイルせずに実行したり、コンパイルしたものをキャッシュして二度目以降はコンパイルしないようにすることができます。
+</p>
+
+<a name=impl></a>
+<h3>pnuts.lang.Implementation オブジェクト</h3>
+<p>
+<a href="../apidoc/pnuts/lang/Implementation.html">pnuts.lang.Implementation</a>インタフェースは、スクリプトインタプリタ実装の抽象インタフェースを定義します。
+Implementation のインスタンスは、ある<a href="context.html">Context</a>に対応づけられます。
+<a href="../apidoc/pnuts/lang/Context.html#setImplementation(pnuts.lang.Implementation)">Context.setImplementation()</a> メソッドと <a href="../apidoc/pnuts/lang/Context.html#getImplementation()">Context.getImplementation()</a> メソッドは、それぞれその settter、getter メソッドです。
+<p>
+
+<h3>既定義のImplementationクラス</h3>
+
+次のクラスは、そのインタフェースを実装するクラスで、Pnutsの配布パッケージに含まれています。
+<p>
+<blockquote>
+<dl>
+<dt><a href="../apidoc/pnuts/lang/PnutsImpl.html"><tt>pnuts.lang.PnutsImpl</tt></a>
+<dd>ASTインタプリタ。
+<dt><a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html"><tt>pnuts.compiler.CompilerPnutsImpl</tt></a>
+<dd>On-the-fly コンパイラ。<tt>pnuts</tt>コマンドを使った場合のデフォルトクラス。
+<dt><a href="../apidoc/pnuts/ext/CachedPnutsImpl.html"><tt>pnuts.ext.CachedPnutsImpl</tt></a>
+<dd>Mixed モード。コンパイル（またはパーズ）されたスクリプトをキャッシュして再利用する。
+<dt><a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a>
+<dd>セキュアモード。Java2 Security APIを使ってスクリプトを安全に実行する。
+<dt><a href="../apidoc/pnuts/security/JAASPnutsImpl.html"><tt>pnuts.security.JAASPnutsImpl</tt></a>
+<dd>JAASを使ってスクリプトを安全に実行する。
+</dl>
+</blockquote>
+</p>
+
+<p>
+実行効率の観点でのImplementation クラスの選び方については、<a href="performance.html#choose">「パフォーマンス向上のためのヒント」</a>をご覧ください。
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+import pnuts.ext.*;
+
+Context context = new Context();
+context.setImplementation(new CachedPnutsImpl());
+Pnuts.loadFile(fileName, context);
+</pre>
+
+<p>
+<a href="../apidoc/pnuts/security/SecurePnutsImpl.html">SecurePnutsImpl</a>および<a href="../apidoc/pnuts/security/JAASPnutsImpl.html">JAASPnutsImpl</a> は、他のPnutsImplサブクラスにセキュリティ機能を追加するためのラッパクラスです。スクリプトがリモートホストからダウンロードされた場合でも安全に読み込むことができます。詳細は、<a href="secure.html">「コードソースに基づく安全なスクリプティング」</a>と<a href="jaas.html">「ユーザ認証に基づく安全なスクリプティング」</a>をご覧下さい。
+</p>
+
+<pre class="eg">
+context.setImplementation(new SecurePnutsImpl(new CompilerPnutsImpl()));
+Pnuts.load(new URL("..."), context);
+</pre>
+
+
+<h3>プロパティ'<tt>pnuts.lang.defaultPnutsImpl</tt>'</h3>
+<p>
+Pnuts APIが最初に読み込まれる時に、プロパティ<tt>pnuts.lang.defaultPnutsImpl</tt>がPnutsImplのサブクラスである場合、そのクラスがデフォルトのPnutsImplとして使われます。
+</p>
+
+<p>
+<a href="../apidoc/pnuts/security/SecurePnutsImpl.html">SecurePnutsImpl</a>と<a
+href="../apidoc/pnuts/security/JAASPnutsImpl.html">JAASPnutsImpl</a>は、デフォルトコンストラクタを持たないので、このプロパティで指定して使うことはできません。
+</p>
+<p>
+どのImplementationが使われているかを知るには、<code>Context.getImplementation()</code>を呼び出します。
+</p>
+
+<pre class="eg">
+&gt; getContext().getImplementation()
+pnuts.compiler.CompilerPnutsImpl@1764be1
+&gt; 
+</pre>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> インタプリタ実装のカスタマイズ
+</div>
+
+  </body>
+</html>

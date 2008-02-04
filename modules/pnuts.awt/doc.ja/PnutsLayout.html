@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> PnutsLayout</div>
+
+    <h2>PnutsLayout</h2>
+
+<p>
+  PnutsLayout は汎用のレイアウトマネージャです。 GridBagLayout と同等の柔軟性を
+持ちながら従来のレイアウトマネージャに比べてプログラマにとって利用しやすいのが特
+徴です。
+PnutsLayout は <a href="../../index-j.html">Pnuts </a>のパッケージに含まれています
+が、通常の LayoutManager として Pnuts 以外からも利用できます。</p>
+
+<p>
+また、別のページで説明する<a href="hierarchicalLayout.html">階層的レイアウト</a>の考え方を使ってPnutsLayout を利用すると、複雑な構造をもつ画面を見通しよく記述することができます。
+ただし、ここでは PnutsLayout のオーソドックスな利用方法を説明します。
+</p>
+
+<p>PnutsLayout ではコンポーネントをいくつかのプロパティを指定して追加していきます。コンストラクタと add() メソッドのパラメータは、"<em>propertyName</em> <tt>=</tt>
+<em>value</em>"という文字列をカンマで区切ってつなげたリストです。
+コンストラクタのパラメータは、個々のコンポーネントのプロパティに対するデフォルトの値になります。
+
+<div class="eg">例:
+<pre>setLayout(new PnutsLayout("columns = 3"));
+add(button1, "padding = 20");
+add(button2, "colspan = 2");
+add(button3, "align = top:left");
+</pre>
+</div>
+</p>
+<p>  
+  プロパティの一覧
+<blockquote>
+  <table border>
+  <tr><th>プロパティ</th><th>意味</th><th>デフォルト</th><th>コンストラクタ</th><th>add()</th></tr>
+  <tr><td><tt>columns</tt></td><td>カラム数</td><td>1</td><td>○</td><td>×</td></tr>
+  <tr><td><tt>uniform</tt></td><td>
+<table>
+<td>"<tt>x</tt>": </td><td>各カラムが同じ幅の場合</td></tr>
+<td>"<tt>y</tt>": </td><td>各ローが同じ高さの場合</td></tr>
+<td>"<tt>xy</tt>": </td><td>各カラム、ローがそれぞれ同じ長さの場合</td></tr>
+</table>
+</td><td>""</td><td>○</td><td>×</td></tr>
+  <tr><td><tt>colspan</tt></td><td>コンポーネントが占めるカラム数</td><td>1</td><td>×</td><td>○</td></tr>
+  <tr><td><tt>rowspan</tt></td><td>コンポーネントが占めるロー数</td><td>1</td><td>×</td><td>○</td></tr>
+  <tr><td><tt>spacing</tt></td><td><div>コンポーネントの周りの空間</div><div>単一の数値（例：5）またはtop:right:bottom:left（例：5:10:5:10）</div></td><td>0</td><td>○</td><td>○</td></tr>
+  <tr><td><tt>padding</tt></td><td><div>外部パディング</div><div>単一の数値（例：5）またはtop:right:bottom:left（例：5:10:5:10）</div></td><td>0</td><td>○</td><td>○</td></tr>
+  <tr><td><tt>ipadding</tt></td><td><div>内部パディング</div><div>単一の数値（例：5）またはx:y（例：5:10）</div></td><td>0</td><td>○</td><td>○</td></tr>
+  <tr><td><tt>fill</tt></td><td>コンポーネントのセルの大きさに対するパーセンテージ（例：100:100）、または"x","y","xy",""</td><td>""</td><td>○</td><td>○</td></tr>
+  <tr><td><tt>align</tt></td><td>アライメント。"<tt>left</tt>", "<tt>right</tt>","<tt>center</tt>","<tt>fill</tt>"のいずれか、または、top/bottom/center:left/right/center（例：top:right)</td><td><tt>center</tt></td><td>○</td><td>○</td></tr>
+  <tr><td><tt>expand</tt></td><td>セルの大きさをコンテナの大きさまで拡張する。"x", "y", "xy", または"".</td><td>""</td><td>○</td><td>○</td></tr>
+  </table>
+</blockquote>
+
+<h4>カラム数(<tt>cols</tt>)</h4>
+
+<table cellpadding=20>
+<tr><td>
+<img src="../doc/image/1.gif"></img>
+</td>
+<td>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</tr>
+</table>
+
+<p>
+PnutsLayout では、必ずカラム数がわかっていて、左から右、上から下の順にコンポーネントを配置していきます。
+</p>
+
+
+<h4>外部パディング (<tt>padding</tt>)</h4>
+<table cellpadding=20>
+<tr>
+<td>
+<img src="../doc/image/2.gif"></img>
+</td><td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,padding=4:10"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+PnutsLayout は、コンポーネントを包含する仮想的なバウンディングボックスをレイアウトします。
+バウンディングボックスの大きさは、少なくとも各コンポーネントの
+preferredSize になります。
+</p>
+<p>
+外部パディングが指定されれば、バウンディングボックスに必要な領域がその分だけ大きくなります。
+</p>
+<p>
+最終的には、バウンディングボックスの幅は同じ列のバウンディングボックスの幅の最大値になり、高さは同じ行のバウンディングボックスの高さの最大値になります。
+</p>
+
+<h4>内部パディング(<tt>ipadding</tt>)</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="../doc/image/3.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,ipadding=4:10"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</td>
+</tr>
+</table>
+
+<p>
+レイアウトされるコンポーネントの大きさは、デフォルトでは preferredSize になりますが、内部パディングが指定されればその分だけ大きくなります。
+</p>
+
+<h4>左寄せ(<tt>left</tt>)</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="../doc/image/9.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("align=left"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+コンポーネントがバウンディングボックスよりも小さい場合、コンポーネントは中央に配置されますが、左や右に寄せたり、幅いっぱいに引き延ばすことができます。
+</p>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="../doc/image/10.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("padding=5,align=left"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<h4>同じ列(行)の最大の幅にそろえる(<tt>fill</tt>)</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="../doc/image/4.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("fill=x"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<h4>複数行にまたがるコンポーネント(rowspan)</h4>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="../doc/image/14.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=2,fill=x"));
+add(new Button("OK"), "rowspan=2,fill=y");
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+複数行や、複数列にまたがるレイアウトも可能です。
+複数列にまたがるコンポーネントがカラム数の制限で配置できない場合は、
+次の行に配置されます。
+</p>
+
+<h4>幅(高さ)をそろえる(uniform)</h4>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="../doc/image/12.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,fill=x,uniform=x"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+バウンディングボックスの幅や高さは行や列によって通常異なりますが、
+強制的にそろえることができます。
+</p>
+
+<h4>伸縮(<tt>expand</tt>)</h4>
+
+<p>
+通常は外側のコンテナの大きさが変わってもバウンディングボックスの大きさには影響し
+ませんが、<tt>expand</tt>を指定することで X 方向 または Y 方向 または両方向に伸縮させることができます。
+</p>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="../doc/image/5.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,align=left,expand=y"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="../doc/image/6.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,expand=y"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help", "fill=x,expand=x"));
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<img src="../doc/image/7.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,expand=xy"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<img src="../doc/image/8.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,fill=xy,expand=xy"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> PnutsLayout</div>
+
+  </body>
+</html>

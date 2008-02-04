@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Context
+</div>
+
+<!-- body start -->
+
+    <h2>Context</h2>
+
+<em>Context</em> is an internal state in Pnuts runtime environment, which is represented by <a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a> class.  A context has the following information:
+
+<ul>
+<li>Stack frame (in AST interpreter only)
+<li>Which Pnuts-package being used
+<li>Imported Java-package list
+<li>OutputStream to which <tt>print()</tt> write data
+<li>OutputStream to which <tt>error()</tt> write message
+<li>OutputStream to which the prompt and the results are written
+<li>ClassLoader by which <tt>load()</tt> find a script
+<li>A <a href="pnuts_engine.html#impl">Implementation object</a>
+<li><a href="#contextlocal">Context-local variables</a>
+<li>Modules added by <tt>use()</tt>
+<li>File list loaded by <tt>load()</tt>
+<li><a href="#configuration">Configuration</a>
+</ul>
+
+<p>
+See "<a href="api.html#context">Pnuts API Overview</a>" for the overview of the class.
+</p>
+
+<a name=getContext></a>
+
+<div class="box">
+<div class="synopsis"><b>getContext</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getContext()</tt> refers to the currently executing context, which is created when an interactive session starts.  All other executions refer to the current context.
+</p>
+
+
+<div class="box">
+<div class="synopsis"><b>eval</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>expression</em> <tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt> } )</tt></div>
+<div class="synopsis"><b>load</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>scriptFile</em> <tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt> } )</tt></div>
+<div class="synopsis"><b>loadFile</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>scriptFile</em> <tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt> } )</tt></div>
+</div>
+
+<p>
+When <em>context</em> is specified to the parameter of these functions, a clone of the context is created and the script is executed with the clone.
+</p>
+
+<p>
+When <em>context</em> is not specified, a clone of the current context is created and the script is executed with the clone.  In this case, the <tt>import()</tt> state and the current package are reset to the default values.
+</p>
+
+<a name="stream"></a>
+<h3>OutputStream for Messages</h3>
+
+<p>
+For each context the following can be specified.
+</p>
+
+<ul>
+<li>Standard output (Writer / OutputStream)
+<li>Error output (Writer)
+<li>Where result of evaluation is printed (Writer)
+</ul>
+
+<div class="box">
+<div class="synopsis"><em>context</em><tt> . </tt><b>setOutputStream</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>anOutputStream</b></em><tt>)</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getOutputStream</b><tt>()</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>setWriter</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>aWriter</b></em><tt> )</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getWriter</b><tt>()</tt></div>
+
+<div class="synopsis"><em>context</em><tt> . </tt><b>setErrorWriter</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>writer</b></em><tt>)</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getErrorWriter</b><tt>()</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>setTerminalWriter</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>writer</b></em><tt>)</tt></div>
+<div class="synopsis"><em>context</em><tt> . </tt><b>getTerminalWriter</b><tt>()</tt></div>
+</div>
+
+
+<a name=contextlocal></a>
+<h3>Context-local Variables</h3>
+
+
+<div class="box">
+<div class="synopsis"><em>context</em> . symbol</div>
+</div>
+
+<p>
+Context-local variables are environment variables assiciated with a
+context.  Context-local variables are used typically when some kind of
+state should be kept between function calls.
+</p>
+
+<div class="eg">e.g.
+<pre>
+function foo(){
+  getContext().foo = true
+}
+
+function bar(){
+  if (getContext().foo != null){
+    println("foo has been called")
+  }
+}
+</pre></div>
+
+For other attributes of Context, See <a href="api.html#context">Pnuts API Overview</a>.
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Context
+</div>
+
+  </body>
+</html>

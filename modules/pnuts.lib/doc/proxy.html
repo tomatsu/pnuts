@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Optimizing Method/Constructor Calls</div>
+
+    <h2>Optimizing Method/Constructor Calls</h2>
+
+<a name=makeProxy></a>
+<div class="box">
+<div class="synopsis"><b>makeProxy</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/reflect/Method.html">java.lang.reflect.Method</a> </tt><em>object</em><tt> )</tt></div>
+<div class="synopsis"><b>makeProxy</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/reflect/Constructor.html">java.lang.reflect.Constructor</a> </tt><em>object</em><tt> )</tt></div>
+</div>
+
+
+<p>
+<tt>makeProxy()</tt> function creates a proxy function that calls Method or
+Constructor specified in the parameter, not using <a href="http://java.sun.com/j2se/1.4/docs/guide/reflection/">Reflection API</a>.
+It can improve the speed of Method/Constructor calls because
+method/constructor selection step based on parameter types is skipped,
+and JIT compiler can optimize the generated code a lot more than reflection calls.
+</p>
+
+<div class="eg">e.g.
+<pre>
+copy = makeProxy(System.getMethod("arraycopy", [Object, int, Object, int, int]))
+
+src = (int[])[1,2,3,4,5]
+dest = int[5]
+
+copy(src, 0, dest, 0, src.length)
+dest  ==> [1,2,3,4,5]
+</pre></div>
+
+<p>
+Proxy functions for non-static methods receive the target object as the first parameter.
+</p>
+
+<div class="eg">e.g.
+<pre>
+hashCode = makeProxy(Object.getMethod("hashCode", []))
+hashCode(Object())
+</pre></div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Optimizing Method/Constructor Calls</div>
+
+  </body>
+</html>

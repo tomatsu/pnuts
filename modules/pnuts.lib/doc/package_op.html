@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Operations
+on Packages/</div>
+
+    <h2>Operations on Packages</h2>
+
+<a name=findPackage></a>
+<div class="box">
+<div class="synopsis"><b>findPackage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>packageName</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>findPackage()</tt> returns the <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> object of the specified name.  If the package
+      does not exist it returns null.
+</p>
+
+<pre class="eg">
+findPackage("foo")   ==> null
+package("foo")       ==> package "foo"
+package("")
+findPackage("foo")   ==> package "foo"
+package()            ==> package ""
+</pre>
+
+<a name=getPackage></a>
+<div class="box">
+<div class="synopsis"><b>getPackage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>packageName</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getPackage()</tt> returns the <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> object of the specified name.  If it
+      does not exist it creates one and return it.
+</p>
+
+<pre class="eg">
+package()             ==> package ""
+findPackage("bar")    ==> null
+getPackage("bar")     ==> package "bar"
+package()             ==> package ""
+</pre>
+
+
+<a name="createPackage"></a>
+<div class="box">
+<div class="synopsis"><b>createPackage</b><tt>()</tt></div>
+<div class="synopsis"><b>createPackage</b><tt>( ` </tt><em>expression</em><tt> ; ... `)</tt></div>
+<div class="synopsis"><b>createPackage</b><tt>( </tt><em>expression</em><tt> , ... )</tt></div>
+</div>
+
+<p>
+<tt>createPackage()</tt> creates and returns an anonymous package.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee># of parameters</th>
+<th bgcolor=#eeeeee>The types</th>
+<th bgcolor=#eeeeee>The action</th>
+<tr class=wb>
+<td>1</td>
+<td>java.lang.String</td>
+<td>Evaluate the string in a package</td>
+</tr>
+<tr class=wb>
+<td>1</td>
+<td>java.lang.Object[]</td>
+<td>Interpret each element as a [key, value] pair and define them in a package</td>
+</tr>
+<tr class=wb>
+<td>any</td>
+<td>any</td>
+<td>If there is any function in the parameters, register the function with its name in a package.</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">e.g.
+<pre>
+p = createPackage()
+p.x = 1
+p.y = 2
+
+q = createPackage("x = 1; y = 2")
+q.x     ==> 1
+q.y     ==> 2
+
+r = createPackage([["a", "hello"], ["b", "world"]])
+r.a  ==> "hello"
+r.b  ==> "world"
+</pre></div>
+
+
+<p>
+Unlike ordinary functions, <tt>createPackage()</tt> evaluates its parameters with the caller's context.  See also <tt><a href="script_package.html">"Script Package"</a></tt>.
+</p>
+
+<a name="removePackage"></a>
+<div class="box">
+<div class="synopsis"><b>removePackage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt>)</tt></div>
+</div>
+<p>
+<tt>removePackage()</tt> removes the specified package.
+</p>
+
+<a name=rootScope></a>
+<div class="box">
+<div class="synopsis"><b>rootScope</b><tt>( )</tt></div>
+</div>
+<p>
+<tt>rootScope()</tt> returns the topmost package of the package hierarchy, which is usually the global package.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Operations
+on Packages/</div>
+
+  </body>
+</html>

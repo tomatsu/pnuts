@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Compiling Scripts from Command Line
+</div>
+
+<!-- body start -->
+
+    <h2>Compiling Scripts from Command Line</h2>
+
+<h3><tt>pnutsc</tt> command</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> <b>pnutsc</b> { -d </tt><em>directory</em><tt> | -o
+	      </tt><em>output_jar_file</em><tt> } { -v } { -main
+	      <em>mainClass</em> { -m <em>moduleName</em> } } {
+	      -prefix </tt><em>name</em><tt> }{ </tt><tt>-no_proxy } {
+	      { -C </tt><em>base_directory</em><tt> }
+	      </tt><em>script_file</em> |  <em>input_jar_file</em> } <tt>...</tt></div>
+</div>
+
+<p>
+<tt>pnutsc</tt> command compiles the specified <em>script_file</em>s
+or script files in the <em>input_jar_file</em>s.
+</p>
+<p>
+If <tt>-o </tt><em>output_jar_file</em> is specified, compiled classes are saved in
+      the <em>output_jar_file</em>.  If <em>output_jar_file</em> exists, the compiled classes
+are added to the JAR file.
+
+<p>
+If no <tt>-o</tt> option is specified, compiled scripts are saved in a set of class files
+in the specified directory with <tt>-d</tt> option, or current directory if <tt>-d</tt> is not specified.
+</p>
+<p>
+<tt>-v</tt> means verbose mode. Generated class names or class file names are printed.
+</p>
+
+<p>
+If <tt>-no_proxy</tt> is specified, generated code does not depend on the pnuts.compiler package,
+but the code for method calls is not optimized.
+</p>
+
+<p>
+If the <tt>-prefix </tt><em>name</em> is set, the <em>name</em> is the  common prefix of the class names.
+</p>
+
+
+<pre class="eg">
+D:\pnuts> pnutsc -o pnuts-precompiled.jar pnuts/util/*.pnut pnuts/lib/*.pnut pnuts/gui/*.pnut pnuts/regex/*pnut
+</pre>
+
+<p>
+If <tt>-C</tt> option is specified, it changes the current directory to <em>base_directory</em> and then compiles the <em>script_files</em>.
+</p>
+
+<p>
+If <tt>-main</tt> option is specified, <em>mainClass</em> with <tt>main()</tt> method and <tt>run(Context)</tt> method is generated.
+</p>
+
+<pre class="eg">
+public class mainClass extends <a href="../apidoc/pnuts/lang/Runtime.html">pnuts.lang.Runtime</a> {
+   public Object run(Context ctx){
+      ctx.usePackage(module1);
+      ctx.usePackage(module2);
+      ...
+      new className1().run((Context)ctx.clone());
+      new className2().run((Context)ctx.clone());
+      ...
+   }
+   public static void main(String args[]){
+      Pnuts.set("$args", args);
+      new mainClass().run(new Context());
+   }
+ }
+</pre>
+
+<div class="eg">
+Example: hello.pnut
+<pre>
+println("hello")
+</pre>
+</div>
+
+<pre class="eg">
+C:\> pnutsc -o hello.jar -main Hello -m pnuts.lib hello.pnut
+C:\> java -classpath "hello.jar;pnuts.jar;pnuts-modules.jar" Hello
+</pre>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Compiling Scripts from Command Line
+</div>
+
+  </body>
+</html>

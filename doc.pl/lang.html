@@ -1,0 +1,2122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head>
+  
+  <title>J&#281;zyk Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav"><a href="lang-TOC.html">Spis tre&#347;ci</a> -&gt; J&#281;zyk Pnuts</div>
+
+<!-- body start -->
+
+<center><h1>J&#281;zyk Pnuts</h1></center>
+<center>wersja 1.2.1</center>
+
+<a name="basics"></a>
+<h2>1. Podstawy</h2>
+
+<a name="structure"></a>
+<h3>Struktura programu</h3>
+
+<h4>Sekwencja wyra&#380;e&#324;</h4>
+<p>Najprostszym stylem kodu programu jest sekwencja wyra&#380;e&#324;<em></em>. Kiedy skrypt jest wykonywany wyra&#380;enia s&#261; ewaluowane sekwencyjnie a wynik ostatniego wyra&#380;enia jest wynikiem ca&#322;ego skryptu.
+</p>
+<div class="eg">
+<pre><em>wyra&#380;enie 1</em>
+<em>wyra&#380;enie</em><em> 2</em>
+...
+<em>wyra&#380;enie</em><em> n</em>
+</pre></div>
+
+<h4>Definiowanie klas</h4>
+<p>W Pnuts mamy mo&#380;liwo&#347;&#263; tworzenia klas Javy bez jawnego kompilowania
+programu do kodu bajtowego&nbsp;. Skryptowa klasa zwyczajowo powinna
+by&#263; zapisana w pliku o rozszerzeniu&nbsp; '<tt>.pnc</tt>', kt&oacute;ry jest kompilowany i &#322;adowany przez specjalizowany loader klas.
+</p>
+<div class="eg">np.
+<pre>class A {<br>  int field_1 = 0<br>  int method (parametr){<br>    ...<br>  }<br>}<br></pre></div>
+<p>Szczeg&oacute;&#322;owy opis definicji klas zawarty jest w&nbsp; <a href="#classdef">sekcji 4</a>.
+
+<a name="expression"></a>
+</p><h3>Wyra&#380;enia</h3>
+<p>Wyra&#380;enia to najmniejszy element programu w j&#281;zyku&nbsp; Pnuts.
+Kiedy wyra&#380;enie jest ewaluowane zwracany jest wynik jako obiekt.
+</p><p>
+
+<a name="variables"></a>
+</p><h3>Zmienne</h3>
+<p>Wyra&#380;enie b&#281;d&#261;ce identyfikatorem stanowi referencje zmiennej.
+Warto&#347;&#263; referencji jest przypisana do danego identyfikatora. Zmienne
+nie posiadaj&#261; zdefiniowanego typu danych (klasa Object jest typem
+zmiennych).Zmienna powo&#322;ywana jest do &#380;ycia w momencie pierwszego
+przypisania warto&#347;ci do identyfikatora w danej przestrzeni nazw.
+</p><p>
+</p><div class="eg">np.
+<pre>year = 2002<br></pre></div>
+<p></p>
+
+<a name="functions"></a>
+<h3>Funkcje</h3>
+
+<p>Funkcje identyfikowane s&#261; po nazwie, li&#347;cie parametr&oacute;w oraz
+sekwencji wyra&#380;e&#324;.Funkcje same w sobie s&#261; obiektami do kt&oacute;rych
+mo&#380;emy tworzy&#263; referencje czyli przypisywa&#263; do zmiennych.
+</p>
+<p>
+</p><div class="eg">np.
+<pre>function double(n) {<br>    n * 2<br>}<br></pre></div>
+<p></p>
+<p>Funkcje s&#261; identyfikowane po nazwie i li&#347;cie parametr&oacute;w
+formalnych. Grupa funkcji o identycznej nazwie stanowi jedn&#261; instancj&#281;
+identyfikowan&#261; po nazwie.
+Kiedy wywo&#322;ywana jest funkcja grupa jest odpytywana czy istnieje wersja
+odpowiednia dla podanych parametr&oacute;w i gdy zostanie znaleziona
+jest wykonywana.
+</p>
+<p>Funkcje mog&#261; by&#263; zagnie&#380;d&#380;one i mog&#261; posiada&#263; kontekst statyczny.
+</p>
+
+<div class="eg">np.(1)
+<pre>function f(){<br>   x = 0<br>   function set(value) x = value<br>   function get() x<br>   ::set = set<br>   ::get = get<br>}<br><br>f()<br>set(100)<br>get()               ---&gt; 100<br>f()<br>get()               ---&gt; 0<br></pre></div>
+<p>
+</p><div class="eg">np.(2)
+<pre>function inc(x) ++x<br>function abs(x) if (x &lt; 0) -x else x<br><br>function compose (f1, f2) return (function (x) f1(f2(x)))<br>compose(inc, abs)(-100)      ---&gt; 101<br>compose(abs, inc)(-100)      ---&gt; 99<br></pre></div>
+
+<a name="packages"></a>
+<h3>Pakiety</h3>
+
+<p>
+Pakiety stanowi&#261; przestrze&#324; nazw dla zmiennych i funkcji. Ka&#380;da zmienna i funkcja jest przypisana do jakiego&#347; pakietu. 
+Zawsze istnieje pakiet nazywany "pakietem bie&#380;&#261;cym".
+</p>
+
+<p>Funkcje s&#261; wykonywane w pakiecie w kt&oacute;rym zosta&#322;y zdefiniowane.
+</p>
+
+<a name="package_hierarchy"></a>
+<a name="root_package"></a>
+<a name="global_package"></a>
+<h4>Hierarchia pakiet&oacute;w</h4>
+<p>Pakiety mog&#261; posiada&#263; pakiet nadrz&#281;dny. Gdy nast&#281;puje odwo&#322;anie do
+zmiennej interpreter zwraca jej warto&#347;&#263; a jak nie znajdzie stara sie
+przeszukiwa&#263; pakiety nadrz&#281;dne.
+</p><p>Przypisania dzia&#322;aj&#261; tylko w zakresie pakietu nie odwo&#322;uj&#261;c sie
+do pakiet&oacute;w nadrz&#281;dnych (przypisanie zawsze tworzy/zmienia
+zmienna w pakiecie wzgl&#281;dem kt&oacute;rego nast&#261;pi&#322;o przypisanie).
+</p><p>Pakiet nie posiadaj&#261;cy rodzica nazywany jest pakietem
+"g&#322;&oacute;wnym" (root package). Domy&#347;lny pakiet g&#322;&oacute;wny jest
+nazywany pakietem globalnym (<em>gloabl package</em>).
+</p><p>Funkcja <a href="#packaging"><tt>package(name)</tt></a> tworzy
+pakiet kt&oacute;rego rodzicem jest pakiet globalny, jedyny wyj&#261;tek
+stanowi pakiet globalny kt&oacute;ry nie posiada rodzica. Kiedy
+parametrem funkcji&nbsp; <a href="#packaging"><tt>package()</tt></a> jest napis podzielony separatorem&nbsp; "<tt>::</tt>" odpowiednia hierarchia pakiet&oacute;w zostaje utworzona.
+</p>
+
+<a name="context"></a>
+<h3>Konteksty</h3>
+
+<a href="context.html">Context</a> odpowiada ze wewn&#281;trzny stan
+wykonywanych skrypt&oacute;w.
+Kontekst jest tworzony gdy skrypt jest wykonywany i przekazywany do
+tego skryptu. Kiedy &#322;adowany jest inny skrypt tworzony jest klon
+kontekstu jest tworzony do wykonania tego skryptu.
+<p></p>
+
+<a name="modules"></a>
+<h3>Modu&#322;y</h3>
+
+<p>
+<em>Modu&#322;</em> jest zbiorem skrypt&oacute;w wielokrotnego u&#380;ytku kt&oacute;ry mo&#380;na wczyta&#263; za pomoc&#261; wbudowanej funkcji <a href="#use"><tt>use()</tt></a>
+. U&#380;ytkownik mo&#380;e wybra&#263; potrzebne modu&#322;y w czasie wykonania a same
+modu&#322;y zapobiegaj&#261; konfliktom nazw zdefiniowanych w skryptach nazw . </p>
+
+<p>Ka&#380;dy modu&#322; zazwyczaj jest pakowany w pliku JAR kt&oacute;ry mo&#380;e
+zosta&#263; dodany do &#347;cie&#380;ki poszukiwa&#324; CLASSPATH lub zosta&#263; skopiowany do
+katalogu ${PNUTS_HOME}/modules/.
+</p><p>
+<em>Modu&#322;</em> jest implementowany jako rozszerzenie&nbsp; <em>pakietu</em>.  Zale&#380;no&#347;&#263; modu&#322;u i pakietu polega na tym &#380;e eksportowane nazwy z modu&#322;u s&#261; widoczne w pakiecie o danej nazwie. 
+</p><p>
+Dlaczego wi&#281;c modu&#322;y s&#261; u&#380;yteczne? . Aby dowo&#322;a&#263; si&#281; do elementu w
+pakiecie po nazwie nale&#380;y ustawi&#263; ten pakiet jako bie&#380;&#261;cy. Nie jest
+praktyczne ci&#261;g&#322;e zmienianie bie&#380;&#261;cego pakietu aby odwo&#322;a&#263; si&#281; do
+zmiennej czy funkcji z danego pakietu.
+</p><p>Odwo&#322;ania do nazw w modu&#322;ach mog&#261; by&#263; poprzedzone nazw&#261; modu&#322;u a co za tym idzie nie ma znaczenia jaki pakiet jest bie&#380;&#261;cym.
+
+</p><p>
+<b><em>Inicjalizacja skrypt&oacute;w</em></b>
+</p>
+<p>Kiedy wywo&#322;ane zostaje&nbsp; use() &nbsp;odpowiedni skrypt
+inicjalizacyjny pakietu jest wczytywany. Funkcje modu&#322;u musz&#261; by&#263;
+zdefiniowane w czasie gdy nast&#281;puje inicjalizacja.
+</p><p>Nazwa skryptu inicjalizacyjnego jest tworzona przez zamianie&nbsp; "::" ai "." na "/". Przyk&#322;adowo gdy nazwa pakietu to&nbsp; "<tt>a.b.c</tt>", &#322;adowany jest skrypt "<tt>a/b/c/init</tt>".</p>
+<p>
+<b><em>Kt&oacute;re nazwy s&#261; eksportowane</em></b>
+</p><p>Domy&#347;lnie wszystkie nazwane funkcje s&#261; automatycznie eksportowane.
+</p><p>Korzystaj&#261;c z Pnuts API autor modu&#322;u mo&#380;e zdecydowa&#263; kt&oacute;re nazwy b&#281;d&#261; eksportowane.
+</p>
+<b><em>Konflikty nazw</em></b>
+<p></p>
+<p>Kiedy jest rejestrowana nazwa z wi&#281;cej ni&#380; jednego modu&#322;u aktualna jest referencja do ostatniej warto&#347;ci.
+</p>
+<b><em>Modu&#322;y i konteksty</em></b>
+
+<p>
+<a href="context.html">Kontekst</a> mo&#380;e zarz&#261;dza&#263; list&#261; zarejestrowanych modu&#322;&oacute;w.
+</p>
+<p>Lista modu&#322;&oacute;w jest wsp&oacute;&#322;dzielona przez klony kontekstu, skrypty &#322;adowane przez funkcje&nbsp;
+load() posiadaj&#261; t&#261; sam&#261; list&#281; modu&#322;&oacute;w co wywo&#322;uj&#261;cy. Modu&#322;y w ramach kontekstu widz&#261; t&#261; sam&#261; list&#281; modu&#322;&oacute;w.
+</p>
+<p>
+<img src="../doc/images/modulelist.png">
+</p>
+
+<a name="branch_module_list"></a>&nbsp;<b><em>Lista modu&#322;&oacute;w</em></b>
+<p>Kiedy wiele modu&#322;&oacute;w definiuje funkcje o takich samych
+nazwach widziana jest funkcja zarejestrowana przez ostatni modu&#322; a
+reszta zostaje przes&#322;oni&#281;ta. Cz&#281;sto jest to niepo&#380;&#261;dany efekt
+&nbsp;jednak zawsze mo&#380;emy odwo&#322;a&#263; si&#281; do funkcji z danego modu&#322;u
+poprzedzaj&#261;c jej nazw&#281; nazw&#261; modu&#322;u. </p><p>Aby zapobiega&#263; temu problemowi zalecane jest resetowanie listy
+modu&#322;&oacute;w przed u&#380;yciem nowego modu&#322;u gdy poprzednie nie s&#261; nam
+potrzebne za pomoc&#261; funkcji <a href="lang.html#use">use(null)</a>, a sam modu&#322; mo&#380;e sam wczyta&#263; potrzebne mu modu&#322;y do pracy.
+</p>
+<img src="../doc/images/modulelist2.png">
+<p>Kiedy tworzona jest lista modu&#322;&oacute;w jest tworzona dodawane
+modu&#322;y s&#261; rejestrowane do nowej listy modu&#322;&oacute;w w kontek&#347;cie (nie
+s&#261; dodawane do oryginalnej listy modu&#322;&oacute;w).
+</p>
+<p>Dla przyk&#322;adu: je&#380;eli modu&#322; &nbsp;A u&#380;ywa modu&#322;u B przed u&#380;yciem
+modu&#322;u C wtedy kontekst modu&#322;u u&#380;ywaj&#261;cego modu&#322;u A mo&#380;e u&#380;ywa&#263;
+r&oacute;wnie&#380; modu&#322;u&nbsp;B. Po zresetowaniu listy modu&#322;&oacute;w
+informacja o module B jest tracona i po instrukcji use(null) ...&nbsp;
+use(C) modu&#322; B przestaje by&#263; widoczny i u&#380;ytkownik modu&#322;u A widzi
+jedynie modu&#322; C. Mo&#380;e by&#263; to u&#380;yteczne gdy modu&#322; wewn&#281;trznie potrzebuje
+u&#380;y&#263; jakiego&#347; modu&#322;u a nie chcemy aby by&#322; widoczny dla
+wywo&#322;uj&#261;cego.&nbsp;
+</p><p>
+
+</p><pre class="eg">use(B)<br>use(null)<br>use(C)<br></pre>
+
+<div>Inicjalizacja modu&#322;u A</div>
+
+
+<p>
+<b><em>Modu&#322;y i wywo&#322;ywanie funkcji</em></b>
+</p>
+<p><font class="translate">
+Funkcja&nbsp; jest wykonywana z&nbsp;modu&#322;u&nbsp; w kt&oacute;ry by&#322; w u&#380;yciu kiedy funkcja by&#322;a okre&#347;lana
+</font>.
+</p>
+<p>Za&#322;&oacute;&#380;my &#380;e nast&#281;puj&#261;ce dwa skrypty s&#261; wczytane.
+</p>
+<div class="eg">m1.pnut
+<pre>use("pnuts.lib")<br>function mymap() map()<br></pre>
+</div>
+
+<div class="eg">m2.pnut
+<pre>use("functional")<br>map        ---&gt; function map(func, list) // w "functional"<br>mymap()    ---&gt; {}                     // map() w "pnuts.lib"<br></pre>
+</div>
+
+<p>Oba modu&#322;y <tt>"pnuts.lib"</tt> and <tt>"functional"</tt> definiuj&#261; funkcje&nbsp; <tt>map()</tt>.<font class="translate">
+Po za&#322;adowaniu skryptu drugiego wyeksportowana nazwa map() z modu&#322;y
+"pnuts.lib" przestaje by&#263; widoczna i wida&#263; jedynie map() z modu&#322;u
+"functional" jednak w module m1 zdefiniowano funkcje mymap() kt&oacute;ra
+&nbsp;wywo&#322;uje map() z &nbsp;modu&#322;u "pnuts.lib". Zamiast tworzenia
+funkcji mymap() wywo&#322;uj&#261;cej map mo&#380;na zdefiniowa&#263; zmienn&#261; mymap() do
+kt&oacute;rej przypiszemy map() a nast&#281;pnie j&#261; wyeksportowa&#263;.
+</font></p>
+
+
+<a name="scope"></a>
+<h3>Zasady widoczno&#347;ci</h3>
+<h4>Definicja zakresu&nbsp; widoczno&#347;ci klas</h4>
+<dl>
+  <dt>Zakres statyczny
+  </dt><dd>
+  <dl>
+    <dt>Lokalny zakres
+    </dt><dt>Zakres najwy&#380;szego poziomu
+  </dt></dl>
+  </dd><dt>Nie statyczny zakres&nbsp;
+  </dt><dd>
+  <dl>
+    <dt>Bie&#380;&#261;cy pakiet
+    </dt><dt>Funkcje wbudowane
+    </dt><dt>Funkcje w modu&#322;ach
+    </dt><dt>Importowane klasy
+    </dt><dt>Hierarchia pakiet&oacute;w
+  </dt></dl>
+</dd></dl>
+
+<h4>Zakres lokalny</h4>
+
+<em>Lokalny zakres (Local scope)</em> jest statycznym zakresem dla
+zmiennych kt&oacute;re s&#261; definiowane z funkcjach. Lokalne zmienne s&#261;
+deklarowane przez podstawienie dowolnej warto&#347;ci do zmiennej i s&#261;
+widoczne tylko w funkcji w kt&oacute;rej zosta&#322;y zdefiniowane.
+
+
+<div class="eg">np.
+<pre>a = 1<br>function t1(){<br>  a = 0<br>  println(a)<br>}<br>t1()  // 0<br>println(a) // 1<br></pre></div>
+<p>Lokalne zmienne deklarowane w wyra&#380;eniach warunkowych s&#261; inicjalizowane wartoscia&nbsp; <tt>null</tt> gdy blok warunkowy nie zostanie wykonany.
+</p>
+
+<div class="eg">np.
+<pre>function t1(){<br>  if (false){<br>      a = 0<br>  }<br>  println(a)<br>}<br><br>function t2(){<br>  while (false){<br>      a = 0<br>  }<br>  println(a)<br>}<br><br>t1()    // null<br>t2()    // null<br></pre></div>
+
+<p>Je&#380;eli funkcje s&#261; zagnie&#380;d&#380;one mo&#380;na u&#380;ywa&#263; zmiennych z funkcji zewn&#281;trznych.</p>
+
+<div class="eg">np.
+<pre>a = 1<br>function t1(){<br>  a = 0<br>  function t2(){<br>    a = 4<br>  }<br>  t2()<br>  println(a + " should be 4")<br>}<br></pre></div>
+
+<p>Zakres zmiennych b&#281;d&#261;cymi licznikami p&#281;tli s&#261; lokalne dla cia&#322;a p&#281;tli podobnie jak w j&#281;zyku Java.</p>
+
+<div class="eg">np.
+<pre>function t3 (){<br>  a = 2<br>  for (a : 0..9){<br>    println(a)<br>  }<br>  println(a + " should be 2")<br>}<br></pre>
+</div>
+
+
+<h4><font class="translate">
+Globalny Zakres widoczno&#347;ci </font>&nbsp;</h4>
+
+<a name="resolution"></a><em>Globalny zakres widoczno&#347;ci(Top level scope)</em>
+jest zakresem w kt&oacute;rym deklarowane s&#261; funkcje. Gdy nast&#281;puj
+odwo&#322;anie do zmiennej kt&oacute;rej nie ma w zakresie lokalnym jest ona
+poszukiwana w zakresie wy&#380;szego poziomu (nie dotyczy przypisania
+kt&oacute;re zawsze jest wykonywane w bie&#380;&#261;cym zakresie)
+<p></p>
+<p>Poszukiwanie nazwy w zakresie Globalnym okre&#347;la kolejno&#347;&#263;.</p>
+<ol>
+  <li>Bierz&#261;cy pakiet
+  </li><li>Funkcje z modu&#322;&oacute;w i funkcje wbudowane
+  </li><li>Importowane klasy
+  </li><li>Hierarchia pakiet&oacute;w
+</li></ol>
+<p>Kiedy definiowana jest zmienna w zakresie Globalnym zmienna definiowana jest w bie&#380;&#261;cym pakiecie.</p>
+<p>Kiedy nast&#281;puje odwo&#322;anie do zmiennej z zakresu globalnego w
+zakresie lokalnym nie jest zagwarantowane &#380;e warto&#347;&#263; b&#281;dzie odczytywana
+ka&#380;dorazowo dla ka&#380;dej referencji&nbsp;.Niekt&oacute;re implementacje
+mog&#281; odczytywa&#263; warto&#347;&#263; z referencji globalnej jednorazowo przy wej&#347;ciu
+do zakresu lokalnego, inne implementacje mog&#261; odczytywa&#263; warto&#347;&#263; przy
+ka&#380;dym odwo&#322;aniu do zmiennej z zakresu globalnego. Z tego powodu nie
+jest zalecane pisanie skrypt&oacute;w zale&#380;nych od tego zachowania.
+</p>
+<p>Przyk&#322;adowo: funkcja wywo&#322;uje <tt>import()</tt> lokalnie co mo&#380;e spowodowa&#263; &#380;e nazwa&nbsp; '<tt>HashMap</tt>'
+&nbsp;mo&#380;e nie zosta&#263; znaleziona. Taka posta&#263; importu nie jest
+zalecana, importowanie powinno by&#263; realizowane podobnie jak w j&#281;zyku
+Java w zakresie globalnym.
+</p>
+
+<pre class="eg">function foo(){<br>  import("java.util.HashMap")<br>  HashMap()<br>}<br></pre>
+
+
+<a name="lexicalElements"></a>
+<h2>2. Elementy Leksykalne</h2>
+
+<a name="keywords"></a>
+<h3>S&#322;owa kluczowe j&#281;zyka</h3>
+
+<table width="400">
+<tbody><tr align="center">
+<td><tt>function</tt></td>
+<td><tt>if</tt></td>
+<td><tt>else</tt></td>
+<td><tt>while</tt></td>
+<td><tt>do</tt></td>
+<td><tt>for</tt></td>
+<td><tt>foreach</tt></td>
+<td><tt>switch</tt></td>
+<td><tt>case</tt></td>
+<td><tt>default</tt></td>
+<td><tt>break</tt></td>
+<td><tt>new</tt></td>
+<td><tt>yield</tt></td>
+</tr>
+<tr align="center">
+<td><tt>null</tt></td>
+<td><tt>try</tt></td>
+<td><tt>catch</tt></td>
+<td><tt>finally</tt></td>
+<td><tt>continue</tt></td>
+<td><tt>return</tt></td>
+<td><tt>true</tt></td>
+<td><tt>false</tt></td>
+<td><tt>instanceof</tt></td>
+<td><tt>class</tt></td>
+<td><tt>import</tt></td>
+<td><tt>macro</tt></td>
+<td><tt>throw</tt></td>
+<td><tt>static</tt></td>
+</tr>
+</tbody></table>
+
+<a name="comments"></a>
+<h3>Komentarze</h3>Komentarze s&#261; analogiczne do tych znanych w Javie a wiec tekst od&nbsp; <tt>//</tt> &nbsp;do ko&#324;ca linii jest ignorowany podobnie jak tekst zawarty mi&#281;dzy&nbsp;<tt>/*</tt> i <tt>*/</tt>.
+
+<a name="character"></a>
+<h3>Litera&#322; znakowy</h3>
+
+<p>Znak jest wyra&#380;eniem reprezentowanym przez obiekt klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Character.html"><tt>java.lang.Character</tt></a>&nbsp;.
+Zasady u&#380;ycia s&#261; wi&#281;c takie same jak w j&#281;zyku Java. 
+</p>
+<div class="eg">np.
+<pre>'A'<br></pre>
+</div>
+
+Nast&#281;puj&#261;ce znaki s&#261; znakami specjalnymi.
+
+<pre class="eg">'\''       ---&gt; '<br>'\n'       ---&gt; LF<br>'\t'       ---&gt; TAB<br>'\r'       ---&gt; CR<br>'\f'       ---&gt; ^L<br>'\b'       ---&gt; ^H<br>'\\'       ---&gt; \<br>'\0'       ---&gt; NUL<br></pre>Jako znak mo&#380;na stosowa&#263; znaki ucieczki definiuj&#261;ce znaki jako kody Unicode.
+
+<pre class="eg">'\u0041'   ---&gt; 'A'<br></pre>
+
+<a name="string"></a>
+<h3>Litera&#322; tekstowy</h3>
+<p>Sekwencja znak&oacute;w zamkni&#281;tych mi&#281;dzy podw&oacute;jnymi
+cudzys&#322;owami " definiuje litera&#322; tekstowy reprezentowany przez
+obiekt klasy&nbsp;&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>&nbsp;co oznacza &#380;e u&#380;ycie obiektu jest analogiczne do tego znanego w Javie.</p>
+<pre class="eg">&gt; "foo"<br>"foo"<br><br>&gt; "\b"<br>"^H"<br></pre>Podobnie jak w znakach w napisach mo&#380;na u&#380;ywa&#263; kod&oacute;w Unicode.
+
+<pre class="eg">"\u0041B"     ---&gt; "AB"<br></pre>
+
+<a name="backquote"></a>
+<p>Znaki zawarte miedzy znakami ` (backquote) pozwala na uproszczenie zapisu napis&oacute;w zawieraj&#261;cych znaki specjalne.
+</p>
+
+<pre class="eg">`x = "A"`     ---&gt; "x = \"A\""<br>`ABC\`        ---&gt; "ABC\\"<br></pre>
+
+
+<a name="integer"></a>
+<h3>Liczby ca&#322;kowite</h3>
+
+<p>Liczby ca&#322;kowite nie s&#261; ograniczone do zakresu typu&nbsp; '<tt>long</tt>'&nbsp;.
+Typ danych zawieraj&#261;cy liczby ca&#322;kowite jest automatycznie dobierany w
+zale&#380;no&#347;ci od warto&#347;ci. Je&#380;eli warto&#347;&#263; mie&#347;ci si&#281; w zakresie
+mi&#281;dzy&nbsp; Integer.MAX_VALUE i Integer.MIN_VALUE typem jest <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Integer.html"><tt>java.lang.Integer</tt></a>. Kiedy warto&#347;&#263; mie&#347;ci si&#281; w zakresie Long.MAX_VALUE i <tt>Long.MIN_VALUE</tt>, typem jest <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Long.html"><tt>java.lang.Long</tt></a>. W przeciwnym przypadku u&#380;yty zostanie obiekt klasy <a href="http://java.sun.com/j2se/1.4/docs/api/java/math/BigInteger.html"><tt>java.math.BigInteger</tt></a>&nbsp;.
+</p>
+
+<p>W &#347;rodowisku&nbsp; <a href="http://java.sun.com/products/personaljava/">Personal Java</a>
+kt&oacute;re nie posiada pakietu java.math liczby przekraczaj&#261;ce zakres <em>long</em> s&#261; reprezentowane przez obiekty klasy&nbsp;&nbsp;<em>Double</em>.
+</p>
+
+<h4>Warto&#347;ci dziesi&#281;tne</h4>
+
+<blockquote>
+("0" | ["1"-"9"] (["0"-"9"])*)
+</blockquote>
+
+<div class="eg">np. <pre>123<br>12345678901234567890<br>123L<br></pre></div>
+
+<h4>Warto&#347;ci szesnastkowe</h4>
+
+<blockquote>
+<div><code>"#" (["0"-"9","a"-"f","A"-"F"])+</code></div>
+<div><code>"0" ("X"|"x") (["0"-"9","a"-"f","A"-"F"])+</code></div>
+</blockquote>
+
+<div class="eg">np. <pre>#ffff<br>#ffff0000<br>0xff<br></pre></div>
+
+<p>Kiedy warto&#347;&#263; jest w zakresie Byte.MAX_VALUE i Byte.MIN_VALUE
+dopuszczalny jest zapis w stylu "#ff" kt&oacute;ry reprezentuje
+warto&#347;ci typu&nbsp; Byte, zapis "0xff" powo&#322;uje do &#380;ycia obiekty typu
+Integer.
+</p>
+
+<h4>Warto&#347;ci &oacute;semkowe</h4>
+
+<div class="eg">np. <pre>0777<br>0177L<br></pre></div>
+
+
+<a name="floating"></a>
+<h3>Liczby rzeczywiste zmiennoprzecinkowe</h3>
+
+<p>Liczby rzeczywiste s&#261; reprezentowane przez klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Double.html"><tt>java.lang.Double</tt></a> lub <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Float.html"><tt>java.lang.Float</tt></a>.
+</p>
+
+<div class="eg">np. <pre>123F       ---&gt; new Float(123.0)<br>123f       ---&gt; new Float(123.0)<br>123D       ---&gt; new Double(123.0)<br>123d       ---&gt; new Double(123.0)<br>123.0      ---&gt; new Double(123.0)<br>123.0f     ---&gt; new Float(123.0)<br>1.23E-4    ---&gt; new Double(1.23E-4)<br>1.23E-4f   ---&gt; new Float(1.23E-4)<br></pre></div>
+
+<a name="decimal"></a>
+<h3>Liczby rzeczywiste sta&#322;oprzecinkowe Multi-precision Decimal Number</h3>
+
+<p>Liczby sta&#322;oprzecinkowe reprezentowane s&#261; przez obiekty klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/math/BigDecimal.html"><tt>java.math.BigDecimal</tt></a>.
+</p>
+
+<div class="eg">np. <pre>123.0B       ---&gt; new BigDecimal("123.0")<br>123.0E-4B    ---&gt; new BigDecimal("0.00123")<br><br>1.2 * 3      ---&gt; 3.5999999999999996<br>1.2B * 3     ---&gt; 3.6<br></pre></div>
+
+<p>
+W &#347;rodowisku&nbsp; <a href="http://java.sun.com/products/personaljava/">Personal Java</a>
+przyrostek&nbsp; 'B' jest ignorowany przez brak pakietu java.math.
+</p>
+
+<a name="boolean"></a>
+<h3>Warto&#347;ci logiczne</h3>
+
+Warto&#347;ci logiczne reprezentowane s&#261; przez obiekty klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Boolean.html"><tt>java.lang.Boolean</tt></a>.
+
+<blockquote>
+<dl>
+  <dt><tt>true</tt></dt>
+  <dt><tt>false</tt></dt>
+</dl>
+</blockquote>
+
+<a name="null"></a>
+<h3>Litera&#322; Null</h3>
+<p>
+<tt>null</tt> reprezentuje litera&#322; null j&#281;zyka Java
+</p>
+
+<a name="classliteral"></a>
+<h3>Litera&#322; klasowy</h3>
+<p>Litera&#322; Class reprezentuje klas&#281; j&#281;zyka Java jednak sam w sobie nie posiada warto&#347;ci. Jest u&#380;ywany w wyra&#380;eniu&nbsp; <a href="#new">new</a> oraz jako cz&#281;&#347;&#263; sk&#322;adni&nbsp; <a href="#try">try/catch/finally statement</a>.
+</p>
+<pre class="eg">java.util.Integer<br></pre>
+
+<a name="typeLiteral"></a>
+<h3>Litera&#322; typu</h3>
+<p>Litera&#322; typu dzia&#322;a tak jak w j&#281;zyku Java jednak nie posiada warto&#347;ci.
+Jest u&#380;ywany w wyra&#380;eniach rzutowania&nbsp; <a href="#cast">cast expression</a> i instancji&nbsp; <a href="#instanceof">instanceof expression</a>.
+Litera&#322; typu mo&#380;e by&#263; tablic&#261; typ&oacute;w, typem podstawowym oraz litera&#322;em klasowym.
+</p>
+<pre class="eg">int<br>int[]<br>java.util.Integer<br></pre>
+
+<a name="class"></a>
+<h3>Klasa Class</h3>
+
+<div class="box">
+<div class="synopsis">class <em>class_literal</em></div>
+<div class="synopsis">class ( "<em>class_literal</em>" )</div>
+</div>
+
+<p>Warto&#347;&#263; referencji class jest typu&nbsp;<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> tak jak w Javie, 
+</p>
+
+<pre class="eg">class java.lang.Object      ---&gt; java.lang.Object class<br></pre>
+
+
+<p>Nazwy klas wewn&#281;trznych s&#261; oddzielane znakiem '$' jak w Javie.
+</p>
+
+<pre class="eg">class Toplevel$Inner       ---&gt; Toplevel.Inner class<br></pre>
+
+<p>Wyra&#380;enie <a href="#import"><tt>import</tt></a> upraszcza import klas.
+</p>
+<p>W&nbsp;JDK1.1 klasy s&#261; &#322;adowane przez klas loadera kt&oacute;ry
+&#322;adowa&#322; same &#347;rodowisko Pnuts. W J2SE/J2EE u&#380;ywany jest systemowy loader
+klas chyba ze zostanie ustawiony inny loader przez metod&#281; <a href="../apidoc/pnuts/lang/Context.html#setClassLoader%28java.lang.ClassLoader,%20pnuts.lang.Context%29"><tt>Context.setClassLoader()</tt></a> wtedy on staje si&#281; domy&#347;lnym.
+</p>
+
+<a name="expressions"></a>
+<h2>3. Wyra&#380;enia</h2>
+
+<a name="arithmetic"></a>
+<h3>Operatory arytmetyczne</h3>
+
+<p>Semantyka nast&#281;puj&#261;cych operator&oacute;w jest bazowana na tej z j&#281;zyka Java.
+</p>
+
+<table width="300">
+<tbody><tr align="center">
+<td><tt>+</tt></td>
+<td><tt>-</tt></td>
+<td><tt>*</tt></td>
+<td><tt>/</tt></td>
+<td><tt>%</tt></td>
+</tr>
+</tbody></table>
+
+<h4>Konwersje typ&oacute;w</h4>
+
+<p>Tabele mo&#380;liwych konwersji mi&#281;dzy typami przy zastosowaniu operator&oacute;w arytmetycznych.
+</p>
+
+<table class="bg3" border="0" cellpadding="3" cellspacing="1" width="95%">
+<tbody><tr class="wb">
+ <td></td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Character</td>
+ <td>Short</td>
+ <td>Byte</td>
+</tr>
+<tr class="wb">
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+</tr>
+<tr class="wb">
+ <td>BigInteger</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+ <td>BigInteger</td>
+</tr>
+<tr class="wb">
+ <td>Double</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+ <td>Double</td>
+</tr>
+<tr class="wb">
+ <td>Float</td>
+ <td>BigDecimal</td>
+ <td>BigDecimal</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+ <td>Float</td>
+</tr>
+<tr class="wb">
+ <td>Long</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Long</td>
+ <td>Long</td>
+ <td>Long</td>
+ <td>Long</td>
+</tr>
+<tr class="wb">
+ <td>Integer</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+<tr class="wb">
+ <td>Character</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+<tr class="wb">
+ <td>Short</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+<tr class="wb">
+ <td>Byte</td>
+ <td>BigDecimal</td>
+ <td>BigInteger</td>
+ <td>Double</td>
+ <td>Float</td>
+ <td>Long</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+ <td>Integer</td>
+</tr>
+</tbody></table>
+
+<h4>Operator Pre&nbsp; Inkrementacji/Dekrementacji</h4>
+
+
+<div class="box">
+<div class="synopsis"><tt>++</tt> <em>expression</em></div>
+<div class="synopsis"><tt>--</tt> <em>expression</em></div>
+</div>
+
+<div class="eg">np.
+<pre>a = 0<br>++a    ---&gt; 1<br>a      ---&gt; 1<br></pre>
+</div>
+
+<h4>Operator Post Inkrementacji/Decrementacji</h4>
+
+<div class="box">
+<div class="synopsis"><em>expression</em> <tt>++</tt> </div>
+<div class="synopsis"><em>expression</em> <tt>--</tt> </div>
+</div>
+
+<div class="eg">np.
+<pre>a = 0<br>a++       ---&gt; 0<br>a         ---&gt; 1<br>a = a++<br>a         ---&gt; 1<br></pre>
+</div>
+
+<a name="comparison"></a>
+<h3>Operatory por&oacute;wnuj&#261;ce</h3>
+
+<table width="300">
+<tbody><tr align="center">
+<td><tt>==</tt></td>
+<td><tt>!=</tt></td>
+<td><tt>&lt;</tt></td>
+<td><tt>&lt;=</tt></td>
+<td><tt>&gt;</tt></td>
+<td><tt>&gt;=</tt></td>
+</tr>
+</tbody></table>
+
+<p>Je&#380;eli oba parametry s&#261; obiektami klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> nast&#281;puj&#261; por&oacute;wnanie numeryczne.
+</p>
+<pre class="eg">1 == 1.0        ---&gt; true<br></pre>
+
+<p>Je&#380;eli jeden z parametr&oacute;w jest klasy&nbsp; <a href="../apidoc/pnuts/lang/Numeric.html">Numeric</a>&nbsp; a drugi jest klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> lub <a href="../apidoc/pnuts/lang/Numeric.html">Numeric</a> por&oacute;wnanie nast&#281;puj&#281; za pomoc&#261; metody&nbsp;<tt>Numeric.compareTo()</tt>.
+</p>
+<p>Je&#380;eli oba por&oacute;wnywane obiekty s&#261; klasy String wynikiem por&oacute;wnania jest wynik metody&nbsp;&nbsp; <tt>String.compareTo()</tt>.
+</p>
+
+<div class="eg">np.
+<pre>"A" &lt; "AB"         ---&gt; true<br></pre></div>
+
+<p>
+Je&#380;eli oba parametry s&#261; tablicami nast&#281;puj&#281; por&oacute;wnanie wszystkich
+element&oacute;w tablic na odpowiadaj&#261;cych sobie indeksach za pomoc&#261;
+metody&nbsp; <tt>Object.equals(Object)</tt>. Tablice r&oacute;&#380;nych d&#322;ugo&#347;ci s&#261; zawsze r&oacute;&#380;ne a jedynie dopuszczalnymi operatorami s&#261;&nbsp; == i !=.
+</p>
+
+<pre class="eg">[1,[2,3]] == [1,[2,3]]    ---&gt; true<br>[1,2,3] == [1,2]          ---&gt; false<br></pre>
+
+<p>Je&#380;eli jeden z parametr&oacute;w jest obiektem implementuj&#261;cym interfejs&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Comparable.html"><tt>java.lang.Comparable</tt></a> metoda&nbsp; <tt>Comparable.compareTo()</tt> tego obiektu jest u&#380;yta do por&oacute;wnania.
+</p>
+
+<p>W przeciwnym przypadku por&oacute;wnanie oparte jest na metodzie&nbsp; <tt>Object.equals(<span style="font-family: Verdata,Geneva,Arial,Helvetica,sans-serif;">)</span></tt> i w tym przypadku jedynie dopuszcza si&#281; operatory&nbsp; == i !=.
+</p>
+<div class="eg">np.
+<pre>1 == 1                ---&gt; true<br>Object() == Object()  ---&gt; false    <br></pre></div>
+
+<a name="logical"></a>
+<h3>Operatory logiczne</h3>Nast&#281;puj&#261;ce operatory s&#261; dost&#281;pne dla obiekt&oacute;w klasy&nbsp; Boolean.
+
+<p>
+<table width="200">
+<tbody><tr align="center">
+<td><tt>&amp;&amp;</tt></td>
+<td><tt>||</tt></td>
+<td><tt>!</tt></td>
+</tr>
+</tbody></table>
+</p><div class="eg">np.
+<pre>!(1 == 2)            ---&gt; true<br>1 == 1 &amp;&amp; 2 == 2     ---&gt; true<br>1 == 1 || 1 == 2     ---&gt; true<br></pre></div>
+
+<p>Je&#380;eli operandy nie s&#261; warto&#347;ciami logicznymi s&#261; one konwertowane do warto&#347;ci logicznych wg&nbsp; <a href="#conversion_to_boolean">zasady konwersji</a>.
+</p>
+
+<a name="bitwise"></a>
+<h3>Operatory bitowe</h3>
+
+Operatory dost&#281;pne dla obiekt&oacute;w numerycznych&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a>&nbsp;.
+
+<p>
+<table width="300">
+<tbody><tr align="center">
+<td><tt>&amp;</tt></td>
+<td><tt>|</tt></td>
+<td><tt>~</tt></td>
+<td><tt>^</tt></td>
+<td><tt>&gt;&gt;</tt></td>
+<td><tt>&lt;&lt;</tt></td>
+<td><tt>&lt;&lt;&lt;</tt></td>
+</tr>
+</tbody></table>
+</p><div class="eg">np.
+<pre>1 &lt;&lt; 100    ---&gt; 1267650600228229401496703205376<br></pre>
+</div>
+
+<a name="ternary"></a>
+<h3>Operator warunkowy</h3>
+<div class="box">
+<div class="synopsis"><em><span style="font-family: monospace;">warunek</span></em><tt> ? </tt><em>wyra&#380;enie</em> :&nbsp;<em>wyra&#380;enie</em></div>
+</div>
+
+<div class="eg">np.
+<pre>pnuts_version.startsWith("1.1") ? 1 : 0<br></pre>
+</div>
+
+<p>Je&#380;eli warto&#347;&#263;&nbsp; <em>warunku</em> nie jest warto&#347;ci&#261; logiczn&#261; jest ona konwertowana za pomoc&#261; zasad <a href="#conversion_to_boolean">zasady konwersji</a>.
+</p>
+
+<a name="assignment"></a>
+<h3>Przypisania</h3>
+
+<div class="box">
+<div class="synopsis"><em><span style="font-family: monospace;">identyfikator</span></em><tt> =&nbsp;</tt><em>wyra&#380;enie</em></div>
+<div class="synopsis"><em>wyra&#380;enie</em><tt>&nbsp;.&nbsp;</tt><em><span style="font-family: monospace;">identyfikator</span></em><tt> =&nbsp;</tt><em>wyra&#380;enie</em></div>
+<div class="synopsis"><em>wyra&#380;enie</em><tt>&nbsp;::&nbsp;</tt><em><span style="font-family: monospace;">identyfikator</span></em><tt> =&nbsp;</tt><em>wyra&#380;enie</em></div>
+<div class="synopsis"><em>wyra&#380;enie</em><tt>[&nbsp;</tt><em>wyra&#380;enie</em><tt> ] =&nbsp;</tt><em>wyra&#380;enie</em></div>
+</div>
+
+
+<h4>Skr&oacute;cone operatory</h4>
+
+<p>
+<table width="400">
+<tbody><tr align="center">
+<td><tt>*=</tt></td>
+<td><tt>/=</tt></td>
+<td><tt>+=</tt></td>
+<td><tt>-=</tt></td>
+<td><tt>%=</tt></td>
+<td><tt>&amp;=</tt></td>
+</tr>
+<tr align="center">
+<td><tt>|=</tt></td>
+<td><tt>~=</tt></td>
+<td><tt>^=</tt></td>
+<td><tt>&gt;&gt;=</tt></td>
+<td><tt>&lt;&lt;=</tt></td>
+<td><tt>&lt;&lt;&lt;=</tt></td>
+</tr>
+</tbody></table>
+</p><p>
+Te operatory maj&#261; zastosowanie dla obiekt&oacute;w pochodnych od&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a>&nbsp;.
+</p>
+
+
+<a name="parallel_assign"></a>
+<h4>Przypisania wielokrotne</h4>
+
+<div class="box">
+<div class="synopsis"><em>identyfikator1</em> ,&nbsp;<em>identyfikator</em><em>2</em> , ... =&nbsp;<span style="font-style: italic;">wyra&#380;enie</span><em></em></div>
+</div>
+<p>Jest odpowiednikiem pseudo kodu.
+</p><pre class="eg"><em>identyfikator1</em> = try {<em><span style="font-family: monospace;">wyra&#380;enie</span></em>[0]} catch (IndexOutOfBoundsException e){}<br><em>identyfikator</em><em>2</em> = try {<em><span style="font-family: monospace;">wyra&#380;enie</span></em>[1]} catch (IndexOutOfBoundsException e){}<br>...<br></pre>
+
+
+<a name="array"></a>
+<h3>Tablice</h3>
+
+<h4>Wyra&#380;enie tablicowe</h4>
+
+
+<div class="box">
+<div class="synopsis">[ <em>wyra&#380;enie</em> , ... ]</div>
+</div>
+
+<div class="eg">np.
+<pre>[1, 2, 3]<br></pre>
+</div>Elementy tablicy mog&#261; mie&#263; r&oacute;&#380;ne typy (podobnie jak listy w Javie).
+
+<pre class="eg">{"one", 1, '\u3042', null}<br></pre>
+
+<h4>Tablice wielowymiarowe</h4>
+<pre class="eg"> {1, {2, {"yes", "no"}, null}}  ---&gt; new Object[]{<br>                                          new Integer(1),<br>                                          new Object[]{<br>                                            new Integer(2),<br>                                            new Object[]{<br>                                              "yes",<br>                                              "no"<br>                                            },<br>                                            null<br>                                          }<br>                                        }<br></pre>
+
+<a name="arrayType"></a>
+<h4>Typ tablicowy</h4>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> ( [  ] )+</div>
+</div>
+
+<div class="eg">np.<pre>type1 = class java.lang.Object[]  ---&gt; java.lang.Object[] class<br>type2 = int[][]                   ---&gt; int[][] type<br></pre></div>
+
+<a name="arrayInstance"></a>
+<h4>Instancja tablicy</h4>
+
+<div class="box">
+<div class="synopsis"><em>class_object</em> ( [ <em>integer</em> ] )+</div>
+<div class="synopsis"><tt> new </tt><em>class_literal</em> ( [ <em>integer</em>  ] )+</div>
+</div>
+
+<div class="eg">np.<pre>type = class java.lang.Object<br>array1 = type[1]        ---&gt; [null]    // new Object[1]<br>array2 = int[3][2]      ---&gt; [[0, 0], [0, 0], [0, 0]]<br>array3 = new int[3][2]   //  jak wy&#380;ej<br></pre></div>
+
+<h4>Wielko&#347;&#263; tablicy&nbsp;</h4>Obiekty tablicowe jak w Javie posiadaj&#261; pole&nbsp; <tt>length</tt> zawieraj&#261;ce d&#322;ugo&#347;&#263; danej tablicy.
+
+
+<pre class="eg">[1, 2, 3].length      ---&gt; 3<br></pre>
+
+<a name="list"></a>
+<h4>Listy</h4>
+<div class="box">
+<div class="synopsis">{ wyra&#380;enie , ... }</div>
+</div>
+<div class="eg">np.
+<pre>{1, 2, 3}<br></pre></div>
+
+<a name="arrayIndex"></a>
+<h4>Odwo&#322;ania do tablic</h4>
+
+<div class="box">
+<div class="synopsis"><em>tablica</em> [ <em>indeks</em> ]</div>
+</div>
+
+<div class="eg">np.
+<pre>a = [1, 2, 3]<br>a[0]      ---&gt; 1<br>a[0] = 10<br>a[0]      ---&gt; 10<br></pre></div>
+
+<p>Elementy tablic s&#261; modyfikowalne.
+</p>
+<div class="eg">np.
+<pre>a = [1, 2, 3]<br>a[0] = 100<br>a       ---&gt; [100, 2, 3]<br></pre></div>
+
+<p>Je&#380;eli <em>index</em> &nbsp;jest warto&#347;ci&#261; ujemn&#261;&nbsp; <em>idx</em> a d&#322;ugo&#347;ci&#261; tablicy jest&nbsp;&nbsp;<em>len</em>, wtedy zapis 
+<tt>a[</tt><em>idx</em><tt>]</tt> jest interpretowany jako&nbsp; <tt>a[</tt><em>idx</em><tt> + </tt><em>len</em><tt>]</tt>.</p><p>(osoby
+znaj&#261;ce np. j&#281;zyk Python znaj&#261; od dawna taka form&#281; indeksowania list
+kt&oacute;ra jest bardzo wygodna, gdy&#380; zamiast pisa&#263; a[a.length-1]
+&nbsp;mo&#380;na zapisa&#263; a[-1])
+
+</p><div class="eg">np.
+<pre>a = [1, 2, 3]<br>a[-1] =&gt; 3<br>a[-2] =&gt; 2<br>a[-3] =&gt; 1<br>a[-4] =&gt; error<br></pre></div>
+<p>Na platformie&nbsp; Java2 tablice mog&#261; by&#263; r&oacute;wnie&#380; obiektami klasy&nbsp; <code>java.util.List</code>.
+
+
+</p><h4>Wycinki tablic</h4>
+
+<div class="box">
+<div class="synopsis"><em>tablica</em>[ <em>indeks_startowy</em> ..]</div>
+<div class="synopsis"><em>tablica</em>[&nbsp;<em>indeks_startowy</em> ..&nbsp;<em>indeks_ko&#324;cowy</em> ]</div>
+</div>
+
+<p>Operacja ta zwraca wycinek tablicy od indeksu&nbsp;<em>indeks_startowy do </em>&nbsp;<em>indeks_ko&#324;cowy&nbsp;</em> jako nowa tablice, gdy <em>indeks_ko&#324;cowy </em>nie jest podany&nbsp;<em>indeks_ko&#324;cowy=tablica.length-1</em>.
+Je&#380;eli w podanym przedziale nie ma element&oacute;w zwracana jest pusta
+tablica. (znowu osoby znaj&#261;ce j&#281;zyk Python poczuj&#261; sie jak w domu:))
+</p>
+
+<pre class="eg">foo = [1, 2, 3]<br>foo[1..]       ---&gt; [2, 3]<br>foo[1, 1]      ---&gt; [2]<br></pre>
+
+<p>Na platformie&nbsp; Java2 tablice mog&#261; by&#263; r&oacute;wnie&#380; obiektami klasy&nbsp; <code>java.util.List</code>.</p>
+
+<a name="selection"></a>
+<h4><font class="translate">
+Wyb&oacute;r Element&oacute;w</font></h4>
+
+<div class="box">
+<div class="synopsis"><em>target</em> [ <em>predicate</em>(elem) ]</div>
+<div class="synopsis"><em>target</em> [ <em>expression</em> ]</div>
+</div>
+
+<p>Je&#380;eli&nbsp; <em>target</em> jest tablica, kolekcj&#261; lub generatorem&nbsp; a&nbsp; <em>predicate</em> jest funkcj&#261; z jednym parametrem&nbsp; wyra&#380;enie zwraca generator zwracaj&#261;cy jedynie elementy spe&#322;niaj&#261;ce warunek&nbsp; <em>predicate</em>.
+</p>
+<div class="eg">
+<pre>x = list([1,2,3])<br>for (i : x[function (x) x % 2 == 0]) {<br>   println(i)<br>}<br></pre></div>
+
+<p>Kiedy&nbsp; <em>expression</em> jest wyra&#380;eniem logicznym to jest ono konwertowane do funkcji jednoparametrowej kt&oacute;ra dzia&#322;a jak&nbsp; <em>predicate(elem)</em>.
+Je&#380;eli&nbsp; <em>expression</em> jest por&oacute;wnaniem&nbsp; (<em>lval</em> <em>compare_op</em> <em>rval</em>) identyfikator z lewej strony (lval)&nbsp; jest interpretowany jako nazwa pola.
+
+</p><div class="eg">
+<pre>x = list()<br>import java.awt.Button<br>for (i : 1..10) x.add(Button())<br><br>x[name == "button0"]<br><br> ---&gt;<br><br>x[function (i) {i.name == "button0"}]<br></pre></div>
+
+<div class="eg">
+<pre>x[name == "button0" || name == "button1"]<br><br> ---&gt;<br><br>x[function (i) {i.name == "button0" || i.name == "button1"}]<br></pre></div>
+
+
+<p>
+Je&#380;eli&nbsp; <em>expression</em> jest operatorem logicznym&nbsp; ( ! <em>val</em> ) identyfikator <em>val</em> &nbsp;jest interpretowany jako nazwa pola z&nbsp; <em>target</em>.
+</p>
+
+<div class="eg">
+<pre>x[!visible]<br><br>  ---&gt;<br><br>x[function (i) {!i.visible}]<br></pre></div>
+
+
+<h4>Wycinki napis&oacute;w</h4>
+
+<div class="box">
+<div class="synopsis"><em>napis</em> [&nbsp;<em>indeks_startowy</em> ..]</div>
+<div class="synopsis"><em>napis</em> [ <em>indeks_startowy</em> ..&nbsp;<em>indeks_ko&#324;cowy</em>]</div>
+</div>
+
+<pre class="eg">foo = "123"<br>foo[1..]        ---&gt; foo.substring(1)  ---&gt; "23"<br>foo[1..1]       ---&gt; foo.sunstring(1, 2) ---&gt; "2"<br></pre>
+
+<h4>Znaki w napisie</h4>
+
+<div class="box">
+<div class="synopsis"><em>napis</em> [ <em>indeks</em> ]</div>
+</div>
+
+<p>Ta operacja wyci&#261;ga znak z napisu o podanym indeksie.
+</p>
+
+<pre class="eg">foo = "123"<br>foo[1]   ---&gt;   foo.charAt(1)    ---&gt;  '2'<br></pre>
+
+<a name="map"></a>
+<h4>Wyra&#380;enie mapuj&#261;ce</h4>
+
+<div class="box">
+<div class="synopsis">{<em>klucz</em>=&gt; <em>warto&#347;&#263;</em> , ...}</div>
+</div>
+<p>Kiedy jedno lub wi&#281;cej wyra&#380;e&#324; mapuj&#261;cych zastanie u&#380;yte tworzony jest obiekt <tt>java.util.HashMap</tt> zawieraj&#261;cy podane mapowania.
+</p>
+<pre class="eg">{ "name"=&gt;"Sae",  "age" =&gt; 1 }<br></pre>
+
+<a name="map_elements"></a>
+<h4>Elementy map</h4>
+
+<div class="box">
+<div class="synopsis"><em>mapa</em> [ <em>klucz</em> ]</div>
+<div class="synopsis"><em>map</em>a [ <em>klucz</em> ] =&nbsp;<em>warto&#347;&#263;</em></div>
+</div>
+
+<p>Na platformie Java2 odwo&#322;anie do element&oacute;w mapy mo&#380;e wygl&#261;da&#263;
+jak odwo&#322;anie do tablicy gdzie indeksem jest klucz mapy w cudzys&#322;owach.
+</p>
+
+<pre class="eg">foo = map()<br>foo["age"] = 24<br>foo["age"]         ---&gt; 24<br></pre>
+<p>
+
+<a name="concatenation"></a>
+</p><h3>Operator + dla obiekt&oacute;w innych ni&#380; liczby</h3>
+
+<h4>Tablice/Kolekcje</h4>
+
+<div class="box">
+<div class="synopsis">
+<div><em>tablica1</em> + <em>tablica2</em></div>
+<div><em>tablica</em> +&nbsp;<em>kolekcja</em></div>
+<div><em>kolekcja</em>&nbsp;+&nbsp;<em>tablica</em></div>
+<div><em>kolekcja</em><em>1</em> +&nbsp;<em>kolekcja</em><em>2</em></div>
+</div>
+</div>
+
+<p>Ta operacja &#322;&#261;czy dwa obiekty.
+</p>
+
+<div class="eg">np.
+<pre>[1, 2, 3] + [4, 5, 6]     ---&gt; [1, 2, 3, 4, 5, 6]<br></pre>
+</div>
+
+<p>Wynikowy obiekt jest takiego samego typu jak pierwszy obiekt z czego
+wynika &#380;e wszystkie elementy drugiego obiektu musz&#261; takie samego typu
+jak pierwszego.
+</p>
+
+<pre class="eg">int[0] + [1, 2, 3]     ---&gt; [1, 2, 3]<br></pre>
+
+<p>Uwaga: je&#380;eli &nbsp;<em>kolekcja</em><em>1</em> i <em>kolekcja</em><em>2</em> s&#261; obiektami typu&nbsp; Set wynikiem b&#281;dzie po&#322;&#261;czenie (UNION) tych obiekt&oacute;w.
+</p>
+
+<h4>Mapy</h4>
+
+<div class="box">
+<div class="synopsis"><em>map</em>a + <em>mapa</em></div>
+</div>
+
+<div class="eg">np.
+<pre>{1=&gt;2, 2=&gt;3} + {2=&gt;4, 3=&gt;5}    --&gt; {1=&gt;2, 2=&gt;4, 3=&gt;5}<br></pre>
+</div>
+
+<h4>Napisy</h4>
+
+<div class="box">
+<div class="synopsis"><em>napis</em> +&nbsp;<em>napis</em></div>
+</div>
+
+<pre class="eg">foo = "ABC"<br>bar = "DEF"<br>foo + bar      ---&gt; "ABCDEF"<br></pre>
+
+<h3>Operator - dla obiekt&oacute;w innych ni&#380; numeryczne</h3>
+
+<div class="box">
+<div class="synopsis">
+<div><em>tablica</em><em>1</em> -&nbsp;<em>tablica</em><em>2</em></div>
+<div><em>tablica</em>&nbsp;-&nbsp;<em>kolekcja</em></div>
+<div><em>kolekcja</em>&nbsp;-&nbsp;<em>tablica</em></div>
+<div><em>kolekcja</em><em>1</em> -&nbsp;<em>kolekcja</em><em>2</em></div>
+</div>
+</div>
+<p>Zwraca kolekcje lub tablice kt&oacute;ra zawiera elementy pierwszego obiektu z wyj&#261;tkiem tych kt&oacute;re s&#261; w obiekcie drugim.
+</p><p>Typy element&oacute;w obu obiekt&oacute;w musz&#261; by&#263; takie same.
+</p>
+
+<pre class="eg">[1,1,1,2] - [1]   ---&gt; [2]<br>[1,1,1,2] - [2]   ---&gt; [1,1,1]<br>[1,1,1,2] - [1,3]   ---&gt; [2]<br></pre>
+
+<h3>Operator * dla obiekt&oacute;w typu Set</h3>
+
+<div class="box">
+<div class="synopsis">
+<div><em>set1</em> * <em>set2</em></div>
+</div>
+</div>
+<p>Zwraca cz&#281;&#347;&#263; wsp&oacute;ln&#261; obu obiekt&oacute;w (jak cze&#347;&#263; wsp&oacute;lna zbior&oacute;w w matematyce).
+
+</p><pre class="eg">set([1,2]) * set([1,3])   ---&gt; [1]<br></pre>
+
+<a name="new"></a>
+
+<a name="instanceCreation"></a>
+<h3>Tworzenie instancji</h3>
+
+<div class="box">
+<div class="synopsis"><em>nazwa_klasy</em>( <em>wyra&#380;enie</em>, ... )</div>
+<div class="synopsis"><tt>new</tt> <em>nazwa_klasy</em>( wyra&#380;enie, ... )</div>
+</div>
+
+<div class="eg">np.
+<pre>new java.awt.Point(10, 20)<br><br>Point = class java.awt.Point<br>Point(10, 20)<br><br>import java.awt.Point<br>new Point(10, 20)<br></pre>
+</div>
+
+<a name="inline_classdef"></a>
+<h3>Definicja klas Inline</h3>
+
+<div class="box">
+<div class="synopsis"><tt>class</tt> <em>nazwa_klasy</em>[ <tt>extends</tt> <em>klasa_bazowa</em> ]
+[ <tt>implements</tt> interfejs... ] </div>
+<div class="synopsis"><tt>{</tt></div>
+(
+<div class="synopsis2">[ <em>typ</em> ] <em>nazaPola</em> [ = <em>warto&#347;&#263;</em> ] </div>
+|
+<div class="synopsis2">[ <em>typ</em> ] <em>nazwaMetody</em> ([<em>typ</em>] <em>zmienna</em>...) { .. } </div>
+)*
+<div class="synopsis">}</div>
+</div>
+
+<div class="eg">np.
+<pre>class Person {<br>  int age; String name<br>  Person(age, name){<br>     this.age=age; this.name=name<br>  }<br>}<br></pre>
+</div>Zobacz r&oacute;wnie&#380; <a href="#classdef">Definiowanie klas</a>&nbsp;.
+
+<a name="subclass"></a>
+<h3>Tworzenie podklas</h3>
+
+<div class="box">
+<div class="synopsis"><tt>new</tt> <em>nazwa_klasy</em>( <em>ewyra&#380;enie</em>, ... ) {</div>
+<div class="synopsis2">[ <em>typ </em>] <em>identyfikator</em> ( [ <em>typ </em>] <em>identyfikator</em> ... ) {</div>
+<div class="synopsis2">... }</div>
+<div class="synopsis">... }</div>
+</div>
+
+<p>Kiedy jedna lub wi&#281;cej definicji metod jest zawarta miedzy para nawias&oacute;w klamrowych przy wyra&#380;eniu&nbsp; <em>new </em>&nbsp;tworzona jest dynamicznie podklasa oraz jej instancja.
+</p>
+<div class="eg">np.
+<pre>import java.awt.event.*<br>new WindowAdapter(){<br>  windowClosing(e){<br>    e.source.dispose()<br>  }<br>}<br></pre>
+</div>
+<p>Je&#380;eli zostanie u&#380;yta specjalna zmienna&nbsp; '<tt>this</tt>' przed wywo&#322;aniem metody, wywo&#322;ywana jest metoda na zasadach&nbsp; jak w j&#281;zyku Java.
+</p>
+<div class="eg">np.
+<pre>x = new Object(){<br>  test(){<br>    this.toString()<br>  }<br>}<br>x.test()<br></pre>
+</div>
+
+<p>Je&#380;eli zostanie u&#380;yta specjalna zmienna&nbsp; '<span style="font-family: monospace;">super</span>' przed wywo&#322;aniem metody, wywo&#322;ywana jest metoda na zasadach&nbsp; jak w j&#281;zyku Java.
+</p>
+<div class="eg">np.
+<pre>x = new Object(){<br>  toString(){<br>    "blah " + super.toString()<br>  }<br>}<br>x.toString()<br></pre>
+</div>
+
+<p>Kod w metodzie posiada zakres widzialno&#347;ci na zasadach znanych z funkcji zagnie&#380;d&#380;onych.
+</p>
+<div class="eg">np.
+<pre>function test(n){<br> x = new Object(){<br>       test(){<br>          println(n)<br>       }<br>    }<br> x.test()<br>}<br>test(100)<br></pre>
+</div>
+
+<br><a name="beandef"></a>
+<h3>Tworzenie Java Beans</h3>
+
+<div class="box">
+<div class="synopsis"><em>linazwa_klasy</em> <tt>{</tt> </div>
+<div class="synopsis2"><em>nazwaPola</em> <tt>:</tt> <em>wyra&#380;enie</em> lub</div>
+<div class="synopsis2"><em>nazwaPola</em>&nbsp;<tt>::</tt>&nbsp;<em>wyra&#380;enie</em></div>
+<div class="synopsis2">...</div>
+<div class="synopsis"><tt>}</tt></div>
+</div>
+<div class="eg">np.
+<pre>btn = java.awt.Button {<br>        labal : "OK"<br>      }<br></pre>
+</div>Powy&#380;sze wyra&#380;enie zostanie zinterpretowane jako:
+
+<div class="eg">
+<pre>btn = new java.awt.Button()<br>btn.labal = "OK"<br>btn<br></pre>
+</div>
+<p>
+<em>Nowa sk&#322;adnia jest jeszcze eksperymentalna.</em>
+</p><p>Je&#380;eli specialny operator<span style="font-family: monospace;"> </span><span style="font-weight: bold; font-family: monospace;">::</span> zostanie u&#380;yty dowolna w&#322;a&#347;ciwo&#347;&#263; Ziarenka zostanie zmodyfikowana (redefiniowana).  
+</p>
+<div class="eg">
+<pre>import javax.swing.*<br><br>f = JFrame();<br>f.name = "foo"<br>btn = JButton {<br>  text :: f.name<br>}<br>btn.text --&gt; "foo"<br><br>f.name = "bar"<br>btn.text ---&gt; "bar"<br></pre>
+</div>
+<p>Dodatkowo w przypadku u&#380;ycia <tt>::</tt> przy pojedy&#324;czej
+w&#322;a&#347;ciwo&#347;ci synchronizacja b&#281;dzie dwu kierunkowa (zmiana warto&#347;ci
+jednej w&#322;a&#347;ciwo&#347;ci wp&#322;ywa na warto&#347;&#263; drugiej). </p>
+
+<div class="eg">
+<pre>btn.text = "zzz"<br>f.name --&gt; "zzz"<br></pre>
+</div>
+<p>
+Jest to zaimplementowane przy u&#380;yciu mechanizmu Ziarenek (JavaBeans) ProperyChangeListener/ProperyChangeEvent.
+</p><a name="instanceof"></a>
+<h3>Testowanie instancji (instanceof)</h3>
+
+<div class="box">
+<div class="synopsis"><em>obiekt</em> <tt>instanceof</tt> <em>typ</em></div>
+</div>
+
+<p>
+Je&#380;eli&nbsp;<em>obiekt</em> jest instancj&#261; klasy&nbsp;<em>typ</em> operator zwraca&nbsp; true.
+</p>
+
+<div class="eg">np.
+<pre>"hello" instanceof String     ---&gt; true<br>[1] instanceof int[]          ---&gt; false<br></pre>
+</div>
+
+<a name="cast"></a>
+<h3>Operacja rzutowania</h3>
+
+<div class="box">
+<div class="synopsis">( <em>typ</em> )&nbsp;<em>wyra&#380;enie</em></div>
+</div>
+
+<p>Gdy&nbsp; <em>typ</em> jest typem podstawowym lub typem tablicowym warto&#347;ci&#261;<em> wyra&#380;enia</em> jest warto&#347;&#263; skonwertowana do podanego typu.  
+</p>
+<pre class="eg">(int)1.0d<br></pre>
+
+<p>Kiedy warto&#347;ci&#261; <em>wyra&#380;enia</em> jest instancja klasy/typu konwersja nie jest przeprowadzana.
+</p>
+<pre class="eg">(java.lang.Object)1.0<br></pre>
+
+<p>Gdy&nbsp; <em>wyra&#380;enie</em> &nbsp;nie mo&#380;e by&#263; skonwertowane do klasy/typu rzucany jest wyj&#261;tek ClassCastException.
+</p>
+
+<pre class="eg">(java.util.Vector)1.0<br>  ---&gt; java.lang.ClassCastException : (java.util.Vector)1.0<br></pre>
+<p>Kiedy wyra&#380;enie jest u&#380;yte jako parametr&nbsp; <a href="#instanceCreation">konstruktora</a>, <a href="#instanceMethod">metody</a>, lub <a href="#staticMethod">metody statycznej</a> warto&#347;&#263; zostaje u&#380;yta do wyboru odpowiedniej implementacji metody/konstruktora.
+</p>
+<pre class="eg">String.valueOf((char[])[1,2,3])<br></pre>
+
+<a name="predefined"></a>
+<h3>Redefiniowane zmienne</h3>
+
+<blockquote>
+<table width="400">
+<tbody><tr align="center">
+<td><tt>byte</tt></td>
+<td><tt>short</tt></td>
+<td><tt>char</tt></td>
+<td><tt>int</tt></td>
+<td><tt>long</tt></td>
+<td><tt>float</tt></td>
+<td><tt>double</tt></td>
+<td><tt>boolean</tt></td>
+</tr>
+</tbody></table>
+</blockquote>
+<p>Podane zmienne s&#261; zdefiniowane jako koresponduj&#261;ce do odpowiednich obiekt&oacute;w&nbsp; Class.
+</p>
+
+<a name="primitive"></a>
+<h3>Konwersje do typ&oacute;w prostych</h3>
+
+<p>U&#380;ycie zdefiniowanej zmiennej jako funkcji powoduje konwersje do okre&#347;lonego typu.
+</p>
+
+
+<div class="box">
+<div class="synopsis"><em>typ_podstawowy</em> ( <em>wyra&#380;enie</em> )</div>
+</div>
+
+<p>Je&#380;eli&nbsp;<em>wyra&#380;enie</em> jest napisem zawieraj&#261;cym warto&#347;&#263; liczbow&#261; funkcja parsuje tekst jako liczb&#281; i j&#261; zwraca. Je&#380;eli&nbsp;&nbsp;<em>wyra&#380;enie</em> jest klasy&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> zostaje skonwertowane do wyspecyfikowanego typu.
+Je&#380;eli&nbsp;&nbsp;<em>wyra&#380;enie </em>jest znakiem to&nbsp;&nbsp;<tt>int()</tt>, <tt>byte()</tt> i <tt>short()</tt> zwraca kod znaku.
+</p>
+<div class="eg">np.
+<pre>int(" 1 ")    ---&gt;  1<br>int('1')      ---&gt;  49<br></pre>
+</div>
+
+
+<p>Je&#380;eli <em>typ_podstawowy</em> to <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Character.html"><tt>java.lang.Character</tt></a> i wynik&nbsp; <em>wyra&#380;enia</em> jest w zakresie&nbsp; 0 i 0xffff funkcja zwraca znak o podanym kodzie, w innym przypadku rzucany jest wyj&#261;tek.
+</p>
+<div class="eg">np.
+<pre>char(65)    ---&gt;  'A'<br></pre>
+</div>
+
+<a name="conversion_to_boolean"></a>
+<h3>Konwersje do warto&#347;ci logicznych</h3>Kiedy typ jest&nbsp; boolean to argument jest konwertowany do warto&#347;ci logicznej wg zasad:.
+
+<ul>
+<li>Je&#380;eli argument jest obiektem klasy Boolean (lub warto&#347;ci&#261; logiczn&#261;
+typu prostego&nbsp; boolean) warto&#347;&#263; jest zwracana taka jak jest.
+</li><li>Je&#380;eli argument jest obiektem klasy Number zwracane jest true gdy warto&#347;&#263; nie jest r&oacute;wna zero.
+</li><li>Je&#380;eli argument jest obiektem klasy String  zwracane jest true gdy &nbsp;napis nie jest pusty.
+</li><li>Je&#380;eli argument jest obiektem innej klasy zwracane jest true gdy argument nie jest null.
+</li></ul>
+
+<div class="eg">np.
+<pre>boolean(true)      ---&gt; true<br>boolean(false)     ---&gt; false<br>boolean(-1)        ---&gt; true<br>boolean(0)         ---&gt; false<br>boolean("non-empty")  ---&gt; true<br>boolean("")        ---&gt; false<br>boolean("false")   ---&gt; true<br>boolean(new Object())  ---&gt; true<br>boolean(null)      ---&gt; false<br></pre>
+</div>
+
+<div class="box">
+<div class="synopsis"><em>typ_podstawowy</em> ( <em>napis</em> {, <em>baza</em> })</div>
+</div>
+
+<p>Je&#380;eli typ jest jednym z&nbsp; int, byte, short, lub long to baza
+mo&#380;e wskazywa&#263; jaka podstawa liczby ma by&#263; u&#380;yta przy konwersji.
+</p>
+
+<div class="eg">np.
+<pre>int("20", 16)    --&gt; 32<br>long("cafebabe", 16)    --&gt; 3405691582<br></pre>
+</div>
+
+<a name="instanceField"></a>
+<h3>Instancja pola</h3>
+
+<div class="box">
+<div class="synopsis"><em>wyra&#380;enie</em> . <em>identyfikator</em></div>
+</div>
+
+<p>Domy&#347;lne zachowanie p&oacute;l klas bazuje na w&#322;a&#347;ciwo&#347;ciach Java
+Beans jednak niekt&oacute;re obiekty posiadaj&#261; w&#322;asne sposoby
+interpretacji tego zachowania.
+</p>
+<dl>
+<dt>1. java.util.Map
+</dt><dd>Traktuje&nbsp;<em>identyfikator</em> jako warto&#347;&#263; klucza mapy<em></em> 
+</dd><dt>2. pnuts.lang.Context
+</dt><dd>Zobacz <a href="api.html">Pnuts API</a>
+</dd><dt>3. pnuts.lang.Property
+</dt><dd>Zobacz <a href="api.html">Pnuts API</a>
+</dd><dt>4.&nbsp;<em>identyfikator</em> jest nazw&#261; w&#322;a&#347;ciwo&#347;ci Java Bean
+</dt><dd>Odwo&#322;anie jak do w&#322;a&#347;ciwo&#347;ci Java Beans
+</dd><dt>5. Kiedy wyra&#380;enie jest obiektem Class
+</dt><dd>Odwo&#322;anie dotyczy statycznego pola klasy
+</dd></dl>
+
+<div class="eg">np.
+<pre>import java.awt.Button<br>btn = Button("hello")<br>btn.label    ---&gt; "hello"<br></pre>
+</div>
+
+<p>Dost&#281;p do p&oacute;l mo&#380;e by&#263; zmieniony przez API Pnuts, zobacz&nbsp; <a href="configuration.html">'Customizing the Behavior of Java API Access'</a>.
+</p>
+
+<a name="staticField"></a>
+<h3>Pola statyczne</h3>
+
+<div class="box">
+<div class="synopsis"><em>klasa</em><tt>::</tt> <em>identyfikator</em></div>
+</div>
+
+<p>Zwraca warto&#347;&#263; pola statycznego, tylko publiczne pola mog&#261; by&#263;&nbsp;<em>identyfikatorem</em>.
+</p>
+
+<div class="eg">np.
+<pre>class java.awt.Color::blue<br></pre>
+</div>
+
+
+
+
+<a name="instanceMethod"></a>
+<h3>Wywo&#322;ywanie metod instancji</h3>
+
+<div class="box">
+<div class="synopsis"><em>wyra&#380;enie</em> . <em>identyfikator</em> ( <em>wyra&#380;enie</em> , ...  )</div>
+</div>
+<p>Wywo&#322;uje metod&#281; instancji z podanym parametrem<em></em>.
+</p>
+
+<div class="eg">np.
+<pre>"ABC".length()       ---&gt; 3<br>"ABC".getClass()     ---&gt; java.lang.String class<br></pre>
+</div>
+<p>Je&#380;eli warto&#347;ci&#261; wyra&#380;enia jest obiekt Class object i <em>identyfikator</em> &nbsp;nie jest metod&#261; instancji ale statyczn&#261; metod&#261; wywo&#322;ywana jest metoda klasy.
+</p>
+
+<a name="staticMethod"></a>
+<h3>Wywo&#322;ywanie metod statycznych</h3>
+
+<div class="box">
+<div class="synopsis"><em>klasa</em> <tt>::</tt> <em>identyfikator</em>( <em>wyra&#380;enie</em> , ...  )</div>
+</div>
+
+<p>Wywo&#322;uje statyczn&#261; metod&#281; klasy z podanym parametrem<em></em>.
+</p>
+
+<div class="eg">np.
+<pre>class java.lang.System::gc()<br></pre>
+</div>
+
+<a name="typeMapping"></a>
+<h3>Mapowanie typ&oacute;w i konwersje</h3>
+
+<p>Typy podstawowe Javy tj.&nbsp; int, long, etc. s&#261; opakowywane jako
+podklasy&nbsp; Number.
+Gdy metoda Javy zwraca warto&#347;&#263; typu prostego skrypt opakowuje t&#261;
+warto&#347;&#263; w odpowiedni obiekt tj. java.lang.Integer. Je&#380;eli metoda Javy
+posiada parametr typu prostego typ obiektowy jest konwertowany
+automatycznie do typu prostego (od Javy 5 (Tiger) takie zachowanie jest
+cze&#347;ci&#261; j&#281;zyka).
+</p>
+
+<div class="eg">np.
+<pre>str = "ABCDE"<br>str.charAt(1)        ---&gt; 'B'<br></pre>
+</div>
+
+<p>Typy tablicowe s&#261; takie same jak w j&#281;zyku Java.
+Kiedy parametr metody jest tablic&#261; i wymagana jest konwersja parametru
+aktualnego tworzona jest nowa odpowiednia tablica a zawarto&#347;&#263; jest
+przepisywana z odpowiedni&#261; konwersj&#261; kt&oacute;ra nast&#281;pnie jest
+przekazywana do metody.
+</p>
+
+<div class="eg">np.
+<pre>array = "Hello".toCharArray()   ---&gt; ['H','e','l','l','o']<br>array.getClass()                ---&gt; char[] type<br>String(['H','e','l','l','o'])   ---&gt; "Hello"<br></pre>
+</div>
+
+
+<a name="conditional"></a>
+<h3>Przetwarzanie warunkowe</h3>
+
+<a name="if"></a>
+<a name="else"></a>
+<h4>if-else</h4>
+
+<div class="box">
+<div class="synopsis"><b>if</b> ( <em>warunek</em> )&nbsp;<em>wyra&#380;enie-blok</em></div>
+<div class="synopsis"><b>else if</b> ( <em>warunek</em> ) <em>wyra&#380;enie-blok</em></div>
+<div class="synopsis">...</div>
+<div class="synopsis"><b>else</b>&nbsp;<em>wyra&#380;enie-blok</em></div>
+</div>
+
+<pre class="eg">foo = [1, 2, 3]<br>if (foo.length &gt; 5){<br>    1<br>} else if (foo.length &gt; 4){<br>    2<br>} else {<br>    3<br>}           ---&gt; 3<br><br>value = if (foo.length &gt; 3) 1 else 2<br>value       ---&gt; 2<br></pre>
+<p>Je&#380;eli&nbsp; <em>warunek</em> nie jest warto&#347;ci&#261; logiczn&#261; jest on konwertowany za pomoc&#261;&nbsp; <a href="#conversion_to_boolean">zasady konwersji</a>.
+</p>
+
+<a name="switch"></a>
+<a name="case"></a>
+<a name="default"></a>
+
+<h4>Switch</h4>
+
+<div class="box">
+<div class="synopsis"><b>switch</b> ( wyra&#380;enie ) {</div>
+<div class="synopsis">case <em>wyra&#380;enie</em> : <em>wyra&#380;enie-blok</em></div>
+<div class="synopsis">...</div>
+<div class="synopsis">default :&nbsp;<em>wyra&#380;enie-blok</em></div>
+<div class="synopsis">}</div>
+</div>
+<p>Dopasowanie jest wykonywana za pomoc&#261; metody&nbsp;<tt>equals()</tt>.
+</p>
+
+<a name="break"></a>
+<h4>break</h4>
+
+<div class="box">
+<div class="synopsis"><b>break</b> [ <em>wyra&#380;enie</em> ]</div>
+</div>
+
+<p>
+"break" bez&nbsp;<em>wyra&#380;enie</em> jest adekwatne do&nbsp; "break null".
+</p>
+
+<a name="while"></a>
+<h4>While</h4>
+
+<div class="box">
+<div class="synopsis"><b>while</b> ( <em>warunek</em> )&nbsp;<em>wyra&#380;enie-blok</em></div>
+</div>
+
+<pre class="eg">while (sum &gt; 0){<br>    sum = sum - 1<br>}<br></pre>
+<p>Je&#380;eli&nbsp; <em>warunek</em> nie jest warto&#347;ci&#261; logiczn&#261; jest on konwertowany za pomoc&#261;&nbsp; <a href="lang.html#conversion_to_boolean">zasady konwersji</a>.
+</p>
+
+<a name="dowhile"></a>
+<h4>do .. while</h4>
+
+<div class="box">
+<div class="synopsis"><b>do</b> { <em>expression-block</em> } <b>while</b> ( <em>condition</em> )  </div>
+</div>
+
+<pre class="eg">x = 0<br>do {<br>  println(x++)<br>} while (i &lt; 10)<br></pre>
+<p>Je&#380;eli&nbsp; <em>warunek</em> nie jest warto&#347;ci&#261; logiczn&#261; jest on konwertowany za pomoc&#261;&nbsp; <a href="lang.html#conversion_to_boolean">zasady konwersji</a>.
+</p>
+
+<a name="for"></a>
+<h4>For</h4>
+
+<div class="box">
+<div class="synopsis"><b>for</b> ( [ <em>identyfikator</em> = wyra&#380;enie , ... ] ; [ <em>warunek</em> ] ; [ <em>ewyra&#380;enie</em>, ... ] ) <em>wyra&#380;enie-blok</em></div>
+</div>
+
+<pre class="eg">j = 0<br>for (i : 0..4){<br>   j = j + i<br>}<br><br>for (; j &gt; 0; j--){<br>   println(j)<br>}<br></pre>
+<p>Je&#380;eli&nbsp; <em>warunek</em> nie jest warto&#347;ci&#261; logiczn&#261; jest on konwertowany za pomoc&#261;&nbsp; <a href="lang.html#conversion_to_boolean">zasady konwersji</a>.
+</p>
+
+<div class="box">
+<div><b>for</b> ( <em>identyfikator</em> : <em>warto&#347;&#263;Pocz&#261;tkowa</em> .. <em>warto&#347;&#263;Ko&#324;cowa</em>)&nbsp;<em>wyra&#380;enie</em><em>-blok</em></div>
+<div><b>for</b> (&nbsp;<em>identyfikator</em> : <em>wyra&#380;enie</em> ) <em>wyra&#380;enie</em><em>-blok</em></div>
+</div>
+
+<p>
+W pierwszej wersji p&#281;tli for&nbsp;<em>wyra&#380;enie</em><em>-blok jest </em>jest wykonywane tyle razy ile wskazuj&#261; warto&#347;ci <em>warto&#347;&#263;Pocz&#261;tkowa i &nbsp;</em><em>warto&#347;&#263;Ko&#324;cowa, </em>w ka&#380;dym przebiegu <em>identyfikator&nbsp;</em>&nbsp; jest zwi&#281;kszany o jeden.
+</p>
+<p>W drugim typie ka&#380;dy element&nbsp; <em>wyra&#380;enia</em> jest podstawiany do&nbsp; <em>identyfikatora</em> i dla ka&#380;dej warto&#347;ci jest wykonywany&nbsp;&nbsp;<em>wyra&#380;enie</em><em>-blok</em>. <em>wyra&#380;enie</em> mo&#380;e by&#263; jednym z obiekt&oacute;w:
+</p>
+
+<ul>
+<li>java.util.Enumeration
+</li><li>java.util.Iterator
+</li><li>java.util.Collection
+</li><li>java.util.Map
+</li><li>Object[] or primitive array
+</li><li>java.lang.String
+</li><li>java.lang.CharSequence (1.4+)
+</li><li>pnuts.lang.Generator
+</li></ul>
+
+
+<pre class="eg">for (i : 1..3) println(i)       ---&gt; 123<br><br>for (i : 3..1) println(i)       ---&gt; 321<br><br>for (i : [1, 2, 3]) println(i)  ---&gt; 123<br></pre>
+
+<a name="multivar_for"></a>
+<div class="box">
+<div><b>for</b> ( <em>identyfikator_1</em> , ...,&nbsp;<em>identyfikator</em><em>_N</em> : wyra&#380;enie ) <em>wyra&#380;enie-blok</em></div>
+</div>
+<p>Je&#380;eli dwie lub wi&#281;cej zmiennych s&#261; zdefiniowane to wyra&#380;enie przypomina podany pseudo kod:
+</p>
+<pre class="eg">for (tmp : <em>wyra&#380;enie</em>) {<br>  <em>identyfikator_1</em> = try { tmp[0]} catch (IndexOutOfBoundsException e){}<br>  ...<br>  <em>identyfikator</em><em>_N</em> = try { tmp[N-1]} catch (IndexOutOfBoundsException e){}<br><br>  <em>wyra&#380;enie-blok</em>
+}
+</pre>
+
+
+<a name="foreach"></a>
+<h4>Foreach</h4>
+
+<div class="box">
+<div class="synopsis"><b>foreach</b> <em>identyfikator</em> <em>tablica-wyra&#380;enie</em> <em>wyra&#380;enie-blok</em></div>
+<div class="synopsis"><b>foreach</b>&nbsp;<em>identyfikator</em> ( <em>tablica</em> )&nbsp;<em>wyra&#380;enie-blok</em></div>
+<div class="synopsis"><b>foreach</b>&nbsp;<em>identyfikator</em> ( <em>java.util.Enumeration</em> )&nbsp;<em>wyra&#380;enie-blok</em></div>
+<div class="synopsis"><b>foreach</b>&nbsp;<em>identyfikator</em> ( <em>java.util.Iterator</em> )&nbsp;<em>wyra&#380;enie-blok</em></div>
+<div class="synopsis"><b>foreach</b>&nbsp;<em>identyfikator</em> ( <em>java.util.Collection</em> )&nbsp;<em>wyra&#380;enie-blok</em></div>
+</div>
+
+<p>
+<tt>foreach i (expr) </tt>jest synonimem&nbsp; <tt>for (i:expr)</tt>.
+</p>
+
+<pre class="eg">sum = 0<br>foreach i [1, 2, 3] {<br>    sum = sum + i<br>}<br>sum          ---&gt; 6<br><br>sum = 0<br>vec = class java.util.Vector()<br>vec.addElement(1)<br>vec.addElement(2)<br>vec.addElement(3)<br>foreach i (vec.elements()) {<br>    sum = sum + i<br>}<br>sum          ---&gt; 6<br></pre>
+
+<a name="continue"></a>
+<h4>continue</h4>
+
+<div class="box">
+<div class="synopsis"><b>continue</b></div>
+</div>
+
+<pre class="eg">for (i : 0..9){<br>   if (i &gt; 2){<br>      continue<br>   }<br>   println(i)<br>}<br></pre>
+
+<a name="return"></a>
+<h4>return</h4>
+
+<div class="box">
+<div class="synopsis"><b>return</b> [ <em>wyra&#380;enie</em> ]</div>
+</div>
+
+<p>Kiedy&nbsp; <tt>return</tt> zostanie napotkane w funkcji to nast&#281;puje powr&oacute;t z funkcji a zwr&oacute;con&#261; przez funkcje warto&#347;ci&#261; b&#281;dzie&nbsp;<em>wyra&#380;enie</em>.
+Kiedy&nbsp; <tt>return</tt> jest wywo&#322;ane poza funkcj&#261; sesja interpretera zostaje zako&#324;czona analogicznie do wywo&#322;ania&nbsp; <a href="#quit"><tt>quit(</tt><em>expressoin</em><tt>)</tt></a>.
+</p>
+<p>
+"return" bez <em>wyra&#380;enia</em> jest odpowiednikiem "return null".
+</p>
+
+<a name="try"></a>
+<h4>try/catch/finally</h4>
+
+<div class="box">
+<div class="synopsis"><b>try</b> { <em>wyra&#380;enie-blok-1</em> }</div>
+<div class="synopsis2">[ <b>catch</b> (<em>nazwa_klasy </em><em>zmienna</em>){&nbsp;<em>wyra&#380;enie-blok</em><em>-2</em> } ]*</div>
+<div class="synopsis2">[ <b>finally</b> {&nbsp;<em>wyra&#380;enie-blok</em><em>-3</em> } ]</div>
+</div>
+
+<p>
+</p><pre class="eg">try {<br>   throw ("blah")<br>} catch (java.io.IOException e1){<br>   println(1)<br>} catch (Exception e2){<br>   println(2)<br>} finally {<br>   println(3)<br>}<br></pre>
+
+<a name="function"></a>
+<h3>Funkcje</h3>
+
+<h4>Definicja</h4>
+
+<div class="box">
+<div class="synopsis"><b>function</b> [ <em>identyfikator</em> ] ( <em>identyfikator</em>, ...) <em>wyra&#380;enie-blok</em></div>
+<div class="synopsis"><b>function</b> [ <em>identyfikator</em> ] ( <em>identyfikator</em>, ..., <em>identyfikator</em> [ ] )&nbsp;<em>wyra&#380;enie-blok</em></div>
+</div>
+
+<p>Je&#380;eli jest podany <em>identyfikator</em> funkcja o podanej
+nazwie jest tworzona. W tym przypadku funkcja jest identyfikowana po
+nazwie oraz liscie parametr&oacute;w formalnych.
+</p>
+<p>Je&#380;eli nie jest podany <em>identyfikator</em> dla funkcji generowany jest automatycznie unikalny identyfikator.
+</p>
+<div class="eg">np.
+<pre>f = function (e) e.getSource().dispose()<br></pre>
+</div>
+
+<a name="closure"></a>
+<h4>Sk&#322;adniowe uproszczenia&nbsp; dla funkcji anonimowych</h4>
+
+<div class="box">
+<div class="synopsis"><b><tt>{</tt></b> <em>lista-parametr&oacute;w</em> <b><tt>-&gt;</tt></b> <em>wyra&#380;enie-blok</em> <b><tt>}</tt></b></div>
+</div>
+
+<div class="eg">
+<pre>{a,b -&gt; a + b}      // odpowiednik funkcji function (a,b) a + b<br></pre>
+</div>
+
+<a name="vararg"></a>
+<h4>Parametry o zmiennej ilo&#347;ci</h4>
+
+<p>Je&#380;eli funkcja posiada jeden lub wi&#281;cej argument&oacute;w i ostatni
+parametr zako&#324;czony jest nawiasami&nbsp; "[]" to funkcja mo&#380;e
+przyjmowa&#263; r&oacute;&#380;n&#261; ilo&#347;&#263; parametr&oacute;w. Formalnie argument
+zako&#324;czony "[]" jest tablic&#261; i odwo&#322;anie do parametr&oacute;w odbywa si&#281;
+na zasadzie pozycyjnej jak w przypadku tablicy
+</p>
+
+<div class="eg">np.
+<pre>function f(args[]) args<br>f()             ---&gt; []<br>f(1)            ---&gt; [1]<br>f(1,2,3)        ---&gt; [1, 2, 3]<br><br>function g(a,b[]) b<br>g(1)          --&gt; []<br>g(1,2)        --&gt; [2]<br>g(1,2,3)      --&gt; [2,3]<br></pre>
+</div>
+<p>W przypadku funkcji o argumentach pozycyjnych nie nast&#281;puje
+prze&#322;adowanie funkcji a jej redefinicja w przypadku nazwanych funkcji,
+funkcji anonimowych to nie dotyczy.
+</p>
+<div class="eg">np.
+<pre>function f(args[]) args<br>..<br>function f(a,b,c[]) c   // f(args[]) nie jest ju&#380; dost&#281;pna<br>f()             --&gt; error<br>f(1,2)          --&gt; []<br>f(1,2,3)        --&gt; [3]<br>f(1,2,3,4)      --&gt; [3,4]<br></pre></div>
+
+<p>W przypadku dopasowywania funkcji przy wywo&#322;aniu znaleziona zostanie
+funkcja pasuj&#261;ca do ilo&#347;ci argument&oacute;w ma ona pierwsze&#324;stwo nad
+funkcja z argumentami pozycyjnymi.
+</p>
+
+<div class="eg">np.
+<pre>function f(args[]) args<br><br>function f(arg)  arg<br>f(1)            ---&gt; 1       // f(arg) bierze piersze&#324;stwo<br>f(1,2,3)        ---&gt; [1, 2, 3]<br></pre></div>
+
+<a name="function_scope"></a>
+<h4>Zasady widoczno&#347;ci definicji funkcji</h4>
+
+<p>Gdy dana funkcja jest zdefiniowana w wielu postaciach w jednej
+przestrzeni nazw fizycznie wszystkie te funkcje stanowi&#261; jeden obiekt
+funkcyjny.
+</p>
+
+<div class="eg">np.
+<pre>function f() 1<br>function f(a) a<br><br>x = f<br>x() / ---&gt; 1<br>x(100) / ---&gt; 100<br></pre>
+</div>
+
+<p>Je&#380;eli funkcje o tej samej nazwie s&#261; zagnie&#380;d&#380;one w przestrzeni
+lokalnej to funkcja z przestrzeni zewn&#281;trznej jest dost&#281;pna w
+przestrzeni wewn&#281;trznej ale funkcja wewn&#281;trzna nie jest widoczna w
+przestrzeni zewn&#281;trznej.
+</p>
+<div class="eg">
+<pre>function scope1(){<br>   function f() 1<br><br>   function scope2(){<br>      function f(a) a<br>      f() // --&gt; 1<br>   }<br><br>   scope2()<br>   f()  // --&gt; 1<br>   f(100)  // --&gt; b&#322;&#261;d<br>}<br></pre>
+</div>Kiedy funkcje definiowane w przestrzeni lokalnej i przestrzeni
+pakietu maj&#261; takie same nazwy dopasowywanie funkcji dzia&#322;a analogicznie
+do poszukiwania zmiennej w blokach lokalnych. Definicje funkcji
+lokalnych nie moj&#261; wp&#322;ywu na definicje funkcji przestrzeni zewn&#281;trznej.
+<div class="eg">
+<pre>function f() 1<br>function g(){<br>  function f(a) a<br>  f(100)  // --&gt; 100<br>  f()  // --&gt; 1<br>}<br><br>f()      // --&gt; 1<br>f(100)   // --&gt; nie znaleziono<br></pre>
+</div>Funkcje z innych pakiet&oacute;w mog&#261; by&#263; redefiniowane z inn&#261; list&#261; parametr&oacute;w.
+
+<div class="eg">
+<pre>use("pnuts.lib")<br>function string(a, b){<br>   string(b)<br>}<br></pre>
+</div>Je&#380;eli funkcja globalna pochodzi z innego pakietu mo&#380;e by&#263; przykryta funkcj&#261; lokaln&#261; o takiej samej nazwie.
+
+<div class="eg">
+<pre>function g(){<br>   function string(a, b) string(a) // --&gt; nie ma takiej funkcji: string (1)<br>   string(1, 2)<br>}<br></pre>
+</div>Aby umo&#380;liwi&#263; tymczasow&#261; redefinicj&#281; funkcji z innego pakietu nale&#380;y przypisa&#263; j&#261; do zmiennej lokalnej.
+
+<div class="eg">np.
+<pre>function g(){<br>   string = string<br>   function string(a, b) string(a + b)<br>   string(1, 2)<br>}<br></pre>
+</div>
+
+<h4>Wywo&#322;anie funkcji</h4>
+
+<div class="box">
+<div class="synopsis"><em>funkcja</em> ( <em>wyra&#380;enie</em>, ... )</div>
+</div>
+
+<p>Wywo&#322;anie funkcji powoduje wykonanie cia&#322;a funkcji gdzie parametry formalne zast&#281;powane s&#261; parametrami aktualnymi.
+</p>
+
+<a name="package"></a>
+<h3>Pakiet</h3>
+
+<div class="box">
+<div class="synopsis"><em>pakiet</em> <tt>::</tt>&nbsp;<em>zmienna</em></div>
+<div class="synopsis"><em>pakiet</em> <tt>::</tt> <em>funkcja</em> ( ... )</div>
+</div>
+
+<p>Zmienne i funkcje w pakiecie&nbsp; <em>pakiet</em> mog&#261; by&#263; przywo&#322;ywane&nbsp; "<em>pakiet</em> <tt>::</tt> <em>nazwa_zmiennej</em>" je&#380;eli pakiet jest prawid&#322;owym identyfikatorem Pnuts.
+</p>
+
+
+<a name="generator"></a>
+<h3>Generatory</h3>
+
+<a name="yield"></a>
+<h4>yield</h4>
+
+<div class="box">
+<div class="synopsis"><b>yield</b>&nbsp;<em>wyra&#380;enie</em> </div>
+</div>
+
+<p>Je&#380;eli funkcja zawiera jedno lub wi&#281;cej wyra&#380;e&#324;&nbsp; 'yield' to
+zwracaj&#261; one specjalny obiekt nazywany "generator" bez jego
+wykonywania&nbsp;. Generator mo&#380;e by&#263; u&#380;yty w p&#281;tli&nbsp; for/foreach w
+celu przetworzenia warto&#347;ci zwracanych przez generator.
+</p>
+
+<pre class="eg">function integerGenerator(min, max){<br>   for (i: min..max) yield i<br>}<br><br>g = integerGenerator(0, 3)    ---&gt; generator<br><br>for (i : g){<br>    println(i)<br>}<br> ---&gt; 0<br>      1<br>      2<br>      3<br></pre>
+
+<h4>generator sekwencji</h4>
+
+<div class="box">
+<div class="synopsis"><em>generator</em> [ <em>pocz&#261;tkowyIndeks</em> ..]</div>
+<div class="synopsis"><em>generator</em> [&nbsp;<em>pocz&#261;tkowyIndeks</em> .. <em>ko&#324;cowyIndeks</em> ]</div>
+</div>
+<p>generator sekwencji zwraca obiekt Generator kt&oacute;ry dostarcza sekwencji liczb w zakresie&nbsp;<em>pocz&#261;tkowyIndeks ..&nbsp;</em><em>ko&#324;cowyIndeks &nbsp;</em> kt&oacute;ra jest podzbiorem warto&#347;ci zwracanych przez inny generator.
+</p>
+<pre class="eg">function g(n){<br>  for(i:0..n) yield i<br>}<br>x = g(100)<br>for (i: x[90..]) println(i)<br></pre>
+
+<h4>Indeksowany dost&#281;p do generatora</h4>
+
+<div class="box">
+<div class="synopsis"><em>generator</em> [ int <em>N</em> ]</div>
+<div class="synopsis"><em>generator</em> [ <em>predicate(elem)</em> ]</div>
+<div class="synopsis"><em>generator</em> [ <em>wyra&#380;enie</em> ]</div>
+</div>
+
+<p>Je&#380;eli podana jest liczba zwracany jest&nbsp; N'ty wygenerowany obiekt. Zwraca&nbsp; <tt>null</tt> je&#380;eli generator nie wygenerowa&#322; N'tego obiektu.
+</p>
+
+<pre class="eg">function range(start, end){<br>  for(i:start..end) yield i<br>}<br>x = range(1, 100)<br>x[90]                  ---&gt; 90<br>x[200]                 ---&gt; null<br></pre>
+
+<p>Je&#380;eli jest zdefiniowana funkcja&nbsp; <em>predicate</em> &nbsp;generator zwraca jedynie te elementy dla kt&oacute;rych funkcja zwraca <em>true</em>.
+</p>
+
+<pre class="eg">function range(start, end){<br>  for(i:start..end) yield i<br>}<br>x = range(1, 100)<br>list(x[function (x) x &lt; 4])     ---&gt; 1,2,3<br></pre>
+
+<p>Kiedy <em>expression</em> jest wyra&#380;eniem logicznym to wyra&#380;enie to
+jest konwertowane do funkcji przyjmuj&#261;cej jeden argument kt&oacute;ra
+dzia&#322;a tak samo jak dla&nbsp; <em>predicate(elem)</em>. Je&#380;eli <em>expression</em> jest por&oacute;wnaniem (<em>lval</em> <em>compare_op</em> <em>rval</em>), lewy identyfikator <em>lval</em> jest interpretowany jako pole instancji. Zobacz <a href="#selection">'Wyb&oacute;r Element&oacute;w'</a>.
+</p>
+
+<pre class="eg">import java.awt.Button<br>function buttons(n) {for (i : 1..n) yield(Button())}<br>x = buttons(10)<br>printAll(x[name == "button0"])<br></pre>
+
+
+<a name="composite_generator"></a>
+<h4>Operator Plus(+) dla generator&oacute;w</h4>
+
+<div class="box">
+<div class="synopsis"><em>generator1</em> + <em>generator2</em></div>
+</div>
+<p>
+<tt>Operacja +</tt> &nbsp;dla dw&oacute;ch generator&oacute;w zwraca
+nowy generator tworz&#261;cy serie obiekt&oacute;w kt&oacute;re
+zwr&oacute;cone by by&#322;y przez oba generatory sekwencyjnie.
+</p>
+<pre class="eg">x = range(1, 10)<br>even = x[function (x) x % 2 == 0]<br>odd = x[function (x) x % 2 != 0]<br>printAll(even + odd)<br></pre>
+
+<div class="box">
+<div class="synopsis"><em>generator</em> . <em>identyfikator</em></div>
+</div>
+
+<p>Odczyt pola z generatora zwraca nowy generator kt&oacute;ry zwraca
+warto&#347;ci p&oacute;l z obiekt&oacute;w generowanych przez ten generator. Zobacz r&oacute;wnie&#380; <a href="#instanceField">'Instancja Pola'</a>.
+</p>
+<pre class="eg">import java.awt.Button<br>function buttons(n) {for (i : 1..n) yield(Button())}<br>x = buttons(10)<br>printAll(x.name)<br></pre>
+
+<p>Zapis pola generatora modyfikuje wszystkie instancje wygenerowane przez generator
+</p>
+
+<pre class="eg">import java.awt.Button<br>buttons = [Button(),Button(),Button()]<br>function generator(elements) for (i:elements) yield i<br>generator(buttons).name = "new name"<br>printAll(generator(buttons).name)<br></pre>
+
+<a name="classdef"></a>
+<h2>4. Definicja klas</h2>
+
+<div class="box">
+<div class="synopsis"><tt>class</tt> <em>nazwa_klasy</em> [ <tt>extends</tt> <em>klasa_bazowa</em> ]
+[ <tt>implements</tt> <em>interfejs</em>... ] </div>
+<div class="synopsis"><tt>{</tt></div>
+(
+<div class="synopsis2">[ <em>typ</em> ] <em>nazwaPola</em> [ = <em>warto&#347;&#263;</em> ] </div>
+|
+<div class="synopsis2">[ <em>typ</em> ] <em>nazwaMetody</em> ([<em>typ</em>] <em>zmienna</em>...) { .. } </div>
+)*
+<div class="synopsis">}</div>
+</div>
+
+<p>Definicja klasy jest podobna do tej znanej z j&#281;zyka Java.
+</p>
+
+<p>Poni&#380;ej przedstawiono r&oacute;&#380;nic&#281; mi&#281;dzy klasami Pnuts a klasami Java:
+</p>
+<ul>
+<li>Tylko publiczne klasy s&#261; dozwolone - nie ma klas prywatnych w ramach pakietu ani interfejs&oacute;w
+</li><li>Dost&#281;p do p&oacute;l dzia&#322;a na zasadzie w&#322;a&#347;ciwo&#347;ci JavaBeans
+</li><li>Typy p&oacute;l/metod.parametr&oacute;w s&#261; opcjonalne
+</li><li>Nie ma statycznych p&oacute;l i metod
+</li><li>Nie ma deklaracji wyj&#261;tk&oacute;w
+</li><li>Nie ma wywo&#322;ania this() i super() w konstruktorach
+</li><li>Konstruktory kt&oacute;re wywo&#322;uj&#261; super() s&#261; automatycznie generowane
+</li></ul>
+
+<a name="classdeffile"></a>
+<h3>Pliki definiuj&#261;ce klasy</h3>Plik definiuj&#261;cy klas&#261; zwany&nbsp; <b>klas&#261; skryptow&#261;</b> definiuje klas&#281; Javy kt&oacute;ra jest &#322;adowana przez specjalizowany loader klas.
+Pliki klas powinny mie&#263; rozszerzenie '<tt>.pnc</tt>'.
+
+<p>Gramatyka definicji klasy jest nast&#281;puj&#261;ca:&nbsp;
+
+</p><div class="box">
+<div class="synopsis">[ <tt>package</tt> <em>nazwa_pakietu</em> ]</div>
+<div class="synopsis">( <tt>import</tt> <em>nazwa_klasy</em> )*</div>
+<div class="synopsis"><tt>class</tt> <em>nazwa_klasy</em> [ <tt>extends</tt> <em>klasa_bazowa</em> ]
+[ <tt>implements</tt> <em>interfejs</em>... ] { ... }</div>
+</div>
+
+<div class="eg">np. (<tt>util/mymap.pnc</tt>)
+<pre>package util<br>import java.util.*<br>import java.io.*<br>class mymap extends TreeMap implements Serializable {<br>  get(key){<br>    if ((v = super.get(key)) == null){<br>      super.put(key, v = set())<br>    }<br>    v<br>  }<br>}<br></pre></div>
+
+<a name="inline_classdef2"></a>
+<h3>Klasy definiowane Inline</h3>
+<p>Definicje klas mog&#261; by&#263; u&#380;ywane jak wyra&#380;enia. Kiedy definicja klasy
+zostanie u&#380;yta jako wyrazenie klasa jest &#322;adowana przez nowo utworzony
+loader klas .
+</p>
+
+
+<a name="builtin"></a>
+<h2>5. Funkcje wbudowane</h2>
+<p>Dziesi&#281;&#263; podstawowych operacji jest jest realizowane przez wbudowane
+funkcje kt&oacute;re nie mog&#261; by&#263; przedefiniowanie przez u&#380;ytkownika.</p>
+<blockquote>
+<table width="400">
+  
+    <tbody><tr align="center">
+      <td><tt>import</tt></td>
+      <td><tt>package</tt></td>
+      <td><tt>getContext</tt></td>
+      <td><tt>class</tt></td>
+      <td><tt>throw</tt></td>
+      <td><tt>catch</tt></td>
+      <td><tt>finally</tt></td>
+      <td><tt>use</tt></td>
+      <td><tt>unuse</tt></td>
+    </tr>
+    <tr align="center">
+      <td><tt>load</tt></td>
+      <td><tt>autoload</tt></td>
+      <td><tt>require</tt></td>
+      <td><tt>loadFile</tt></td>
+      <td><tt>eval</tt></td>
+      <td><tt>defined</tt></td>
+      <td><tt>quit</tt></td>
+    </tr>
+  
+</tbody></table>
+</blockquote>
+<a name="import"></a>
+
+<div class="box">
+<div class="synopsis"><b>import</b>("<em>nazwa_klasy</em>")</div>
+<div class="synopsis"><b>import</b>&nbsp;<em>nazwa_klasy</em></div>
+<div class="synopsis"><b>import static</b>&nbsp;<em>statyczny_sk&#322;adnik</em></div>
+</div>
+
+<p>import() rejestruje&nbsp;<em>nazwa_klasy</em> w bie&#380;&#261;cym kontek&#347;cie.
+Je&#380;eli nast&#281;puje odwo&#322;anie do niezarejestrowanej nazwy, zmienna jest sprawdzana czy nazwa jest zarejestrowana przez t&#261; funkcje.</p>
+<p><em>nazwa_klasy</em> mo&#380;e zawiera&#263; znak "*" np. <tt>"java.awt.*"</tt>.</p>
+<p>Domy&#347;lnie pakiet <tt>"java.lang.*"</tt> i domy&#347;lny pakiet (<tt>"*"</tt>)
+s&#261; zarejestrowane. &nbsp;Klasy s&#261; poszukiwane zaczynaj&#261;c od ostatnio
+importowanego pakietu. &nbsp;U&#380;ycie "*" w imporcie nie powoduje
+nadpisania nazw zaimportowanych klas.</p>
+<blockquote>
+<pre>Object                ---&gt; java.lang.Object class<br>import("org.omg.CORBA.*")<br>Object                ---&gt; org.omg.CORBA.Object interface<br>import("java.lang.Object")<br>Object                ---&gt; java.lang.Object class<br>import("org.omg.CORBA.*")<br>Object                ---&gt; java.lang.Object class<br></pre>
+</blockquote>
+<p>Kiedy parametr&nbsp;&nbsp;<em>nazwa_klasy</em> r&oacute;wna si&#281;&nbsp; null, wszystkie nazwy klas s&#261; niezarejestrowane.</p>
+
+<tt>Import static</tt> pozwala na dost&#281;p do statycznych p&oacute;l/metod bez specyfikacji nazwy klasy.
+
+<div class="eg">np.
+<pre>import static java.awt.Color.*<br>blue  --&gt; java.awt.Color[r=0,g=0,b=255]<br><br>import static java.util.ResourceBundle.*<br>getBundle("pnuts.lang.pnuts")<br></pre></div>
+
+
+<div class="box">
+<div class="synopsis"><b>import</b>()</div>
+</div>
+<p>Zwraca list&#281; zaimportowanych klas i pakiet&oacute;w.</p>
+
+<pre class="eg">import()               ---&gt; ["java.lang.*", "*"]<br>import("org.omg.CORBA.Object")<br>import()               ---&gt; [org.omg.CORBA.Object interface, "java.lang.*", "*"]<br>import(null)<br>import()               ---&gt; []<br></pre>
+
+<p>
+<tt>import()</tt> musi by&#263; u&#380;yty w globalnej przestrzeni nazw.
+</p>
+
+<a name="packaging"></a>
+<div class="box">
+<div class="synopsis"><b>package</b> ( <em>nazwaNapis</em> lub <em>pakiet</em> )</div>
+</div>
+<p>Wchodzi do podanego pakietu, je&#380;eli&nbsp;<em>nazwaNapis </em>jest podana a pakiet nie istnieje jest on tworzony. Funkcja zwraca&nbsp; <tt>null</tt>.
+</p>
+
+<div class="eg">np.(1)
+<pre>package()           ---&gt; package ""<br>a = 1<br>package("foo")      ---&gt; pakiet "foo"<br>a                   ---&gt; 1<br>a = 2<br>a                   ---&gt; 2<br>::a                 ---&gt; 1<br>package("")         ---&gt; pakiet ""<br>a                   ---&gt; 1<br>foo::a              ---&gt; 2<br></pre>
+</div>
+
+<div class="eg">np.(2)
+<pre>package()           ---&gt; pakiet ""<br>function f() 1<br>package("foo")      ---&gt; pakiet "foo"<br>f()                 ---&gt; 1<br>function f() 2<br>f()                 ---&gt; 2<br>::f()               ---&gt; 1<br>package("")         ---&gt; pakiet ""<br>f()                 ---&gt; 1<br>foo::f()            ---&gt; 2<br></pre>
+</div>
+
+<div class="box">
+<div class="synopsis"><b>package</b><tt>()</tt></div>
+</div>  
+
+<p>Zwraca bie&#380;&#261;cy pakiet.</p>
+
+<div class="eg">np.
+<pre>package()           ---&gt; pakiet ""<br>package("foo")<br>package()           ---&gt; pakiet "foo"<br>package("")<br>package()           ---&gt; pakiet ""<br></pre>
+</div>
+<a name="use"></a>
+<div class="box">
+<div class="synopsis"><b>use</b> ( { <em>modu&#322;</em> } )</div>
+</div>
+<p>Kiedy <em>modu&#322;</em> jest obiektem&nbsp; String to modu&#322; jest dodawany do bie&#380;&#261;cego kontekstu.
+</p><ul>
+<li>Je&#380;eli modu&#322; nie zosta&#322; zainicjalizowany wywo&#322;ywany jest skrypt
+inicjalizacyjny. Modu&#322; zostaje zarejestrowany w bie&#380;&#261;cym kontek&#347;cie u
+staje si&#281; dost&#281;pny tylko w przypadku prawid&#322;owego wykonania skryptu
+inicjalizacyjnego.
+</li><li>Je&#380;eli modu&#322; ju&#380; jest zainicjalizowany ale nie zarejestrowany w kontek&#347;cie jest dodawany do listy modu&#322;&oacute;w kontekstu.
+</li></ul>
+<p>Gdy modu&#322; jest prawid&#322;owo u&#380;yty funkcje z modu&#322;u s&#261; domy&#347;lnie eksportowane.
+</p>
+<p>
+<tt>use()</tt> zwraca&nbsp; true je&#380;eli modu&#322; zosta&#322; zarejestrowany w kontek&#347;cie.
+</p><p>Przyk&#322;adowo,
+
+</p><div class="eg">foo/init.pnut
+<pre>function x() 100<br></pre>
+</div>
+
+<div class="eg">
+<pre> use("foo")    ---&gt; true<br> x             ---&gt; function x() 100<br></pre></div>
+
+<p>Gdy <em>module</em> jest obiektem Package pakiet jest zaznaczany jako modu&#322; i dodawany do listy modu&#322;&oacute;w kontekstu&nbsp;. Zobacz "<a href="module.html#dynamic_modules">Dynamiczne modu&#322;y</a>".
+
+</p><p>Gdy <em>module</em> jest <tt>null</tt>, wszystkie pakiety s&#261; wyrejestrowywane z kontekstu. Zobacz <a href="#branch_module_list">"Lista Modu&#322;&oacute;w"</a>.</p>
+<p>Gdy <em>module</em> jest pomini&#281;ty zwracana jest tablica nazw u&#380;ytych modu&#322;&oacute;w.
+</p><div class="eg">np.
+<pre>use()          ---&gt;  ["foo"]<br></pre></div>
+
+<p>Zobacz <a href="#modules">"Modu&#322;y"</a> aby dowiedzie&#263; si&#281; o podstawowych koncepcjach i&nbsp; <a href="module.html">"Podr&#281;cznik Pnuts"</a> aby dowiedzie&#263; si&#281; wi&#281;cej o modu&#322;ach.</p>
+
+<a name="unuse"></a>
+<div class="box">
+<div class="synopsis"><b>unuse</b> ( <em>modu&#322;</em> )</div>
+</div>
+
+<p>
+<tt>unuse()</tt> usuwa podany modu&#322; z listy modu&#322;&oacute;w i zwraca&nbsp; true je&#380;eli modu&#322; zosta&#322; usuni&#281;ty.
+</p>
+
+<a name="context"></a>
+<div class="box">
+<div class="synopsis"><b>getContext</b> ()</div>
+</div>
+<p><em>Context</em> jest wewn&#281;trznym obiektem interpretera&nbsp; Pnuts. Zawiera nast&#281;puj&#261;ce informacje;</p>
+<ul>
+  <li>Kt&oacute;re pakiety Pnuts s&#261; w u&#380;yciu
+  </li><li>List&#281; zaimportowanych pakiet&oacute;w Javy
+  </li><li>Strumie&#324; wyj&#347;cia (OutputStream) gdzie funkcja print() wypisuje dane
+  </li><li>Strumie&#324; wyj&#347;cia (OutputStream) gdzie funkcja error() wypisuje dane
+  </li><li>itd.
+</li></ul>
+<p>Rezultatem <tt>getContext()</tt> jest obiekt klasy <a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a> kt&oacute;ry jest opisany w <a href="../apidoc/pnuts/lang/Context.html">Dokumentacji API</a>.</p>
+<div class="eg">np.
+<pre>getContext().setOutputStream(System::out)<br></pre></div>
+<p>Zobacz <a href="context.html">"Podr&#281;cznik Pnuts"</a>.</p>
+<p><a name="loading"></a></p>
+<div class="box">
+<div class="synopsis"><b>loadFile</b> ( nazwa_pliku [ , <em>kontekst </em>] )</div>
+<div class="synopsis"><b>load</b> ( <em>resource</em> [ ,&nbsp;<em>kontekst</em> ] )</div>
+<div class="synopsis"><b>require</b> ( <em>zas&oacute;b</em> )</div>
+<div class="synopsis"><b>autoload</b> ( <em>symbol</em>,&nbsp;<em>kontekst</em> )</div>
+</div>
+  
+<p><tt>loadFile()</tt> czyta skrypt z lokalnego systemu plik&oacute;w.
+<tt>load()</tt> czyta skrypt znaleziony przez loadera klas.
+Funkcje zwracaj&#261; wynik ostatniego wyra&#380;enia w skrypcie.</p>
+
+<p>Kiedy skrypt jest wykonywany importowane klasy s&#261; resetowane do stanu
+domy&#347;lnego a bie&#380;&#261;cy pakiet jest ustawiany na pakiet g&#322;&oacute;wny.
+</p><div class="eg">np.
+<pre>loadFile("/home/my.pnut")<br>load("examples/pnutsLayout.pnut")<br></pre></div>
+<p><tt>require()</tt> czyta skrypt kt&oacute;ry nie zosta&#322; jeszcze wczytany lub zosta&#322; zmieniony.</p>
+<p><tt>autoload()</tt> rejestruje symbol mapuj&#261;cy skrypt w pakiecie
+bie&#380;&#261;cym. &nbsp;Je&#380;eli symbol nie jest zdefiniowany w pakiecie
+zamapowany pakiet jest wczytywany.</p>
+
+<p>Zobacz <a href="loading.html">"Podr&#281;cznik Pnuts"</a>.</p>
+<p><a name="eval"></a></p>
+<div class="box">
+<div class="synopsis"><b>eval</b> ( <em>napis</em> )</div>
+<div class="synopsis"><b>eval</b> ( <em>napis</em>, <em>pakiet</em> )</div>
+<div class="synopsis"><b>eval</b> ( <em>napis</em>, <em>kontekst</em> )</div>
+</div>
+
+<div class="eg">np.
+<pre>foo = "YES"<br>eval("foo.length()")    ---&gt; 3<br></pre></div>
+<p>Gdy&nbsp; <em>pakiet</em> jest podany to <em>napis</em> jest ewaluowany w&nbsp;nowym kontek&#347;cie gdzie&nbsp;<em>pakiet</em> staje si&#281; pakietem bie&#380;&#261;cym.</p>
+<pre class="eg">eval("a = 100", "pkg")<br>pkg::a             ---&gt; 100<br></pre>
+<p>
+<a name="exception"></a>
+<a name="throw"></a>
+</p><div class="box">
+<div class="synopsis"><b>throw</b> ( <em>wyj&#261;tek </em>lub&nbsp;<em>napis</em> ) </div>
+<div class="synopsis"><b>throw</b>&nbsp;<em>wyj&#261;tek </em>lub&nbsp;<em>napis</em><em></em></div>
+</div>
+
+<p>Rzuca podany wyj&#261;tek lub RuntimeException gdy napis jest podany.</p>
+<div class="eg">np.
+<pre>throw("be careful")<br>throw(FileNotFoundException())<br></pre></div>
+
+<div class="eg">np.
+<pre>throw new java.io.IOException("message")<br></pre>
+</div>
+
+<p><a name="catch"></a></p>
+<div class="box">
+<div class="synopsis"><b>catch</b> ( <em><span style="font-family: monospace;">klasaWyj&#261;tku</span></em><tt>, </tt><em>funkcja</em> )</div>
+</div>
+<p>Gdy <tt>catch()</tt> nie jest u&#380;yte w bloku&nbsp; try/catch
+nast&#281;puje definicja obs&#322;ugi wyj&#261;tku w bie&#380;&#261;cej przestrzeni. Kiedy
+rzucony zostanie wyj&#261;tek z zarejestrowanej listy odpowiednia oobs&#322;uga jest
+wykonywana i nast&#281;puje powr&oacute;t do wywo&#322;uj&#261;cego a funkcja zwraca
+wynik.</p>
+<p>Przestrze&#324; obs&#322;ugi wyj&#261;tk&oacute;w jest taka sama jak zmiennych.</p>
+<div class="eg">np.
+<pre>function func(){<br>  catch(FileNotFoundException, function (e) "Nie ma znaczenia")<br>  println(1)<br>  FileInputStream("plik nie istnieje")<br>  println(2)<br>}<br><br>&gt; func()<br>1<br>"Nie ma znaczenia"<br><br>&gt; FileInputStream("plik nie istnieje")<br>java.io.FileNotFoundException  : "plik nie istnieje"<br></pre></div>
+<p>Gdy&nbsp; <em>funkcja</em> jest obs&#322;uga jest niezdefiniowana</p>
+
+
+<p><a name="finally"></a></p>
+<div class="box">
+<div class="synopsis"><b>finally</b> ( [&nbsp;<em>funkcjaTry</em>  , ] <em>funkcjaFinally</em>)</div>
+</div>  
+<p>Gdy obie funkcje s&#261; podane wykonywana jest funkcja&nbsp;<em>funkcjaTry()</em> nast&#281;pnie wykonywana jest&nbsp;<em>funkcjaFinally()</em> bez wzgl&#281;du czy <em>funkcjaTry()</em> wykona&#322;a si&#281; z sukcesem czy nie.
+
+</p><pre class="eg">try {<br>    <em>tryFunction()</em>
+} finally {
+    <em>functionFunction()</em>
+}
+</pre>
+<p>Gdy jest tylko podana&nbsp;<em>funkcjaFinally</em> rejestrowana jest funkcja kt&oacute;ra jest wykonywana kiedy opuszczana jest bie&#380;&#261;cy zakres.
+
+</p>
+<pre class="eg">function test(){<br>   finally(function () println("zrobione"))<br>   println("start")<br>}<br><br>&gt; test()<br>start<br>zrobione<br></pre>
+
+<p><a name="defined"></a></p>
+<div class="box">
+<div class="synopsis"><b>defined</b> ( <em>symbol</em> )</div>
+</div>
+
+<p><tt>defined()</tt> sprawdza czy podany&nbsp; symbol jest zdefiniowany w zakresie.</p>
+<div class="eg">np.
+<pre>&gt; defined("X")<br>false<br>&gt; X = 100<br>100<br>&gt; defined("X")<br>true<br>&gt; X = null<br>null<br>&gt; defined("X")<br>true<br></pre></div>
+<p><tt>defined()</tt> r&oacute;wnie&#380; sprawdza dost&#281;pno&#347;&#263; klas.</p>
+<div class="eg">np.
+<pre>&gt; defined("Window")<br>false<br>&gt; import("java.awt.Window")<br>null<br>&gt; defined("Window")<br>true<br></pre></div>
+<p><a name="class"></a></p>
+<div class="box">
+<div class="synopsis"><b>class</b> ( "<em>nazwa_klasy</em> )</div>
+</div>
+
+<p>Je&#380;eli istnieje podana klasa zwracany jest odpowiedni obiekt Class lub null gdy nie istnieje.</p>
+<p><a name="quit"></a></p>
+<div class="box">
+<div class="synopsis"><b>quit</b> ( [ <span style="font-style: italic;">wyra&#380;enie</span><em></em> ] )</div>
+</div>
+
+<p><tt>quit()</tt> ko&#324;czy wykonywanie skryptu.
+</p>
+<p>Gdy&nbsp; <em>wyra&#380;enie</em> jest podane interpreter zwraca podan&#261; warto&#347;&#263;. Zobacz <a href="api.html">Pnuts API</a>.</p>
+<div class="eg">np.
+<pre>(w Javie)<br>   Object ret = Pnuts.load(System.in, true, new Context());<br>   System.out.println("ret = " + ret);<br><br>(w Pnuts)<br>   quit(123)<br><br>------------<br>   ret = 123<br></pre></div>
+<p>Funkcja nie mo&#380;e zatrzyma&#263; programu kt&oacute;ry nie jest w&#261;tkiem
+demonem tj. AWT-EventDispatcher kt&oacute;ry dzia&#322;a gdy w&#261;tek
+g&#322;&oacute;wny jest zatrzymywany.</p>
+<a name="sugar"></a>
+<h2>6. Rozszerzenia sk&#322;adni</h2>
+<p>Gdy obiekt implementuj&#261;cy specjalne interfejsy realizuj&#261;ce operacje
+arytmetyczne czy wyra&#380;enia dost&#281;pu odpowiednie metody s&#261; wywo&#322;ywane
+upraszczaj&#261;c kod skryptu.
+</p><p><a name="arithmeticExtension"></a></p>
+<h3>Operacje arytmetyczne</h3>
+<p>Gdy obiekt implementuje interfejs <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a> odpowiednie metody s&#261; wywo&#322;ywane.</p>
+
+<pre class="eg">public interface Numeric {<br>    Object add(Object o);<br>    Object subtract(Object o);<br>    Object multiply(Object o);<br>    Object divide(Object o);<br>    Object negate();<br>    Object inverse();<br>    int compareTo(Object o);<br><br>    int NOT_EQUAL = 2;<br>    int LEFT_IS_BIGGER = 1;<br>    int RIGHT_IS_BIGGER = -1;<br>    int EQUAL = 0;<br>}<br></pre>
+
+<p>Gdy pierwszym operandem jest obiekt zgodny z&nbsp; <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a> koresponduj&#261;ca metoda jest wywo&#322;ywana.</p>
+<div class="eg">np.:
+<pre>Numeric n1, n2;<br>n1 + n2     ---&gt;  n1.add(n2)<br>n1 - n2     ---&gt;  n1.subtract(n2)<br>n1 * n2     ---&gt;  n1.multiply(n2)<br>n1 / n2     ---&gt;  n1.divide(n2)<br>n1 &gt; n2     ---&gt;  n1.compareTo(n2) == LEFT_IS_BIGGER<br>- n1        ---&gt;  n1.negate()<br></pre></div>
+<p>Operatory "+" i "*" s&#261; przemienne wi&#281;c gdy drugi operand jest obiektem&nbsp; Numeric object a pierwszy obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> operandy s&#261; zamieniane miejscami.</p>
+<p>Gdy drugi operand "-" jest obiektem Numeric a pierwszy obiektem&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> drugi operator zostaje zanegowany i jest dodawany do pierwszego.</p>
+<p>Gdy drugi operand&nbsp;"/"&nbsp;jest obiektem Numeric&nbsp;a pierwszy obiektem <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> drugi operand zostaje odwr&oacute;cony i jest mno&#380;ony przez pierwszy.</p>
+
+<a name="units"></a><p></p>
+<h3>Jednostki</h3>
+<p><a href="../apidoc/pnuts/lang/QuantityFactory.html">QuantityFactory</a> jest zdefiniowany nast&#281;puj&#261;co.</p>
+<pre class="eg">package pnuts.lang;<br><br>public interface QuantityFactory {<br>   public Object make(Number number, String unitName);<br>}<br></pre>
+<p>Nazwa jednostki powinna by&#263; zarejestrowana przez metod&#281; <a href="../apidoc/pnuts/lang/Context.html#registerQuantityFactory%28java.lang.String,%20pnuts.lang.QuantityFactory%29"><tt>Context.registerQuantityFactory(String, QuantityFactory)</tt></a>&nbsp;. Gdy zdefiniowana jednostka wyst&#281;puje po literale numerycznym metoda&nbsp; <tt>QuantityFactory.make()</tt> zwraca koresponduj&#261;cy obiekt QuantityFactory &nbsp;kt&oacute;ry jest uruchamiany w celu zwr&oacute;cenia warto&#347;ci wyra&#380;enia.
+</p><p>Wynik metody&nbsp; <tt>make()</tt> &nbsp;jest warto&#347;ci&#261; numeryczn&#261; wi&#281;c mog&#261; by&#263; na niej stosowane operacje numeryczne.</p>
+<pre class="eg">10cm - 1in       ---&gt; 7.460cm<br>0.5cm - 0.1in    ---&gt; 0.246cm<br></pre>
+
+<p><a name="indexed"></a></p>
+<h3>Dost&#281;p indeksowy</h3>
+<p>Dost&#281;p indeksowy realizuje interfejs <a href="../apidoc/pnuts/lang/Indexed.html"><tt>pnuts.lang.Indexed</tt></a> kt&oacute;rego metoda jest w tym wypadku wywo&#322;ywana.</p>
+<p><tt>pnuts.lang.Indexed</tt> jest zdefiniowany tak.</p>
+<pre class="eg">package pnuts.lang;<br><br>public interface Indexed {<br>    void set(int idx, Object value);<br>    Object get(int idx);<br>}<br></pre>
+<div class="eg">np.
+<pre>i1 = anIndexed<br>i1[0]          ---&gt;  i1.get(0)<br>i1[0] = 18     ---&gt;  i1.set(0, 18)<br></pre></div>
+<p>Na platformie J2SE dost&#281;p indeksowy na obiektach&nbsp; <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/List.html"><tt>Java.util.List</tt></a> powoduje wywo&#322;anie metody&nbsp; of <tt>List.get(int)</tt> i <tt>List.set(int, Object)</tt>.
+
+</p><p><a name="member"></a></p>
+<h3>Dost&#281;p do sk&#322;adowych</h3>
+<p>Dost&#281;p do sk&#322;adowych realizuje interfejs&nbsp; <a href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a> i jego metody: <tt>get()</tt> or <tt>set()</tt>.</p>
+<p><tt>pnuts.lang.Property</tt> jest zdefiniowany jako.</p>
+<pre class="eg">package pnuts.lang;<br><br>public interface Property {<br>    void set(String name, Object value, Context context);<br>    Object get(String name, Context context);<br>}<br></pre>
+<div class="eg">np.
+<pre>p1 = aProperty<br>p1.name          ---&gt;  p1.get("name")<br>p1.age = 18      ---&gt;  p1.set("age", 18)<br></pre></div>
+<p>Uwaga klasa <a href="../apidoc/pnuts/lang/Package.html"><tt>pnuts.lang.Package</tt></a> implementuje interfejs
+<a href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a> &nbsp;co powoduje &#380;e notacja z kropk&#261; mo&#380;e by&#263; u&#380;ywa na obiektach klasy Package.</p>
+<div class="eg">np.
+<pre>package("foo")<br>p1 = package()<br>package("")<br>p1.msg = "yes"   == p1.set("msg", "yes") == foo::msg = "yes"</pre></div>
+<p>Na platformie&nbsp; J2SE notacja z kropk&#261; na obiektach <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html"><tt>Java.util.Map</tt></a> skutkuje wywo&#322;aniem metod&nbsp;<tt>Map.get(Object)</tt> i <tt>Map.put(Object, Object)</tt>.
+
+</p><p><a name="methodCall"></a></p>
+<h3>Wywo&#322;ywanie metod</h3>
+<p>Wywo&#322;anie metody na obiekcie&nbsp; <a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a> powoduje wywo&#322;anie metody invoke().</p>
+<p><tt>pnuts.lang.AbstractData</tt> jest zdefiniowany nast&#281;puj&#261;co.</p>
+<pre class="eg">package pnuts.lang;<br><br>public interface AbstractData extends Property {<br>    Object invoke(String name, Object args[], Context context);<br>}<br></pre>
+<div class="eg">np.
+<pre>o1 = anAbstractData<br>o1.work(1,2,3)   ---&gt;  p1.invoke("work", [1,2,3], getContext())<br></pre></div>
+
+<p><a name="syntax"></a></p>
+<h2>7. Zasady Sk&#322;adni</h2>
+<p>Zasady sk&#322;adni j&#281;zyka Pnuts s&#261; nast&#281;puj&#261;ce i bazuj&#261;&nbsp; EBNF jednak cz&#281;&#347;ciowo umywaj&#261; notacji JavaCC&nbsp;.
+</p>
+
+<pre class="wb">INTEGER_LITERAL =  DECIMAL_LITERAL | HEX_LITERAL1 | HEX_LITERAL2 ;<br>DECIMAL_LITERAL = ("0"-"9")+, ( LETTER )* ;<br>HEX_LITERAL1 = "#", ("0"-"9","a"-"f","A"-"F")+ ;<br>HEX_LITERAL2 = "0", ("x" | "X"), ("0"-"9"|"a"-"f"|"A"-"F")+, ( LETTER )*;<br>FLOATING_POINT_LITERAL = ("0"-"9")+, ".", ("0"-"9")+, [ EXPONENT ], ( LETTER )* |<br>                           ".", ("0"-"9")+, [ EXPONENT ],  ( LETTER )* |<br>                          ("0"-"9")+,  EXPONENT, ( LETTER )* ;<br>EXPONENT = ( "e" |"E" ), ["+" | "-"], ("0"-"9")+ ;<br>UNICODE_ESCAPE = ("u" | "U"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F") ;<br>CHARACTER_LITERAL = "'", ( ~["'","\\","\n","\r"] |<br>                           "\\" ( "n" | "t" | "b" | "r" | "f" | "0" |<br>                           "\\" | "'" | "\"" | UNICODE_ESCAPE ) ) "'" ;<br>STRING_LITERAL = "\""( ( ~["\"","\\"]) |<br>                           ("\\" ( "\\" | (~["\\"]) ) ) )* "\"" ;<br>STRING_LITERAL2 = "`" ( ~["`"] )* "`" ;<br>IDENTIFIER = LETTER ( LETTER | DIGIT )* ;<br>LETTER = "\u0024" | "\u0040"-"\u005a" | "\u005f" | "\u0061"-"\u007a" | "\u0080"-"\uffff" ;<br>DIGIT = "0"-"9" ;<br>IDENTIFIER: LETTER ( LETTER | DIGIT )* ;<br>COMMAND_HEADER = "#!" (~["\n","\r"])* ("\r\n" | "\n" | "\r") ;<br>EOL = "\r" | "\n" "\r\n" ;<br>Eol = ( EOL )* ;<br>StartSet = [ COMMAND_HEADER ] Eol ( (ExpressionList ( EOL [ ExpressionList ] )* EOF)  |<br>                                       EOF ) ;<br>Start = [ ExpressionList ] ( EOL | EOF ) ;<br>ExpressionList =  Expression (";" [ Expression ] )* |<br>                    ";" ;<br>Expression = MultiAssignLHS "=" Expression |<br>             ConditionalExpression [ Assignment ] |<br>             StatementExpression ;<br>MultiAssignLHS = IdNode "," IdNode ("," IdNode )*<br>ArgumentExpression = ConditionalExpression [ Assignment ] |<br>               StatementExpression ;<br>PrimaryExpression = PrimaryPrefix ( PrimarySuffix )* ;<br>IdNode = [ "::" ] IDENTIFIER ;<br>PrimaryPrefix = Literal | IdNode | MapElements | Class | New |<br>                "[" ListElements "]" |<br>                "{" ListElements "}" |<br>                "(" Eol Expression Eol ")" ;<br>ListElements = Eol [ ArgumentExpression Eol ( "," Eol ArgumentExpression Eol )* ] ;<br>MapElements = "{" Eol MapElement ("," Eol MapElement)* Eol "}" ;<br>MapElement = Expression "=&gt;" Expression ;<br>Class = "class" [ ClassName ] ;<br>New = "new" ClassName ( (" ListElements ")" [ ClassDefBody ] |<br>                          ( ArraySuffix )+ [ "{" ListElements "}" ] ) ;<br>ClassDef = "class" ClassName<br>           [ "extends" ClassName ]<br>           [ "implements" ClassName ( "," ClassName)* ]<br>           ClassDefBody<br>ClassDefBody = "{" Eol (MethodDef|FieldDef)* "}" ;<br>MethodDef = [ ClassName ] IDENTIFIER TypedParamList Eol Block2 Eol ;<br>FieldDef = [ ClassName ] IDENTIFIER [ "=" Expression ]<br>ArraySuffix = "[" Eol ( "]" | Expression Eol "]" ) ;<br>ClassName = Package ( "." Package )* ;<br>Package = IDENTIFIER ;<br>MethodNode = "." IDENTIFIER "("  ListElements ")" ;<br>StaticMethodNode = "::" IDENTIFIER "("  ListElements ")" ;<br>MemberNode = "." ( IDENTIFIER | "class" ) ;<br>StaticMemberNode = "::" IDENTIFIER ;<br>ApplicationNode = "(" ListElements ")" ;<br>PrimarySuffix = "[" Eol ( "]" |<br>                          Expression Eol ( ".." Eol ( "]" |<br>                             	                      Expression Eol "]" ) |<br>                                           "]" ) ) |<br>                   MethodNode | StaticMethodNode | MemberNode |<br>                   StaticMemberNode | ApplicationNode ;<br>Literal = INTEGER_LITERAL | FLOATING_POINT_LITERAL | CHARACTER_LITERAL |<br>            STRING_LITERAL | STRING_LITERAL2 | BooleanLiteral | NullLiteral ;<br>BooleanLiteral = "true" | "false" ;<br>NullLiteral = "null" ;<br>Assignment = ("=" | "*=" | "%=" | "/=" | "+=" | "-=" | "&lt;&lt;=" | "&gt;&gt;=" | "&gt;&gt;&gt;=" | "&amp;=" | "^=" | "|=")   Eol Expression ;<br>ConditionalExpression = ConditionalOrExpression [ "?" Eol Expression ":" Eol ConditionalExpression ] ;<br>ConditionalOrExpression = ConditionalAndExpression ( Eol "||" Eol ConditionalAndExpression )* ;<br>ConditionalAndExpression = InclusiveOrExpression ( Eol "&amp;&amp;" Eol InclusiveOrExpression  )* ;<br>InclusiveOrExpression = ExclusiveOrExpression ( Eol "|" Eol ExclusiveOrExpression  )* ;<br>ExclusiveOrExpression = AndExpression ( Eol "^" Eol AndExpression )* ;<br>AndExpression = EqualityExpression ( Eol "&amp;" Eol EqualityExpression  )* ;<br>EqualityExpression = InstanceofExpression ( Eol ( "==" Eol InstanceofExpression |<br>                                                    "!=" Eol InstanceofExpression ) )* ;<br>InstanceofExpression = RelationalExpression [ Eol "instanceof" Type ] ;<br>RelationalExpression = ShiftExpression ( Eol (  ("&lt;" | "&gt;" | "&lt;=" | "&gt;=") Eol ShiftExpression )*;<br>ShiftExpression = AdditiveExpression ( Eol ( ( "&lt;&lt;" | "&gt;&gt;" | "&gt;&gt;&gt;" ) Eol AdditiveExpression ))*;<br>AdditiveExpression = MultiplicativeExpression ( Eol ( ( "+" | "-" ) Eol MultiplicativeExpression ))*;<br>MultiplicativeExpression = UnaryExpression ( Eol ( ("*" | "/" | "%") Eol UnaryExpression ))* ;<br>UnaryExpression = "+" UnaryExpression |<br>                    "-" UnaryExpression |<br>                    "++" PrimaryExpression |<br>                    "--" PrimaryExpression |<br>                     UnaryExpressionNotPlusMinus ;<br>UnaryExpressionNotPlusMinus = "~" UnaryExpression |<br>                                "!" UnaryExpression |<br>                                CastExpression |<br>                                PostOpe ;<br>CastExpression = "(" Eol Type Eol ")" UnaryExpressionNotPlusMinus ;<br>Type = ClassName (PrimarySuffix)* ;<br>PostOpe = PrimaryExpression  [ "++" | "--" ] ;<br>StatementExpression = IfStatement | WhileStatement | DoStatement | ForeachStatement |<br>                      ForStatement | SwitchStatement | Break | Continue | Return |<br>                      Yield | FunctionStatement | TryStatement | CatchNode |<br>                      FinallyNode | Import | ThrowNode ;<br>Break =  "break" [ Expression ] ;<br>Continue = "continue" ;<br>Return = "return" [ Expression ] ;<br>Yield = "yield" [ Expression ] ;<br>Import = "import"  [ "static" ]  [ Package ( "." Package )* ["." "*" ] |<br>                                      "*") |<br>                                      "(" [ Expression ] ")" ] ;<br>Block = "{" Eol [ Expression ((";" |EOL) [ Expression ] )* ] "}" |<br>          ExpressionINTEGER_LITERAL =  DECIMAL_LITERAL | HEX_LITERAL1 | HEX_LITERAL2 ;<br>DECIMAL_LITERAL = ("0"-"9")+, ( LETTER )* ;<br>HEX_LITERAL1 = "#", ("0"-"9","a"-"f","A"-"F")+ ;<br>HEX_LITERAL2 = "0", ("x" | "X"), ("0"-"9"|"a"-"f"|"A"-"F")+, ( LETTER )*;<br>FLOATING_POINT_LITERAL = ("0"-"9")+, ".", ("0"-"9")+, [ EXPONENT ], ( LETTER )* |<br>                           ".", ("0"-"9")+, [ EXPONENT ],  ( LETTER )* |<br>                          ("0"-"9")+,  EXPONENT, ( LETTER )* ;<br>EXPONENT = ( "e" |"E" ), ["+" | "-"], ("0"-"9")+ ;<br>UNICODE_ESCAPE = ("u" | "U"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F"),<br>                 ( "0"-"9" | "a"-"f" | "A"-"F") ;<br>CHARACTER_LITERAL = "'", ( ~["'","\\","\n","\r"] |<br>                           "\\" ( "n" | "t" | "b" | "r" | "f" | "0" |<br>                           "\\" | "'" | "\"" | UNICODE_ESCAPE ) ) "'" ;<br>STRING_LITERAL = "\""( ( ~["\"","\\"]) |<br>                           ("\\" ( "\\" | (~["\\"]) ) ) )* "\"" ;<br>STRING_LITERAL2 = "`" ( ~["`"] )* "`" ;<br>IDENTIFIER = LETTER ( LETTER | DIGIT )* ;<br>LETTER = "\u0024" | "\u0040"-"\u005a" | "\u005f" | "\u0061"-"\u007a" | "\u0080"-"\uffff" ;<br>DIGIT = "0"-"9" ;<br>IDENTIFIER: LETTER ( LETTER | DIGIT )* ;<br>COMMAND_HEADER = "#!" (~["\n","\r"])* ("\r\n" | "\n" | "\r") ;<br>EOL = "\r" | "\n" "\r\n" ;<br>Eol = ( EOL )* ;<br>StartSet = [ COMMAND_HEADER ] Eol ( (ExpressionList ( EOL [ ExpressionList ] )* EOF)  |<br>                                       EOF ) ;<br>Start = [ ExpressionList ] ( EOL | EOF ) ;<br>ExpressionList =  Expression (";" [ Expression ] )* |<br>                    ";" ;<br>Expression = MultiAssignLHS "=" Expression |<br>             ConditionalExpression [ Assignment ] |<br>             StatementExpression ;<br>MultiAssignLHS = IdNode "," IdNode ("," IdNode )*<br>ArgumentExpression = ConditionalExpression [ Assignment ] |<br>               StatementExpression ;<br>PrimaryExpression = PrimaryPrefix ( PrimarySuffix )* ;<br>IdNode = [ "::" ] IDENTIFIER ;<br>PrimaryPrefix = Literal | IdNode | MapElements | Class | New |<br>                "[" ListElements "]" |<br>                "{" ListElements "}" |<br>                "(" Eol Expression Eol ")" ;<br>ListElements = Eol [ ArgumentExpression Eol ( "," Eol ArgumentExpression Eol )* ] ;<br>MapElements = "{" Eol MapElement ("," Eol MapElement)* Eol "}" ;<br>MapElement = Expression "=&gt;" Expression ;<br>Class = "class" [ ClassName ] ;<br>New = "new" ClassName ( (" ListElements ")" [ ClassDefBody ] |<br>                          ( ArraySuffix )+ [ "{" ListElements "}" ] ) ;<br>ClassDef = "class" ClassName<br>           [ "extends" ClassName ]<br>           [ "implements" ClassName ( "," ClassName)* ]<br>           ClassDefBody<br>ClassDefBody = "{" Eol (MethodDef|FieldDef)* "}" ;<br>MethodDef = [ ClassName ] IDENTIFIER TypedParamList Eol Block2 Eol ;<br>FieldDef = [ ClassName ] IDENTIFIER [ "=" Expression ]<br>ArraySuffix = "[" Eol ( "]" | Expression Eol "]" ) ;<br>ClassName = Package ( "." Package )* ;<br>Package = IDENTIFIER ;<br>MethodNode = "." IDENTIFIER "("  ListElements ")" ;<br>StaticMethodNode = "::" IDENTIFIER "("  ListElements ")" ;<br>MemberNode = "." ( IDENTIFIER | "class" ) ;<br>StaticMemberNode = "::" IDENTIFIER ;<br>ApplicationNode = "(" ListElements ")" ;<br>PrimarySuffix = "[" Eol ( "]" |<br>                          Expression Eol ( ".." Eol ( "]" |<br>                             	                      Expression Eol "]" ) |<br>                                           "]" ) ) |<br>                   MethodNode | StaticMethodNode | MemberNode |<br>                   StaticMemberNode | ApplicationNode ;<br>Literal = INTEGER_LITERAL | FLOATING_POINT_LITERAL | CHARACTER_LITERAL |<br>            STRING_LITERAL | STRING_LITERAL2 | BooleanLiteral | NullLiteral ;<br>BooleanLiteral = "true" | "false" ;<br>NullLiteral = "null" ;<br>Assignment = ("=" | "*=" | "%=" | "/=" | "+=" | "-=" | "&lt;&lt;=" | "&gt;&gt;=" | "&gt;&gt;&gt;=" | "&amp;=" | "^=" | "|=")   Eol Expression ;<br>ConditionalExpression = ConditionalOrExpression [ "?" Eol Expression ":" Eol ConditionalExpression ] ;<br>ConditionalOrExpression = ConditionalAndExpression ( Eol "||" Eol ConditionalAndExpression )* ;<br>ConditionalAndExpression = InclusiveOrExpression ( Eol "&amp;&amp;" Eol InclusiveOrExpression  )* ;<br>InclusiveOrExpression = ExclusiveOrExpression ( Eol "|" Eol ExclusiveOrExpression  )* ;<br>ExclusiveOrExpression = AndExpression ( Eol "^" Eol AndExpression )* ;<br>AndExpression = EqualityExpression ( Eol "&amp;" Eol EqualityExpression  )* ;<br>EqualityExpression = InstanceofExpression ( Eol ( "==" Eol InstanceofExpression |<br>                                                    "!=" Eol InstanceofExpression ) )* ;<br>InstanceofExpression = RelationalExpression [ Eol "instanceof" Type ] ;<br>RelationalExpression = ShiftExpression ( Eol (  ("&lt;" | "&gt;" | "&lt;=" | "&gt;=") Eol ShiftExpression )*;<br>ShiftExpression = AdditiveExpression ( Eol ( ( "&lt;&lt;" | "&gt;&gt;" | "&gt;&gt;&gt;" ) Eol AdditiveExpression ))*;<br>AdditiveExpression = MultiplicativeExpression ( Eol ( ( "+" | "-" ) Eol MultiplicativeExpression ))*;<br>MultiplicativeExpression = UnaryExpression ( Eol ( ("*" | "/" | "%") Eol UnaryExpression ))* ;<br>UnaryExpression = "+" UnaryExpression |<br>                    "-" UnaryExpression |<br>                    "++" PrimaryExpression |<br>                    "--" PrimaryExpression |<br>                     UnaryExpressionNotPlusMinus ;<br>UnaryExpressionNotPlusMinus = "~" UnaryExpression |<br>                                "!" UnaryExpression |<br>                                CastExpression |<br>                                PostOpe ;<br>CastExpression = "(" Eol Type Eol ")" UnaryExpressionNotPlusMinus ;<br>Type = ClassName (PrimarySuffix)* ;<br>PostOpe = PrimaryExpression  [ "++" | "--" ] ;<br>StatementExpression = IfStatement | WhileStatement | DoStatement | ForeachStatement |<br>                      ForStatement | SwitchStatement | Break | Continue | Return |<br>                      Yield | FunctionStatement | TryStatement | CatchNode |<br>                      FinallyNode | Import | ThrowNode ;<br>Break =  "break" [ Expression ] ;<br>Continue = "continue" ;<br>Return = "return" [ Expression ] ;<br>Yield = "yield" [ Expression ] ;<br>Import = "import"  [ "static" ]  [ Package ( "." Package )* ["." "*" ] |<br>                                      "*") |<br>                                      "(" [ Expression ] ")" ] ;<br>Block = "{" Eol [ Expression ((";" |EOL) [ Expression ] )* ] "}" |<br>          Expression (";" [ Expression ] )*  |<br>          ";" ;<br>Block2 = "{" Eol [ Expression ((";" |EOL) [ Expression ] )* ] "}" ;<br>IfStatement = "if" Eol "(" Eol Expression Eol ")" Eol Block ( ElseIfNode )* [ ElseNode ] ;<br>ElseIfNode = Eol "else" "if" "(" Eol Expression Eol ")" Eol Block ;<br>ElseNode = Eol "else" Eol Block ;<br>WhileStatement = "while" Eol "(" Eol Expression Eol ")" Eol Block ;<br>TryStatement = "try" Eol Block2 ( Eol CatchBlock )* [ Eol FinallyBlock ] ;<br>CatchBlock =  "catch" "(" ClassName IDENTIFIER ")" Eol Block2 ;<br>CatchNode =  "catch" [ "(" Eol Expression Eol "," Eol Expression Eol ")" ] ;<br>FinallyNode = "finally" [ "(" Eol Expression Eol [ "," Eol Expression Eol ] ")" ] ;<br>ThrowNode = "throw" [ Expression ] ;<br>FinallyBlock = "finally" Eol Block2 ;<br>DoStatement = "do" Eol Block2 Eol "while" Eol "(" Eol Expression Eol ")"  ;<br>ForStatement = "for" Eol "(" Eol ( ForEnum |<br>                                     [ ForInit ] ";" Eol [ Expression Eol ] ";" Eol [ ForUpdate ] ) ")" Eol Block ;<br>ForEnum = IDENTIFIER (, IDENTIFIER)* Eol ":" Eol Expression Eol [ ".." Eol Expression Eol ] ;<br>ForInit = Local Eol ( "," Eol Local Eol )* ;<br>ForUpdate =  Expression Eol ( "," Eol Expression Eol )* ;<br>Local = IDENTIFIER "=" Eol Expression ;<br>ForeachStatement = "foreach" Eol t1 = IDENTIFIER ( "[" ListElements "]" |<br>                                                    "(" Eol Expression Eol ")" ) Eol Block ;<br>SwitchStatement = "switch" Eol "(" Eol  Expression Eol ")"  Eol<br>                   "{" Eol ( SwitchLabel SwitchBlock )*  "}" ;<br>SwitchBlock = Block2 | [ Expression ] ( (";" | EOL ) [ Expression ] )* ;<br>SwitchLabel = "case" Expression ":" | "default" ":" ;<br>FunctionStatement = "function" [ IDENTIFIER ] ParamList Eol Block ;<br>ParamList = "(" [ Param ( "," Param )* [ "[" "]" ]) ] ")" ;<br>Param = Eol IDENTIFIER Eol ;<br>TypedParam = Param | ClassName Param ;<br>TypedParamList = "(" ( ")" | TypedParam ("," TypedParam  )* ")" ) ;</pre>
+<!-- body end --><br><div class="nav2"><a href="lang-TOC.html">Spis tre&#347;ci</a> -&gt; J&#281;zyk Pnuts</div>
+
+</body></html>

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.net モジュール</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="std.html">標準モジュール</a> -> pnuts.netモジュール</div>
+
+<h2><tt>pnuts.net</tt>モジュール</h2>
+
+<a name=getLocalHost></a>
+<div class="box">
+<div class="synopsis"><b>getLocalHost</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getLocalHost()</tt> は、ローカル・ホストのアドレスを表す<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/InetAddress.html">InetAddress</a>オブジェクトを返します。
+</p>
+
+<a name=getInetAddress></a>
+<div class="box">
+<div class="synopsis"><b>getInetAddress</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>host</em>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>address</em>)</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>hostOrAddress</em>)</tt></div>
+</div>
+
+<p>
+<tt>getInetAddress()</tt> は、指定されたホストのアドレスを表す <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/InetAddress.html">InetAddress</a>オブジェクトを返します。
+
+</p>
+
+<div class="eg">
+例：
+<pre>
+getInetAddress("127.0.0.1")
+getInetAddress("pnuts.org")
+</pre></div>
+
+<a name=isLocalHost></a>
+<div class="box">
+<div class="synopsis"><b>isLocalHost</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/InetAddress.html">InetAddress</a>
+<em>address</em>)</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>hostOrddress</em>)</tt></div>
+</div>
+
+<p>
+<tt>isLocalHost()</tt> は、指定されたアドレスがローカルホストのアドレスに含まれるかどうかをp調べます。
+</p>
+
+<div class="eg">
+例：
+<pre>
+isLocalHost("127.0.0.1")
+isLocalHost("pnuts.org")
+</pre></div>
+
+
+<a name=encodeURL></a>
+
+<div class="box">
+<div class="synopsis"><b>encodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>str</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>encodeURL()</tt>は、生テキストから<tt>x-www-form-urlencoded</tt>フォーマットのテキストに変換します。
+</p>
+
+<p>
+<em>encoding</em>には、Javaのエンコード名を指定します。
+<em>encoding</em>を指定しない場合は、デフォルトエンコーディングが使われます。
+</p>
+
+<div class="eg">例:
+<pre>
+encodeURL("How are you?", "UTF-8") ==> "How+are+you%3F"
+</pre></div>
+
+<a name=decodeURL></a>
+
+<div class="box">
+<div class="synopsis"><b>decodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoded</em> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> } )</tt></div>
+</div>
+
+<p>
+<tt>decodeURL()</tt>は、<tt>x-www-form-urlencoded</tt>フォーマットのテキストから生テキストに変換します。
+</p>
+
+<p>
+<em>encoding</em>には、Javaのエンコード名を指定します。
+<em>encoding</em>を指定しない場合は、デフォルトエンコーディングが使われます。
+</p>
+
+<div class="eg">例:
+<pre>
+decodeURL("How+are+you%3F", "UTF-8") ==> "How are you?"
+</pre></div>
+
+
+<a name=makeQueryString></a>
+
+<div class="box">
+<div class="synopsis"><b>makeQueryString</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> <em>map</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encoding</em> )</tt></div>
+</div>
+
+<p>
+<tt>makeQueryString()</tt>は、{パラメータ, 値}のペアを持つ<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>オブジェクトから、<tt>x-www-form-urlencoded</tt>フォーマットのQuery Stringを作ります。
+</p>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html">標準モジュール</a> -> pnuts.netモジュール</div>
+
+  </body>
+</html>

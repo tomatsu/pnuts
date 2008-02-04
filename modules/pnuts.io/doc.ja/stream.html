@@ -1,0 +1,305 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.io モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> ストリームのサポート</div>
+
+
+    <h2>ストリームのサポート</h2>
+
+<h3>基本操作</h3>
+
+<a name=open></a>
+
+<div class="box">
+<div class="synopsis"><b>open</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mode</b></em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mode</b></em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mode</b></em><tt> })</tt> or </div>
+<div class="synopsis2"><tt>(byte[] </tt><em>bytes</em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mode</em><tt> })</tt></div>
+</div>
+<p>
+<tt>open()</tt> は指定されたファイル(またはURL)から InputStream または OutputStream を作成します。
+第2引数の<em>mode</em>はファイルを開く際のモードを示します。</tt><em>"r"</em> または <em>"w"</em> または <em>"a"</em>のいずれかになります。
+第2引数は指定されない場合は "r" がデフォルトの値として渡されます。
+</p>
+
+<dl>
+<dt>"r"
+<dd>FileInputStream(<em>fileName</em>)
+<dt>"w"
+<dd>FileOutputStream(<em>fileName</em>)
+<dt>"a"
+<dd>FileOutputStream(<em>fileName</em>, true)
+</dl>
+
+<p>
+"w"または"a"の場合、指定されたファイルのディレクトリ部分が存在しない場合は、
+そのディレクトリを作成してからファイルを開きます。
+</p>
+
+<a name=read></a>
+
+<div class="box">
+<div class="synopsis"><b>read</b><tt>(</tt><em>input</em><tt> {, </tt><em>output</em><tt> })</tt></div>
+<div class="synopsis"><b>read</b><tt>(</tt><em>reader</em><tt> {, </tt><em>writer</em><tt> })</tt></div>
+</div>
+
+<p>
+<em>input</em>からEOFが見つかるまでデータを読み込んで
+<em>output</em>に書き出します。
+</p>
+<p>
+<em>input</em>には、InputStream, Reader, File, ファイル名を表すString, URLのいずれかを指定します。<em>output</em>には、OutputStream, Writer, File, ファイル名を表すStringのいずれかを指定します。
+</p>
+<p>
+出力側が省略された場合は、通常の出力先に書き出します。
+出力側に<tt>null</tt>が指定された場合は、単にデータが破棄されます。
+</p>
+
+
+<a name=setCharacterEncoding></a>
+<a name=getCharacterEncoding></a>
+
+<div class="box">
+<div class="synopsis"><b>setCharacterEncoding</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>input_encoding</em> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>output_encoding</em> }<tt>)</tt></div>
+<div class="synopsis"><b>getCharacterEncoding</b><tt>()</tt></div>
+</div>
+<p>
+<tt>setCharacterEncoding()</tt>は、InputStreamからReader、OutputStreamからWriterへ暗黙の変換が行なわれる関数で、どの文字コードを使うかを指定します。 <tt>null</tt>が指定された場合は、プラットフォームのデフォルトのエンコーディングが使われます。
+</p>
+<p>
+<tt>getCharacterEncoding()</tt>は、<tt>setCharacterEncoding()</tt>で指定された文字コードのペア(長さ2の配列)を返します。
+</p>
+<pre class="eg">
+setCharacterEncoding("JISAutoDetect", null)
+</pre>
+
+<a name=readBytes></a>
+
+<div class="box">
+<div class="synopsis"><b>readBytes</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> <em>inputStream</em>, byts[] <em>array</em> { , int <em>offset</em>, int <em>length</em> }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>readBytes()</tt> は、<em>inputStream</em>からデータを読み込み、<em>array</em>にコピーし、読み込んだバイト数を返します。<em>offset</em>と<em>length</em>が指定された場合は、<em>length</em>バイトのデータが<em>array</em>の中の<em>offset</em>と<em>length</em>で示される部分にコピーされます。
+</p>
+
+<a name=writeBytes></a>
+<div class="box">
+<div class="synopsis"><b>writeBytes</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> <em>outputStream</em>, byts[] <em>array</em> { , int <em>offset</em>, int <em>length</em> }<tt>)</tt></div>
+</div>
+<p>
+<tt>writeBytes()</tt> は、 <em>array</em>のデータを<em>outputStream</em>に書き込み、書き込んだバイト数を返します。<em>offset</em>と<em>length</em>が指定された場合は、<em>array</em>の中の<em>offset</em>と<em>length</em>で示される部分のデータが書き込まれます。
+</p>
+
+<a name=openURL></a>
+
+<div class="box">
+<div class="synopsis"><b>openURL</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>urlString</b></em><tt>)</tt> or</div>
+<div class="synopsis2">(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+</tt><em>urlString</b></em><tt>)</tt> or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<em>urlString</em> で示される URL からドキュメントを読みむための InputStreamを返します。
+</p>
+
+<pre class="eg">
+setProperty("proxyHost", "machine") // proxy
+setProperty("proxyPort", "8080")
+stream = openURL("http://java.sun.com/index.html")
+read(stream)
+</pre>
+
+<h3>Reader, Writer</h3>
+
+<a name=reader></a>
+<a name=writer></a>
+
+<div class="box">
+<div class="synopsis"><b>reader</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt></div>
+<div class="synopsis"><b>writer</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>reader()</tt> は指定された <em>input</em> から <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/BufferedReader.html">BufferedReader</a> オブジェクトを作ります。<em>encoding</em> が指定された場合は、そのエンコーディングでBufferedReaderオブジェクトを作ります。
+<p>
+<tt>writer()</tt> は 指定された <em>output</em> から <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/PrintWriter.html">PrintWriter</a> オブジェクトを作ります。<em>encoding</em> が指定された場合は、そのエンコーディングでPrintWriterオブジェクトを作ります。
+<p>
+
+<div class="eg">例:
+<pre>
+rd = reader(open("large.txt"))
+while ((line = rd.readLine()) != null){
+  println(line)
+}
+</pre>
+</div>
+
+<a name=stringReader></a>
+<a name=stringWriter></a>
+
+<div class="box">
+<div class="synopsis"><b>stringReader</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>str</em><tt>)</tt></div>
+<div class="synopsis"><b>stringWriter</b><tt>()</tt></div>
+</div>
+<p>
+<tt>stringReader()</tt> は、指定された文字列から<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/StringReader.html">StringReader</a>オブジェクトを作ります。
+<p>
+<tt>stringWriter()</tt> は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/StringWriter.html">StringWriter</a>オブジェクトを作ります。
+
+<p>
+
+<div class="eg">例:
+<pre>
+sr = stringReader("abc\ndef")
+while ((line = sr.readLine()) != null){
+  println(line)
+}
+</pre>
+</div>
+
+
+<a name=readText></a>
+<div class="box">
+<div class="synopsis"><b>readText</b><tt> ( <I>input</I> {, encoding} )</tt></div>
+</div>
+
+<p>
+<tt>readText()</tt> はテキストファイル(<I>input</I>)を読み込んで、その
+内容をStringオブジェクトとして返します。<I>input</I>は、ファイル名のString、InputStream、Reader、URLのいずれかです。</p>
+
+<div class="eg">例:
+<pre>
+template = readText("template.txt")
+</pre>
+</div>
+
+<a name=writeText></a>
+<div class="box">
+<div class="synopsis"><b>writeText</b><tt> ( <I>text</I>, <I>output</I> {, encoding} )</tt></div>
+</div>
+
+<p>
+<tt>writeText()</tt> は、指定された<I>output</I>オブジェクトにテキストを書き込みます。<I>output</I>は、ファイル名、OutputStream, または、
+Writerのいずれかでなければなりません。</p>
+
+<div class="eg">例:
+<pre>
+writeText("foo...", "foo.txt")
+</pre>
+</div>
+
+<h3>バッファの利用</h3>
+
+<a name=openByteArray></a>
+<a name=openCharArray></a>
+
+<div class="box">
+<div class="synopsis"><b>openByteArray</b><tt>()</tt></div>
+<div class="synopsis"><b>openByteArray</b><tt>(byte[] array)</tt></div>
+<div class="synopsis"><b>openCharArray</b><tt>()</tt></div>
+<div class="synopsis"><b>openCharArray</b><tt>(char[] array)</tt></div>
+</div>
+
+<p>
+<tt>openByteArray()</tt> は、引数がない場合、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/ByteArrayOutputStream.html">ByteArrayOutputStream</a> を作ります。引数を指定した場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/ByteArrayInputStream.html">ByteArrayInputStream</a> を作ります。
+<p>
+<tt>openCharArray()</tt> は、引数がない場合、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/CharArrayWriter.html">CharArrayWriter</a> を作ります。引数を指定した場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/CharArrayReader.html">CharArrayReader</a>を作ります。
+
+<div class="eg">例：
+<pre>
+buf = openByteArray()
+read(open("foo.txt"), buf)
+buf.toByteArray()
+
+read(open("bar.txt"), buf)
+buf.writeTo(fd = open("baz.txt", "w"))
+fd.close()
+</pre>
+</div>
+
+<a name=getByteArray></a>
+<a name=getCharArray></a>
+
+<div class="box">
+<div class="synopsis"><b>getByteArray</b><tt>(</tt><em>input</em><tt>)</tt></div>
+<div class="synopsis"><b>getCharArray</b><tt>(</tt><em>input</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getByteArray()</tt> は <em>input</em> からデータを読んで、byte配列を返します。
+</p>
+<p>
+<tt>getCharArray()</tt> は <em>input</em> からデータを読んで、char配列を返します。
+</p>
+<p>
+<em>input</em>には、InputStream, Reader, File, String(ファイル名), URLのいずれかを指定できます。
+</p>
+
+<h3>パイプ入出力</h3>
+
+<a name=pipe></a>
+
+<div class="box">
+<div class="synopsis"><b>pipe</b><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>,
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a>), <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>in</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>,
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a>), <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a>
+</tt><em>out</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>), <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+</tt><em>reader</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>),
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+</tt><em>writer</b></em><tt> )</tt></div>
+</div>
+
+<p>
+第2引数にInputStreamが指定された場合、<em>in</em>は別スレッドで <em>func</em> の第一引数に渡され、第二引数には内部的に使用されるPipedOuptutStreamが渡され、pipe()関数はそれと接続されたPipedInputStreamを返します。第2引数にOutputStreamが指定された場合、<em>out</em> は別スレッドで <em>func</em> の第二引数に渡され、第一引数には内部的に使用されるPipedInputStreamが渡され、pipe()関数はそれと接続されたPipedOutputStreamを返します。
+</p>
+
+<p>
+第2引数にReaderが指定された場合、<em>reader</em>は別スレッドで <em>func</em> の第一引数に渡され、第二引数には内部的に使用されるPipedWriterが渡され、pipe()関数はそれと接続されたPipedReaderを返します。第2引数にWriterが指定された場合、<em>writer</em> は別スレッドで <em>func</em> の第二引数に渡され、第一引数には内部的に使用されるPipedReaderが渡され、pipe()関数はそれと接続されたPipedWriterを返します。
+</p>
+<p>
+次の例は、ファイルtest.datの内容をbase64でエンコードし、GZIPで圧縮したものをファイルtest.gzに保存するというサンプルです。
+</p>
+
+<div class="eg">例:
+<pre>
+pin = pipe(base64encode, open("test.dat"))
+
+read(pin, pout = pipe(gzip, open("test.gz", "w")))
+pout.close()
+</pre>
+</div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> ストリームのサポート</div>
+
+  </body>
+</html>

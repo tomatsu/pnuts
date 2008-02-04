@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> オブジェクトの書式</div>
+
+<h2>オブジェクトの書式</h2>
+
+<a name=hex></a>
+<a name=string></a>
+<a name=format></a>
+
+<div class="box">
+<div class="synopsis"><b>hex</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>integerOrByteArray</em><tt>)</tt></div>
+<div class="synopsis"><b>string</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>)</tt></div>
+<div class="synopsis"><b>format</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>hex()</tt> は、指定された整数やbyte配列から、16進数の文字列を作り、それを返します。
+</p>
+
+<p>
+<tt>string()</tt> は、指定されたオブジェクトの文字列表現を返します。<em>object</em>が<tt>null</tt>の場合は、空文字("")を返します。
+</p>
+
+<p>
+<tt>format()</tt> は、指定されたオブジェクトから得られるフォーマット済の文字列を返します。
+</p>
+
+<div class="eg">
+例:
+<pre>
+string([1,2,3]) ==> "[Ljava.lang.Object;@17a37c"
+format([1,2,3]) ==> "[1, 2, 3]"
+hex(10) ==> "a"
+hex((byte[])[#ca, #fe, #ba, #be]) ==> "cafebabe"
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> オブジェクトの書式</div>
+
+  </body>
+</html>

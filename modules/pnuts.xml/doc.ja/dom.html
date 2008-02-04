@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xmlモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> DOMオブジェクトの利用</div>
+
+<h2>DOMオブジェクトの利用</h2>
+
+<h3>DOMオブジェクトの読み取り</h3>
+
+<a href="functions.html#readDocument">readDocument()</a>関数でXML文書を読み込みます。
+そして、Document.getDocumentElement()メソッドで一番外側の要素を求めます。
+
+<pre class="eg">
+ssdoc = readDocument("XMLファイル")
+elem = doc.getDocumentElement()
+</pre>
+
+DOMオブジェクトへのアクセスを簡単にするには<a href="functions.html#nodeAccess">nodeAccess(true)</a>を呼び出しておきます。
+
+<pre class="eg">
+nodeoAccess(true)
+</pre>
+
+<a href="functions.html#nodeAccess">nodeAccess(true)</a>が呼び出された状態では、Elementオブジェクトに対して、
+getChild()メソッドとgetChildren()メソッドが利用できます。
+<p>
+getChild()メソッドは、一つ下の要素をタグの名前で探して、最初に見つかった要素
+を返します。
+
+<pre class="eg">
+elem.getChild("tag")
+</pre>
+
+次の式も同じ意味になります。
+
+<pre class="eg">
+child = elem.tag
+(child != null) child[0] : null
+</pre>
+getChildren()メソッドは、引数なしで呼び出された場合は、一つ下の要素をすべて含むListを返します。
+引数が一つ指定された場合は、一つ下の要素のうち、指定されたタグの要素をすべて含むListを返します。
+要素が見つからなかった場合は大きさ0のListを返します。
+
+<pre class="eg">
+elem.getChildren()
+elem.getChildren("tag")
+</pre>
+
+'要素.タグ名'のような式も、一つ下の要素をタグの名前で探して、見つかった要素のListを返します。
+要素が見つからなかった場合はnullを返します。
+
+<pre class="eg">
+elem.name
+</pre>
+
+'要素.text'のような式は、要素の内容（テキスト）を返します。
+
+<pre class="eg">
+elem.text
+</pre>
+
+代入文でテキストを置き換えることができます。
+
+<pre class="eg">
+elem.text = <em>値</em>
+</pre>
+
+
+'要素.textTrim'のような式は、要素の内容（テキスト）を前後の空白を除た形で返します。
+
+<pre class="eg">
+elem.textTrim
+</pre>
+
+getAttribute()メソッドは、要素の属性を調べます。
+
+<pre class="eg">
+elem.getAttribute("name")
+</pre>
+
+'要素.attributesのような式は、属性をjava.util.Mapに変換したものを返します。
+
+<pre class="eg">
+elem.attribute
+</pre>
+
+そのMapオブジェクトは属性を定義するためにも利用されます。
+
+<pre class="eg">
+elem.attribute.<em>myAttr</em> = <em>値</em>
+</pre>
+
+
+
+<h3>DOMオブジェクトの作成</h3>
+
+<a href="functions.html#element">element()</a>関数でタグを定義します。
+
+<pre class="eg">
+html = element("html")
+body = element("body")
+</pre>
+
+<a href="functions.html#element">element()</a>の呼び出し結果を使ってXMLの文書構造を作ります。
+要素の内容は、文字列引数として指定します。
+
+<pre class="eg">
+x = html(body("hello"))
+</pre>
+
+属性はMapとして指定します。
+
+<pre class="eg">
+x = html(body(a({"href"=>"http://java.sun.com/"}, "Java home"))
+</pre>
+
+最終的に、結果を0引数関数として呼び出すとElementオブジェクトが作成できます。
+<pre class="eg">
+elem = x()   // または call(x)
+writeDocument(elem)
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> DOMオブジェクトの利用</div>
+
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <title>Pnuts 言語</title>
+  <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <META Http-Equiv="Content-Style-Type" Content="text/css">
+  <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+</head>
+
+<body>
+<div class="nav"><a href="lang-TOC.html">目次</a> -> 変更履歴</div>
+
+<h2>バージョン1.2からの変更</h2>
+<ul>
+<li><a href="lang.html#beandef">JavaBeansを生成するための新しい構文</a>
+<pre class="eg">
+      btn = java.awt.Button {
+              label : "OK"
+            }
+</pre>
+上の例は次のように解釈されます。
+<pre class="eg">
+      btn = new java.awt.Button()
+      btn.label = "OK"
+      btn
+</pre>
+<li><a href="lang.html#string">文字列リテラル</a>に式を埋め込むことができるようになりました。
+<pre class="eg">
+       "Date: \( date() \)"
+</pre>
+<li><a href="lang.html#parallel_assign">多重代入はnullを返す</a>
+<pre class="eg">
+       a,b = [1,2]       --> null
+</pre>
+<li><a href="lang.html#classdef">フィールド定義中の型宣言は、初期値を代入する場合のみ省略可能</a>
+<pre class="eg">
+     class A {
+       name2 = null
+     }
+</pre>
+</ul>
+
+<h2>バージョン1.1からの変更</h2>
+<ul>
+<li><a href="lang.html#classdef">クラス定義</a>
+<pre class="eg">
+package util
+import java.util.*
+import java.io.*
+class mymap extends TreeMap implements Serializable {
+  get(key){
+    if ((v = super.get(key)) == null){
+      super.put(key, v = set())
+    }
+    v
+  }
+}
+</pre></li>
+<li><a href="lang.html#closure">無名関数のコンパクトな構文</a>
+<pre class="eg">
+{a, b -> a + b}
+</pre>
+</li>
+<li><a href="lang.html#parallel_assign">多重代入</a>
+<pre class="eg">
+a, b = [1, 2]
+for (key, value : {1 => 2}){ ... }
+</pre>
+</li>
+<li><a href="lang.html#multivar_for">for文で複数の変数</a>
+<pre class="eg">
+for (key, value : {1 => 2}){ ... }
+</pre>
+</li>
+<li><a href="lang.html#arrayIndex">負のインデックス</a>
+<pre class="eg">
+a[-n]　　// a[size(a) - n]と解釈されます。
+</pre></li>
+
+<li><a href="lang.html#vararg">可変長引数の関数で１つ以上のパラメータ変数</a>
+<pre class="eg">
+function f(a,b,c[]) c
+f(1,2) --> []
+f(1,2,3) --> [3]
+f(1,2,3,4) --> [3,4]
+</pre>
+<li><a href="lang.html#list">List作成の構文規則</a>
+<pre class="eg">
+{1, 2, 3}
+</pre>
+</li>
+<li><a href="lang.html#concatenation">collection/array/mapを対象にした二項演算</a>
+<pre class="eg">
+{1, 2} + {3}
+{1, 2} - {2, 4}
+{1, 2} > [2]
+</pre>
+</li>
+<li>primitive型の暗黙の型変換
+<pre class="eg">
+Thread.sleep(100.0)
+</pre></li>
+<li>配列とList間の暗黙の型変換
+<pre class="eg">
+String({65})
+</pre></li>
+</ul>
+<p>
+
+<h3>バージョン1.0からの変更</h3>
+<ul>
+<li>新しい予約語
+<pre class="eg">
+  new
+  do
+  try
+  finally
+  import
+  yield
+</pre>
+
+<li><a href="lang.html#new">型リテラルを指定してインスタンスを生成する<tt>'new'</tt> 式</a>
+
+<div class="eg">例
+<pre>
+new java.util.ArrayList()
+new int[10]
+new int[]{1, 2, 3}
+</pre>
+</div>
+</li>
+<li><a href="lang.html#subclass">サブクラスを生成する<tt>'new'</tt>式</a>
+
+<div class="eg">例
+<pre>
+new WindowAdapter(){
+   windowClosing(e){
+      ...
+   }
+}
+</pre>
+</div>
+</li>
+<li><a href="lang.html#import">import()関数の代わりに使うことのできる<tt>import</tt>文</a>
+
+<div class="eg">例
+<pre>
+import java.util.*
+import java.rmi.Remote
+import static java.awt.Color.*
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#cast">キャスト</a>と<a href="lang.html#instanceof"><tt>instanceof</tt>式</a>には、Classオブジェクトではなく型リテラルを指定するようになりました。
+</li>
+
+<li><a href="lang.html#yield">ジェネレータ関数を定義する<tt>yield</tt>文</a>
+<div class="eg">例
+<pre>
+function integers(min, max){
+   for (i: min..max) yield i
+}
+
+for (i : integers(0, 3)) println(i)
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#throw"><tt>throw</tt> 文</a>
+<div class="eg">例：
+throw new java.io.IOException("message")
+</div>
+</li>
+
+<li><a href="lang.html#try"><tt>try</tt>/<tt>catch</tt>/<tt>finally</tt>文</a>
+<div class="eg">例
+<pre>
+try {
+  fd.close()
+} catch (java.io.IOException e){
+  e.printStackTrace()
+}
+</pre>
+</div>
+</li>
+</li>
+
+<li><a href="lang.html#dowhile"><tt>do</tt>/<tt>while</tt>文</a>
+<div class="eg">例
+<pre>
+i = 0
+do {
+  i++
+} while (i < 10)
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#ternary"><tt>式　?　式　:　式</tt></a>
+<div class="eg">例
+<pre>
+pnuts_version.startsWith("1.1") ? 1 : 0
+</pre>
+</div>
+
+<li>Classオブジェクトに対してインスタンスメソッドが呼ばれたが、そのメソッドが見つからないとき、そのクラスのstaticメソッドが呼ばれるようになりました(デフォルトの動作として)。
+<div class="eg">例
+<pre>
+System.gc()
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#map">Map式</a>
+<pre class="eg">
+{ "name"=>"Sae",  "age" => 1 }
+</pre>
+
+<li><a href="lang.html#array">配列</a>
+<pre class="eg">
+{ "name",  "age" }       // ["name", "age"]と同じ
+</pre>
+
+<li><a href="lang.html#scope">スコープ規則</a>の明確化</li>
+<p>
+<div class="eg">旧：
+<pre>
+import java.awt.*
+swing = false
+function f(){
+  if (swing){
+    Menu = JMenu
+  }
+  Menu   // java.awt.Menu
+}
+</pre>
+</div>
+
+<div class="eg">新：
+<pre>
+import java.awt.*
+swing = false
+function f(){
+  if (swing){
+    Menu = JMenu
+  }
+  Menu   // null
+}
+</pre>
+<div>
+
+</ul>
+
+<div class="nav2"><a href="lang-TOC.html">目次</a> -> 変更履歴</div>
+
+</body>
+</html>

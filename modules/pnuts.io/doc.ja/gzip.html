@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.io モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> GZIPによる圧縮/展開</div>
+
+    <h2>GZIPによる圧縮/展開</h2>
+
+<a name=zcat></a>
+
+<div class="box">
+<div class="synopsis"><b>zcat</b><tt>( </tt><em>input</b></em><tt> {, </tt><em>output</b></em><tt> })</tt></div>
+</div>
+
+<p>
+圧縮されたデータを<em>input</em>から読んで、内容を復元します。
+<em>output</em> が指定された場合はそれに書き出します。
+そうでない場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/PipedInputStream.html">java.io.PipedInputStream</a> を返します。これは後で read() 関数で読み出すことができます。
+</p>
+<p>
+<em>input</em>には、InputStream, File, String(ファイル名), URLのいずれかを指定できます。
+<em>output</em>には、OutputStream, File, String(ファイル名)のいずれかを指定できます。
+</p>
+<p>
+次のスクリプトは、gzip で圧縮されたスクリプトを読み込む例です。
+</p>
+
+<pre class="eg">
+load(zcat("big.pnut.gz"))
+</pre>
+
+<a name=gzip></a>
+
+<div class="box">
+<div class="synopsis"><b>gzip</b><tt>(</tt><em>input</b></em><tt> {, </tt><em>output</b></em><tt> })</tt></div>
+</div>
+
+<p>
+データを<em>input</em>から読んで、その内容を圧縮します。
+<em>output</em> が指定された場合はそれに書き出します。そうでない場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/PipedInputStream.html">java.io.PipedInputStream</a> を返します。これは後で read() 関数で読み出すことができます。
+</p>
+
+<p>
+<em>input</em>には、InputStream, File, String(ファイル名), URLのいずれかを指定できます。
+<em>output</em>には、OutputStream, File, String(ファイル名)のいずれかを指定できます。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> GZIPによる圧縮/展開</div>
+
+  </body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xmlモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> XML文書のダイジェスト</div>
+
+    <h2>XML文書のダイジェスト</h2>
+
+<p>
+<a
+href="../../apidoc/pnuts/xml/DigestReader.html">pnuts.xml.DigestReader</a>クラスは、XML文書をパーズする際に、要素のパスに対してアクションを対応づけたルールを定義しておくと、登録しておいたパスを辿るたびに対応づけられたアクションが実行される仕組みを提供します。
+</p>
+<p>
+ここでは、XML文書のダイジェストで用いられるDigestReaderクラスとDigestActionクラスについて詳しく説明します。pnuts.xml.actionパッケージにはDigestActionクラスのサブクラスがいくつかあらかじめ定義されています。それらについては、<a href="digest_action.html">「既定義のDigestAction」</a>を参照。
+また、それらの使用例については、<a href="digest_usage.html">「DigestReaderの使用例」</a>を参照。
+</p>
+
+<h3><a href="../../apidoc/pnuts/xml/DigestReader.html">pnuts.xml.DigestReader</a>クラス</h3>
+
+<h4>ルールの設定</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>setRules</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[][]
+<em>rules</em>)</dt>
+</dl>
+</blockquote>
+
+<p>
+ルールを設定します。ルールとは、要素のパスに対してアクションを対応づけたもので、次の配列を要素とする2次元配列として与えられます。
+</p>
+<blockquote>
+[<em>アクション</em>, <em>パス</em> {, <em>キーワード</em> }]
+</blockquote>
+
+<blockquote>
+<dl>
+<dt><em>アクション</em>
+<dd>パーザが<em>パス</em>を辿ったときに実行される動作を定義します。アクションは、次の項で説明する<a href="#DigestAction">DigestAction</a>クラスのインスタンスか、そのエイリアスを指定します。エイリアスはsetAlias()メソッドで定義します。
+<dt><em>パス</em>
+<dd>要素の<a href="http://www.y-adagio.com/public/standards/tr_xml_ns/nsmain.htm#ns-qualnames">「修飾された名前」</a>を'/'で連結した文字列を与えます。ただし、<a href="http://www.y-adagio.com/public/standards/tr_xml_ns/nsmain.htm#ns-qualnames">「修飾された名前」</a>の代わりにワイルドカードを表す<tt>"*"</tt>を指定することもできます。
+また、パスが"<tt>//</tt>"で始まる場合には、途中のノード以降のマッチに用いられます。(例: /a/b/c, a/b/*, //b/c, //*)
+<dt><em>キーワード</em>
+<dd><em>アクション</em>を実行した結果を後で参照するときに用いられるキーワードを与えます。キーワードは省略可能です。省略された場合はルール中のパスの中で親(間接的なものも含む)の要素となるパスがあった場合は、そのパスからの相対パスがキーワードとして使われます。そのようなルールがない場合には、<em>パス</em>がそのままキーワードとして使われます。
+</dl>
+</blockquote>
+
+<p>
+あるパスに対するアクションは1つまでで、複数のアクションを登録しようとすると、最後のアクションだけが登録されることになります。
+</p>
+
+<h4>アクションのエイリアス</h4>
+
+<p>
+DigestReaderは、アクションのエイリアスを{文字列->DigestAction}を要素とする<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>オブジェクトとして保持します。この<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>オブジェクトのsetter/getterメソッドが用意されています。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setAliases</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+<em>aliases</em> )</dt>
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> <b>getAliases</b> ( )</tt></dt>
+</dl>
+</blockquote>
+
+<h4>パーズ</h4>
+<p>
+parse()メソッドは実際にXML文書をパーズします。ルールが定義されていれば、ルールにしたがってアクションを呼び出します。<em>initialValue</em>が指定された場合はその値が、指定されない場合は空のMapオブジェクトがスタックにプッシュされた状態でパーズが開始します。そして、初期状態でプッシュされた値がreturnされます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>parse</b> (</tt> ( <a href="http://java.sun.com/products/jdk/1.4.2/docs/api/org/xml/sax/InputSource.html">InputSource</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> ) <em>input</em> {, <a href="http://java.sun.com/j2se/1.4/java/lang/Object.html">Object</a> <em>initialValue</em> }<tt>)</tt></dt>
+<dd> throws SAXException, IOException</dd>
+</dl>
+</blockquote>
+
+<a name="DigestAction"></a>
+<h3><a href="../../apidoc/pnuts/xml/DigestAction.html">pnuts.xml.DigestAction</a>クラス</h3>
+<p>
+このクラスは、ルールの中のアクションを定義します。このクラスのメソッドは、サブクラスを定義するときに役立ちます。
+</p>
+
+<h4>コールバック用メソッド</h4>
+
+<p>
+DigestActionのサブクラスでは、次のいずれかのメソッドを最低限定義します。start()メソッドは、パーザがpathに相当する要素に到達したときに呼び出されます。end()メソッドは、パーザがpathに相当する要素のパーズを終えるときに呼び出されます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>start</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>path</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>key</em>, <a
+href="http://java.sun.com/products/jdk/1.4.2/docs/api/java/util/Map.html">Map</a>
+<em>attributeMap</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>top</em> <tt>);</tt></dt>
+<dt><tt>public void <b>end</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>path</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>key</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>text</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>top</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<h4>スタック操作用メソッド</h4>
+
+<p>
+アクションは、実行の副作用としてスタックへ値をプッシュしたり、スタックから値をポップすることができます。
+push()メソッドでは、どのパスでプッシュされたかが後でわかるように、パスが対応づけられます。このパスは明示的に指定することもできます。
+</p>
+<blockquote>
+<dl>
+<dt><tt>protected void <b>push</b> (</tt> { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>path</em>, } <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>value</em> )
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>pop</b> (  )</tt>
+</dl>
+</blockquote>
+
+次のメソッドはそれぞれ、スタックトップの値と、その値をプッシュしたときのパスを返します。
+
+<blockquote>
+<dl>
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getStackTopValue</b>()</tt></dt>
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <b>getStackTopPath</b>()</tt></dt>
+</dl>
+</blockquote>
+
+<h4>リスト管理用メソッド</h4>
+
+連続する要素をListオブジェクトに対応づけることを可能にするために、DigestReaderはパーズの間リストを管理しています。
+
+
+<blockquote>
+<dl>
+<dt><tt>protected void <b>registerListPath</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>path</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>list</em>)</tt></dt>
+<dd>特定のパス<em>path</em>に対してリスト<em>list</em>を登録します。
+登録されたリストは、登録されたときのパスとは別の枝の要素や、より浅いパスの要素のパーズを開始したときに管理下から除外されます。
+<dt><tt>protected boolean <b>listAlive</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>path</em>)</tt></dt>
+<dd>パス<em>path</em>に対して登録されたリストが、まだ管理下にあるかどうかを調べます。
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>currentListValue</b>()</tt></dt>
+<dd>管理下のリストのうち一番最後に登録されたものを返します。
+</dl>
+</blockquote>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> XML文書のダイジェスト</div>
+
+  </body>
+</html>

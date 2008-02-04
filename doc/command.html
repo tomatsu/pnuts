@@ -1,0 +1,402 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=#ffffff>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Command Shell
+</div>
+
+<!-- body start -->
+
+<h2>Command Shell</h2>
+
+<a name=pnuts></a>
+<h3>Invoking and Terminating the Interpreter</h3>
+
+<div class="box">
+<code>C:\> pnuts</code>
+</div>
+
+<p>
+The "<tt>pnuts</tt>" command invokes a Pnuts interpreter.  The greeting message shows the version of Pnuts, the JDK version, and JVM vendor's name.
+</p>
+
+<pre class="eg">C:\&gt; pnuts
+Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)
+Java HotSpot(TM) Client VM (mixed mode)
+&gt; </pre>
+
+<div class="box">
+<div class="synopsis"><tt>&gt; </tt><em>expression</em></div>
+<div class="synopsis"><em>result</em></div>
+</div>
+
+<p>
+Input an expression after the prompt (>) then hit ENTER key.
+Then the expression is evaluated and the result is shown.
+</p>
+
+<pre class="eg">
+> 1 + 2
+3
+</pre>
+
+<div class="box">  
+<div class="synopsis"><code>&gt; exit() </code></div>
+</div>
+
+<p>
+Either <a
+href="../modules/pnuts.lib/doc/shutdown.html#exit"><tt>exit()</tt></a>
+or <a href="lang.html#quit"><tt>quit()</tt></a> is used to terminate the command shell.
+</p>
+
+<h3><tt>pnuts</tt> Command Options</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts { -e </tt><em>expression</em><tt>
+	| -r </tt><em>resource</em><tt> | -R
+	</tt><em>resource</em><tt> | -f </tt><em>initfile</em><tt> |
+	-F	</tt><em>initfile</em></tt> | -u </tt><em>URL</em><tt>
+	| -U </tt><em>URL</em><tt> | -m </tt><em>moduleName</em><tt> |
+	-a | -b | -p | -w | -s | -v | -encoding <em>enc</em> | -inputlog <em>file</em> |
+	-version | -help }* { </tt><em>fileName</em><tt> { arg1, ... }}</tt></div>
+</div>
+
+<p>
+<tt>-version</tt> option prints the version information and exits.
+</p>
+
+<a name="-encoding"></a>
+<p>
+<tt>-encoding</tt> option specifies the character encoding for script files.
+</p>
+
+<p>
+<tt>-e</tt> option evaluates the next argument as an expression.
+</p>
+
+<pre class="eg">
+C:\&gt; pnuts -e <a href="../modules/pnuts.lib/doc/console.html#println">println</a>(\&quot;hello\&quot;)
+...
+C:\&gt;
+</pre>
+
+<a name="-r"></a>
+<p>
+<tt>-r</tt> option loads a <a href="http://java.sun.com/j2se/1.3/docs/guide/resources/index.html">resource</a> file specified with the next argument, and
+continues the interactive session.
+</p>
+
+<a name="-R"></a>
+<p>
+<tt>-R</tt> option loads a <a
+href="http://java.sun.com/j2se/1.3/docs/guide/resources/index.html">resource</a>
+file specified with the next argument, and terminates the session.
+</p>
+
+<pre class="eg">
+C:\&gt; pnuts -r examples/fact.pnut
+Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)
+Java HotSpot(TM) Client VM (mixed mode)
+&gt;
+</pre>
+
+<a name="-f"></a>
+<p>
+<tt>-f</tt> option loads a local file specified with the next argument, and
+continues the interactive session.
+</p>
+
+<a name="-F"></a>
+<p>
+<tt>-F</tt> option loads a local file specified with the next argument, and
+terminates the session.
+</p>
+
+
+<pre class="eg">
+C:\&gt; pnuts -f &quot;$HOME/init.pnut&quot;
+Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)
+Java HotSpot(TM) Client VM (mixed mode)
+&gt;
+</pre>
+
+<a name="-u"></a>
+<p>
+<tt>-u</tt> option loads a script file specified as a URL, and
+continues the interactive session.
+</p>
+
+<a name="-U"></a>
+<p>
+<tt>-U</tt> option loads a script file specified as a URL, and
+terminates the session.
+</p>
+
+<pre class="eg">
+C:\&gt; pnuts -u http://javacenter.sun.co.jp/pnuts/examples/calculator.pnut -e quit()
+</pre>
+
+<a name="-m"></a>
+<p>
+<tt>-m</tt> option add a <a href="module.html">module</a> to the initial context.  Functions in the module can be accessed without specifying the package name prefix.
+</p>
+
+<pre class="eg">
+C:\&gt; pnuts -m my.module
+</pre>
+
+<p>
+<tt>-v</tt> option sets verbose output mode.  When an exception is thrown the stack trace is printed. In addition, a log message is printed when a script file is loaded.
+</p>
+
+<pre class="eg">
+C:\> pnuts -v
+Pnuts interpreter Version 1.0, 1.1.8 (Sun Microsystems Inc.)
+> <a href="lang.html#exception">throw</a>("hogehoge") 
+java.lang.RuntimeException: hogehoge
+	at java.lang.Throwable.<init>(Compiled Code)
+	at pnuts.lang.PnutsFunction.call_builtin(Compiled Code)
+	at pnuts.lang.PnutsFunction.exec(Compiled Code)
+	at pnuts.lang.PnutsInterpreter._applicationNode(Compiled Code)
+	at pnuts.lang.SimpleNode.jjtAccept(Compiled Code)
+	at pnuts.lang.PnutsInterpreter._expressionList(Compiled Code)
+	...
+	...
+</pre>
+
+<a name="-a_option"></a>
+<p>
+If <tt>-a</tt> option is given in Java2 environment, all non-public members are accessible from scripts.
+</p>
+
+
+<pre class="eg">
+string = "Hello"
+string.value ==> ['H', 'e', 'l', 'l', 'o']
+</pre>
+
+<a name="-p_option"></a>
+
+<p>
+If <tt>-p</tt> option is specified, only public members are accessible from scripts.
+</p>
+
+<a name="-b_option"></a>
+<p>
+If <tt>-b</tt> option is given, all field access expressions are
+interpreted as JavaBeans access.  This switch no longer useful since
+it became the default behavior.
+</p>
+
+
+<pre class="eg">
+import("java.awt.*")
+f = Button("OK")
+f.label
+</pre>
+
+
+<a name="-w_option"></a>
+<p>
+If <tt>-w</tt> option is given, a Swing-based GUI console comes up and
+the Pnuts interpreter runs in it.
+</p>
+
+<pre class="eg">
+C:\> pnuts -w
+</pre>
+
+
+<a name="-s_option"></a>
+<p>
+If <tt>-s</tt> option is given, scripts are executed in the secure sand-box.
+</p>
+
+<pre class="eg">
+C:\> pnuts -s unsecure_script.pnut
+</pre>
+
+<a name="-inputlog"></a>
+<p>
+<tt>-inputlog</tt> option specifies the log-file's name to which user input in an interactive session are saved.
+</p>
+
+<pre class="eg">
+C:\> pnuts -inputlog c:\tmp\input.log
+</pre>
+
+<p>
+See <a href="pnuts_engine.html">'On-the-fly Compiler and AST Interpreter'</a> for <tt>-pure</tt> option and <tt>-O</tt> option,
+and <a href="debug.html">'Debugging Scripts'</a> for <tt>-d</tt> option and <tt>-vd</tt> option
+</p>
+
+<a name="args"></a>
+<H3>Passing Arguments to JVM</H3>
+<P>If -J&lt;<I>option</I>&gt; is given, the &lt;<I>option</I>&gt; is passed to JVM. For example, the following
+command passes -Xmx4m to JVM.</P>
+
+<pre class="eg">
+pnuts -J-Xmx4m
+</pre>
+
+<H3><CODE>${PNUTS_HOME}/modules</CODE> directory</H3>
+<P>When the <CODE>pnuts</CODE> command is executed, JAR files in ${PNUTS_HOME}
+directory are appended to the <em>CLASSPATH</em> setting.
+</P>
+<h3>Command Line Arguments</h3>
+
+<p>
+If a <em>fileName</em> is specified in pnuts command, the file and the arguments that follows can be accessed with the global variable '$args'.
+</p>
+
+<div>
+<pre class="eg">
+for (i : 0..$args.length - 1) println($args[i])
+</pre>
+<center><tt>echo.pnut</tt></center>
+</div>
+
+<pre class="eg">
+C:\> pnuts echo.pnut 1 2 3
+echo.pnut
+1
+2
+3
+</pre>
+
+<H3>Environment Variables</H3>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Environment Variable</th>
+<th bgcolor=#eeeeee>Description</th>
+<tr class="wb">
+      <TD width="185">PNUTS_JAVA_COMMAND</TD>
+      <TD width="344">Specifies the path of the java command.   The default value is "java".
+<tr class="wb">
+      <TD width="185">PNUTS_JDK11_COMPATIBLE</TD>
+      <TD width="344">If this environment variable is defined,
+      Pnuts classes are appended to CLASSPATH and
+      loaded by the system classloader. Otherwise,
+      Pnuts classes are loaded by the boot classloader.</TD>
+<tr class="wb">
+      <TD width="185">PNUTS_MODULE</TD>
+      <TD width="344">Startup modules, which are separated by semi-colon. "<tt>pnuts.tools</tt>" is the default value.</TD>
+<tr class="wb">
+      <TD width="185">HTTP_PROXY_HOST</TD>
+      <TD width="344">Specifies HTTP proxy host.
+<tr class="wb">
+      <TD width="185">HTTP_PROXY_PORT</TD>
+      <TD width="344">Specifies HTTP proxy port.
+</TABLE>
+</blockquote>
+
+<a name=properties></a>
+<h3>The System Properties</h3>
+
+<p>
+The following properties must be set before any of Pnuts API classes is loaded.
+</p>
+
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Property</th>
+<th bgcolor=#eeeeee>Description</th>
+<tr class="wb">
+  <td><tt>pnuts.lang.defaultPnutsImpl</tt></td>
+  <td>If a class that implements pnuts.lang.Implementation interface is specified, an
+  instance of the class is created with the default constructor and it
+  becomes the default <a href="pnutsImpl.html">Implementation</a> object.  See '<a
+  href="pnutsImpl.html#defaultPnutsImpl">The
+  <code>pnuts.lang.defaultPnutsImpl</code> Property</a>' for more details.
+<tr class="wb">
+  <td><tt>pnuts.lang.defaultConfiguration</tt></td>
+  <td>If a vaild <code>pnuts.lang.Configuration</code> subclass is
+  specified, an instanceof the class is created with the default
+  constructor and it becomes the default <a href="configuration.html">Configuration</a>.
+<tr class="wb">
+  <td><tt>pnuts.compiler.optimize</tt></td>
+  <td>If true is specified, Pnuts compiler generates a little faster
+   code. Instead, line number information is not printed when an error occurs.
+<tr class="wb">
+  <td><tt>pnuts.compiler.traceMode</tt></td>
+  <td>If true is specified, Pnuts compiler generates Context.updateLine(int) method for every expression. 
+<tr class="wb">
+  <td><tt>pnuts.compiler.useDynamicProxy</tt></td>
+  <td>If true is specified, method/constructor call is implemented by
+   dynamic proxy class, rather than reflection API.  Method/constructor
+   call could be a little faster using with JIT compiler.</td>
+<tr class="wb">
+  <td><tt>pnuts.compiled.script.prefix</tt></td>
+  <td>If this property is set at start up time, when the function <tt>load()</tt> 
+  is called with a parameter that does not end with the suffix '.pnut', Pnuts
+  interpreter tries to load a precompiled script as a Java class.  The class
+  name is the script name that '<tt>/</tt>' is replaced by '<tt>.</tt>' after
+  the value of the property.  For instance, when a script name is
+  "<tt>lib/stream</tt>" and the property "<tt>pnuts.compiled.script.prefix</tt>"
+  is "<tt>pnuts.precompiled.</tt>", <tt>pnuts.precompiled.lib.stream</tt> class is loaded
+  if it exists. The <tt>pnuts</tt> command defines the property as
+  "<tt></tt>&quot; by default.</td></tr>
+<tr class="wb">
+  <td><tt>pnuts.package.factory</tt></td>
+  <td>If this property is specified at start up time, the class becomes the default package factory. See <a href="../apidoc/pnuts/lang/PackageFactory.html">pnuts.lang.PackageFactory</a>.
+</table>
+</blockquote>
+
+<p>
+The following properties are related to the <tt>pnuts</tt> command.
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Property</th>
+<th bgcolor=#eeeeee>Description</th>
+<tr class="wb">
+  <td><tt>pnuts.interactive</tt></td>
+  <td>If this property is not specified, when neither script files nor
+  expression (with -e) nor redirection are given, <tt>pnuts</tt> command runs
+  in interactive mode, which means that the prompt string and results are
+  displayed. The property <tt>pnuts.interactive</tt> allows to specify
+  explicitly that <tt>pnuts</tt> command runs in interactive or batch mode no
+  matter what is given in the command line.
+</tr>
+<tr class="wb">
+  <td><tt>pnuts.debugger</tt></td>
+  <td>When -d option is given to the pnuts command, a class name of the debugger can be specified to the 'pnuts.debugger' property. If the property value is "pnuts.tools.VisualDebugger", the graphical debugger is used instead of the terminal-style debugger. 
+<tr class="wb">
+  <td><tt>pnuts.tools.modules</tt></td>
+  <td>Specifies the modules to be used at the startup time.  It should be a comma-separated list.
+  </td></tr>
+<tr class="wb">
+  <td><tt>pnuts.home</tt></td>
+  <td>The directory where Pnuts is installed. This property is read-only.</td>
+</tr>
+</table>
+</blockquote>
+
+<h3>Version Number</h3>
+
+<p>
+The value of <tt>pnuts_version</tt> variable is the version number of Pnuts.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Command Shell
+</div>
+
+  </body>
+</html>

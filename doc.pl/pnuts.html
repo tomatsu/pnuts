@@ -1,0 +1,250 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html style="direction: ltr;" lang="pl"><head>
+
+      
+  <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+      
+  <meta http-equiv="Content-Style-Type" content="text/css">
+
+      
+  <link type="text/css" rel="stylesheet" href="stylesheet.css">
+  <title>Projekt Pnuts</title></head>
+
+<body style="direction: ltr;">
+
+
+<!-- body start -->
+
+<table cellpadding="20">
+
+  <tbody>
+    <tr>
+
+      <td colspan="2" align="center">
+      <h2>Projekt Pnuts</h2>
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td align="right" valign="top" width="20%"><b>Opis</b></td>
+
+      <td>
+      <p>Pnuts jest skryptowym j&#281;zykiem bazuj&#261;cym na JVM. Jego zadaniem
+jest umo&#380;liwienie systemom bazuj&#261;cym na platformie Java &#322;atwego i
+wydajnego &#322;&#261;czenia skrypt&oacute;w i kodu j&#281;zyka Java. Oto niekt&oacute;re
+w&#322;a&#347;ciwo&#347;ci j&#281;zyka.
+</p>
+
+
+      <ul>
+
+        <li>Prosta i czysta sk&#322;adnia
+        </li>
+        <li>Interaktywny interpreter
+        </li>
+        <li>Rozszerzalny system modu&#322;&oacute;w
+        </li>
+        <li>Elastyczne i dostosowywalne&nbsp; API
+        </li>
+        <li>Dynamiczna/statyczna kowersja do kodu bajtowego JVM
+        </li>
+        <li>Jeden z najszybszych skryptowych j&#281;zyk&oacute;w implementowanych w Javie
+        </li>
+        <li>Posiada wiele dobrych cech Javy (bezpiecze&#324;stwo, przeno&#347;no&#347;&#263;, itd.) 
+        </li>
+      </ul>
+
+
+      <p>Strona domowa projektu to <a href="http://pnuts.dev.java.net/">http://pnuts.dev.java.net/</a>, gdzie mo&#380;na znale&#347;&#263; dokumentacje, kod &#378;r&oacute;d&#322;owy jak i najnowsze wydania dystrybucji.
+      </p>
+
+      </td>
+
+    </tr>
+
+
+    <tr>
+
+      <td align="right" valign="top"><b>Motywacja</b></td>
+
+      <td>
+      <p>Pnuts orginalnie zosta&#322; stworzony jako narz&#281;dzie testowania
+klas Javy w 1997 r. Od tego czasu j&#281;zyk zosta&#322; znacznie rozbudowany
+kt&oacute;rego zastosowanie skupia si&#281; na spe&#322;nieniau zadania bazuj&#261;cego na
+Javie skryptowego silnika zawieraj&#261;cego system modu&#322;&oacute;w, kompilator kodu
+bajtowego i wiele wi&#281;cej.</p>
+      <br>
+Od T&#322;umacza: najnowsza wersja j&#281;zyka zawiera wiele eleganckich i
+wygodnych elemet&oacute;w j&#281;zkowych i sk&#322;adniowych kt&oacute;re daj&#261; nam mo&#380;liwo&#347;ci
+znane z takich j&#281;zyk&oacute;w jak Python&nbsp; <br>
+      <p>Od roku 2002 kiedy powsta&#322;o skryptowanie WEB j&#281;zyk Java
+posiada&#322; ju&#380; rozwi&#261;zanie JSP jednak jak wiadomo wielu webmaster&oacute;w nie
+by&#322;o programistami javy. Rozwi&#261;zanie bazuj&#261;ce na JSP wydawa&#322;o si&#281;
+trudne dla nich do nauczenia i z tego powodu wi&#281;kszo&#347;&#263; z nich
+sko&#380;ysta&#322;a z j&#281;zka PHP i podobnych technologii. Powsta&#322; pomys&#322; aby
+stworzy&#263; skryptowe &#347;rodowisko dla programist&oacute;w nie b&#281;d&#261;cymi
+programistami Javy daj&#261;c im mo&#380;liwo&#347;ci ko&#380;ystania z rosn&#261;cych
+mo&#380;liwo&#347;ci platformy Java.&nbsp;
+</p>
+
+
+      </td>
+
+    </tr>
+
+    <tr>
+
+      <td align="right" valign="top"><b>Zalety</b></td>
+
+      <td>
+      <ol>
+
+        <li><b>J&#281;zyk zosta&#322; zaprojektowany specjalnie dla platformy Java</b>
+          <div>Systemy skryptowe dla JVM posz&#322;y w dwuch kierunkach,
+jeden to tworzenie port&oacute;w istniej&#261;cych j&#281;zyk&oacute;w dla platformy Java (np.
+j&#281;zyk Python dla javy to Jython), druga droga to tworzone nowe j&#281;zyki
+od pocz&#261;tku.
+          <p>Systemy tworzone na podstawie istniej&#261;cych j&#281;zyk&oacute;w maj&#261;
+jeden wsp&oacute;lny problem, utrzymywanie kompatybilno&#347;ci z istniej&#261;cymi
+systemami. Je&#380;eli istniej&#261; r&oacute;&#380;nice miedzy j&#281;zykim skryptowym a j&#281;zykiem
+bazowym musz&#261; one pozosta&#263; np. je&#380;eli j&#281;zyk skryptowy posiada inny
+system typ&oacute;w to dane przekazywane ze skryptu do kodu bazowego j&#281;zyka
+musz&#261; by&#263; konwertowane. Na dodatek u&#380;ytkownik musi uczy&#263; si&#281; innej
+sk&#322;adni i zasad programowania w j&#281;zyku skryptowym, nie bez
+naczenia&nbsp;jest fakt &#380;e konwersje danych na po&#322;&#261;czniu &#347;rokowiska
+skryptowego i j&#281;zyka bazowego mog&#261; wp&#322;ywa&#263; negatywnie na wydajno&#347;&#263;. </p>
+
+          <p>Nowe j&#281;zyki projektowane z my&#347;l&#261; o jezyku Java w tym Pnuts
+nie posiadaj&#261; tych niedogodno&#347;ci, wszystkie warto&#347;ci w Pnuts s&#261;
+prawdziwymi objektami j&#281;zyka Java wi&#281;c zadna konwersja nie jest
+konieczna.
+</p>
+
+          </div>
+        </li>
+
+        <li><b>Modularne API</b>
+          <div>API Pnuts pozwala na proste &#322;&#261;czenie skrypt&oacute;w z j&#281;zykiem Java.
+Wiele innych system&oacute;w jest o wiele bardziej skomplikowanych w tej dziedzinie.
+          </div>
+        </li>
+
+        <li><b>Bogaty zestaw standardowych modu&#322;&oacute;w</b>
+          <div>Pnuts dostarcza gotowe biblioteki funkcji jako
+standardowe modu&#322;y . Funkcje te pozwalaj&#261; rozwija&#263; aplikacj&#281; du&#380;o
+&#322;awiej ni&#380; rozwi&#261;zania oparte tylko o mo&#380;liwo&#347;ci Javy.&nbsp; W dodatku
+, Pnuts dostarcza wyrafinowanego systemu modu&#322;&oacute;w kt&oacute;re u&#380;ykownik mo&#380;e
+dodawa&#263; na potrzeby danej aplikacji .&nbsp;
+</div>
+        </li>
+
+        <li><b>Wysoka wydajno&#347;&#263;</b>
+          <div>Pnuts jest jednym z najszybszych j&#281;zyk&oacute;w bazuj&#261;cych na
+platformie Java. Szybko&#347;&#263; jest wa&#380;na wtedy gdy silnik skryptowy jest
+cz&#281;&#347;ci&#261; rozbudowanej aplikacji poniewa&#380; skrypty s&#261; cz&#281;sto w&#261;skim
+gard&#322;em w wydajno&#347;ci takiej aplikacjii.
+</div>
+        </li>
+      </ol>
+
+      </td>
+
+    </tr>
+
+
+    <tr>
+
+      <td align="right" valign="top"><b>Zastosowania</b></td>
+
+      <td>
+      <ul>
+
+        <li>OpenWFE client - klient dla OpenWFE napisany w Pnuts
+          <div><a href="http://machine.homeunix.org/my_stuff/openwfe_client/">http://machine.homeunix.org/my_stuff/openwfe_client/</a></div>
+        </li>
+
+
+        <li>PnutsWiki - prosta aplikacja&nbsp;wiki napisana w Pnuts
+          <div><a href="http://pnuts.org/wiki/">http://pnuts.org/wiki/</a></div>
+        </li>
+
+     
+        <li>PnutsBlog - prosta aplikacja typu WEBLOG napisana w Pnuts
+          <div><a href="http://pnuts.org/%7Etomatsu/blog/">http://pnuts.org/~tomatsu/blog/</a> (Japo&#324;ska)</div>
+        </li>
+
+     
+        <li>JAS3
+          <div><a href="http://jas.freehep.org/jas3/index.html">http://jas.freehep.org/jas3/index.html</a></div>
+        </li>
+
+
+        <li>JASP -bazowany na Javie procesor statystyczny
+          <div><a href="http://jasp.ism.ac.jp/">http://jasp.ism.ac.jp/</a></div>
+        </li>
+
+
+        <li>Jakarta Bean Scripting Engine
+          <div><a href="http://jakarta.apache.org/bsf/">http://jakarta.apache.org/bsf/</a></div>
+        </li>
+
+
+        <li>Java GuiBuilder
+          <div><a href="http://www.guibuilder.de/">http://www.guibuilder.de/</a></div>
+        </li>
+
+
+        <li>Alma
+          <div><a href="http://www.desnoix.com/guillaume/alma/">http://www.desnoix.com/guillaume/alma/</a></div>
+        </li>
+
+
+        <li>docproc - pakiet dla przetwarzania XML/XSL we wczesnych wersjach.
+          <div><a href="http://javalab.uoregon.edu/ser/software/docproc_2/">http://javalab.uoregon.edu/ser/software/docproc_2/</a></div>
+        </li>
+
+
+        <li>Mulcci (tylko po japo&#324;sku)
+          <div><a href="http://member.nifty.ne.jp/mulcci/">http://member.nifty.ne.jp/mulcci/</a></div>
+        </li>
+
+      </ul>
+
+
+      </td>
+
+    </tr>
+
+  </tbody>
+</table>
+
+
+
+<!-- body end -->
+
+
+
+<div class="footer">
+<a href="http://pnuts.org/">Strona domowaPnuts</a>
+<tt>|</tt> <a href="guide.html">Podr&#281;cznik</a>
+<tt>|</tt>
+<a href="lang-TOC.html">J&#281;zyk Pnuts</a>
+<tt>|</tt>
+<a href="quickref.html">&#346;ci&#261;gawka</a>
+<tt>|</tt>
+<a href="../apidoc/index.html">Dokumentacja API</a>
+<tt>|</tt>
+<a href="faq.html">FAQ</a>
+<tt>|</tt> <a href="http://pnuts.org/snapshot/latest/">Pobieranie</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">Licencja</a>
+<tt>|</tt> <a href="mailto:pnuts-admin@Japan.Sun.COM">Kontakt</a>
+</div>
+
+
+
+  
+</body></html>

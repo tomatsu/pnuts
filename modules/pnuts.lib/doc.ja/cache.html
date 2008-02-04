@@ -1,0 +1,127 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>データ・キャッシュ / ファイナライザ</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> データ・キャッシュ</div>
+
+    <h2>データ・キャッシュ / ファイナライザ</h2>
+
+<a name=memcache></a>
+
+<div class="box">
+<div class="synopsis"><b>memcache</b><tt> ( </tt><em>factory</em> <tt>( ) )</tt> or</div>
+<div class="synopsis2"><tt> ( </tt><em>factory</em> <tt>( </tt><em>key</em><tt> ) )</tt></div>
+</div>
+
+<p>
+<tt>memcache()</tt>は、<tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/ref/SoftReference.html">SoftReference</a></tt>クラスを使ってキャッシュの仕組みを実現します。
+</p>
+<p>
+<em>factory()</em>が指定された場合、<tt>memcache()</tt> は<em>factory()</em>の計算結果を返す関数を返します。その計算結果は、キャッシュに蓄えられ、再利用されます。
+</p>
+
+<pre class="eg">
+cache = memcache(function () Date())
+
+cache()    => Mon Dec 08 23:58:32 JST 2003
+cache()    => Mon Dec 08 23:58:32 JST 2003
+...
+cache()    => Tue Dec 09 00:00:21 JST 2003
+</pre>
+
+<p>
+<em>factory(key)</em>が指定された場合、<tt>memcache()</tt> は、ヒープメモリにkey-valueのペアを保管できる<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>オブジェクトを返します。そのオブジェクトの<tt>get()</tt> メソッドは、キャッシュされたデータを（もしまだあれば）取り出します。要求したデータがキャッシュから消えている場合、あるいは、まだキャッシュされていない場合、そのデータを識別するためのkeyを引数にして<em>factory</em> 関数が呼ばれ、その結果がキャッシュ・オブジェクトに保管されます。
+</p>
+
+<p>
+たとえば、次のコードは、大きなテキストファイル"<tt>constitution.txt</tt>" をメモリキャッシュに保管する例です。
+メモリ使用量が多い場合には、キャッシュされたデータはGCによって回収されるかもしれません。<tt>get()</tt> を呼び出したときに、キャッシュされたデータが消えていた場合は、<tt>readText("constitution.txt")</tt> が呼び出され、その結果がキャッシュに再度保管されます。結果として、そのファイルの内容は、キャッシュにあるかどうかに関わらず、<tt>get()</tt> メソッドで取り出すことができます。
+</P>
+
+<pre class="eg">
+textCache = memcache(readText)
+
+txt = textCache["constitution.txt"]
+...
+</pre>
+
+<p>すでにキャッシュされているデータを手動でキャッシュから追い出すには、invalidate(<em>key</em>)メソッドを呼び出します。
+<pre class="eg">
+textCache.invalidate("constitution.txt")
+</pre>
+
+<a name=LRUcache></a>
+<div class="box">
+<div class="synopsis"><b>LRUcache</b><tt> ( int </tt><em>size</em> { , <em>factory</em> <tt>( <em>key</em> ) { , <em>expiration_handler(expired_object)</em> } } )</tt></div>
+</div>
+
+<p>
+<tt>LRUcache()</tt>は、LRUアルゴリズムに基づいたデータキャッシュを実現する<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>オブジェクトを返します。
+</p>
+<p>
+<em>factory</em>が指定されない場合、このオブジェクトの<tt>get()</tt> メソッドは、キャッシュされたデータを（もしまだあれば）取り出します。なければnullを返します。
+</p>
+<p>
+<em>factory</em>が指定された場合、このオブジェクトの<tt>get()</tt> メソッドは、キャッシュされたデータを（もしまだあれば）取り出します。要求したデータがキャッシュから消えている場合、あるいは、まだキャッシュされていない場合、そのデータを識別するためのkeyを引数にして<em>factory</em> 関数が呼ばれ、その結果がキャッシュ・オブジェクトに保存されます。
+</p>
+<p>
+このキャッシュ・オブジェクトには最大<em>size</em>個のデータがキャッシュされます。それ以上のデータを保存するときは、最終アクセス(read/write)の最も古いデータがキャッシュから消されます。
+</p>
+<p>
+<em>expiration_handler</em>が指定された場合は、最も古いデータがキャッシュから消されるときに、そのデータ引数にして<em>expiration_handler</em>が呼び出されます。
+</p>
+
+<p>
+次の例は、最大4つまでSAXパーザをプールする例です。
+</p>
+
+<div class="eg">例:
+<pre>
+import("javax.xml.parsers.*")
+
+function createSAXParser(properties){
+   factory = SAXParserFactory::newInstance()
+   if (properties != null) setBeanProperties(factory, properties)
+   factory.newSAXParser()
+}
+
+saxParserPool = LRUcache(4, createSAXParser)
+parser = saxParserPool[null]
+...
+</pre></div>
+
+
+<a name="setFinalizer"></a>
+<div class="box">
+<div class="synopsis"><b>setFinalizer</b><tt> ( <a href="../../../apidoc/pnuts/lang/Property.html">Property</a> </tt><em>package</em> <tt>, </tt><em>func ()</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>setFinalizer()</tt> は、<em>package</em>のファイナライザとして関数<em>func</em>を登録します。
+<em>package</em>への参照がなくなりGCに回収されるときに、登録された関数<em>func</em>が呼び出されます。
+</p>
+
+<pre class="eg">
+function newResource(x) {
+   pkg = $(
+     function get() x
+   )
+   setFinalizer(pkg, function () println(x, " was disposed"))
+   pkg
+}
+</pre>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> データ・キャッシュ</div>
+
+  </body>
+</html>

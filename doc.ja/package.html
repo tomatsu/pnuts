@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> パッケージ
+</div>
+
+<!-- body start -->
+
+    <h2>パッケージ</h2>
+
+<p>
+<em>パッケージ</em>とは、変数や関数を定義する独立した名前空間です。
+</p>
+
+
+<a name=package></a>
+
+<div class="box">
+<div class="synopsis"><b>package</b><tt>( )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>packageName</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="../apidoc/pnuts/lang/Package.html">Package</a> </tt><em>aPackage</b></em><tt>)</tt></div>
+</div>
+
+<p>
+1引数の<tt>package()</tt> 関数はカレントパッケージを変更します。
+0引数の<tt>package()</tt> 関数はカレントパッケージに対応する<a href="../apidoc/pnuts/lang/Package.html">Package</a> オブジェクトを返します。
+</p>
+
+<pre class="eg">
+package("foo")   ==> package "foo"
+package()        ==> package "foo"
+package("")      ==> package ""
+package()        ==> package ""
+</pre>
+
+<a name="use"></a>
+
+<div class="box">
+<div class="synopsis"><b>use</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>packageName</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<em>pkgName</em>で示されるパッケージで定義されているすべての関数をカレントパッケージで直接参照できるようにします。<a href="module.html"><tt>モジュール</tt></a>は、この組み込み関数を利用して実現されています。
+</p>
+
+<pre class="eg">
+package("foo")
+function x() 100
+y = 200
+
+package("bar")
+use("foo")
+x ==> function x
+y ==> エラー
+
+package("")
+x ==> エラー
+y ==> エラー
+</pre>
+
+
+<div class="box">
+<div class="synopsis"><em>aPackage</em><tt> . symbol</tt></div>
+<div class="synopsis"><em>aPackage</em><tt> . symbol = </tt><em>value</em></div>
+</div>
+
+<pre class="eg">
+foo = 100
+package().foo     ==> 100
+package().foo = 200
+foo               ==> 200
+package().bar     ==> null
+</pre>
+
+<div class="box">
+<div class="synopsis"><em>aPackage</em> <b>.defined</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>symbolName</b></em><tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>Package.defined</tt> メソッドは、指定した名前のシンボルがターゲットのパッケージで定義されているかどうかを調べます。
+</p>
+
+<pre class="eg">
+getPackage("foo")
+context = getContext()
+findPackage("foo").defined("bar", context)   ==> false
+foo::bar = 100
+findPackage("foo").defined("bar", context)   ==> true
+</pre>
+
+<div class="box">
+<div class="synopsis"><em>aPackage</em> <b>.clear</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>symbolName</em><tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>Package.clear</tt> メソッドは指定したシンボルをターゲットのパッケージから削除します。
+</p>
+
+<pre class="eg">
+context = getContext()
+findPackage("foo").defined("bar", context)   ==> true
+findPackage("foo").clear("bar", context)
+findPackage("foo").defined("bar", context)   ==> false
+</pre>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> パッケージ
+</div>
+
+  </body>
+</html>

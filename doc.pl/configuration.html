@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Dostosowywanie zachowania wyra&#380;e&#324; podstawowych
+</div>
+
+<!-- body start -->
+
+<h2>Dostosowywanie zachowania wyra&#380;e&#324; podstawowych</h2>
+
+<p>Zachowanie p&oacute;l klas, dost&#281;pu indeksowego, wywo&#322;ania&nbsp;
+metod/construktor&oacute;w oraz operator&oacute;w mo&#380;e by&#263; zmienione
+przez atrybuty obietku&nbsp; Context.
+</p>
+<blockquote>
+<table class="bg2" border="0" cellpadding="3" cellspacing="1" width="45%">
+<tbody><tr class="wb">
+<td><b>Dost&#281;p do p&oacute;l</b></td>
+<td><tt>
+<div>target . field</div>
+<div>target :: field</div>
+</tt></td>
+</tr>
+<tr class="wb">
+<td><b>Dost&#281;p indeksowy</b></td>
+<td><tt>target [ index ]</tt></td>
+</tr>
+<tr class="wb">
+<td><b>Wywo&#322;anie metod</b></td>
+<td><tt>
+<div>target . method (...)</div>
+<div>target :: method (...)</div>
+</tt></td>
+</tr>
+<tr class="wb">
+<td><b>Konstruktor</b></td>
+<td><tt>
+<div>target (...)</div>
+</tt></td>
+</tr>
+<tr class="wb">
+<td><b>Operatory</b></td>
+<td><tt>+</tt>,<tt>-</tt>,<tt>*</tt>,<tt>/</tt>,<tt>&amp;</tt>,<tt>|</tt>,<tt>^</tt>,<tt>&lt;&lt;</tt>,<tt>&gt;&gt;</tt>,<tt>&gt;&gt;&gt;</tt>,<tt>&amp;&amp;</tt>,<tt>||</tt>,<tt>++</tt>,<tt>--</tt></td>
+</tr>
+</tbody></table>
+</blockquote>
+
+<h3>Ustawanie konfiguracji</h3>
+<p>Konfiguracja kontekstu mo&#380;e by&#263; ustawiona przez metod&#281;&nbsp; <a href="../apidoc/pnuts/lang/Context.html#setConfiguration%28pnuts.lang.Configuration%29"><tt>Context.setConfiguration(Configuration)</tt></a>.
+</p>
+
+<pre class="eg">Context context = new Context();<br>context.setConfiguration(new NonPublicMemberAccessor());<br>...<br></pre>
+
+<h3>Klasa<tt> pnuts.lang.Configuration</tt>&nbsp;</h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/Configuration.html"><tt>pnuts.lang.Configuration</tt></a>
+definiuje domy&#347;lne zachowanie wyra&#380;e&#324;. W podklasie mo&#380;na zdefiniowa&#263; w&#322;asne zachowanie przez nadpisanie odpowiednich metod.
+</p>
+
+<h4><b>Dost&#281;p do p&oacute;l</b></h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getField</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> context , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em> );</tt></dt>
+<dt><tt>public void <b>putField</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em> );</tt></dt>
+
+
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getStaticField</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em> );</tt></dt>
+<dt><tt>public void <b>putStaticField</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em> );</tt></dt>
+
+</dl>
+</blockquote>
+
+<h4><b>Dost&#281;p indeksowy</b></h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getElement</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>key</em>  );</tt></dt>
+<dt><tt>public void <b>setElement</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> context , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>key</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em>);</tt></dt>
+</dl>
+</blockquote>
+
+
+<h4><b>Konstruktor</b></h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>callConstructor</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> <em>c</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] <em>types</em> );</tt></dt>
+</dl>
+</blockquote>
+
+<h4><b>Wywo&#322;anie metod</b></h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>callMethod</b>( <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> ,
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[]
+<em>types</em> );</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Operatory</h4>Dzia&#322;anie operator&oacute;w mo&#380;e by&#263; ustawione przez ustawianie zabezpieczonych zmiennych w konstruktorze.
+
+<blockquote>
+<dl>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/BinaryOperator.html">BinaryOperator</a> _add, _subtract, _multiply, _divide, _mod, _and, _or, _xor, _shiftLeft, _shiftRight, _shiftArithmetic;</tt>
+</dt><dt><tt>protected <a href="../apidoc/pnuts/lang/UnaryOperator.html">UnaryOperator</a> _add1, _subtract1, _negate, _not;</tt>
+</dt><dt><tt>protected <a href="../apidoc/pnuts/lang/BooleanOperator.html">BooleanOperator</a> _lt, _le, _gt, _ge, _eq;</tt>
+</dt></dl>
+</blockquote>
+
+
+<h3>Predefiniowana konfiguracja</h3>
+
+<p>Poni&#380;sze klasy zdefiniowane w pakiecie pnuts.lang package ustalaj&#261; domy&#347;ln&#261; konfiguracj&#281;.
+</p>
+<blockquote>
+<dl>
+<dt><a href="../apidoc/pnuts/lang/Configuration.html"><b><tt>pnuts.lang.Configuration</tt></b></a>
+</dt><dd>Domy&#347;lna konfiguracja z dost&#281;pem do w&#322;asciwo&#347;ci i metod
+Beans,zmiennych kontekstu oraz atrybut&oacute;w&nbsp;
+pnuts.lang.Property. &nbsp;Pod platforma Java 2 dost&#281;p do wpis&oacute;w
+w obiektach Map dzia&#322;a jak dost&#281;p do p&oacute;&#322; obiektu.
+</dd><dt><a href="../apidoc/pnuts/ext/PublicMemberAccessor.html"><b><tt>pnuts.ext.PublicMemberAccessor</tt></b></a>
+</dt><dd>Tak samo jak domy&#347;lna z wyjatkiem &#380;e jest dost&#281;p do publicznych p&oacute;l zamiast w&#322;a&#347;ciwo&#347;ci Beans.
+</dd><dt><a href="../apidoc/pnuts/ext/NonPublicMemberAccessor.html"><b><tt>pnuts.ext.NonPublicMemberAccessor</tt></b></a>
+</dt><dd>Pozwala na dot&#281;p do niepublicznych motod i p&oacute;l, wymaga platformy Java 2.
+</dd><dt><a href="../modules/pnuts.awt/apidoc/pnuts/awt/EventQueueConfiguration.html"><b><tt>pnuts.awt.EventQueueConfiguration</tt></b></a>
+</dt><dd>U&#380;ywan w&#261;tku&nbsp; zdarze&#324; AWT w dost&#281;pnie do API.
+</dd></dl>
+</blockquote>
+
+
+<h3>W&#322;a&#347;ciwo&#347;&#263; <tt>pnuts.lang.defaultConfiguration</tt>&nbsp;</h3>
+<p>
+Je&#380;eli systemowa w&#322;a&#347;ciwo&#347;&#263; <tt>pnuts.lang.defaultConfiguraion</tt> wskazuje na prawid&#322;ow&#261; podlas&#281; konfiguracji jest ona u&#380;yta jako domy&#347;lna konfiguracja.
+</p>
+
+<p>Przyk&#322;adowo jezeli uruchomimy interpreter jak podano poni&#380;ej wszytskie pola w klasach b&#281;d&#261; dost&#281;pne jako publiczne.
+</p>
+
+<pre class="eg">% java -Dpnuts.lang.defaultConfiguration=pnuts.lang.PublicMemberConfiguration pnuts.tools.Main<br></pre>Zobacz r&oacute;wnie&#380; '<a href="context_setup.html">Configuracja kontekstu</a>'.
+
+<h3>Funkcje i konfiguracja</h3>
+<p>Funkcje zdefiniowane w skryptach s&#261; wykonywane w konfiguracji w
+kt&oacute;rej zosta&#322;y zdefiniowane &nbsp;(konfiguracje w kt&oacute;rej
+skrypt zosta&#322; zaladowany)
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Dostosowywanie zachowania wyra&#380;e&#324; podstawowych
+</div>
+
+  </body></html>

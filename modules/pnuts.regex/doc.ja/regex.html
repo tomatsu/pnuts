@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.regexモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.regex</tt></a> -> 関数定義</div>
+
+<h2><tt>pnuts.regex</tt>モジュール</h2>
+
+<a name=match></a>
+
+<div class="box">
+<div class="synopsis">
+<b>match</b><tt> (<em>regular_expression</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>input</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>options</em> }) </TT></div>
+</div>
+
+<p>
+<tt>match()</tt> は、文字列<em>input</em>に正規表現<em>regular_expression</em> が含まれるかどうかを判定した結果を返します。
+</p>
+<p>
+<em>regular_expression</em>は、String または、Patternオブジェクトです。正規表現の文法は、Javaの正規表現APIで定義されます。</p>
+
+<div class="eg">例:
+<pre>
+match("a*b", "aaaaabbb")  => true
+</pre></div>
+
+<p>
+<em>options</em>は、"i", "s", "m" などの文字が含まれる文字列です。
+</p>
+
+<blockquote>
+<table border>
+<tr><th>文字<th>意味
+<tr><td>i
+    <td>大文字小文字の区別をしない</td>
+<tr><td>m
+    <td>複数行モード</td>
+<tr><td>s
+    <td>. が改行にマッチ</td>
+<tr><td>n
+    <td>メタ文字をエスケープする</td>
+<tr><td>その他
+    <td>正規表現APIにそのまま渡される</td>
+</table>
+</blockquote>
+
+<div class="eg">例:
+<pre>
+match("a", "ABC", "i")  => true
+</pre></div>
+
+<a name=getMatch></a>
+
+<div class="box">
+<div class="synopsis"><b>getMatch</b><tt> (int <em>index</em>) </TT></div>
+</div>
+
+<p>
+<tt>getMatch(0)</tt>はマッチした文字列全体を、<tt>getMatch(n)</tt>はｎ番目のグループにマッチした文字列を返します。
+</p>
+
+<div class="eg">例:
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatch(0)  => "aaabcc"
+getMatch(1)  => "aaa"
+getMatch(2)  => "cc"
+</pre></div>
+
+<a name=getMatches></a>
+<div class="box">
+<div class="synopsis"><b>getMatches</b><tt> ( ) </tt></div>
+</div>
+
+<p>
+<tt>getMatches()</tt>はパターングループにマッチした文字列の配列を返します。
+</p>
+
+<div class="eg">例:
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatches()  => ["aaa", "cc"]
+</pre>
+</div>
+
+<a name=getMatchStart></a>
+
+<div class="box">
+<div class="synopsis"><b>getMatchStart</b><tt> (int <em>index</em>) </TT></div>
+</div>
+
+<p>
+<tt>getMatchStart(0)</tt>はマッチした文字列の開始インデックスを、<tt>getMatchStart(n)</tt>はｎ番目のグループにマッチした文字列の開始インデックスを返します。
+</p>
+
+<div class="eg">例:
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatchStart(0)  => 0
+getMatchStart(1)  => 0
+getMatchStart(2)  => 4
+</pre></div>
+
+<a name=getMatchEnd></a>
+
+<div class="box">
+<div class="synopsis"><b>getMatchEnd</b><tt> (int <em>index</em>) </TT></div>
+</div>
+
+<p>
+<tt>getMatchEnd(0)</tt>はマッチした文字列の終了インデックスを、<tt>getMatchEnd(n)</tt>はｎ番目のグループにマッチした文字列の終了インデックスを返します。
+</p>
+
+<div class="eg">例:
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatchEnd(0)  => 6
+getMatchEnd(1)  => 3
+getMatchEnd(2)  => 6
+</pre></div>
+
+<a name=getNumberOfGroups></a>
+
+<div class="box">
+<div class="synopsis"><b>getNumberOfGroups</b><tt> ()</tt></div>
+</div>
+
+<p>
+<tt>getNumberOfGroups()</tt>は、マッチに成功した場合に正規表現のグループの数を返します。マッチに失敗した場合の値は不定です。（定義されません。）
+</p>
+
+<a name=formatMatch></a>
+
+<div class="box">
+<div class="synopsis"><b>formatMatch</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>template</em> )</tt></div>
+</div>
+<p>
+<tt>formatMatch()</tt>は、<em>replacement_string</em>に直前のパターンマッチでマッチしたサブシーケンスを埋め込んで得られる文字列を返します。
+</p>
+
+<div class="eg">例:
+<pre>
+match("(a+)(b+)", "aaaabbbb")
+formatMatch("$2$1")
+  => "bbbbaaaa"
+</pre></div>
+
+<a name=matchAll></a>
+
+<div class="box">
+<div class="synopsis"><b>matchAll</b><tt> (<em>regular_expression</em>,
+	<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>input</em>
+	{ , <em>func</em> (<em>word</em>) { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>options</em> } }</tt></div>
+</div>
+
+<p>
+<em>func</em>が指定された場合、<tt>matchAll()</tt>は<em>regular_expression</em> を<em>input</em>から検索し、マッチした文字列を順に<em>func</em>に渡して呼び出し、マッチした回数を返します。
+</p>
+<p>
+<em>func</em>が指定されない場合、マッチした文字列を順に取りだすために使われるIteratorを返します。
+</p>
+<div class="eg">例:
+<pre>
+for (word : matchAll("[a-z]+", "abc def")){
+   println(word)
+}
+</pre></div>
+
+<a name=substitute></a>
+
+<div class="box">
+<div class="synopsis"><b>subsitute</b><tt> (<em>regular_expression</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>replacement</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>input</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>options</em> }) or </TT></div>
+<div class="synopsis2"><TT>(<em>regular_expression</em>, <a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> <em>func</em> ( {<em>matchedWord</em>} ), <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>input</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>options</em> }) </TT></div>
+</div>
+
+<p>
+２番目の引数に文字列が渡された場合、文字列<em>input</em>の正規表現<em>regular_expression</em>にマッチした部分を、<em>replacement</em>で置き換えます。正規表現にサブグループがある場合、<em>replacement</em>内の<tt>$0〜$9</tt>は<tt>n</tt>番目のグループに置き換わります。ただし、<em>options</em>に文字'<tt>n</tt>'が含まれる場合は、<tt>$n</tt>の解釈は行われず<em>replacement</em>がそのまま埋め込まれます。
+</p>
+<p>
+２番目の引数に関数が渡された場合、文字列<em>input</em>の正規表現<em>regular_expression</em>にマッチした部分を、<em>func</em>を呼び出した結果で置き換えます。関数は0引数または1引数で呼び出せるものを指定します。関数が引数を１つ取る場合、マッチした語が引数に渡されます。
+</p>
+<p>
+<em>regular_expression</em>は、String または、Patternオブジェクトです。正規表現の文法は、正規表現APIで定義されます。</p>
+
+
+<div class="eg">例:
+<pre>
+substitute(&quot;[a-zA-Z]+&quot;, {x->toUpperCase(x)}, &quot;aBcDe&quot;, &quot;g&quot;)  =&gt; &quot;ABCDE&quot;
+</pre></div>
+
+<a name=split></a>
+
+<div class="box">
+<div class="synopsis"><b>split</b><tt> (<em>regular_expression</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>input</em> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>options</em> }) </TT></div>
+</div>
+
+<p>
+<tt>split()</tt>は、正規表現<em>regular_expression</em>にマッチする文字列を区切りとして、文字列<em>input</em>を分割した結果(List)を返します。
+</p>
+<p>
+<em>regular_expression</em>は、String または、特定の正規表現APIのパターンオブジェクトです。正規表現の文法は、正規表現APIで定義されます。</p>
+
+<div class="eg">例:
+<pre>
+split(`\.`, "a.b.c") => ["a", "b", "c"]
+</pre></div>
+
+<a name=whichRegexAPI></a>
+
+<div class="box">
+<div class="synopsis"><b>whichRegexAPI</b><tt> ( )</tt></div>
+</div>
+
+<p>
+<tt>whichRegexAPI()</tt> は、使われているモジュール名を返します。スクリプトが読み込まれていない場合は<tt>null</tt>を返します。
+</p>
+
+<a name=getMatchCount></a>
+
+<div class="box">
+<div class="synopsis"><b>getMatchCount</b><tt> ( )</tt></div>
+</div>
+
+<p>
+<tt>getMatchCount()</tt> は、直前に呼び出された<tt>substitute()</tt>で置換された個所の数を返します。
+</p>
+
+<a name=regex></a>
+
+<div class="box">
+<div class="synopsis"><b>regex</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>expression</em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>options</em> })</tt></div>
+</div>
+
+<p>
+<tt>regex()</tt> は、<em>expression</em>から、特定の正規表現APIのパターンオブジェクトを作って返します。例えば、pnuts.regex モジュールを使っている場合、java.util.regex.Pattern オブジェクトを返します。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.regex</tt></a> -> 関数定義</div>
+
+  </body>
+</html>

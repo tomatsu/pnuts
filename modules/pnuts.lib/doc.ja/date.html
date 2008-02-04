@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.libモジュール</title>
+    <meta Http-Equiv="Content-Style-Type" Content="text/css">
+    <link Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> 日付／時刻</div>
+
+    <h2>日付／時刻</h2>
+
+
+<a name=currentTimeMillis></a>
+<div class="box">
+<div class="synopsis"><b>currentTimeMillis</b><tt>()</tt></div>
+
+</div>
+
+<p>
+<tt>currentTimeMillis()</tt> は、現在の時刻をミリ秒(long)で返します。
+</p>
+
+
+<a name=date></a>
+<div class="box">
+<div class="synopsis"><b>date</b><tt>()</tt> or</div>
+
+<div class="synopsis2"><tt>(long <em>timeMillis</em>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt>or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>dateString</em> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>pattern</em> })</tt> or</div>
+
+<div class="synopsis2"><tt>(int <em>year</em>, int <em>month</em>, int <em>day</em> { , int <em>hour</em>, int <em>minute</em>, int <em>second</em> } )</tt></div>
+
+</div>
+
+<p>
+<tt>date()</tt> は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html"><tt>java.util.Date</tt></a> オブジェクトを返します。引数がない場合、現在時刻を表すオブジェクトを返します。
+</p>
+<p>
+<em>dateString</em> が指定された場合、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a> に説明されている規則に従って解析されます。<em>pattern</em> のデフォルト値は"MM/dd/yyyy"です。
+
+
+</p>
+
+<div class="eg">例：
+<pre>
+date("2000/10/27", "yyyy/MM/dd")
+</pre></div>
+
+<a name=getYear></a>
+<a name=getMonth></a>
+<a name=getDayOfYear></a>
+<a name=getDayOfMonth></a>
+<a name=getDayOfWeek></a>
+<a name=getHour></a>
+<a name=getMinute></a>
+<a name=getSecond></a>
+<a name=getMillisecond></a>
+<a name=getMaxDayOfMonth></a>
+
+<a name=getMaxDayOfYear></a>
+
+<div class="box">
+<div class="synopsis"><b>getYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+
+<div class="synopsis"><b>getDayOfYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getDayOfMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getDayOfWeek</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+
+<div class="synopsis"><b>getHour</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getMinute</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getSecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+
+<div class="synopsis"><b>getMillisecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getMaxDayOfYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+<div class="synopsis"><b>getMaxDayOfMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>)</tt></div>
+
+</div>
+
+<p>
+時間の属性を調べます。
+</p>
+<p>
+<table border>
+<tr>
+<td>DayOfWeek</td><td>1=日曜, ... 7=土曜</td>
+</tr>
+<tr>
+<td>Month</td><td>1=１月, ... 12=１２月</td>
+
+</tr>
+
+</table>
+</p>
+
+<a name=addYear></a>
+<a name=addMonth></a>
+<a name=addWeek></a>
+<a name=addDay></a>
+<a name=addHour></a>
+<a name=addMinute></a>
+<a name=addSecond></a>
+<a name=addMillisecond></a>
+
+<div class="box">
+<div class="synopsis"><b>addYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+
+<div class="synopsis"><b>addMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+<div class="synopsis"><b>addWeek</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+<div class="synopsis"><b>addDay</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+
+<div class="synopsis"><b>addHour</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+<div class="synopsis"><b>addMinute</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+<div class="synopsis"><b>addSecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+
+<div class="synopsis"><b>addMillisecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date</em>, int number)</tt></div>
+</div>
+
+<p>
+日付･時刻から、指定した時間を経過した日付･時刻を返します。
+</p>
+
+<a name=diffYear></a>
+<a name=diffMonth></a>
+<a name=diffDay></a>
+
+<a name=diffWeek></a>
+
+<a name=diffHour></a>
+<a name=diffMinute></a>
+<a name=diffSecond></a>
+<a name=diffMillisecond></a>
+
+<div class="box">
+<div class="synopsis"><b>diffYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+
+<div class="synopsis"><b>diffMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+<div class="synopsis"><b>diffWeek</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+
+<div class="synopsis"><b>diffDay</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+<div class="synopsis"><b>diffHour</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+
+<div class="synopsis"><b>diffMinute</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+<div class="synopsis"><b>diffSecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+
+<div class="synopsis"><b>diffMillisecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date1</em>, <a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> <em>date2</em>)</tt></div>
+</div>
+
+<p>
+２つ引数の時間間隔を返します。<em>date2</em>が<em>date1</em>より古い場合には負の数を返します。
+
+
+</p>
+
+<a name=setTimeZone></a>
+<a name=getTimeZone></a>
+
+<div class="box">
+<div class="synopsis"><b>getTimeZone</b><tt>( { <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>timeZoneName</em> } )</tt></div>
+<div class="synopsis"><b>setTimeZone</b><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>timeZoneName</em>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href ="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/TimeZone.html">TimeZone</a> <em>timeZone</em>)</tt></div>
+</div>
+
+<p>
+カレント・コンテクストのTimeZone を求めたり、あるいは、変更します。
+</p>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> 日付／時刻</div>
+
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> パッケージ</div>
+
+    <h2>パッケージ</h2>
+
+<a name=findPackage></a>
+<div class="box">
+<div class="synopsis"><b>findPackage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>packageName</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>findPackage()</tt> 関数は、指定した名前の <a
+	href="../../../apidoc/pnuts/lang/Package.html">Package</a> オブジェクトを求め
+      ます。 指定したパッケージがない場合は null を返します。
+</p>
+
+<pre class="eg">
+findPackage("foo")   ==> null
+package("foo")       ==> package "foo"
+package("")
+findPackage("foo")   ==> package "foo"
+package()            ==> package ""
+</pre>
+
+<a name=getPackage></a>
+<div class="box">
+<div class="synopsis"><b>getPackage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>packageName</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getPackage()</tt> は、指定した名前の<a
+	href="../../../apidoc/pnuts/lang/Package.html">Package</a> オブジェクトを求め
+      ます。指定したパッケージがない場合は、そのパッケージを作成してそれを返します。
+</p>
+
+<pre class="eg">
+package()             ==> package ""
+findPackage("bar")    ==> null
+getPackage("bar")     ==> package "bar"
+package()             ==> package ""
+</pre>
+
+<a name=createPackage></a>
+<div class="box">
+<div class="synopsis"><b>createPackage</b><tt>()</tt></div>
+<div class="synopsis"><b>createPackage</b><tt>( ` </tt><em>expression</em><tt> ; ... `)</tt></div>
+<div class="synopsis"><b>createPackage</b><tt>( </tt><em>expression</em><tt> , ... )</tt></div>
+</div>
+
+<p>
+<tt>createPackage()</tt>は、匿名のパッケージを作成して返します。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>引数の数</th>
+<th bgcolor=#eeeeee>型</th>
+<th bgcolor=#eeeeee>動作</th>
+<tr class="wb">
+<td>1</td>
+<td>java.lang.String</td>
+<td>パッケージ内で文字列を評価する</td>
+</tr>
+<tr class="wb">
+<td>1</td>
+<td>java.lang.Object[]</td>
+<td>各要素を[key, value] のペアと解釈して、パッケージでそれらを定義する。</td>
+</tr>
+<tr class="wb">
+<td>任意</td>
+<td>任意</td>
+<td>引数の中に関数がある場合は、パッケージでその関数を関数名で登録する</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">
+例:
+<pre>
+p = createPackage()
+p.x = 1
+p.y = 2
+
+q = createPackage("x = 1; y = 2")
+q.x     ==> 1
+q.y     ==> 2
+
+r = createPackage([["a", "hello"], ["b", "world"]])
+r.a  ==> "hello"
+r.b  ==> "world"
+</pre></div>
+
+<p>
+<tt>createPackage()</tt>は、通常の関数とちがって、呼び出し時のコンテクストで引数を評価します。<tt><a href="script_package.html">「スクリプトパッケージ」</a></tt> を参照。
+</p>
+
+<a name="removePackage"></a>
+<div class="box">
+<div class="synopsis"><b>removePackage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>name</em>)</tt></div>
+</div>
+
+<p>
+<tt>removePackage()</tt> は指定したパッケージを除外します。
+</p>
+
+<a name=rootScope></a>
+<div class="box">
+<div class="synopsis"><b>rootScope</b><tt>( )</tt></div>
+</div>
+
+<p>
+<tt>rootScope()</tt>は、パッケージ階層の最上位のパッケージを返します。
+通常はグローバル・パッケージです。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> パッケージ</div>
+
+  </body>
+</html>

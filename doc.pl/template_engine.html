@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; U&#380;ycie Pnuts jako silnika szablon&oacute;w
+</div>
+
+<!-- body start -->
+
+    <h2>U&#380;ycie Pnuts jako silnika szablon&oacute;w</h2>
+
+<h3>Wst&#281;p</h3>
+<p>Szablony zamkni&#281;te mi&#281;dzy &nbsp;tagami <tt>&lt;%=</tt> ... <tt>%&gt;</tt> lub <tt>&lt;%</tt> ... <tt>%&gt;</tt>
+&nbsp;s&#261; konwertowane na wykonywalne skrypty Pnuts. Fragmenty kodu w
+tych tagach mog&#261; odwo&#322;ywa&#263; si&#281; do zmiennych. Fragmenty kodu
+r&oacute;wnie&#380; mog&#261; wykonywa&#263; dowolne skrypty w celu utworzenia
+dynamicznej zawarto&#347;ci. </p>
+<p>Ta funkcjonalno&#347;&#263; jest cze&#347;ci&#261;&nbsp; <a href="../modules/pnuts.servlet/doc/index.html">modu&#322;u pnuts.servlet</a>. 
+Prosze skonsultowa&#263; si&#281; z sekcj&#261;&nbsp; <a href="servlet.html#dynamic_pages">'Strony Dynamiczne'</a> w celu poznania szczeg&oacute;&#322;&oacute;w.
+</p>
+
+<h3>pnuts.servlet.DynamicPage</h3>
+
+<dl>
+<dt></dt><dd><tt>public DynamicPage(URL <em>url</em>, String <em>encoding</em>, Context <em>context</em>) throws IOException, ParseException</tt></dd>
+<dt></dt><dd><tt>public DynamicPage(URL <em>url</em>, String <em>encoding</em>, Context <em>context</em>, boolean <em>checkUpdates</em>) throws IOException, ParseException</tt></dd>
+</dl>
+<p>Kiedy jest tworzona Strona Dynamiczna szablon podany&nbsp; <em>url</em> &nbsp;jest kompilowany. Wywo&#322;ywana jest metoda
+DynamicPage.run(Context) rozwini&#281;ta zawarto&#347;&#263; jest zapisywany do Wrtiter'a skoja&#380;onego z kontekstem.Je&#380;eli <em>checkUpdates</em>
+jest true (domy&#347;lnie) sprawdzany jest czas ostatniej modyfikacji pliku
+szablonu i w przypadku stwierdzenia r&oacute;&#380;nicy jest
+&nbsp;outomatycznie rekompiloany.
+</p>
+
+<h4>Przyk&#322;ad</h4>
+
+<div class="eg">
+<pre>import pnuts.lang.Pnuts;<br>import pnuts.lang.Context;<br>import pnuts.lang.Package;<br>import pnuts.lang.ParseException;<br>import pnuts.servlet.DynamicPage;<br>import java.net.*;<br>import java.util.*;<br>import java.io.*;<br><br>public class MyClass {<br>    DynamicPage page;<br>    Context context;<br><br>    static Context setupContext(){<br>	Context context = new Context();<br>	context.usePackage("pnuts.servlet");<br>	return context;<br>    }<br><br>    public MyClass(URL template, String encoding) throws IOException, ParseException {<br>	this(template, encoding, setupContext());<br>    }<br><br>    public MyClass(URL template, String encoding, Context context)<br>	throws IOException, ParseException<br>    {<br>	this.context = context;<br>	this.page = new <b>DynamicPage(</b>template, encoding, context<b>)</b>; // compiles the template<br>    }<br><br>    public void format(Map<string ,object=""> vars, Writer writer){<br>	Package pkg = Package.wrap(vars);<br>	Context context = (Context)this.context.clone();<br>	context.setCurrentPackage(pkg);<br>	context.setWriter(writer);<br>	this.page.run(context);<br>    }<br><br>    public String format(Map<string ,object=""> vars){<br>	StringWriter sw = new StringWriter();<br>	format(vars, sw);<br>	return sw.toString();<br>    }<br><br>    public static void main(String[] args) throws Exception {<br>	MyClass instance = new MyClass(new File("template.txt").toURL(), "utf-8");<br>	Map vars = new HashMap();<br>	vars.put("properties", System.getProperties());<br>	System.out.println(instance.format(map));<br>   }<br>}<br></string></string></pre>
+</div>
+
+<div class="eg">template.txt
+<pre>&lt;%@escape%&gt;<br>&lt;table&gt;<br>&lt;% for (k, v : properties) { %&gt;<br>&lt;tr&gt;<br>&lt;td&gt;&lt;%=k%&gt;&lt;/td&gt;<br>&lt;td&gt;&lt;%=v%&gt;&lt;/td&gt;<br>&lt;/tr&gt;<br>&lt;% } %&gt;<br>&lt;/table&gt;<br></pre>
+</div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; U&#380;ycie Pnuts jako silnika szablon&oacute;w
+</div>
+
+  </body></html>

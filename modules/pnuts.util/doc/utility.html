@@ -1,0 +1,220 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> File Operations</div>
+
+    <h2>File Operations</h2>
+
+<a name=exists></a>
+<div class="box">
+<div class="synopsis"><b>exists</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+</div>
+<p>
+<tt>exists()</tt> returns if the specified file exists or not.
+</p>
+
+<a name=isDirectory></a>
+<div class="box">
+<div class="synopsis"><b>isDirectory</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+</div>
+<p>
+<tt>isDirectory()</tt> returns if the specified file is a directory or not.
+</p>
+
+<a name=canRead></a>
+<a name=canWrite></a>
+<div class="box">
+<div class="synopsis"><b>canRead</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+<div class="synopsis"><b>canWrite</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+</div>
+<p>
+<tt>canRead()</tt> returns if the specified file can be read.
+<tt>canWrite()</tt> returns if the specified file can be written.
+</p>
+
+<a name=ls></a>
+<div class="box">
+<div class="synopsis"><b>ls</b><tt>()</tt></div> 
+<div class="synopsis"><b>ls</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>directory</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>ls()</tt> displays the files in the specified <em>directory</em>.
+If <em>directory</em> is not specified, the directory ${user.dir} is implicitly used.
+</p>
+
+<a name=chdir></a>
+<div class="box">
+<div class="synopsis"><b>chdir</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>directory</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>chdir()</tt> changes the current directory (the property "user.dir") to the specified <em>directory</em>.
+</p>
+
+<a name=pwd></a>
+<div class="box">
+<div class="synopsis"><b>pwd</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>pwd()</tt> displays the current directory (the property "user.dir").
+</p>
+
+
+<a name="mkdir"></a>
+<div class="box">
+<div class="synopsis"><b>mkdir</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>directory</em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>directory</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>mkdir()</tt> makes a <em>directory</em>.
+<p>
+
+<a name=renameTo></a>
+<div class="box">
+<div class="synopsis"><b>renameTo</b><tt>(</tt><em>old</em> <tt>, </tt><em>new</em><tt>)</tt> </div>
+</div>
+
+<p>
+<tt>renameTo()</tt> renames the file <em>old</em> to the <em>new</em> name.
+</p>
+<p>
+<em>old</em> and <em>new</em> should be either a File or String that represents a relative path from the current directory.
+</p>
+<pre class="eg">
+function moveFiles(files, dir){
+  for (f:files) renameTo(f, getFile(dir, f.name))
+}
+</pre>
+
+<a name=delete></a>
+<div class="box">
+<div class="synopsis"><b>delete</b><tt>(</tt><em>file</em><tt> {, boolean </tt><em>recursive</em><tt> })</tt> or </div>
+<div class="synopsis2"><tt>(</tt><em>files[]</em><tt> {, boolean </tt><em>recursive</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>delete()</tt> deletes the specified <em>file</em>.  If the <em>file</em> is a directory and it is not empty, the directory is deleted only when <em>recursive</em> is true.
+</p>
+<p>
+<em>file</em> and the elements of <em>files</em> should be a File, or a String that represents a relative path from the current directory.
+</p>
+
+<a name="walkDirectory"></a>
+<div class="box">
+<div class="synopsis"><b>walkDirectory</b><tt>(</tt><em>dir</em><tt> { , </tt><em>callback(file)</em><tt> {,
+</tt><em>enterFunc(dir)</em><tt> , </tt><em>exitFunc(dir)</em><tt> }})</tt></div>
+</div>
+<p>
+<tt>walkDirectory()</tt> with one argument returns a generator that traverses the directory tree.
+For example, the following example shows how to delete "*~" files under the current directory.
+</p>
+
+<pre class="eg">
+for (f : walkDirectory(".")){
+   if (f.getName().endsWith("~")) delete(f)
+}
+</pre>
+
+<p>
+When <em>callback</em> is given, the function is called for each file.
+<p>
+If <em>enterFunc</em> is specified, it is called when the traversal
+enters a directory. <em>enterFunc</em>() must return a boolean value.
+If false is returned, the traversal from the directory is skipped.
+If <em>exitFunc</em> is specified, it is called when the traversal
+exits a directory.
+<p>
+
+<p>
+The following example prints file names with indents to show the structure of the directory.
+<p>
+<pre class="eg">
+function pp(base){
+  level = 0
+  function indent(n) {
+    c = char[n * 2]
+    c[0..] = ' '
+    write(c)
+  }
+  function enter(d) {
+     level++
+     true
+  }
+  function leave(d) level--
+
+  walkDirectory(base,
+     function (f) {
+       indent(level)
+       println(f.getName())
+     },
+     enter,
+     leave)
+}
+</pre>
+
+<a name=copy></a>
+<div class="box">
+<div class="synopsis"><b>copy</b><tt>(</tt><em>source</em><tt> , </tt><em>destination</em> <tt>)</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>files[]</em><tt>, </tt><em>destination</em> <tt>)</tt></div>
+</div>
+
+<p>
+If <em>source</em> is a directory, <tt>copy()</tt> copies all files under the <em>source</em> directory to <em>destination</em> directory.  If <em>source</em> is a ordinary file and <em>destination</em> is a directory, <tt>copy()</tt> copies the file to <em>destination</em> directory.  If both <em>source</em> and <em>destination</em> are ordinary files, <tt>copy()</tt> copies the content of the source file to the destination file.
+When <em>files</em> are specified, call copy() for the elements.
+</p>
+
+<a name=cat></a>
+<div class="box">
+<div class="synopsis"><b>cat</b><tt>(</tt><em>file</em><tt> {,  </tt><em>output</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>files[]</em><tt> {, </tt><em>output</em><tt> } )</tt></div> 
+</div>
+
+<p>
+Reads the contents of <em>file</em> or <em>files</em> and writes the contents to <em>output</em>.
+If <em>output</em> is not specified, the content is written to the value of getContext().getOutputStream().
+<em>file</em> and the elements of <em>files</em> should be a File, or a String that represents a relative path from the current directory.
+</p>
+
+<a name=createTempFile></a>
+<div class="box">
+<div class="synopsis"><b>createTempFile</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>prefix</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>suffix</em><tt> {, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>directory</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>createTempFile()</tt> creates a new empty file in the specified directory, using given prefix and suffix to generate its name.  In Java2, the created file is deleted when the virtual machine terminates normally.
+</p>
+
+<a name=shellExpand></a>
+<div class="box">
+<div class="synopsis"><b>shellExpand</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>pattern</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>shellExpand()</tt> searches files whose names match <em>pattern</em> and returns an <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a> object from which the names of the matched files can be retrieved.
+<p>
+
+<pre class="eg">
+printAll(shellExpand("*/*/*pnut"))
+</pre>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> File Operations</div>
+
+  </body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Implementacja modu&#322;&oacute;w w Javie
+</div>
+
+<!-- body start -->
+
+<a name="module_in_java"></a>
+
+<h2>Implementacja modu&#322;&oacute;w w Javie</h2>
+
+<p>
+Skrypty inicjalizacyjne mog&#261; by&#263; implementowane jako&nbsp;<a href="loadable.html">&#322;adowalne klasy</a>.  R&oacute;wnie&#380; dopuszczalne jest implementowanie tych skrypt&oacute;w jako klasy wywodz&#261;cej sie z <tt>pnuts.lang.Executable</tt> jednak bardziej zalecane jest implementowanie ich jako podklasy&nbsp; <tt>pnuts.ext.ModuleBase</tt>.
+</p>
+
+<p>Dla przyk&#322;adu zdefiniujmy modu&#322; <tt>"my_module"</tt>. Definiujemy&nbsp; <tt>my_module.init</tt> jako klas&#281; dziedzicz&#261;c&#261; po <tt>pnuts.ext.ModuleBase</tt>.Metoda 
+<a href="../apidoc/pnuts/ext/ModuleBase.html#execute%28pnuts.lang.Context%29"><tt>public
+Object execute(Context)</tt></a> definiuje funkcje <tt>hello()</tt> w pakiecie <tt>"my_module"</tt>
+</p>
+
+<pre class="eg">package my_module;<br><br>import pnuts.ext.ModuleBase;<br>import pnuts.lang.Context;<br>import pnuts.lang.Package;<br><br>public class init extends ModuleBase {<br>    public Object execute(Context context){<br>      Package pkg = Package.getPackage("my_module", context);<br>	pkg.set("hello".intern(), new hello(), context);<br>	return null;<br>    }<br>}<br></pre>
+
+<p>Nale&#380;y zauwa&#380;y&#263; &#380;e napis <tt>"hello" jest internowanym obiektem klasy String</tt> gdy&#380; klasa <tt>pnuts.lang.Package</tt> pracuje na internowanych napisach. 
+</p>
+<p>
+
+</p>
+
+<h3>Zale&#380;no&#347;&#263; od innych modu&#322;&oacute;w</h3>
+<p>Najprostszym sposobem definicji zale&#380;no&#347;ci od innych modu&#322;&oacute;w jest nadpisanie metody&nbsp; <tt>ModuleBase.getRequredModules()</tt>.  Przyk&#322;ad definiuje modu&#322; <tt>my_module</tt> kt&oacute;ry wymaga modu&#322;&oacute;w <tt>"pnuts.lib"</tt> i <tt>"pnuts.io"</tt>.
+
+</p><pre class="eg">package my_module;<br><br>import pnuts.lang.Context;<br>import pnuts.ext.ModuleBase;<br><br>public class init extends ModuleBase {<br>    protected String[] getRequiredModules(){<br>        return new String[]{"pnuts.lib", "pnuts.io"};<br>    }<br>    ...<br>}<br></pre>
+
+<h3>Definiowanie pod modu&#322;&oacute;w</h3>Modu&#322; mo&#380;e definiowa&#263; funkcjonalne pod modu&#322;y kt&oacute;re mog&#261; by&#263; okre&#347;lone przez redefinicj&#281; metody&nbsp; <tt>ModuleBase.getSubModules()</tt>.
+<p>Dla przyk&#322;adu inicjalizacyjny skrypt modu&#322;u definiuje pod modu&#322; <tt>"functional"</tt>.
+</p><p>
+</p><pre class="eg">package my_module;<br><br>import pnuts.lang.Context;<br>import pnuts.ext.ModuleBase;<br><br>public class init extends ModuleBase {<br>    protected String[] getSubModules(){<br>        return new String[]{"functional"};<br>    }<br>    ...<br>}<br></pre>
+
+<h3>Definiowanie zale&#380;no&#347;ci/pod modu&#322;&oacute;w w czasie wykonania</h3>
+
+<p>Zale&#380;no&#347;ci lub pod modu&#322;y mog&#261; by&#263; definiowane w czasie wykonania przez u&#380;ycie odpowiedniej metody <tt>ModuleBase.execute(Context)</tt> w nast&#281;puj&#261;cy spos&oacute;b.
+</p><p>
+
+</p><ol>
+<li>Wywo&#322;a&#263; <tt>Context.usePackage()</tt> na pod module
+</li><li>Wywo&#322;a&#263; metod&#281; <tt>Context.clearPackage()</tt>&nbsp;
+</li><li>Wywo&#322;a&#263; <tt>Context.usePackage()</tt> z wymaganymi modu&#322;ami
+</li></ol>
+
+<p>Dla przyk&#322;adu poni&#380;szy kod definiuje modu&#322; <tt>"my_module"</tt> zale&#380;ny od modu&#322;&oacute;w <tt>"pnuts.lib"</tt> module i <tt>"pnuts.io"</tt> i posiadaj&#261;cy pod modu&#322; <tt>"functional"</tt>.
+</p><p>
+
+</p><pre class="eg">package my_module;<br><br>import pnuts.lang.Context;<br>import pnuts.ext.ModuleBase;<br><br>public class init extends ModuleBase {<br>    public Object execute(Context context){<br>        context.usePackage("functional");<br>        context.clearPackages();  // reset the module list<br>        context.usePackage("pnuts.lib");<br>        context.usePackage("pnuts.io");<br>	...<br>    }<br>}<br></pre>
+
+
+<h3>Specyfikacja skryptu inicjalizacyjnego</h3>
+<p>Skrypt inicjalizacyjny mo&#380;e by&#263; wyspecyfikowany w <tt>META-INF/pnuts/module/</tt><em>moduleName</em>. Dla przyk&#322;adu skrypt inicjalizacyjny pakietu <tt>java.net</tt> jest zdefiniowany w 1 linii <tt>META-INF/pnuts/module/java.net</tt>.
+</p>
+<pre class="eg">org/pnuts/java_net/init<br></pre>
+
+<h3>Automatyczne &#322;adowanie w Javie</h3>
+<p>Automatyczne &#322;adowanie jest u&#380;yteczne w minimalizacji czasu potrzebnego do inicjalizacji modu&#322;&oacute;w.
+</p><p>
+<a href="../apidoc/pnuts/lang/Package.html#autoload%28java.lang.String,%0D%0Ajava.lang.String,%20pnuts.lang.Context%29"><tt>Package.autoload()</tt></a> mo&#380;e by&#263; u&#380;yte do automatycznego &#322;adowania skrypt&oacute;w i &#322;adowalnych klas jednak implementacja klas &#322;adowalnych&nbsp;  <tt>pnuts.ext.ModuleBase</tt>&nbsp; zapewnia bardziej wygodny spos&oacute;b automatycznego &#322;adowania metod.
+</p>
+<h4>(1) Automatyczne &#322;adowanie skrypt&oacute;w Pnuts</h4>
+<p>Aby za&#322;adowa&#263; skrypt lub &#322;adowaln&#261; klas&#281; mo&#380;na u&#380;y&#263; <a href="../apidoc/pnuts/ext/ModuleBase.html#autoload%28java.lang.String%5B%5D,%20java.lang.String,%20pnuts.lang.Context%29"><tt>ModuleBase.autoload()</tt></a>.  Przyk&#322;adowo przedstawiony kod definiuje nazw&#281; <tt>'hello' kt&oacute;ra</tt> zdefiniowana jest w skrypcie <tt>"my_module/hello"</tt>ale skrypt nie jest &#322;adowany do czasu pierwszego u&#380;ycia zdefiniowanej nazwy.
+</p>
+
+<pre class="eg">package my_module;<br><br>import pnuts.lang.Context;<br>import pnuts.ext.ModuleBase;<br><br>public class init extends ModuleBase {<br>    static String[] files  = { "my_module/hello" };<br>    static String[][] functions = {<br>        { "hello" }<br>    };<br>    <br>    public Object execute(Context context){<br>	for (int i = 0; i &lt; files.length; i++){<br>	    autoload(functions[i], files[i], context);<br>	}<br>	return null;<br>    }<br>}<br></pre>
+
+<h4>(2)&nbsp;Automatyczne &#322;adowanie funkcji Pnuts</h4>
+<p>Aby za&#322;adowa&#263; funkcje napisan&#261; w Javie mo&#380;e u&#380;y&#263; metody <a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadFunction%28java.lang.String,%20pnuts.lang.Context%29"><tt>ModuleBase.autoloadFunction()</tt></a>.
+Przyk&#322;adowo klasa definiuje inicjalizacj&#281; modu&#322;u <tt>my_module</tt> module.
+Kiedy symbol&nbsp; '<tt>hello</tt>' zostanie pierwszy raz u&#380;yty klasa <tt>org.pnuts.my_module.hello</tt> jest &#322;adowana i tworzona jest jej instancja kt&oacute;ra zostaje zwr&oacute;cona do interpretera.
+</p>
+
+<pre class="eg">package my_module;<br><br>import pnuts.lang.Context;<br>import pnuts.ext.ModuleBase;<br><br>public class init extends ModuleBase {<br>    static String[] javaFunctions = { "hello" };<br><br>    protected String <b>getPrefix</b>(){<br>        return "org.pnuts";<br>    }<br>    <br>    public Object execute(Context context){<br>	for (int i = 0; i &lt; javaFunctions.length; i++){<br>	    <b>autoloadFunction</b>(javaFunctions[i], context);<br>	}<br>	return null;<br>    }<br>}<br></pre>
+
+<p>
+<a href="../apidoc/pnuts/ext/ModuleBase.html#getPrefix%28%29"><tt>getPrefix()</tt></a> definiuje przedrostek nazwy klas kt&oacute;ry domy&#347;lnie jest ustawiony na&nbsp; <tt>null</tt>.
+W przyk&#322;adzie klasa jest konstruowana z przedrostkiem <tt>"org.pnuts"</tt>, modu&#322; nazywa si&#281; <tt>"my_module"</tt>, a funkcja nazywa si&#281;&nbsp; <tt>"hello"</tt>. Je&#380;eli metoda <a href="../apidoc/pnuts/ext/ModuleBase.html#getPrefix%28%29"><tt>getPrefix()</tt></a> nie jest zdefiniowana prefix jest pustym stringiem.
+</p>
+
+<h4>(3)&nbsp;Automatyczne &#322;adowanie klas Javy</h4>
+
+<p>Aby za&#322;adowa&#263; klas&#281; Javy mo&#380;na u&#380;y&#263;, <a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadClass%28java.lang.String,%20java.lang.String,%20pnuts.lang.Context%29"><tt>ModuleBase.autoloadClass()</tt></a>&nbsp;.
+Przyk&#322;adowo przedstawiony kod definiuje dwie nazwy 'Vector' i
+'Hashtable' kt&oacute;re koresponduj&#261; z klasami jednak same klasy nie
+s&#261; &#322;adowane do czasu u&#380;ycia zdefiniowanych nazw.
+</p>
+<pre class="eg">package my_module;<br><br>import pnuts.lang.Context;<br>import pnuts.ext.ModuleBase;<br><br>public class init extends ModuleBase {<br>    public Object execute(Context context){<br>	for (int i = 0; i &lt; javaFunctions.length; i++){<br>	    <b>autoloadClass</b>("java.util", "Vector", context);<br>	    <b>autoloadClass</b>("java.util", "Hashtable", context);<br>	}<br>	return null;<br>    }<br>}<br></pre>
+
+
+<h3>Lokalizacja komunikat&oacute;w b&#322;&#281;du</h3>
+
+<p>Kiedy modu&#322; <a href="../modules/pnuts.lib/doc/index.html"><tt>pnuts.lib</tt></a> zostanie u&#380;yty to funkcja <a href="../modules/pnuts.lib/doc/i18n.html#formatMessage"><tt>formatMessage()</tt></a>mo&#380;e
+by&#263; u&#380;yta do pokazywania lokalizowanych komunikat&oacute;w. Jednak jak
+to mo&#380;liwe &#380;e mo&#380;na u&#380;y&#263; tego w module kt&oacute;ry nie zale&#380;y od
+modu&#322;u&nbsp; <a href="../modules/pnuts.lib/doc/index.html"><tt>pnuts.lib</tt></a>&nbsp;?
+</p><p>W kodzie podlasy&nbsp;<tt>pnuts.ext.ModuleBase </tt>mo&#380;na zdefiniowa&#263; funkcj&#281;
+<a href="#ERROR"><tt>ERROR()</tt></a>.
+</p><p>
+
+<a name="ERROR"></a>
+
+</p><div class="box">
+<div class="synopsis"><b>ERROR</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>errorType</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>param_1</em> ... <tt>} )</tt></div>
+</div>
+
+<p>Funkcja szuka komunikatu w pliku zasob&oacute;w&nbsp; <tt>"errors.properties"</tt>,nast&#281;pnie formatuje komunikat tak jak&nbsp; <a href="../modules/pnuts.lib/doc/i18n.html#formatMessage"><tt>formatMessage()</tt></a> a nast&#281;pnie rzuca <tt>pnuts.lang.PnutsException</tt> z sformatowanym komunikatem.</p>
+
+<pre class="eg">if (!isFunction(obj)){<br>  ERROR("must_be_a_function", obj)<br>}<br></pre>
+
+<div class="eg"><tt>my_module/errors.properties</tt>
+<pre>must_be_a_function=A function is expected: {0}<br></pre>
+</div>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Implementiacja modu&#322;&oacute;w w Javie
+</div>
+
+  </body></html>

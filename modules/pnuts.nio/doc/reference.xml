@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="scanLines">index.html#scanLines</function>
+ <function name="charset">index.html#charset</function>
+ <function name="charsets">index.html#charsets</function>
+ <function name="mapFile">index.html#mapFile</function>
+</reference>

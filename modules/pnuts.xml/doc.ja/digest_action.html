@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xmlモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a href="digest.html">XML文書のダイジェスト</a> -> 既定義のDigestAction</div>
+
+<h2>既定義のDigestAction</h2>
+<p>
+既定義のDigestActionは、<a
+href="../../apidoc/pnuts/xml/action/package-summary.html">pnuts.xml.action</a>パッケージに含まれています。使用例については、<a href="digest_usage.html">「DigestReaderの使用例」</a>を参照。
+</p>
+
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>クラス</th>
+  <th bgcolor=#eeeeee>説明</th>
+</tr>
+<tr class=wb>
+  <td><div><a href="../../apidoc/pnuts/xml/action/ListAction.html">ListAction</a></td><td
+class=wb>Listオブジェクトを作り、スタックトップのオブジェクトの型に応じた方法でそのオブジェクトに追加します。
+<ul>
+<li>スタックトップのオブジェクトがListの場合、作成したListオブジェクトをそこに追加します。
+<li>スタックトップのオブジェクトがMapオブジェクトの場合、{キーワード=>作成したListオブジェクト}のマッピングを登録します。
+<li>それ以外の場合は、スタックトップのオブジェクトのBeanプロパティでキーワードを名前とするものの値に、作成したListオブジェクトを代入します(そのBeanプロパティはList型である必要があります)。
+</ul>
+</div>
+<div>作成したListオブジェクトには、以下の規則で要素を追加します。
+</div>
+<ul>
+<li>要素の内容が空でない場合、その文字列をListオブジェクトに追加します。
+<li>子供の要素が1つ以上ある場合、それらに対応するアクションの結果をListオブジェクトに追加します。
+<li>それ以外の場合で属性が1つ以上ある場合には、属性から作られるMapオブジェクト({属性の名前=>属性の値}のマッピング)をListオブジェクトに追加します。
+</ul>
+</div>
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/MapAction.html">MapAction</a></td><td>Mapオブジェクトを作り、スタックトップのオブジェクトの型に応じた方法でそのオブジェクトに追加し、スタックにプッシュします。
+<ul>
+<li>スタックトップのオブジェクトがListの場合、{キーワード=>作成したMapオブジェクト}のマッピングを持つMapオブジェクトを作成し、Listオブジェクトに追加します。
+<li>スタックトップのオブジェクトがMapの場合、{キーワード=>作成したMapオブジェクト}のマッピングを追加します。
+<li>それ以外の場合は、スタックトップのオブジェクトのBeanプロパティでキーワードを名前とするものの値に、作成したMapオブジェクトを代入します(そのBeanプロパティはMap型である必要があります)。
+</ul>
+要素の属性が1つ以上ある場合は、{属性の名前=>属性の値}のマッピングを、作成したMapオブジェクトに登録します。
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/TextAction.html">TextAction</a></td><td><em>キーワード</em>と要素の内容のマッピングを、スタックトップのオブジェクトの型に応じた方法で、そのオブジェクトに登録します。
+<ul>
+<li>スタックトップのオブジェクトがListの場合、{キーワード=>要素の内容}のマッピングを持つMapオブジェクトを作成し、スタックにプッシュします。
+<li>スタックトップのオブジェクトがMapの場合、{キーワード=>要素の内容}のマッピングを追加します。
+<li>それ以外の場合は、スタックトップのオブジェクトのBeanプロパティでキーワードを名前とするものの値に、要素の内容を表す値を代入します。
+ただし、そのプロパティの型がプリミティブ型の場合には、その型に自動的に変換されます。
+</ul>
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/BeanAction.html">BeanAction</a></td>
+<td>コンストラクタで指定されたクラスのインスタンスを作成し、スタックトップのオブジェクトの型に応じた方法でそのオブジェクトに追加し、スタックにプッシュします。
+<ul>
+<li>スタックトップのオブジェクトがListの場合、作成したオブジェクトを追加します。
+<li>スタックトップのオブジェクトがMapの場合、{キーワード=>作成したオブジェクト}のマッピングを追加します。
+<li>それ以外の場合は、スタックトップのオブジェクトのBeanプロパティでキーワードを名前とするものの値に、作成したインスタンスを代入します(そのBeanプロパティの型は、作成したオブジェクトの型にマッチする必要があります)。
+</ul>
+要素の属性が1つ以上ある場合は、それらの属性の「修飾された名前」を名前とするプロパティに属性の値を設定します。ただし、そのプロパティの型がプリミティブ型の場合には、その型の値に自動的に変換されます。
+</td>
+<tr class=wb><td><a
+href="../../apidoc/pnuts/xml/action/BeanPropertyAction.html">BeanPropertyAction</a></td><td><em>キーワード</em>と要素の内容を使ってスタックトップのオブジェクトのBeanプロパティを設定します。
+<ul>
+<li>スタックトップのオブジェクトがListの場合、コンストラクタで指定されたクラスのインスタンスを作成し、Listに追加した上でスタックにプッシュします。
+<li>スタックトップのオブジェクトの型にかかわらず、要素の内容が空でなければ、作成したオブジェクトのBeanプロパティでキーワードを名前とするものの値に、要素の内容を表す値を代入します。ただし、そのプロパティの型がプリミティブ型の場合には、その型の値に自動的に変換されます。
+</ul>
+</td>
+<tr class=wb><td><em><a href="../../apidoc/pnuts/xml/action/SimpleCallAction.html">SimpleCallAction</a></em></td><td>要素の属性をパラメータとして何らかの計算を行います。サブクラスで具体的な処理を定義します。
+</td>
+<tr class=wb><td><em><a
+href="../../apidoc/pnuts/xml/action/ElementCallAction.html">ElementCallAction</a></em></td>
+<td>キーワード、要素の属性、要素の内容をパラメータとして、抽象メソッドを呼び出します。サブクラスで具体的な処理を定義します。
+</td>
+<tr class=wb><td><em><a
+href="../../apidoc/pnuts/xml/action/CallAction.html">CallAction</a></em></td><td>スタックから値をポップして何らかの計算を行います。サブクラスで具体的な処理を定義します。
+</td>
+<tr class=wb><td><a href="../../apidoc/pnuts/xml/action/ParameterAction.html">ParameterAction</a></td><td>要素の内容をスタックにプッシュします(CallActionがあとでポップして使います)。</td>
+<tr class=wb><td><a href="../../apidoc/pnuts/xml/action/AddMapAction.html">AddMapAction</a></td><td>2つの要素の内容からMapを構成します。コンストラクタで、Mapエントリの名前になるキーワードと、値になるキーワードを指定します。
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a href="digest.html">XML文書のダイジェスト</a> -> 既定義のDigestAction</div>
+
+  </body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.text モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.text</tt></div>
+
+    <h2><tt>pnuts.text</tt> モジュール</h2>
+
+<p>
+<tt>pnuts.text</tt> モジュールは、テキストデータのI/O処理に関する関数を定義します。
+</p>
+
+<ul>
+<li>関数
+<ul>
+<li><a href="#applyTemplate">applyTemplate</a>
+<li><a href="#textGrab">textGrab</a>
+<li><a href="#formatTemplate">formatTemplate</a>
+<li><a href="#printf">printf</a>
+<li><a href="#readLine">readLine</a>
+<li><a href="#readLines">readLines</a>
+<li><a href="#sprintf">sprintf</a>
+<li><a href="#template">template</a>
+</ul>
+<li><a href="../../apidoc/pnuts/text/package-summary.html">APIドキュメント</a>
+</ul>
+
+<a name=printf></a>
+<div class="box">
+<div class="synopsis"><b>printf</b><tt> ( <I>format</I> {, <em>args</em> ...} )</tt></div>
+<div class="synopsis"><b>sprintf</b><tt> ( <I>format</I> {, <em>args</em> ...} )</tt></div>
+</div>
+
+<p>
+<tt>printf</tt> と <tt>sprintf</tt> は、C言語の関数(<tt>printf</tt>、<tt>sprintf</tt>)をエミュレートします。
+
+<p>
+<tt>sprintf()</tt> は、フォーマットされた文字列を返します。
+<tt>printf()</tt>は、<tt>sprintf()</tt>の結果を表示します。
+</p>
+
+<div class="eg">例:
+<pre>
+sprintf("(%s)(%s)", "foo", "bar") ==> "(foo)(bar)"
+</pre></div>
+
+
+<a name=readLine></a>
+
+<div class="box">
+<div class="synopsis"><dt><b>readLine</b><tt> ( <a
+        href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+        <em>input</em> )</tt> or</div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> <em>input</em> )</tt></div>
+</div>
+
+<p>
+<tt>readLine()</tt> は、<em>input</em>から一行読み、その行を文字列として返します。
+</p>
+
+<a name=readLines></a>
+
+<div class="box">
+<div class="synopsis"><b>readLines</b><tt> ( <em>input </em>, <em>handler</em> (String <em>line</em>) {, boolean <I>includeLineSeparator</I>
+	})</tt> or</div>
+<div class="synopsis2"><tt> ( <em>input </em>, <em>collection</em> {, boolean <I>includeLineSeparator</I> })</tt> or</div>
+<div class="synopsis2"><tt> ( <em>input </em> )</tt></div>
+</div>
+
+<p>
+単に<em>input</em>だけが指定された場合は、<em>input</em>の各行を for 文で取りだすことのできるジェネレータを返します(例を参照)。
+Pnuts1.0では、各行を含むListオブジェクトを返します。
+
+<p>
+関数<I>handler</I>が指定された場合は、各行に対して、Stringオブジェクトを引数にして指定された<I>handler</I>を呼び出し、処理された行数を返します。
+</p>
+<p>
+<em>collection</em>が指定された場合は、各行を<em>collection</em>に追加し、行数を返します。
+</p>
+<p>
+<em>input</em>には、Reader, URL, File, ファイル名を表すStringのいずれかを指定します。
+</p>
+<p>
+<I>includeLineSeparator</I> にtrueが指定された場合、そのパラメータの改行文字(\r, \n, or \r\n) は保存されます(デフォルトでは、改行文字は削除されます)。</p>
+<p>
+<div class="eg">例:
+<pre>
+for (line : readLines(&quot;template.txt&quot;)){
+   println(line)
+}
+</pre>
+</div>
+
+<a name=template></a>
+
+<div class="box">
+<div class="synopsis"><b>template</b><tt> ( <I>text</I>, <I>pattern</I> )</tt></div>
+</div>
+
+<p>template()は、<I>text</I>に含まれる<I>pattern</I>を後で<tt>formatTemplate()</tt>を使って置換するためのテンプレートを作成します。<I>pattern</I>は、1グループを含む正規表現でなければなりません。</p>
+
+
+<a name=formatTemplate></a>
+
+<div class="box">
+<div class="synopsis"><b>formatTemplate</b><tt> ( <I>template</I>, <tt>java.util.Map</tt> <I>map</I> {, <tt>java.io.Writer</tt> <I>writer</I> }</tt></div>
+</div>
+
+<p>
+まず、<tt>template()</tt>で作成したテンプレートに含まれるパターンの $1 に対応する値(以下<em>value</em>)を<I>map</I>から求めます。
+そして、<em>value</em>の型に応じて、下記の処理をした結果を返します。</p>
+<p>
+<ol>
+<li><em>value</em>が関数の場合は、その関数を呼び出した結果をテンプレートに埋め込みます。
+<li><em>value</em>が、配列、java.util.List, java.util.Iterator, java.util.Enumerationのいずれかである場合は、そのオブジェクトから取り出される各要素に対して、1〜3を再帰的に適用します。
+<li>1, 2以外の場合は、そのオブジェクトを文字列に変換した結果をテンプレートに埋め込みます。
+</ol>
+
+<p><I>writer</I> が指定された場合は、整形されたテキストはその<I>writer</I>に書き出されます。
+</p>
+
+<pre class="eg">
+templ = template("${key} - ${value}", `\$\{([A-Za-z]+)\}`)
+formatTemplate(templ, map([["key", "foo"], ["value", "bar"]]))
+    ==> "foo - bar"
+</pre>
+
+<a name=applyTemplate></a>
+
+<div class="box">
+<div class="synopsis"><b>applyTemplate</b><tt> ( <I>template</I>, <tt>java.util.Map</tt> <I>map</I> )</tt></div>
+</div>
+
+<p><tt>applyTemplate()</tt>は、フォーマットの結果を表示する関数を返します。
+return結果の関数には、オプションとして1個(<em>writer</em>)引数を与えることができ、呼び出したときにその<em>writer</em>(0引数の場合はcontext.getWriter()の値)にテンプレートの展開結果が書き込まれます。
+</p>
+<p>
+テンプレートを展開する方法は、<tt>formatTemplate()</tt>と同じです。
+</p>
+
+<p>例えば、次の2つの式は同じ結果を表示します。
+</p>
+
+<pre class="eg">
+print(formatTemplate(<em>template</em>, <em>map</em>))
+</pre>
+
+<pre class="eg">
+applyTemplate(<em>template</em>, <em>map</em>))()
+</pre>
+
+
+<p>
+この関数は、テンプレートがネストしている場合でも、テンプレートの展開を効率よく行えます。
+テンプレートに埋め込まれる値が関数の場合、その関数は<tt>applyTemplate()</tt>の結果の関数が呼ばれるときに実行されます。
+<tt>formatTemplate()</tt>とは異なり、中間結果を保存するためのバッファを確保する必要がありません。
+</p>
+
+<pre class="eg">
+templ = template("${key} - ${value}", `\$\{([A-Za-z]+)\}`)
+tmp = applyTemplate(templ, map([["key", "bar"], ["value", "baz"]]))
+result = applyTemplate(templ, map([["key", "foo"], ["value", tmp]]))
+result()
+  => foo - bar - baz
+</pre>
+
+<p>
+別の例です。
+</p>
+
+<pre class="eg">
+templ1 = template("&lt;option value=\"%value%\"&gt;%value%&lt;/option&gt;\n", `%([A-Za-z0-9_]+)%`)
+x = list()
+for (i : 0..2){
+   x.add(applyTemplate(templ1, map([["value", string(i)]])))
+}
+templ2 = template(`%list%`, `%([A-Za-z0-9_]+)%`)
+applyTemplate(templ2, map([["list", x]]))()
+  => &lt;option value="0"&gt;0&lt;/option&gt;
+     &lt;option value="1"&gt;1&lt;/option&gt;
+     &lt;option value="2"&gt;2&lt;/option&gt;
+</pre>
+
+<a name=textGrab></a>
+
+<div class="box">
+<div class="synopsis"><b>textGrab</b><tt> ( <I>func</I> )</tt></div>
+</div>
+
+<p>
+<tt>textGrab()</tt>は、<em>func</em>を呼び出した結果として表示されるテキストを返す関数を返します。
+返される関数は、<em>func</em>と同じ数の引数を受け取ることができます。
+</p>
+
+<pre class="eg">
+function hello(who) { print("Hello "); print(who) }
+helloText = textGrab(hello)
+helloText("Fumi")
+    ==> "Hello Fumi"
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.text</tt></div>
+
+  </body>
+</html>

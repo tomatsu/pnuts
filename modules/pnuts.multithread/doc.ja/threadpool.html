@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> スレッド・プール</div>
+
+    <h2>スレッド・プール</h2>
+
+<a name=threadPool></a>
+
+<div class="box">
+<div class="synopsis"><b>threadPool</b><tt> ( int </tt><em>maxThreads</em><tt> { , int </tt><em>minThreads</em><tt> { long </tt><em>keepaliveInMSec</em><tt> } } )</tt></div>
+</div>
+
+<p>
+<tt>threadPool()</tt>は、<a
+href="../../../apidoc/org/pnuts/multithread/ThreadPool.html">pnuts.multithread.ThreadPool</a>オブジェクトを返します。この返り値は<a href="#async"><tt>async()</tt></a>関数に渡され、非同期に実行されるスレッド間で、スレッドのプール(蓄積所)を共有するために使われます。
+</p>
+
+<a name=async></a>
+
+<div class="box">
+<div class="synopsis"><b>async</b><tt>(<em>func()</em>, <em>threadpool</em>)</tt></div>
+</div>
+
+<p>
+<tt>async()</tt>は、指定されたスレッドプールにタスクを一つ追加します。そして、そのタスクの結果を取り出すことのできるハンドル・オブジェクトを返します。
+</p>
+<p>
+スレッドプールにタスクのタスクは非同期に実行されます。タスクが終了するまで待って計算結果を取り出すには、ハンドル・オブジェクトを関数として呼び出します。
+</p>
+
+<div class="eg">例:
+<pre>
+pool = threadPool(5)
+handle = async(function () ..., pool)
+handle()
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> スレッド・プール</div>
+
+  </body>
+</html>

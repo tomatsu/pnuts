@@ -1,0 +1,208 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Operations
+on Packages/</div>
+
+    <h2>Script Packages</h2>
+
+<a name="$"></a>
+<div class="box">
+<div class="synopsis"><tt>$( )</tt></div>
+<div class="synopsis"><tt>$( ` </tt><em>expression</em><tt> ; ... `)</tt></div>
+<div class="synopsis"><tt>$( </tt><em>expression</em><tt> , ... )</tt></div>
+</div>
+
+<p>
+<b>Script package</b> is a <a href="../../apidoc/pnuts/lib/ScriptPackage.html"><tt>pnuts.lib.ScriptPackage</tt></a> object that is used
+in user's scripts as an hashtable.  Script packages can be created by <tt>$</tt> function, which is implemented by <a href="../../apidoc/pnuts/lib/ScriptPackage.Function.html"><tt>pnuts.lib.ScriptPackage.Function</tt></a> class.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee># of parameters</th>
+<th bgcolor=#eeeeee>The types</th>
+<th bgcolor=#eeeeee>The action</th>
+</tr>
+<tr class=wb>
+<td>1</td>
+<td>java.lang.String</td>
+<td>Evaluate the string in a script package</td>
+</tr>
+<tr class=wb>
+<td>1</td>
+<td>java.lang.Object[]</td>
+<td>Interpret each element as a [key, value] pair and define them in a script package</td>
+</tr>
+<tr class=wb>
+<td>any</td>
+<td>any</td>
+<td>If there is any function in the parameters, register the function with its name in a script package.</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">e.g.
+<pre>
+p = $( )
+p.x = 1
+p.y = 2
+
+q = $("x = 1; y = 2")
+q.x     ==> 1
+q.y     ==> 2
+
+r = $([["a", "hello"], ["b", "world"]])
+r.a  ==> "hello"
+r.b  ==> "world"
+</pre></div>
+
+
+<h4>Functions in a Script Package</h4>
+
+<p>
+When a function is specified as a parameter of $ function, the function is
+      registered in the script package with its name, and can be called in
+      method-call style.
+</p>
+
+<div class="eg">e.g.
+<pre>
+s = $(function hello () "hello", function bye () "bye")
+s.hello()    ==> "hello"
+s.bye()      ==> "bye"
+</pre></div>
+
+<p>
+Functions in a script package are defined in the scope at the $() call.
+In the last example, function <tt>hello()</tt> and <tt>bye()</tt>, as well as a variable <tt>s</tt>, are defined in
+the top level scope.
+</p>
+
+<pre class="eg">
+hello()      => "hello
+bye()        => "bye"
+</pre>
+
+<p>
+To avoid that functions in a script package consume the name space, there are two ways.
+One is to assign anonymous functions to the method names.
+</p>
+<pre class="eg">
+s = $([["hello", function () "hello"],
+       ["bye",   function () "bye"]])
+</pre>
+
+<p>
+The other is to use nested functions.
+<pre class="eg">
+function create() $(
+   function hello() "hello",
+   function bye() "bye"
+)
+s = create()
+</pre>
+</p>
+
+<h4>Abstract Data Type by Script Packages</h4>
+<p>
+With a script package, a kind of abstract data type can be defined.
+</p>
+
+<a name=bug1.0b7></a>
+<div class="eg">e.g.
+<pre>
+function Stack() $(
+   function Cell(x){
+     this = $()
+     this.object = x
+     this
+   },
+   cell = null,
+   function pop(){
+      c = cell
+      if (c == null) throw("underflow")
+      cell = c.next
+      c.object
+   },
+   function push(x){
+      c = cell
+      cell = Cell(x)
+      cell.next = c
+      null
+   }
+)
+s = Stack()
+s.push(100)
+s.pop()
+</pre>
+</div>
+
+<p>
+Script packages, of cource, can be the current package.
+</p>
+<div class="eg">e.g.
+<pre>
+package(Stack())
+push(100)
+pop()
+</pre>
+</div>
+
+<a name="print"></a>
+<h4>String Representation of Script Packages</h4>
+
+<p>
+When a Script Package has a symbol "print" and it is a zero-arg function,
+ ScriptPackage.toString() method calls the function to obtain the string
+representation of the object.
+</p>
+
+<div class="eg">e.g.
+<pre>
+s = $()
+s.print = function () print("foo")
+string(s)   ==> "foo"
+</pre></div>
+
+<h4>Operations of Script Packages</h4>
+<p>
+Since <Tt>pnuts.ext.ScriptPackage</tt> implements <tt><a href="../../../apidoc/pnuts/lang/AbstractData.html">pnuts.lang.AbstractData</a></tt> interface, instance methods of <a href="../../../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a> class
+      can not be called in Pnuts directrly.  Instead, the following methods
+      are provided.
+<ul>
+<li><tt><b>$.set</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em> <tt>, Object </tt><em>value</b></em><tt>)</tt>
+<li><tt><b>$.get</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em><tt>)</tt>
+<li><tt><b>$.defined</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em><tt>)</tt>
+<li><tt><b>$.clear</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em><tt>)</tt>
+<li><tt><b>$.keys</b>(Package </tt><em>package</em><tt>)</tt>
+<li><tt><b>$.save</b>(Package </tt><em>package</em><tt>, OutputStream </tt><em>outputStream</em><tt>)</tt>
+<li><tt><b>$.clone</b>(Package </tt><em>package</em><tt>)</tt>
+</ul>
+</p>
+<div class="eg">e.g.
+<pre>
+t = $()
+
+symbol = "%%%".intern()
+$.set(t, symbol, "value")         // t.set(symbol, "value")
+$.get(t, symbol)                  // t.get(symbol)
+$.keys(t)                         // t.keys()
+$.save(t, open("test.ser", "w"))  // t.save(open("test.ser", "w"))
+</pre></div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Operations
+on Packages/</div>
+
+  </body>
+</html>

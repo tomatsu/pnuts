@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Thread Pool</div>
+
+    <h2>Thread Pool</h2>
+
+<a name=threadPool></a>
+<div class="box">
+<div class="synopsis"><b>threadPool</b><tt> ( int </tt><em>maxThreads</em><tt> { , int </tt><em>minThreads</em><tt> { long </tt><em>keepaliveInMsec</em> <tt> } } )</tt></div>
+</div>
+
+<p>
+<tt>threadPool()</tt> creates a <a
+href="../../../apidoc/org/pnuts/multithread/ThreadPool.html">org.pnuts.multithread.ThreadPool</a>
+object, which will be passed to <a href="#async"><tt>async()</tt></a>
+function so as to share a pool of threads by asynchronously executing tasks. 
+</p>
+
+<a name=async></a>
+<div class="box">
+<div class="synopsis"><b>async</b><tt>(</tt><em>func()</em><tt>, </tt><em>threadpool</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>async()</tt> adds a task to the specified thread pool and returns a
+handle object from which the result of the task can be obtained.
+</p>
+<p>
+Tasks in a thread pool are executed asynchronously. To get the result
+of a asynchronous task, call the handle object as a function.
+</p>
+
+<div class="eg">e.g.
+<pre>
+pool = threadPool(5)
+handle = async(function () ..., pool)
+
+handle()
+</pre>
+</div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Thread Pool</div>
+
+  </body>
+</html>

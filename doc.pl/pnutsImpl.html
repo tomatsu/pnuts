@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt; Dostosowywanie interpretera
+</div>
+
+<!-- body start -->
+
+<h2>Dostosowywanie interpretera</h2>
+
+<p>Skrypty Pnuts zazwyczaj s&#261; kompilowane do kodu bajtowego w czasie
+wykonania. Sposobem zmiany tego zachowania jest ustawienie atrybut
+(pnutsImpl) obiektu Context. Przyk&#322;adowo skrypty mog&#261; by&#263; wykonywane
+bez kompilacji lub z kompilacj&#261; i keszowaniem.
+</p>
+
+<h3>pnuts.lang.Implementation Object</h3>
+<p>
+<a href="../apidoc/pnuts/lang/Implementation.html"><tt>pnuts.lang.Implementation</tt></a> definiuje interfejs implementacji interpretera.  
+Instancja implementacji tego interfejsu jest cze&#347;ci&#261; obiektu klasy <a href="context.html">Context</a>. Para metod <a href="../apidoc/pnuts/lang/Context.html#setImplementation%28pnuts.lang.Implementation%29"><tt>Context.setImplementation()</tt></a> i <a href="../apidoc/pnuts/lang/Context.html#getImplementation%28%29"><tt>Context.getImplementation()</tt></a> s&#261; setram i geterem tej w&#322;a&#347;ciwo&#347;ci.
+</p><p>
+
+</p><h3>Predefiniowane implementacje</h3>
+
+ Nast&#281;puj&#261;ce implementacje s&#261; cze&#347;ci&#261; dystrybucyj Pnuts.
+<p>
+</p><blockquote>
+<dl>
+<dt><a href="../apidoc/pnuts/lang/PnutsImpl.html"><tt>pnuts.lang.PnutsImpl</tt></a>
+</dt><dd>Interpreter AST.
+</dd><dt><a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html"><tt>pnuts.compiler.CompilerPnutsImpl</tt></a>
+</dt><dd>Kompilator w locie, domy&#347;lna implementacja dla komend.
+</dd><dt><a href="../apidoc/pnuts/ext/CachedPnutsImpl.html"><tt>pnuts.ext.CachedPnutsImpl</tt></a>
+</dt><dd>Mieszana implementacja keszuj&#261;ca kompilowane lub parsowane skrypty to ponownego u&#380;ycia. Domy&#347;lna dla klas&nbsp; <a href="servlet.html">Pnuts Servlet</a>.
+</dd><dt><a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a>
+</dt><dd>Bezpieczna wersja wykonuj&#261;ca skrypty w oparciu Java2 Security API
+</dd><dt><a href="../apidoc/pnuts/security/JAASPnutsImpl.html"><tt>pnuts.security.JAASPnutsImpl</tt></a>
+</dt><dd>Bezpieczna wersja wykonuj&#261;ca skrypty w oparciu&nbsp;JAAS.
+</dd></dl>
+</blockquote>
+
+<p>Zobacz <a href="performance.html#choose">Podpowiedzi na temat wydajno&#347;ci</a> w celu prawid&#322;owego wyboru implementacji w zale&#380;no&#347;ci od potrzeb.
+</p>
+
+
+<pre class="eg">import pnuts.lang.*;<br>import pnuts.ext.*;<br><br>Context context = new Context();<br>context.setImplementation(new CachedPnutsImpl());<br>Pnuts.loadFile(fileName, context);<br></pre>
+
+<p>
+<a href="../apidoc/pnuts/security/SecurePnutsImpl.html">SecurePnutsImpl</a> i <a href="../apidoc/pnuts/security/JAASPnutsImpl.html">JAASPnutsImpl</a>
+s&#261; adapterami innych implementacji z dodatkiem funkcjonalno&#347;ci zabezpiecze&#324;. Zobacz <a href="secure.html">Budowanie chronionego &#347;rodowiska skryptowego</a> aby dowiedzie&#263; si&#281; wi&#281;cej.
+
+</p><pre class="eg">context.setImplementation(new SecurePnutsImpl(new CompilerPnutsImpl()));<br>Pnuts.load(new URL("..."), context);<br></pre>
+
+<a name="defaultPnutsImpl"></a>
+<h3>W&#322;a&#347;ciwo&#347;&#263; <code>pnuts.lang.defaultPnutsImpl</code>&nbsp;</h3>
+<p>
+W systemowych w&#322;a&#347;ciwo&#347;ciach w&#322;a&#347;ciwo&#347;&#263; <tt>pnuts.lang.defaultPnutsImpl</tt>
+jest sposobem na zmian&#281; domy&#347;lnej implementacji kt&oacute;r&#261; nale&#380;y
+ustawi&#263; przed pierwszym u&#380;yciem jakiejkolwiek klasy z API Pnuts.
+</p>
+<p>Zanim <a href="../apidoc/pnuts/security/SecurePnutsImpl.html">SecurePnutsImpl</a> i <a href="../apidoc/pnuts/security/JAASPnutsImpl.html">JAASPnutsImpl</a> nie posiada&#322;y domy&#347;lnych konstruktor&oacute;w ustawianie tej w&#322;a&#347;ciwo&#347;ci by&#322;o sposobem na zmian&#281; implementacji domy&#347;lne.
+</p>
+<p>Aby zobaczy&#263; jaka jest u&#380;ywana implementacja mo&#380;na wywo&#322;a&#263; metod&#281; <code>Context.getImplementation()</code>.
+</p>
+
+<pre class="eg">&gt; getContext().getImplementation()<br>pnuts.compiler.CompilerPnutsImpl@1764be1<br>&gt; <br></pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt; Dostosowywanie interpretera
+</div>
+
+  </body></html>

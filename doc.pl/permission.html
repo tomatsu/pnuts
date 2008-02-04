@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body bgcolor="#ffffff">
+
+<!-- body start -->
+
+<h2>Zezwolenia pakietu</h2>
+
+<p>
+Pnuts API pozwala chronic pakiety&nbsp; Pnuts packages przez niezaufanym kodem u&#380;ywaj&#261;c&nbsp; <a href="http://java.sun.com/j2se/1.5.0/docs/guide/security/">Java2 security API</a>.
+</p>
+
+
+<h3> klasa <tt><a href="../apidoc/pnuts/security/SecurePackage.html">pnuts.security.SecurePackage</a></tt></h3>
+
+<p>
+<tt>pnuts.security.SecurePackage</tt> jest podklas&#261; <tt>pnuts.lang.Package</tt>.
+Kiedy ustawiany jest SecurityManager potrzebne jest ustawianie&nbsp; <tt>pnuts.security.PackagePermission</tt>
+aby doda&#263;/usun&#261;&#263; pakiet lub zmieni&#263; warto&#347;&#263; zmiennej pakietu.
+</p>
+
+<p>Aby klasa&nbsp; To make <tt>pnuts.security.SecurePackage</tt> by&#322;a dom&#347;ln&#261; klas&#261; pakietu nale&#380;y zdefiniowa&#263; w&#322;a&#347;ciwo&#347;&#263; <tt>pnuts.package.factory</tt> jako
+<tt>pnuts.security.SecurePackageFactory</tt> przed inicjalizacj&#261; klasy <tt>pnuts.lang.Package</tt>.
+</p>
+
+<pre class="eg">pnuts -J-Djava.security.manager -J-Dpnuts.package.factory=pnuts.security.SecurePackageFactory<br></pre>
+
+<h3>klasa<a href="../apidoc/pnuts/security/PackagePermission.html"> pnuts.security.PackagePermission</a>&nbsp;</h3>
+
+<div class="box">
+<div class="synopsis"><tt>public pnuts.security.PackagePermission(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>pakiet</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>akcje</em><tt>)</tt></div>
+</div>
+
+<p>Parametr&nbsp; <em>pakiet</em> dopuszcza aby nazwa pakietu kt&oacute;r&#261; kontroluje mog&#322;a by&#322;a okr&#281;slana za pomc&#261; znak&oacute;w maskuj&#261;cych&nbsp;"<tt>*</tt>" na ko&#324;cu nazwy, mozliwe jest te&#380; u&#380;ycie znak&oacute;w&nbsp; "<tt>::</tt>", "<tt>.</tt>" lub po prostu nazwy bezposredniej.
+</p>
+<p>Drugi parametr&nbsp; <em>actions</em> okre&#347;la liste akcje oddzielonych przecinkiem.
+</p>
+
+<dl>
+<dt><b>write</b></dt>
+<dd>zezwala na modyfikacje pakiet&oacute;w za wyj&#261;tkiem pakiet&oacute;w anonimowych.
+</dd><dt><b>add</b></dt>
+<dd>zezwala na rejestracj&#281; pakiet&oacute;w.
+</dd><dt><b>remove</b></dt>
+<dd>zezwala na wyrejestrowanie pakiet&oacute;w.
+</dd></dl>
+
+<p>Przyk&#322;adowo skrypt&nbsp; <a href="../examples/awt/calculator.pnut">http://javacenter.sun.co.jp/pnuts/examples/awt/calculator.pnut</a>
+stara si&#281; zarejestrowa&#263; nowy pakiet o nazwie&nbsp; "calculator" oraz
+zdefiniwa&#263; w nim funkcje. Aby bezpiecznie wykona&#263; skrypt na
+platformie&nbsp; Java2 polecenie PackagePermission("calculator",
+"write, add") powinno pozwoli&#263; na tak&#261; operacj&#281;.
+</p>
+<p>Oto przyk&#322;ad pliku zezwole&#324; wymaganych przez ten skrypt.
+</p>
+
+<pre class="eg">grant codebase "http://javacenter.sun.co.jp/pnuts/examples/-" {<br>      permission pnuts.security.PackagePermission "*", "write, add";<br>};<br></pre>
+
+<p>Zdalne skrypty dzia&#322;aj&#261; w chronionym kontek&#347;cie i s&#261; determiniowane
+przez adres&nbsp; URL na zasadzie analogicznej do aplet&oacute;w.
+Domy&#347;lnie skrypty nie maj&#261; dost&#281;pu do lokalnego systemu plik&oacute;w i
+systemowych w&#322;a&#347;ciwo&#347;ci. Za pomoca pliku pozwole&#324; u&#380;ytkownik mo&#380;e
+zmieni&#263; te zasady </p>
+<p>Kiedy skrypt zdalny jest wykonywany jako anonimowy pakiet, skrypt
+mo&#380;e definiowa&#263; zmienne globalne gdy&#380; nie istniej&#261; zasady dost&#281;pu dla
+aninimowych pakiet&oacute;w.
+</p>
+
+<!-- body end -->
+
+<hr noshade="noshade" size="1">
+<p>
+</p><center><h3>
+<a href="guide.html">Powr&oacute;t</a>
+</h3></center>
+<p>
+</p><hr noshade="noshade" size="1">
+  </body></html>

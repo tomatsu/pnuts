@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnutsユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC_JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnutsユーザーズガイド</a> -> Pnutsをテンプレートエンジンとして使う
+</div>
+
+<!-- body start -->
+
+    <h2>Pnutsをテンプレートエンジンとして使う</h2>
+
+<h3>概略</h3>
+<p>
+テキストファイルの中に<tt>&lt;%=</tt> ... <tt>%&gt;</tt> や　<tt>&lt;%</tt> ... <tt>%&gt;</tt> を埋め込んだテンプレートは、展開すると実行可能なPnutsスクリプトに変換されます。それらのタグはスクリプトの変数を参照したり、任意のスクリプトを実行することができます。最終的には、スクリプトからprint() 関数や println()関数で出力される文字列がテンプレートの展開結果になります。
+</p>
+<p>
+この機能は<a href="../modules/pnuts.servlet/doc.ja/index.html">pnuts.servletモジュール</a>の一部です。テンプレートファイルのフォーマットの詳細については、<a href="servlet.html#dynamic_pages">「ダイナミック・ページ」</a>の節を参照。
+</p>
+
+<h3>pnuts.servlet.DynamicPage</h3>
+
+<dl>
+<dt></dt><dd><tt>public DynamicPage(URL <em>url</em>, String <em>encoding</em>, Context <em>context</em>) throws IOException, ParseException</tt></dd>
+<dt></dt><dd><tt>public DynamicPage(URL <em>url</em>, String <em>encoding</em>, Context <em>context</em>, boolean <em>checkUpdates</em>) throws IOException, ParseException</tt></dd>
+</dl>
+<p>
+DynamicPageオブジェクトを作成すると、<em>url</em>で指定されたテンプレートがコンパイルされます。
+そして、DynamicPageオブジェクトに対して、run(Context)メソッドを呼び出すことで、Context.getWriter()の値として返すWriterに対して、展開された内容が出力されます。<em>checkUpdates</em>がtrueの場合(デフォルトはtrue)、テンプレート出力時に、テンプレートファイルが更新されているかどうかを検査し、更新されていた場合に自動的に再コンパイルを行います。
+</p>
+
+<h4>例</h4>
+
+<div class="eg">
+<pre>
+import pnuts.lang.Pnuts;
+import pnuts.lang.Context;
+import pnuts.lang.Package;
+import pnuts.lang.ParseException;
+import pnuts.servlet.DynamicPage;
+import java.net.*;
+import java.util.*;
+import java.io.*;
+
+public class MyClass {
+    DynamicPage page;
+    Context context;
+
+    static Context setupContext(){
+	Context context = new Context();
+	context.usePackage("pnuts.servlet"); //標準ライブラリを利用可能にする
+	return context;
+    }
+
+    public MyClass(URL template, String encoding) throws IOException, ParseException {
+	this(template, encoding, setupContext());
+    }
+
+    public MyClass(URL template, String encoding, Context context)
+	throws IOException, ParseException
+    {
+	this.context = context;
+	this.page = new <b>DynamicPage(</b>template, encoding, context<b>)</b>; //テンプレートをコンパイル
+    }
+
+    public void format(Map<String,Object> vars, Writer writer){
+	Package pkg = Package.wrap(vars);
+	Context context = (Context)this.context.clone();
+	context.setCurrentPackage(pkg);
+	context.setWriter(writer);
+	this.page.run(context);
+    }
+
+    public String format(Map<String,Object> vars){
+	StringWriter sw = new StringWriter();
+	format(vars, sw);
+	return sw.toString();
+    }
+
+    public static void main(String[] args) throws Exception {
+	MyClass instance = new MyClass(new File("template.txt").toURL(), "utf-8");
+	Map vars = new HashMap();
+	vars.put("properties", System.getProperties());
+	System.out.println(instance.format(map));
+   }
+}
+</pre>
+</div>
+
+<div class="eg">template.txt
+<pre>
+&lt;%@escape%&gt;
+&lt;table&gt;
+&lt;% for (k, v : properties) { %&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;%=k%&gt;&lt;/td&gt;
+&lt;td&gt;&lt;%=v%&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;% } %&gt;
+&lt;/table&gt;
+</pre>
+</div>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnutsユーザーズガイド</a> -> Pnutsをテンプレートエンジンとして使う
+</div>
+
+  </body>
+</html>

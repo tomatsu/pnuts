@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/dtd/web-app_2_2.dtd">
+
+<web-app>
+    <servlet>
+        <servlet-name>
+            pnuts_servlet_script
+        </servlet-name>
+        <servlet-class>
+            pnuts.servlet.PnutsServlet
+        </servlet-class>
+        <init-param>
+            <param-name>module</param-name>
+            <param-value>pnuts.servlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>compile</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>buffering</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>locale</param-name>
+            <param-value></param-value>
+        </init-param>
+        <init-param>
+            <param-name>isolation</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet>
+        <servlet-name>
+            pnuts_dynamic_page
+        </servlet-name>
+        <servlet-class>
+            pnuts.servlet.DynamicPageServlet
+        </servlet-class>
+        <init-param>
+            <param-name>module</param-name>
+            <param-value>pnuts.servlet</param-value>
+        </init-param>
+        <init-param>
+            <param-name>compile</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>buffering</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>locale</param-name>
+            <param-value></param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>
+            pnuts_servlet_script
+        </servlet-name>
+        <url-pattern>
+            *.pnut
+        </url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>
+            pnuts_dynamic_page
+        </servlet-name>
+        <url-pattern>
+            *.pea
+        </url-pattern>
+    </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+    <welcome-file>index.htm</welcome-file>
+    <welcome-file>index.pnut</welcome-file>
+    <welcome-file>index.pea</welcome-file>
+  </welcome-file-list>
+
+</web-app>

@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Kompilator i Interpreter AST</div>
+
+<!-- body start -->
+
+<h2>Kompilator i Interpreter AST</h2>
+
+<p>Kompilator Pnuts kompiluje skrypty w czasie wykonania i generuje w
+pami&#281;ci kod bajtowy, jest to domy&#347;lne zachowanie interpretera
+kt&oacute;re mo&#380;na zmieni&#263; za pomoc&#261; komendy -pure kt&oacute;ra wymusza
+interpretacje drzewa AST. Wykonywanie skompilowanych skrypt&oacute;w jest du&#380;o wydajniejsze ni&#380; interpretacje AST.
+</p>
+
+
+<h3>Opcje linii polece&#324;</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\&gt; pnuts { -pure } { skrypty }</tt></div>
+</div>
+
+<p>Gdy opcja "-pure" jest podana wy&#322;&#261;czany jest system kompilacji w locie i u&#380;yty zostaje interpreter AST.
+</p>
+
+<pre class="eg">C:\&gt; pnuts<br>Pnuts version 1.0rc2 (04/16/2002), 1.3.1_02 (Sun Microsystems Inc.)<br>Java HotSpot(TM) Client VM (mixed mode)<br>&gt; getContext().getImplementation()<br>pnuts.compiler.CompilerPnutsImpl@df503<br></pre>
+
+<div class="box">
+<div class="synopsis"><tt>C:\&gt; pnuts -O { skrypty }</tt></div>
+</div>
+<p>
+-O powoduje optymalizacj&#281; kompilacji - numery linii b&#322;&#281;d&oacute;w nie s&#261; dost&#281;pne.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt;&nbsp;Kompilator i Interpreter AST
+</div>
+
+  </body></html>

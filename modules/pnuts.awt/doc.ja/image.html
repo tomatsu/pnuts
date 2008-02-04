@@ -1,0 +1,197 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> 画像データの表示、操作</div>
+
+    <h2>画像データの表示、操作</h2>
+
+<a name=showImage></a>
+<div class="box">
+<div class="synopsis"><b>showImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt> {, int </tt><em>width</em><tt>, int </tt><em>height</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>showImage()</tt> は、url で指定された画像データを Frame の中に表示します。
+</p>
+
+<div class="eg">例
+<pre>
+im = getToolkit().getImage("test.jpg")
+showImage(im)
+</pre></div>
+
+<a name=readImage></a>
+<div class="box">
+<div class="synopsis"><b>readImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> } )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</em><tt> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>path</em><tt> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>readImage()</tt> は、ファイル、URL、InputStream のいずれかからイメージを読み込みます。
+</p>
+
+
+<div class="eg">例
+<pre>
+im = readImage("test.png")
+showImage(im)
+</pre></div>
+
+<p>
+この関数を実行するには、J2SDK1.4以降に含まれる<a href="http://jcp.org/jsr/detail/15.jsp">Image I/O API</a>が必要です。
+</p>
+
+<a name=writeImage></a>
+<div class="box">
+<div class="synopsis"><b>writeImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>path</em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</em> <tt>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeImage()</tt> は指定された画像オブジェクト<em>image</em>を、ファイルまたは OutputStream に書き込みます。
+</p>
+
+<div class="eg">例
+<pre>
+im = readImage("test.png")
+writeImage(im, "test.bmp")
+</pre></div>
+
+<p>
+この関数を実行するには、J2SDK1.4以降に含まれる<a href="http://jcp.org/jsr/detail/15.jsp">Image I/O API</a>が必要です。
+</p>
+
+<a name=makeImage></a>
+<div class="box">
+<div class="synopsis"><b>makeImage</b><tt>(int </tt><em>width</em><tt>, int </tt><em>height</em><tt>, <a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> </tt><em>drawFunc</em> <tt> {, int </tt><em>imageType</em><tt> })</tt></div>
+</div>
+
+<p>
+大きさ<em>width</em> x <em>height</em> の Image オブジェクトが作られ、<em>drawFunc</em>がnullでない場合はそれが呼ばれて何か描画されます。
+
+<blockquote>
+<em>drawFunc</em><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Graphics.html">Graphics</a> </tt><em>graphics</em><tt>)</tt>
+</blockquote>
+
+<p>
+<em>imageType</em> が指定される場合は、次の定数のいずれかでなければなりません。
+</p>
+
+<ul>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_CUSTOM">TYPE_CUSTOM</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_INT_RGB">TYPE_INT_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_INT_ARGB">TYPE_INT_ARGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_INT_ARGB_PRE">TYPE_INT_ARGB_PRE</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_INT_BGR">TYPE_INT_BGR</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_3BYTE_BGR">TYPE_3BYTE_BGR</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR">TYPE_4BYTE_ABGR</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_4BYTE_ABGR_PRE">TYPE_4BYTE_ABGR_PRE</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_565_RGB">TYPE_565_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_555_RGB">TYPE_555_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_USHORT_555_RGB">TYPE_USHORT_555_RGB</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_BYTE_GRAY">TYPE_BYTE_GRAY</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_USHORT_GRAY">TYPE_USHORT_GRAY</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_BYTE_BINARY">TYPE_BYTE_BINARY</a>
+<li><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/image/BufferedImage.html#TYPE_BYTE_INDEXED">TYPE_BYTE_INDEXED</a>
+</ul>
+
+<div class="eg">例
+<pre>
+import("java.awt.Color")
+im = makeImage(100, 100, function (g){
+        g.setColor(Color::white)
+        g.fillRect(0, 0, 100, 100)
+        g.setColor(Color::blue)
+        g.fillOval(0, 0, 100, 100)
+     }, TYPE_INT_ARGB)
+showImage(im)
+</pre></div>
+
+
+<a name=filterImage></a>
+<div class="box">
+<div class="synopsis"><b>filterImage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/image/ImageFilter.html">ImageFilter</a> </tt><em>imageFilter</em> <tt>)</tt></div>
+</div>
+<p>
+<tt>filterImage()</tt> は、<em>image</em> に対してフィルタ<em>imageFilter</em>をかけた結果のイメージを返します。
+</p>
+
+<a name=cropImage></a>
+<div class="box">
+<div class="synopsis"><b>cropImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, int x, int y, int w, int h)</tt></div>
+</div>
+
+<p>
+<tt>cropImage()</tt> は、<em>image</em>から矩形領域(x, y, x + w, y + h)のイメージを切り出して返します。
+<p>
+
+<a name=scaleImage></a>
+<div class="box">
+<div class="synopsis"><b>scaleImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, double <em>x</em>, double <em>y</em>)</tt></div>
+</div>
+
+<p>
+<tt>scaleImage()</tt>は、<em>image</em>を倍率(<em>x</em>, <em>y</em>)で拡大あるいは縮小させます。
+<p>
+
+<a name=rotateImage></a>
+<div class="box">
+<div class="synopsis"><b>rotateImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a> </tt><em>image</em><tt>, double <em>theta</em> {, double <em>x</em>, double <em>y</em>} )</tt></div>
+</div>
+
+<p>
+<tt>rotateImage()</tt> は、<em>image</em>を、(<em>x</em>, <em>y</em>)を中心として、角度<em>theta</em>回転させます。
+<p>
+
+<a name=flipImage></a>
+<div class="box">
+<div class="synopsis"><b>flipImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, boolean <em>horizontal</em>, boolean <em>vertical</em>)</tt></div>
+</div>
+
+<p>
+<tt>flipImage()</tt>は、<em>image</em>を、<em>vertical</em>がtrueのときは垂直方向に、<em>horizontal</em>がtrueのときは水平方向に反転させます。
+<p>
+
+<a name=shearImage></a>
+<div class="box">
+<div class="synopsis"><b>shearImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>, double <em>x</em>, double <em>y</em>)</tt></div>
+</div>
+
+<p>
+<tt>shearImage()</tt>は<em>image</em>に対してshearing transformationを適用します。
+<p>
+
+<a name=grayImage></a>
+<div class="box">
+<div class="synopsis"><b>grayImage</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Image.html">Image</a>
+</tt><em>image</em><tt>)</tt></div>
+</div>
+<p>
+<tt>grayImage()</tt>は<em>image</em>をグレースケールイメージに変換します。
+<p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> 画像データの表示、操作</div>
+
+  </body>
+</html>

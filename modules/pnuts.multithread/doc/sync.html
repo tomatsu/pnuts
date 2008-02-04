@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Synchronized Functions/Collection/Map</div>
+
+    <h2>Synchronized Functions/Collection/Map</h2>
+
+<a name=sync></a>
+<div class="box">
+<div class="synopsis"><b>sync</b><tt>(<a
+href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a>
+</tt><em>func</em><tt> {, Object </tt><em>lock</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a> </tt><em>collection</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> </tt><em>map</em><tt>)</tt></div>
+</div>
+
+<p>
+When <em>func</em> is specified, <tt>sync()</tt> returns a function that locks the specified object <em>lock</em> and calls <em>func</em> function.  When the function returns, the <em>lock</em> is unlocked.  If <em>lock</em> is not specified, <em>func</em> is used as a lock.
+<p>
+Although the function <tt>mutex()</tt> can describe fine grained synchronization with two simple operations; lock and unlock, <tt>sync()</tt> is easier to use in the following situations.
+</p>
+
+<ul>
+<li>Need to lock only during a function call.
+<li>A function may throw an exception.  But the lock must be unlocked even if an exception is thrown.
+<li>Any object should be able to be used as a lock, as well as a Mutex object.
+</ul>
+
+<div class="eg">e.g.
+<pre>
+file = File("foo")
+
+function update(f){
+  w = open(f, "w")
+  w.write(...)
+  w.close()
+}
+
+rfunc = sync(read, file)
+wfunc = sync(update, file)
+
+rfunc(open(file))
+wfunc(file)
+</pre>
+</div>
+
+<p>
+When <em>collection</em> or <em>map</em> is specified, <tt>sync()</tt>
+returns a thread-safe Colloection or Map object.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Synchronized Functions/Collection/Map</div>
+
+  </body>
+</html>

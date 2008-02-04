@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Loading Scripts
+</div>
+
+<!-- body start -->
+
+<h2>Loading Scripts</h2>
+
+<h3>Loading from a Local File</h3>
+
+<a name=loadFile></a>
+
+<div class="box">
+<div class="synopsis"><b>loadFile</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</em><tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a></tt> <em>context</em> <tt>} )</tt></div>
+</div>
+
+<p>
+<tt>loadFile()</tt> reads and executes a script file <em>fileName</em> from a local file systems.  
+It returns the result of last expression.
+</p>
+
+<div class="eg">e.g. (Windows)
+<pre>
+loadFile("..\\examples\\misc\\compose.pnut")
+loadFile(`..\examples\misc\compose.pnut`)
+loadFile("../examples/misc/compose.pnut")
+</pre>
+</div>
+
+<div class="eg">e.g. (Unix)
+<pre>
+loadFile("/home/pnuts/sample.pnut")
+</pre>
+</div>
+
+<h3>Loading Scripts Using ClassLoader</h3>
+
+<a name=load></a>
+<a name=require></a>
+
+<div class="box">
+<div class="synopsis"><b>load</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>script</em><tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a></tt> <em>context</em> <tt>} ) or</tt></div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>script</em><tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a></tt> <em>context</em> <tt>} ) or</tt></div>
+<div class="synopsis"><b>require</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>script</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>load()</tt> reads and evaluates a <em>script</em> and returns the result of the last expression.
+If <a href="../apidoc/pnuts/lang/Context.html#getClassLoader()">Context.getClassLoader()</a> returns a class loader, the <tt>load()</tt> function finds a script using the class loader.  Otherwise, the system class loader is used to find a script.
+</p>
+<p>
+<tt>require()</tt> reads a <em>script</em> file if the file has not been read.
+</p>
+
+<p>
+The suffix '.pnut' can be omitted for <tt>load()</tt> and <tt>require()</tt>. 
+</p>
+
+<a name="precompiled"></a>
+<p>
+When the suffix '.pnut' is omitted in these calls, Pnuts interpreter first tries to load a corresponding class as a precompiled script and then load .pnut file.  See "<a href="loadable.html">Implementing Loadable Class in Java</a>" for details.
+</p>
+
+<a name=autoload></a>
+
+<div class="box">
+<div class="synopsis"><b>autoload</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>scriptName</em><tt> ) </tt></div>
+</div>
+
+<p>
+<tt>autoload()</tt> associates <em>name</em> with a <em>scriptName</em> so that
+when the variable <em>name</em> is not defined, the <em>scriptName</em> is
+loaded before the reference is resolved.
+</p>
+
+<p>
+The suffix '.pnut' can be omitted for <tt>autoload()</tt>. 
+</p>
+
+
+<div class="eg">e.g.
+<pre>
+autoload("ls", "pnuts/util/ls")
+</pre>
+</div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Loading Scripts
+</div>
+
+  </body>
+</html>

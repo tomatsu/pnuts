@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util モジュール</title>
+    <META Http-Equiv="Content-Type" Content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnutsユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> pack200</div>
+
+    <h2>Pack200</h2>
+
+<a name=pack200></a>
+<div class="box">
+<div class="synopsis"><b>pack200</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt>,</tt></div>
+<div class="synopsis2">
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</b></em></div>
+<div class="synopsis2">
+<tt>{ , </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> <em>properties</em><tt> }  )</tt> </div>
+</div>
+
+<p>
+与えられたデータをPack200形式のアーカイブに変換します。
+</p>
+
+<pre class="eg">
+pack200("pnuts.jar", "pnuts.pack")
+</pre>
+
+<a name=unpack200></a>
+<div class="box">
+<div class="synopsis"><b>unpack200</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt>,</tt></div>
+<div class="synopsis2">
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> | </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</b></em></div>
+<div class="synopsis2">
+<tt>{ , </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> <em>properties</em><tt> }  )</tt> </div>
+</div>
+
+<p>
+Pack200形式のアーカイブを読んで、JARエンコードされたデータを出力します。
+</p>
+
+<pre class="eg">
+unpack200("pnuts.pack", "pnuts.jar")
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnutsユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> pack200</div>
+
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="bind">beans.html#bind</function>
+ <function name="decodeBean">beans.html#decodeBean</function>
+ <function name="encodeBean">beans.html#encodeBean</function>
+ <function name="events">beans.html#events</function>
+ <function name="generateBeanClass">beans.html#generateBeanClass</function>
+ <function name="getBeanProperties">beans.html#getBeanProperties</function>
+ <function name="getBeanProperty">beans.html#getBeanProperty</function>
+ <function name="listenerMethodNames">beans.html#listenerMethodNames</function>
+ <function name="listenerType">beans.html#listenerType</function>
+ <function name="methods">beans.html#methods</function>
+ <function name="properties">beans.html#properties</function>
+ <function name="setBeanProperties">beans.html#setBeanProperties</function>
+ <function name="setBeanProperty">beans.html#setBeanProperty</function>
+ <function name="unbind">beans.html#unbind</function>
+</reference>

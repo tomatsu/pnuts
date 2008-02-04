@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="addCookie">index.html#addCookie</function>
+ <function name="convertDynamicPage">index.html#convertDynamicPage</function>
+ <function name="encodeURL">index.html#encodeURL</function>
+ <function name="escape">index.html#escape</function>
+ <function name="decodeURL">index.html#decodeURL</function>
+ <function name="forward">index.html#forward</function>
+ <function name="getCookie">index.html#getCookie</function>
+ <function name="getFile">index.html#getFile</function>
+ <function name="getInitParameter">index.html#getInitParameter</function>
+ <function name="getParameter">index.html#getParameter</function>
+ <function name="getRequest">index.html#getRequest</function>
+ <function name="getResponse">index.html#getResponse</function>
+ <function name="getSession">index.html#getSession</function>
+ <function name="getSessionMap">index.html#getSessionMap</function>
+ <function name="getURL">index.html#getURL</function>
+ <function name="makeQueryString">index.html#makeQueryString</function>
+ <function name="parseQueryString">index.html#parseQueryString</function>
+ <function name="readDynamicPage">index.html#readDynamicPage</function>
+ <function name="readGetParameters">index.html#readGetParameters</function>
+ <function name="readMultipartRequest">index.html#readMultipartRequest</function>
+ <function name="readParameters">index.html#readParameters</function>
+ <function name="readPostParameters">index.html#readPostParameters</function>
+ <function name="requestPath">index.html#requestPath</function>
+ <function name="requestScope">index.html#requestScope</function>
+ <function name="sendPostRequest">index.html#sendPostRequest</function>
+ <function name="sendRedirect">index.html#sendRedirect</function>
+ <function name="setupActions">index.html#setupActions</function>
+ <function name="setupPages">index.html#setupPages</function>
+ <function name="unescape">index.html#unescape</function>
+</reference>

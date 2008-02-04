@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head><title>Podr&#281;cznik Pnuts</title> <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"> <meta http-equiv="Content-Style-Type" content="text/css"> <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+<div class="nav"><a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt;&nbsp;Implementacja &#322;adowalnych klas w javie
+</div><!-- body start -->
+<a name="module"></a><h3>Implementacja &#322;adowalnych klas w Javie</h3>
+<p>Kiedy rozszerzenie <tt>'.pnut' jest</tt> pomini&#281;te w nazwie podanej w wywo&#322;aniu load<tt>()</tt>
+interpreter pr&oacute;buje za&#322;adowa&#263; odpowiadaj&#261;cy nazwie klas&#281; jako
+skompilowany skrypt. W tym przypadku znaleziona klasa musi implementowa&#263;
+interfejs&nbsp; <a href="../apidoc/pnuts/lang/Executable.html"><tt>pnuts.lang.Executable</tt></a>&nbsp;.
+</p><p>Nazwa klasy jest tworzona przez zamian&#281; znaku&nbsp;<tt>'/' na</tt> <tt>'.' w nazwie pliku</tt>&nbsp;.Dla przyk&#322;adu gdy skrypt nazywa si&#281; "<tt>lib/stream</tt>",klasa
+<tt>lib.stream</tt> jest &#322;adowana a gdy nie istnieje skrypt o nazwie&nbsp; <tt>lib/stream.pnut</tt> jest &#322;adowany.
+</p><p>W implementacji klasy po interfejsie <a href="../apidoc/pnuts/lang/Runtime.html"><tt>pnuts.lang.Executable</tt></a> musi by&#263; zdefiniowana metoda <tt>run(Context)</tt>.
+</p><pre class="eg">package my.package;<br>import pnuts.lang.*;<br><br>public class init implements Executable {<br> public Object run(Context context){<br> ...<br> }<br>}<br></pre>
+<p>Wywo&#322;anie <tt>load("my/package/init")</tt> wczytuje klas&#281; a nast&#281;pnie wykonuje metod&#281;&nbsp; <tt>run(Context)</tt>.
+</p><p>
+Aby si&#281; dowiedzie&#263; czy u&#380;yty zosta&#322; skrypt prekompilowany mo&#380;na poda&#263; opcje&nbsp; <tt>-v</tt>
+w linii polece&#324; interpretera lub ustawi&#263; w&#322;a&#347;ciwo&#347;&#263;<tt> "pnuts.verbose" na</tt> true.
+</p><div class="eg">In case a precompiled script is
+used.
+<pre>% pnuts -v -r my/package/init<br>[loading my.package.init class]<br></pre></div>
+<div class="eg">In case no precompiled script is used.
+<pre>% pnuts -v -r my/package/init<br>[loading file:/C:/test/my/package/init.pnut]<br></pre></div>
+<!-- body end --><div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>
+-&gt;&nbsp;Implementacja &#322;adowalnych klas w javie
+</div> </body></html>

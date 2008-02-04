@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.securityモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> メッセージダイジェスト</div>
+
+    <h2>メッセージダイジェスト(MD5, SHA)</h2>
+
+<a name=md5></a>
+
+<div class="box">
+<div class="synopsis"><b>md5</b><tt>(byte[] </tt><em>array</b></em> <tt>{, int </tt><em>offset</b></em> <tt>, int </tt><em>length</b></em><tt> } )</tt></dt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>md5()</tt>は、パラメータに指定されたオブジェクトから、MD5の値を計算し、byte配列を返します。
+</p>
+
+<a name=sha></a>
+
+<div class="box">
+<div class="synopsis"><b>sha</b><tt>(byte[] </tt><em>array</b></em> <tt>{, int </tt><em>offset</b></em> <tt>, int </tt><em>length</b></em><tt> } )</tt></dt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>sha()</tt>は、パラメータに指定されたオブジェクトから、SHAの値を計算し、byte配列を返します。
+</p>
+</p>
+
+<div class="eg">例:
+<pre>
+md5("foo")   ==> [#9A, #87, #42, #07, #6E, #F9, #FF, #A5, #59, #1F, #63, #37, #04, #C2, #28, #6B]
+
+sha("foo")   ==> [#C5, #F4, #E7, #20, #32, #50, #17, #36, #75, #41, #74, #35, #4B, #E3, #C6, #47, #D9, #71, #B8, #08]
+
+hex(md5("foo")) ==> "9a8742076ef9ffa5591f633704c2286b"
+hex(sha("foo")) ==> "c5f4e72032501736754174354be3c647d971b808"
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> メッセージダイジェスト</div>
+
+  </body>
+</html>
+

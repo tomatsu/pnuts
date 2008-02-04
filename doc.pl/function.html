@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head><title>Podr&#281;cznik Pnuts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"> <meta http-equiv="Content-Style-Type" content="text/css"> <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+<div class="nav"><a href="guide.html">Podr&#281;cznik
+Pnuts</a> -&gt; Definiowanie funkcji/generator&oacute;w w javie
+</div><!-- body start --><h2>Definiowanie funkcji/generator&oacute;w w Javie</h2>
+<h3>Funkcje pisane w Javie</h3>
+<p>Funkcje mog&#261; by&#263; pisane zgodnie z poni&#380;szym przepisem.
+</p><ul><li>Musi by&#263; to klasa dziedzicz&#261;ce po klasie <a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a>&nbsp;.
+</li><li>Publiczna metoda <tt>public boolean defined(int)</tt>
+definiuje oczekiwan&#261; liczb&#281; parametr&oacute;w.
+</li><li>Zabezpieczona metoda <tt>protected Object exec(Object[],
+Context)</tt> definiuje cia&#322;o funkcji. Gdy ilo&#347;&#263; parametr&oacute;w jest niezgodna z za&#322;o&#380;eniami mo&#380;e zosta&#263; wywo&#322;ana funkcja,
+<tt>undefined(args,context)</tt> i zwr&oacute;cona warto&#347;&#263; NULL.
+</li></ul><p>Poni&#380;sza klasa implementuje prost&#261; funkcj&#281; wypisuj&#261;c&#261; napis <tt>"hello"</tt>. Gdy funkcja nie ma parametr&oacute;w metoda <tt>defined()</tt>
+zwraca true tylko gdy argumentem jest 0.</p><p>Pierwsza cz&#281;&#347;&#263; metody <tt>exec()</tt> sprawdza czy ilo&#347;&#263; parametr&oacute;w jest odpowiednia i gdy jest prawid&#322;owa drukuje napis "<tt>hello"</tt> na standardowe wyj&#347;cie. </p>
+<pre class="eg">import pnuts.lang.Context;<br>import pnuts.lang.Package;<br><br>public class hello extends PnutsFunction {<br> public hello(){<br> super("hello");<br> }<br><br> public boolean defined(int nargs){<br> return (nargs == 0);<br> }<br><br> protected Object exec(Object[] args, Context context){<br> int nargs = args.length;<br> if (nargs != 0){<br> undefined(args, context);<br>	return null;<br> }<br> System.out.println("hello");<br> return null;<br> }<br><br> public String toString(){<br> return "function hello()";<br> }<br>}<br></pre><h3>Generatory (Generators) w Javie</h3>
+<p><a href="lang.html#generator">Generatory</a> mog&#261; by&#263; pisane w Javie w nast&#281;puj&#261;cy spos&oacute;b.
+</p><ul><li>Klasa zawsze rozszerza klas&#281;&nbsp; <a href="../apidoc/pnuts/lang/Generator.html">Generator</a>&nbsp;.
+</li><li>Metoda <tt>public Object
+accept(PnutsFunction <em>closure</em>, Context <em>context</em>)</tt>
+definiuje jakie obiekty i w jakiej kolejno&#347;ci b&#281;d&#261; generowane.
+Generatory mog&#261; by&#263; u&#380;yte w p&#281;tlach iteracyjnych jako liczniki
+iteracji.
+</li></ul><p>Podana klasa implementuje prosty generator zwracaj&#261;cy liczby ca&#322;kowite w przedziale 0..9&nbsp;
+</p><pre class="eg">import pnuts.lang.*;<br><br>public class MyGenerator extends Generator {<br><br> public Object apply(PnutsFunction closure, Context context){<br>	for (int i = 0; i &lt; 10; i++){<br>	closure.call(new Object[]{new Integer(i)}, context);<br>	}<br>	return null;<br> }<br>}<br></pre><pre class="eg">for (i : MyGenerator()){<br> println(i)<br>}<br></pre><p>Aby u&#380;y&#263; generator&oacute;w w Javie nale&#380;y u&#380;y&#263; metody Runtime.applyGenerator() jak podano poni&#380;ej.
+</p><pre class="eg">import pnuts.lang.Runtime;<br><br>Runtime.applyGenerator(generator,<br> new PnutsFunction(){<br> protected Object exec(Object[] args, Context ctx){<br> /*<br> * args[0] is the generated object<br> */<br> }<br> },<br> context);<br></pre><!-- body end --><div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>
+-&gt; Definiowanie funkcji/generator&oacute;w w javie
+</div> </body></html>

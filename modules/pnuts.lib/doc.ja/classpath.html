@@ -1,0 +1,72 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> クラスパスの変更</div>
+
+    <h2>クラスパスの変更</h2>
+
+<a name=setClassPath></a>
+<div class="box">
+<div class="synopsis"><b>setClassPath</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a>[] </tt><em>directoryOrJarFile</em><tt> )</tt></div>
+</div>
+
+<p>
+関数setClassPath()は、Pnutsがクラスを参照するときに使われるクラスパスを設定します。
+関数 setClassPath() で設定されたディレクトリやJARファイルは、指定した順序で
+環境変数 CLASSPATH よりも先に参照されます。
+パラメータが配列の場合、配列の要素のディレクトリやJARファイルがクラスパスになります。
+</p>
+<p>
+実行中に設定したクラスパスがリセットするには、パラメータに<tt>null</tt> を指定します。
+</p>
+
+<div class="eg">
+例：
+<pre>
+setClassPath(["k1.jar", "c:\\home"])
+</pre>
+</div>
+
+<a name=addClassPath></a>
+<div class="box">
+<div class="synopsis"><b>addClassPath</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> path)</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> path)</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> path)</tt></div>
+</div>
+
+<p>
+<tt>addClassPath()</tt>は、現在のクラスパスに <em>path</em> を追加します。
+</p>
+
+<div class="eg">
+例：
+<pre>
+addClassPath("foo.jar")
+   => [file:/foo.jar]
+
+addClassPath("bar.jar")
+   => [file:/bar.jar, file:/foo.jar]
+</pre></div>
+
+<a name=getClassPath></a>
+<div class="box">
+<div class="synopsis"><b>getClassPath</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getClassPath()</tt> 関数はクラスパスの設定を求めます。
+</p>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> クラスパスの変更</div>
+
+  </body>
+</html>

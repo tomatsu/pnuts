@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h2>パッケージに対するパーミッション</h2>
+
+<p> 
+Pnuts API は<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/security/">Java2
+Security API</a>を使って、信用できないコードからPnutsのパッケージを保護することができます。
+</p>
+
+<h3><tt><a href="../apidoc/pnuts/security/SecurePackage.html">pnuts.security.SecurePackage</a></tt> クラス</h3>
+
+<p>
+<tt>pnuts.security.SecurePackage</tt>クラスは、
+<tt>pnuts.lang.Package</tt>のサブクラスで、SecurityManagerが設定されている状態で、パッケージを追加(削除)したり、パッケージの変数の値を変更する際に<tt>pnuts.security.PackagePermission</tt>が必要になります。
+</P>
+
+<p>
+<tt>pnuts.security.SecurePackage</tt>クラスをデフォルトのパッケージにするには、<tt>pnuts.lang.Package</tt>クラスが初期化される前に、システム・プロパティ<tt>pnuts.package.factory</tt>に<tt>pnuts.security.SecurePackageFactory</tt>を設定します。
+</p>
+<blockquote>
+<table cellpadding=20>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+pnuts -J-Djava.security.manager -J-Dpnuts.package.factory=pnuts.security.SecurePackageFactory
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+<h3><tt><a href="../apidoc/pnuts/security/PackagePermission.html">pnuts.security.PackagePermission</a></tt> クラス</h3>
+
+<table border=1 width=90% cellpadding=10>
+<tr>
+<td>
+<dl>
+<dt><tt>public pnuts.security.PackagePermission(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>package</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>actions</em><tt>)</tt>
+</dl>
+</td>
+</tr>
+</table>
+
+<p>
+最初のパラメータ<em>package</em> は許可を与える対象のパッケージの名前です。
+名前の最後にアスタリスク"<tt>*</tt>"を指定することができます。
+アスタリスクは単独で使われるか、"<tt>::</tt>"か"<tt>.</tt>"の後ろに指定され、ワイルドカードを表します。
+2番目のパラメータ<em>actions</em> は、次の要素がカンマで区切られたリストです。
+</p>
+
+<dl>
+<dt><b>write</b></dt>
+<dd>パッケージに修正を加えること (ただし、匿名のパッケージは対象になりません)
+<dt><b>add</b></dt>
+<dd>新しいパッケージを登録すること
+<dt><b>remove</b></dt>
+<dd>パッケージを削除すること
+</dl>
+
+<p>
+たとえば、スクリプト <a
+	href="../examples/awt/calculator.pnut">http://javacenter.sun.co.jp/pnuts/examples/awt/calculator.pnut</a> は、新しいパッケージ "calculator" を登録してその中に関数を定義しようとします。
+このスクリプトをJava2セキュリティのもとで実行するには、セキュリティポリシーの中で<tt>PackagePermission("calculator", "write, add")</tt> が許可されていなければなりません。
+</p>
+<p>
+次に示すのは、このスクリプトで必要な許可を与えるポリシーファイルの例です。
+</p>
+
+<blockquote>
+<table cellpadding=20>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+grant codebase "http://javacenter.sun.co.jp/pnuts/examples/-" {
+      permission pnuts.security.PackagePermission "*", "write, add";
+};
+</pre>
+</td>
+</tr>
+</table>
+<center><tt>${user.home}/.java.policy</tt></center>
+</blockquote>
+
+<p>
+遠隔スクリプトは、アプレットとだいたい同じような方法で、そのURLから決定されるアクセスコントロールコンテクスト(Access Control Context)の中で処理を行います。遠隔スクリプトは通常はローカルファイルシステムやシステムプロパティなどにアクセスできません。ポリシーファイルを使えばセキュリティポリシーをカスタマイズすることができます。
+</p>
+<p>
+遠隔スクリプトが匿名のパッケージで実行される場合、そのスクリプトはグローバルスコープの変数を定義することができます。匿名のパッケージにアクセスするためにはパーミッションが必要ないからです。
+</p>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">戻る</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+  </body>
+</html>

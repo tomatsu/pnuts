@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.security module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> Digital Signature</div>
+
+    <h2>Digital Signature</h2>
+
+<a name=getKeyStore></a>
+<div class="box">
+<div class="synopsis"><b>getKeyStore</b><tt>( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/KeyStore.html">KeyStore</a> </tt><em>database</em> <tt>,} <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>getKeyStore()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/KeyStore.html"><tt>java.security.KeyStore</tt></a> object, which represents a X.509 certificate keystore.
+If <em>database</em> is not specified, keystore is loaded from <tt>${user.home}/.keystore</tt>.
+</p>
+<p>
+A keystore database should be prepared with <a href="http://java.sun.com/j2se/1.4/docs/guide/security/cert3.html#tools"><tt>keytool</tt></a> before using <tt>getKeyStore()</tt>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+ks = getKeyStore("key_pass")
+</pre></div>
+
+<a name=getPublicKey></a>
+<a name=getPrivateKey></a>
+<div class="box">
+<div class="synopsis"><b>getPublicKey</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/security/KeyStore.html">KeyStore</a> </tt><em>keystore</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>alias</em><tt> )</tt></div>
+<div class="synopsis"><b>getPrivateKey</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/security/KeyStore.html">KeyStore</a> </tt><em>keystore</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>alias</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>pass</em><tt> )</tt></div>
+</div>
+
+<p>
+These functions retrieve public key and private key of <em>alias</em> from the <em>keystore</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+my_key = getPrivateKey(ks, "my_name", "my_pass")
+my_pub = getPublicKey(ks, "my_name")
+</pre></div>
+
+<a name=signObject></a>
+<a name=verifyObject></a>
+<div class="box">
+<div class="synopsis"><b>signObject</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/PrivateKey.html">PrivateKey</a> </tt><em>privateKey</em><tt> )</tt></div>
+<div class="synopsis"><b>verifyObject</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/security/SignedObject.html">SignedObject</a> </tt><em>signedObject</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/PublicKey.html">PublicKey</a> </tt><em>publicKey</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>signObject()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/SignedObject.html"><tt>java.security.SignedObject</tt></a> object which is created by signing <em>object</em> with the <em>privateKey</em>.
+</p>
+<p>
+<tt>verifyObject()</tt> verifies that the <em>signedObject</em> object is signed by the owner of the <em>publicKey</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+signed = signObject("something", my_key)
+verifyObject(signed, my_pub)
+</pre></div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> Digital Signature</div>
+
+  </body>
+</html>

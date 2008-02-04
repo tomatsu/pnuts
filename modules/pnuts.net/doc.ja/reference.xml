@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="getLocalHost">index.html#getLocalHost</function>
+ <function name="getInetAddress">index.html#getInetAddress</function>
+ <function name="isLocalHost">index.html#isLocalHost</function>
+ <function name="encodeURL">index.html#encodeURL</function>
+ <function name="decodeURL">index.html#decodeURL</function>
+ <function name="sendPostRequest">index.html#sendPostRequest</function>
+ <function name="makeQueryString">index.html#makeQueryString</function>
+</reference>

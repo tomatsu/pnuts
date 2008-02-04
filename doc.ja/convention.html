@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> ユーザーズガイドの書式
+</div>
+
+<!-- body start -->
+
+<h2>ユーザーズガイドの書式</h2>
+<p>
+ユーザーズガイドでは、関数の使い方を説明するときに次のような書式にしたがいます。
+</p>
+
+<div class="box">
+<div class="synopsis">
+<b>loadFile</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</em><tt> )</tt></div>
+</div>
+
+<p>
+この例では、loadFile という名前の関数は String 型の変数を一つ受け取ることを示しています。
+</p>
+<p>シグネチャ（パラメータの型の並び）が複数ある関数については、引数部分を ' or 'をはさんで記述します。
+</p>
+
+
+<div>
+<div class="box">
+<div class="synopsis">
+<b>write</b><tt>(byte[] </tt><em>array</em> <tt>, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(char[] </tt><em>array</em> <tt>, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt>)</tt></div>
+</div>
+<center>' or ' で引数部分を連結する例</center>
+</div>
+<p>
+オプションとなる引数がある場合は、その引数を括弧 {} で囲んで記述します。
+</p>
+
+<div class="box">
+<div class="synopsis"><b>open</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>mode</em> <tt>} )</tt></div>
+</div>
+
+<center>オプション引数の例</center>
+
+<p>
+パラメータがObject型や配列の場合は、要素の型を省略することがあります。
+<p>
+
+<div class="box">
+<div class="synopsis"><b>sort</b><tt>(</tt><em>array</em><tt> [ ] )</tt></div>
+</div>
+
+
+<p>
+パラメータが関数の場合、パラメータリストを括弧で囲んだものが後ろにきます。
+<p>
+
+
+<div class="box">
+<div class="synopsis"><b>memcache</b><tt>(</tt><em>handler</em><tt> ( key ) )</tt></div>
+</div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> ユーザーズガイドの書式
+</div>
+
+  </body>
+</html>

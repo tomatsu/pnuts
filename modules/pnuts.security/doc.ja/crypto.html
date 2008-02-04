@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.securityモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> 暗号の利用</div>
+
+    <h2>暗号の利用</h2>
+
+<p>
+以下関数は <a href="http://java.sun.com/products/jce/index.html">Java Cryptography Extension</a>の使い方を簡略化します。Sun JCE1.2 または互換ソフトウェアが必要になります。
+</p>
+
+<a name=getSecretKey></a>
+
+<div class="box">
+<div class="synopsys"><b>getSecretKey</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>algorithm</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>getSecretKey()</tt> は指定したアルゴリズム<em>algorithm</em>の秘密鍵(<a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a>オブジェクト)を作成します。
+</p>
+
+<div class="eg">例:
+<pre>
+key = getSecretKey("DES")
+key.getEncoded()    ==> [#DE, #A0, .... ]
+</pre></div>
+
+<a name=encrypt></a>
+
+<div class="box">
+<div class="synopsys"><dt><b>encrypt</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em> <tt>} )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt></div>
+</div>
+
+<p>
+<em>secretkey</em>が指定された場合は、<em>input</em>から読み込んだデータを<em>secretkey</em>で暗号化します。
+<em>password</em>が指定された場合は、<em>input</em>から読み込んだデータをそのパスワードを使って暗号化します。
+<p>
+いずれの場合も、<em>output</em>が指定された場合は、暗号化されたデータを<em>output</em>に書き込みます。<em>output</em>が指定されない場合は、暗号化されたデータを<tt><a href="stream.html">read()</a></tt>で読み出すことができるような InputStream を返します。
+<p>
+<em>input</em>には、InputStream, File, String(ファイル名), URLのいずれかを指定します。<em>output</em>には、OutputStream, FIle, String(ファイル名)のいずれかを指定します。
+</p>
+
+<div class="eg">例:
+<pre>
+encrypt(key, "plain.txt", "encrypted.dat")
+</pre></div>
+
+<a name=decrypt></a>
+
+<div class="box">
+<div class="synopsys"><b>decrypt</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt> or </div>
+<div class="synopsys2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt></div>
+</div>
+
+<p>
+<em>secretkey</em>が指定された場合、<em>input</em>から読み込んだデータをその<em>secretkey</em>を使って復号化します。<em>password</em>が指定された場合は、<em>input</em>から読み込んだデータをそのパスワードで復号化します。
+<p>
+いずれの場合も、<em>output</em>が指定された場合は、復号化されたデータを<em>output</em>に書き込みます。<em>output</em>が指定されない場合は、復号化されたデータを<tt><a href="stream.html">read()</a></tt>で読み出すことができるような InputStream を返します。
+<p>
+<em>input</em>には、InputStream, File, String(ファイル名), URLのいずれかを指定します。<em>output</em>には、OutputStream, FIle, String(ファイル名)のいずれかを指定します。
+</p>
+<div class="eg">例:
+<pre>
+decrypt(key, "encrypted.dat", "plain.txt")
+</pre></div>
+
+<a name=sealObject></a>
+<a name=unsealObject></a>
+
+<div class="box">
+<div class="synopsis"><b>sealObject</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt></div>
+<div class="synopsis"><b>unsealObject</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>sealObject()</tt>は <em>secretkey</em>または<em>password</em>を使って<em>object</em>を暗号化し、<tt><a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SealedObject.html">javax.crypto.SealedObject</a></tt>を返します。
+<tt>unsealObject()</tt>は <em>secretkey</em>または<em>password</em>を使って<em>object</em>を復号化し、<tt>sealObject()</tt>の結果からもとのオブジェクトを取り出します。
+</p>
+
+<div class="eg">例:
+<pre>
+sealed = sealObject(key, "something secret")
+unsealObject(key, sealed)
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> 暗号の利用</div>
+
+  </body>
+</html>

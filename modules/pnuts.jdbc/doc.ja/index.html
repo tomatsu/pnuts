@@ -1,0 +1,294 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.jdbc モジュール</title>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=EUC_JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.jdbc</tt></div>
+
+    <h2><tt>pnuts.jdbc</tt> モジュール</h2>
+
+<p>
+<tt>pnuts.jdbc</tt> モジュールは、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/jdbc/index.html">JDBC</a> API の上に高レベルの関数を定義します。
+</P>
+<ul>
+<li><a href="#openJDBC">openJDBC</a>
+<li><a href="#load"><em>jdbc</em> . load</a>
+<li><a href="#execute"><em>jdbc</em> . execute</a>
+<li><a href="#query"><em>jdbc</em> . query</a>
+<li><a href="#insert"><em>jdbc</em> . insert</a>
+<li><a href="#update"><em>jdbc</em> . update</a>
+<li><a href="#updateOrInsert"><em>jdbc</em> . updateOrInsert</a>
+<li><a href="#session"><em>jdbc</em> . session</a>
+<li><a href="#getConnection"><em>jdbc</em> . getConnection</a>
+<li><a href="#getAutoCommit"><em>jdbc</em> . getAutoCommit</a>
+<li><a href="#setAutoCommit"><em>jdbc</em> . setAutoCommit</a>
+<li><a href="#commit"><em>jdbc</em> . commit</a>
+<li><a href="#rollback"><em>jdbc</em> . rollback</a>
+<li><a href="#close"><em>jdbc</em> . close</a>
+</ul>
+
+<a name=openJDBC></a>
+
+<div class="box">
+<div class="synopsis"><tt><b>openJDBC</b> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>driverName</em><tt> , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>jdbc_url</em><tt> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a></a> </tt><em>properties</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>driverName</em><tt> , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>jdbc_url</em><tt> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></a> </tt><em>propertyDefinition</em><tt> } )</tt></div>
+<div class="synopsis2"><tt>( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></tt>
+</tt><em>driverName</em><tt> , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>jdbc_url</em><tt> , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></a>
+</tt><em>username</em><tt> , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></a> </tt><em>password</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/javax/sql/DataSource.html">DataSource</a></tt> <em>dataSource</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/sql/Connection.html">Connection</a></tt> <em>connection</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></tt> <em>dataSoureceJndiName</em><tt> )</tt> </div>
+</div>
+
+<p>
+JDBC の接続を開始します。
+</p>
+<p>
+<em>propertyDefinition</em> には、Properties.load() メソッドが読めるようなフォーマットの文字列を指定します。
+</P>
+
+<div class="eg">例:
+<pre>
+jdbc = openJDBC("org.gjt.mm.mysql.Driver",
+                "jdbc:mysql://localhost/mysql",
+                "user=foo\npassword=bar")
+</pre></div>
+
+<p>
+このモジュールの他の関数は、メソッド呼び出しのスタイルで、openJDBC()の戻り値をターゲットとして呼び出されます。
+</p>
+
+
+<a name=load></a>
+
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>load</b> ( </tt><em>input</em><tt> {, boolean </tt><em>verbose</em><tt> } )</tt></div>
+</div>
+
+<p>
+<em>input</em>よりSQL コマンドを読み込みます。<em>verbose</em> が true の場合、<em>input</em>のクエリごとに結果が表示されます。
+</p>
+
+<div class="eg">例:
+<pre>
+jdbc.load("/tmp/test.sql")
+</pre></div>
+
+<a name=execute></a>
+
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>execute</b> ( </tt><em>query</em><tt> {, </tt><em>parameters</em><tt> } )</tt></div>
+</div>
+
+<p>
+JDBCの接続に対してクエリを送信します。
+<em>parameters</em>が指定された場合は、その要素がパラメータとして使われます。
+</p>
+<em>query</em>には文字列またはPreparedStatementを指定します。<em>parameters</em>には配列またはListを指定します。
+
+<div class="eg">例:
+<pre>
+jdbc.execute("delete from PERSON where name=?", ["John"])
+</pre></div>
+
+<a name="query"></a>
+
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>query</b> ( </tt><em>query</em> { , <em>parameters</em> } <tt>)</tt></div>
+</div>
+<p>
+JDBCの接続に対してクエリを送信し、クエリ結果の各行を表すオブジェクトを順に生成するジェネレータを返します。for文でループさせることで、各行を表すオブジェクトにアクセスできます。
+<p>
+<em>query</em>には文字列またはPreparedStatementを指定します。<em>parameters</em>には配列またはListを指定します。
+
+</p>
+生成されるオブジェクトは、Mapインタフェースとpnuts.lang.Indexedインタフェースを実装するオブジェクトです。
+生成されるオブジェクトに対して、カラム名またはインデックス(何番目のカラムか)を指定してカラムの値を求めることができます。
+</p>
+<div class="eg">例:
+<pre>
+for (i : jdbc.query("select * from PERSON")){
+    println(i.name)
+    println(i[0])
+}
+</pre></div>
+
+<p>
+JDBCドライバの実装によっては、query()の結果はループの度にあたらしいオブジェクトを作らないかもしれません。したがって、結果を順に取りだしてListに保存するような場合には、pnuts.libモジュールの<a href="../../pnuts.lib/doc.ja/array.html#map">map()</a>関数を使って複製を作るなどの工夫が必要になります。
+</p>
+<div class="eg">例:
+<pre>
+x = list()
+for (i : jdbc.query("select * from PERSON")) x.add(map(i))
+</pre></div>
+
+<a name="insert"></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>insert</b> ( </tt><em>table</em> , <em>map</em><tt> )</tt></div>
+<div class="synopsis"><em>jdbc</em><tt> . <b>insert</b> ( </tt><em>table</em> , <em>columns</em> , <em>row_generator</em> { , <em>batchSize</em> } <tt> )</tt></div></div>
+
+<p><tt>insert()</tt>は、<em>table</em>に一行挿入します。
+<p>
+<p>
+<em>map</em>が指定される場合は、column-valueのマッピングを指定します。
+</P>
+
+<div class="eg">
+<pre>
+row = {"name" => "Chihiro", "age" => 3}
+jdbc.insert("person", row)
+</pre>
+</div>
+
+<P>
+<em>columns</em>と<em>row_generator</em>と、オプションとして<em>batchSize</em>が指定される場合、
+<em>columns</em>はカラム名のリストか配列にします。
+<em>row_generator</em>は、全行を生成するGeneratorにします。各行はカラムの値の配列またはListです。
+<em>batchSize</em>はバッチ処理のためのバッファサイズです。
+</p>
+
+<div class="eg">
+<pre>
+columns = ["name", "age"]
+function gen(){
+  yield ["Chihiro", 5]
+  yield ["Sae", 3]
+  yield ["Yoshikazu", 0]
+}
+jdbc.insert("person", columns, gen())
+</pre>
+</div>
+
+<a name="update"></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>update</b> ( </tt><em>table</em> , <em>condition_map</em> , <em>values_map</em><tt> )</tt></div>
+</div>
+<p>
+<em>condition_map</em> はWHERE節に相当するjava.util.Map オブジェクト。<em>values_map</em>は新しい値を持つjava.util.Mapオブジェクト。
+</p>
+
+<div class="eg">
+<pre>
+jdbc.update("person", {"name"=>"Chihiro"}, {"age"=>5})
+</pre>
+</div>
+
+<a name="updateOrInsert"></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>updateOrInsert</b> ( </tt><em>table</em> , <em>condition_map</em> , <em>values_map</em><tt> )</tt></div>
+</div>
+<p>
+<em>condition_map</em> はWHERE節に相当するjava.util.Map オブジェクト。<em>values_map</em>は新しい値を持つjava.util.Mapオブジェクト。
+</p>
+<p>
+JDBCドライバが更新可能なResultSetをサポートしている必要があります。
+</p>
+
+<div class="eg">
+<pre>
+jdbc.updateOrInsert("person", {"name"=>"Chihiro"}, {"age"=>5})
+</pre>
+</div>
+
+<a name=session></a>
+
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>session</b> (  )</tt></div>
+</div>
+
+<p>
+SQL インタプリタセッションを開始します。インタラクティブモードでは、System::inの競合が起きるので、この関数はバッチモードで使用します。
+</p>
+
+<div class="eg">例: (mysql.pnut)
+<pre>
+use("pnuts.jdbc")
+
+jdbc = openJDBC("org.gjt.mm.mysql.Driver",
+                "jdbc:mysql://localhost/mysql?user=root")
+jdbc.session()
+jdbc.close()
+</pre></div>
+
+<div class="eg">例:
+<pre>
+C:\&gt;pnuts mysql.pnut
+% show tables
+....
+</pre></div>
+
+<a name=getConnection></a>
+
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>getConnection</b> (  )</tt></div>
+</div>
+
+<p>
+JDBCへの接続を表す<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/sql/Connection.html">java.sql.Connection</a>オブジェクトを返します。
+</p>
+
+
+<a name=getAutoCommit></a>
+<a name=setAutoCommit></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>getAutoCommit</b> (  )</tt></div>
+<div class="synopsis"><em>jdbc</em><tt> . <b>setAutoCommit</b> ( boolean )</tt></div>
+</div>
+
+<p>
+<tt>getAutoCommit()</tt>は、現在のauto-commitモードを求めます。
+<tt>setAutoCommit()</tt>は、現在のauto-commitモードを変更します。
+</p>
+
+<a name=commit></a>
+<a name=rollback></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>commit</b> (  )</tt></div>
+<div class="synopsis"><em>jdbc</em><tt> . <b>rollback</b> (  )</tt></div>
+</div>
+
+<p>
+<tt>commit()</tt>は、最後にcommit/rollbackしてから行なった変更を永続化し、
+ロックを解放します。
+</p>
+<p>
+<tt>rollback()</tt>は、現在のトランザクションで行なった変更を取消し、
+ロックを解放します。
+</p>
+
+<div class="eg">
+<pre>
+try {
+   con.execute("update wiki set name=? text=?", [name, text])
+   ..
+   con.commit()
+} catch(Exception e){
+   con.rollback()
+}
+</pre>
+</div>
+
+<a name=close></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>close</b> (  )</tt></div>
+</div>
+
+<p>
+JDBC への接続を閉じます。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.jdbc</tt></div>
+
+  </body>
+</html>

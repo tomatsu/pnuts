@@ -1,0 +1,157 @@
+<html>
+    <head>
+      <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body>
+
+<!-- body start -->
+
+<table cellpadding=20>
+<tr>
+<td colspan=2 align=center><h2>The Pnuts Project</h2></td>
+</tr>
+<tr>
+<td valign=top align=right width=20%><b>Overview</b></td>
+<td>
+<p>
+Pnuts is a scripting language system based on JVM.
+It is intended to be a part of dual-language system based on Java platform. Some of the features are as follows.
+</p>
+
+<ul>
+<li>Simple and clean syntax
+<li>Interactive interpreter
+<li>Extensible through its module system
+<li>Customizable and embeddable through Pnuts API
+<li>Dynamic/static translation to JVM bytecode
+<li>One of the fastest scripting language implemenations on JVM
+<li>Inherits many advantages of Java (security, portability, etc.) 
+</ul>
+
+<p>
+The project has a web page at <a href="http://pnuts.dev.java.net/">http://pnuts.dev.java.net/</a>, in which the latest
+source code and documents are being distributed.
+</p>
+</td>
+</tr>
+
+<tr>
+<td valign=top align=right><b>Motivation</b></td>
+<td>
+<p>
+Pnuts was originally developed as a testing tool of Java classes in 1997.
+Since then, Pnuts has been extended, mainly focusing on essential functionalities required for
+Java-based scripting engine, such as module system, bytecode compiler, and so on.
+</p>
+<p>
+Since around 2002, effort on Web scripting has been made.
+Java platform already has JSP based solutions. However, it is well known that there are many Web application developers who are not Java developers.  JSP-based solutions seem to be too difficult to learn for them, so they typically stick with PHP or other technologies.  One of the goals is to provide a scripting environment for those who are not serious Java programmers and to allow them to enjoy the benefits of Java platform.
+</p>
+
+</td>
+</tr>
+<tr>
+<td valign=top align=right><b>Advantages</b></td>
+<td>
+<ol>
+<li><b>The language is designed specially for Java Platform</b>
+<div>
+Scripting language systems on JVM fall into two categories; one is porting of an existing language to Java platform,
+and the other is a new language from ground up. 
+<p>
+Systems in the former category bring an additional value to the existing system.  A common problem of systems in this category is that they have to keep it compatible with the existing system.  Even if the models of the two languages differ, the difference has to be left as it was.  For example, since most scripting languages have different type system from the host language, data type conversion between the languages is necessary.  Not only that user has to understand and distinguish the two type systems in dual-language applications, but that it would significantly degrade the performance. 
+</p>
+<p>
+New languages specialized for Java, including Pnuts, do not have such restriction.
+All values in Pnuts are Java objects of well-defined Java classes/interfaces.
+</p>
+</li>
+<li><b>Modular API</b>
+<div>
+Pnuts API provides a flexible interface to embed Pnuts into Pnuts applications.
+Many other systems fall short in this area.
+</div></li>
+<li><b>A rich set of the standard modules</b>
+<div>
+Pnuts provides off-the-shelf library functions as standard modules.  Those functions make application
+development much simpler than Java-only solution.  In addition, Pnuts has a sophisticated module system that allows users
+to add their own modules as needed for user's application.
+</div></li>
+<li><b>High performance</b>
+<div>
+Pnuts is one of the fastest scripting language implementations based on Java.  Speed is important
+when a scripting engine is embedded into a large application, because scripting engines are likely to be a
+performance bottle-neck of the application.
+</div></li></ol>
+</td>
+</tr>
+
+<tr>
+<td valign=top align=right><b>User Experiences</b></td>
+<td>
+<ul>
+<li>OpenWFE client - a client for OpenWFE writing in Pnuts
+<div><a href="http://machine.homeunix.org/my_stuff/openwfe_client/">http://machine.homeunix.org/my_stuff/openwfe_client/</a></li>
+
+<li>PnutsWiki - a simple wiki application written in Pnuts
+<div><a href="http://pnuts.org/wiki/">http://pnuts.org/wiki/</a></li>
+     
+<li>PnutsBlog - a simple weblog application written in Pnuts
+<div><a href="http://pnuts.org/~tomatsu/blog/">http://pnuts.org/~tomatsu/blog/</a> (Japanese)</li>
+     
+<li>JAS3
+<div><a href="http://jas.freehep.org/jas3/index.html">http://jas.freehep.org/jas3/index.html</a></li>
+
+<li>JASP - A Java based statistical processor
+<div><a href="http://jasp.ism.ac.jp/">http://jasp.ism.ac.jp/</a></li>
+
+<li>Jakarta Bean Scripting Engine
+<div><a href="http://jakarta.apache.org/bsf/">http://jakarta.apache.org/bsf/</a></li>
+
+<li>Java GuiBuilder
+<div><a href="http://www.guibuilder.de/">http://www.guibuilder.de/</a></li>
+
+<li>Alma
+<div><a href="http://www.desnoix.com/guillaume/alma/">http://www.desnoix.com/guillaume/alma/</a></li>
+
+<li>docproc - a software package for XML/XSL processing in early days.
+<div><a href="http://javalab.uoregon.edu/ser/software/docproc_2/">http://javalab.uoregon.edu/ser/software/docproc_2/</a></li>
+
+<li>Mulcci (only in Japanese)
+<div><a href="http://member.nifty.ne.jp/mulcci/">http://member.nifty.ne.jp/mulcci/</a></li>
+</ul>
+
+</td>
+</tr>
+</table>
+
+
+<!-- body end -->
+
+
+
+<div class="footer">
+<a href="http://pnuts.org/">Pnuts Home</a>
+<tt>|</tt>
+<a href="guide.html">User's Guide</a>
+<tt>|</tt>
+<a href="lang-TOC.html">Pnuts Language</a>
+<tt>|</tt>
+<a href="quickref.html">Quick Reference</a>
+<tt>|</tt>
+<a href="../apidoc/index.html">API doc</a>
+<tt>|</tt>
+<a href="faq.html">FAQ</a>
+<tt>|</tt>
+<a href="http://pnuts.org/">Download</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">License</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">Contact</a>
+</div>
+
+
+  </body>
+</html>

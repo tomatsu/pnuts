@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Kompilacja skrypt&oacute;w z linii polece&#324;
+</div>
+
+<!-- body start -->
+
+    <h2>Kompilacja skrypt&oacute;w z linii polece&#324;</h2>
+
+<h3><tt>pnutsc</tt> komendy</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\&gt; <b>pnutsc</b> { -d </tt><em><span style="font-family: monospace;">katalog</span></em><tt> | -o
+	      wyj&#347;ciowy_plik_jar</tt><em></em><tt> } { -v } { -main <em>klasaMain</em> { -m <em><span style="font-family: monospace;">nazwaModu&#322;u</span></em> } } {
+	      -prefix </tt><em>nazwa</em><tt> }{ </tt><tt>-no_proxy } {
+	      { -C </tt><em><span style="font-family: monospace;">katalog_bazowy</span></em><tt> } </tt><em>plik_skryptu</em> | <em>wej&#347;ciowe_pliki_jar</em> } <tt>...</tt></div>
+</div>
+
+<p>
+<tt>pnutsc</tt> kompiluje podany plik <em>plik_skryptu</em> lub pliki <em>wej&#347;ciowe_pliki_jar</em>.
+</p>
+<p>opcja <tt>-o
+	      wyj&#347;ciowy_plik_jar</tt><em></em> powoduje zapisanie skompilowanych klas do pliku JAR&nbsp;<em>output_jar_file,&nbsp;</em>gdy plik JAR instnieje klasy zostan&#261; do niego dopisane.</p><p>gdy brak opcji -o klasy zostanie zapisane w katalogu z opcji <tt>-d </tt><em><span style="font-family: monospace;">katalog</span></em> lub gdy jej brak w bie&#380;&#261;cym katalogu
+</p>
+<p>
+<tt>-v</tt> w&#322;&#261;cza opcje gadatliw&#261;, wypisywane s&#261; informacje z przebiegu kompilacji.
+</p>
+
+<p>je&#380;eli jest podane -no+proxy wygenerowany kod nie jest zale&#380;ny od
+pakietu pnuts.compiler jednak wywo&#322;anie metod nie bezie zoptymalizowane.</p><tt>-prefix </tt><em>name &nbsp;</em>ustawia domy&#347;lny prefiks wygenerowanych klas
+
+
+
+
+<pre class="eg">D:\pnuts&gt; pnutsc -o pnuts-precompiled.jar pnuts/util/*.pnut pnuts/lib/*.pnut pnuts/gui/*.pnut pnuts/regex/*pnut<br>
+</pre><span style="font-family: monospace;">-C ustawia bie&#380;&#261;cy katalog na </span><em><span style="font-family: monospace;">katalog_bazowy</span></em> a nast&#281;pnie kompiluje<p>If <tt>-main</tt> powoduje wygenerowanie klasy startowej <em>mainClass</em> z metod&#261; <tt>main()</tt> w kt&oacute;rej jest wykonany kod.
+</p>
+
+<pre class="eg"><br>public class mainClass extends <a href="../apidoc/pnuts/lang/Runtime.html">pnuts.lang.Runtime</a> {<br>   public Object run(Context ctx){<br>      ctx.usePackage(module1);<br>      ctx.usePackage(module2);<br>      ...<br>      new className1().run((Context)ctx.clone());<br>      new className2().run((Context)ctx.clone());<br>      ...<br>   }<br>   public static void main(String args[]){<br>      Pnuts.set("$args", args);<br>      new mainClass().run(new Context());<br>   }<br> }<br></pre>
+
+<div class="eg">Przyk&#322;ad: hello.pnut
+<pre>println("hello")<br></pre>
+</div>
+
+<pre class="eg">C:\&gt; pnutsc -o hello.jar -main Hello -m pnuts.lib hello.pnut<br>C:\&gt; java -classpath "hello.jar;pnuts.jar;pnuts-modules.jar" Hello<br></pre>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt;&nbsp;Kompilacja skrypt&oacute;w z linii polece&#324;
+</div>
+
+  </body></html>

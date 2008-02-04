@@ -1,0 +1,238 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Internationalization</div>
+
+    <h2>Internationalization</h2>
+
+<h3>Locale information</h3>
+
+<a name=getLocale></a>
+<div class="box">
+<div class="synopsis"><b>getLocale</b><tt>()</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>locale_string</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Locale.html">Locale</a>
+</tt><em>locale</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getLocale()</tt> returns the <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Locale.html">Locale</a>
+object of the current context.  
+<p>
+
+<p>
+When <em>locale_string</em> is specified, it returns the java.util.Locale object.
+<em>locale_string</em> should be a '<tt>_</tt>' separated string that contains lanuage, country and variant in that order.
+</p>
+<p>
+When <em>locale</em> is specified, just returns it.
+</p>
+<pre class="eg">
+loc = getLocale()
+println("Language: ", loc.language)
+println("Country: ", loc.country)
+</pre>
+
+<a name=setLocale></a>
+<div class="box">
+<div class="synopsis"><b>setLocale</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>locale_string</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Locale.html">Locale</a> </tt><em>locale</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>setLocale()</tt> changes the Locale of the current context.
+</p>
+<p>
+When <em>locale_string</em> is specified, it should be a '<tt>_</tt>' separated string that contains lanuage, country and variant in that order.
+</p>
+
+<h3>Localized Resource</h3>
+
+<a name=getLocalizedResource></a>
+<div class="box">
+<div class="synopsis"><b>getLocalizedResource</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>rsrcName</em> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>language</em> {, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>country</em> } })</tt></div>
+</div>
+
+<p>
+<tt>getLocalizedResource()</tt> gets a localized resource using the
+specified <em>resourceName</em> and the locale information.  The
+candidates of the localized resource are made in the following rules.
+</p>
+
+<ol>
+<li> basename + "_" + language + "_" + country + "." + extension
+<li> basename + "_" + language + "." + extension
+<li> basename + "." + extension
+</ol>
+
+<p>
+For example, imagin that your system's default locale is fr_FR and you
+want to localize a resource called "<tt>hello.txt</tt>".  
+</p>
+
+<pre class="eg">
+getLocalizedResource("hello.txt")
+</pre>
+
+<p>
+If you have "<tt>hello_fr_FR.txt</tt>", <tt>getLocalizedResource()</tt> returns
+the file as a URL object.
+<p>
+If you have "<tt>hello_fr.txt</tt>" but not "<tt>hello_fr_FR.txt</tt>", <tt>getLocalizedResource()</tt> returns
+"<tt>hello_fr.txt</tt>" as a URL object.
+<p>
+If neither "<tt>hello_fr_FR.txt</tt>" nor "<tt>hello_fr.txt</tt>" are found,
+<tt>getLocalizedResource()</tt> returns "<tt>hello.txt</tt>" as a URL object
+</p>
+
+<h3>Internationalized message</h3>
+
+<a name=formatMessage></a>
+<div class="box">
+<div class="synopsis"><b>formatMessage</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>bundleName</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>key</em> <tt>{, parameters ...} )</tt></div>
+</div>
+
+<p>
+Gets the value of <em>key</em> from a resource bundle (<em>bundleName</em>) based on the Locale of the current context.
+When one or more <em>parameters</em> are specified, it formats a message through <a href="http://java.sun.com/j2se/1.4/docs/api/java/text/MessageFormat.html#format(java.lang.String, java.lang.Object[])"><tt>MessageFormat::format()</tt></a> method.
+</p>
+
+<pre class="eg">
+formatMessage("pnuts/lang/pnuts", "autoload.failed")
+
+   ==> ResourceBundle::getBundle("pnuts/lang/pnuts", Locale::getDefault()).getObject("autoload.failed")
+
+formatMessage("pnuts/lang/pnuts", "autoload.failed", "foo.pnut")
+
+   ==> MessageFormat::format(
+           ResourceBundle::getBundle("pnuts/lang/pnuts", LC).getObject("autoload.failed"),
+          ["foo.pnut"])
+</pre>
+
+<a name="getResourceBundle"></a>
+
+<div class="box">
+<div class="synopsis"><em>bundle = </em> <b>getResourceBundle</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs//api/java/net/URL.html">URL</a> </tt><em>url</em>, 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>bundleName</em> {, ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Locale.html">Locale</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> } <em>locale</em> } )</tt></div>
+<div class="synopsis"><em>bundle</em><tt>.formatMessage(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>key</em> { , <em>parameters</em> ...} )</div>
+</div>
+<p>
+<tt>getResourceBundle()</tt> return a handle to access the internationalized resource bundle.
+ </p>
+<pre class="eg">
+b = getResourceBundle("pnuts.jar", "pnuts/lang/pnuts")
+println(b.formatMessage("not.defined", "foo"))
+</pre>
+
+<h3>Locale-sensitive Number Formats</h3>
+
+<a name=formatNumber></a>
+<a name=formatCurrency></a>
+<a name=formatPercent></a>
+<div class="box">
+<div class="synopsis"><b>formatNumber</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>fmin</em><tt> }) </tt> or</div>
+<div class="synopsis2"><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>, String </tt><em>format</em><tt> ) </tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>imin</em> <tt>, int </tt><em>imax</em> <tt>, int </tt><em>fmin</em> <tt>, int </tt><em>fmax</em><tt> } )</tt></div>
+<div class="synopsis"><b>formatCurrency</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>fmin</em><tt> }) </tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>imin</em> <tt>, int </tt><em>imax</em> <tt>, int </tt><em>fmin</em> <tt>, int </tt><em>fmax</em><tt> } )</tt></div>
+<div class="synopsis"><b>formatPercent</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>fmin</em><tt> }) </tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>imin</em> <tt>, int </tt><em>imax</em> <tt>, int </tt><em>fmin</em> <tt>, int </tt><em>fmax</em><tt> } )</tt></div>
+</div>
+
+<P>
+Gets a formatted number, currency, and percent number respectively.
+</P>
+
+<p>
+<em>imin, imax, fmin, fmax</em> sets the number of digits for integer part 
+      or fraction part.
+    When the value is <tt>-1</tt> the default value is applied.
+</p>
+
+<blockquote>
+<dl>
+<dt><em>imin</em>
+<dd>the minimum integer digits for the NumberFormat
+<dt><em>imax</em>
+<dd>the maximum integer digits for the NumberFormat
+<dt><em>fmin</em>
+<dd>the minimum fraction digits for the NumberFormat
+<dt><em>fmax</em>
+<dd>the maximum fraction digits for the NumberFormat
+</dl>
+</blockquote>
+
+<pre class="eg">
+fmt1 = formatNumber(12345)
+fmt2 = formatCurrency(12345)
+fmt3 = formatPercent(0.12, 3)
+</pre>
+
+<tt>The <em>format</em> string given to formatNumber(<em>number</em>, <em>format</em>)</tt> should be a <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/text/DecimalFormat.html">java.text.DecimalFormat</a> patterns.
+
+<pre class="eg">
+formatNumber(123.456, "0000")
+</pre>
+
+<a name=formatDate></a>
+<a name=formatTime></a>
+<a name=formatDateTime></a>
+<div class="box">
+<div class="synopsis"><b>formatDate</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>aDate</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>style</em><tt> } )</tt></div>
+<div class="synopsis"><b>formatTime</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>aDate</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>style</em><tt> } )</tt></div>
+<div class="synopsis"><b>formatDateTime</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>aDate</em><tt></div>
+<div class="synopsis2">{, ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>style</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>style</em><tt> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt> <em>pattern</em><tt> ) } )</tt></div>
+</div>
+
+<P>
+Gets a formatted date, time, and both respectively.
+</P>
+
+<p>
+If <em>style</em> is omitted "DEFAULT" is passed implicitly.
+<em>style</em> can be one of the followings (case-insensitive):
+
+<ul>
+<li>"full"
+<li>"long"
+<li>"medium"
+<li>"short"
+</ul>
+</p>
+
+<p>
+If two parameters are given to <tt>formatDateTime()</tt>, the date
+value is formated using <em>pattern</em> string, which is defined in <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">java.text.SimpleDateFormat</a>.
+</p>
+
+<pre class="eg">
+formatDate(date(), "full")
+formatTime(date(), "short")
+formatDateTime(date(), "yyyy/MM/dd HH:mm:ss z")
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Internationalization</div>
+
+  </body>
+</html>

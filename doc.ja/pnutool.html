@@ -1,0 +1,91 @@
+<html>
+<head>
+  <title>Pnuts ユーザーズガイド</title>
+  <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <META Http-Equiv="Content-Style-Type" Content="text/css">
+  <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+</head>
+    <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> PnutsのGUI環境
+</div>
+
+<!-- body start -->
+
+<h2>Pnuts の GUI 環境</h2>
+
+
+<a name="console"></a>
+<h3>pnuts -w</h3>
+
+<div class="box">
+<code>
+<div>C:\> pnuts -w</div>
+</code>
+</div>
+
+<p>
+<tt>pnuts</tt>コマンドに<tt>-w</tt>オプションが指定されると、SwingベースのGUIコンソールが出ます。
+</p>
+
+<center><img src="images/console.png"></center>
+
+<a name="pnutool"></a>
+<h3>Pnutool</h3>
+
+<p> 'pnutool' は Pnuts の GUI 環境です。すべて Pnuts 言語でかかれています。
+pnutool を使えば、すべての Java の public API を呼び出して結果を見ることができます。
+</p>
+
+<div class="box">
+<code>
+<div>C:\> pnuts -e pnutool()</div>
+</code>
+</div>
+
+<p>
+pnutool にはテキスト入力領域が上下に2つ並んでいます。上からワークスペースと
+     アウトプット・エリアと呼びます。ワークスペースはユーザがコマンドを入力する領域です。実行結果はアウトプット・エリアに表示されます。
+</p>
+
+<center><img src=images/pnutool-j.gif></center>
+
+<p>
+File メニューの Open, Load, Save はアプリケーションからのみ利用可能です。
+選択肢 Open はローカルファイルを開きワークスペースに表示します。 Open URL は指定された URL のドキュメントを読み込みワークスペースに表示します。Save はワークスペースの内容をダイアログで指定したファイルに保存します。Load はローカルファイルシステムからスクリプトを読み込んで評価します。
+</p>
+
+<h4>スクリプトの実行</h4>
+<p>
+Eval はユーザの入力をインタプリタに渡して評価します。ワークスペースで何らかの文字列が選択されていれば、その部分がインタプリタに渡されます。何も選択されていない場合はカーソルのある行を評価します。
+</p>
+
+<center><img src=images/filemenu-j.gif></center>
+
+<p>
+たとえば、次のコマンドをワークスペースに入力して、すべての文字列を選択します。
+そして、Eval を実行します(または Ctrl-j)。
+</p>
+
+<pre>
+import("java.awt.*")
+frame = Frame("test")
+frame.setSize(100, 100)
+frame.show()
+</pre>
+
+<p>
+結果として Frame オブジェクトが作られ表示されます。ウィンドウの大きさが変更するために 2 行目のコマンドを <tt>frame.setSize(200, 200)</tt>に変更し、その行を選択します。そして、再び Eval を実行します。ウィンドウは 2 倍の大きさになるはずです。
+</p>
+<center><img src=images/selection-j.gif></center>
+<p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> PnutsのGUI環境
+</div>
+
+</body>
+</html>

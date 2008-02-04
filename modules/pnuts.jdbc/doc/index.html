@@ -1,0 +1,297 @@
+ <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.jdbc module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.jdbc</tt></div>
+
+    <h2><tt>pnuts.jdbc</tt> module</h2>
+
+<p>
+The <tt>pnuts.jdbc</tt> module defines high level functions on top of <a href="http://java.sun.com/j2se/1.4/docs/guide/jdbc/index.html">JDBC</a> API.
+</P>
+<ul>
+<li><a href="#openJDBC">openJDBC</a>
+<li><a href="#load"><em>jdbc</em> . load</a>
+<li><a href="#execute"><em>jdbc</em> . execute</a>
+<li><a href="#query"><em>jdbc</em> . query</a>
+<li><a href="#insert"><em>jdbc</em> . insert</a>
+<li><a href="#update"><em>jdbc</em> . update</a>
+<li><a href="#updateOrInsert"><em>jdbc</em> . updateOrInsert</a>
+<li><a href="#session"><em>jdbc</em> . session</a>
+<li><a href="#getConnection"><em>jdbc</em> . getConnection</a>
+<li><a href="#getAutoCommit"><em>jdbc</em> . getAutoCommit</a>
+<li><a href="#setAutoCommit"><em>jdbc</em> . setAutoCommit</a>
+<li><a href="#commit"><em>jdbc</em> . commit</a>
+<li><a href="#rollback"><em>jdbc</em> . rollback</a>
+<li><a href="#close"><em>jdbc</em> . close</a>
+</ul>
+
+<a name=openJDBC></a>
+<div class="box">
+<div class="synopsis"><tt><b>openJDBC</b> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>driverName</em><tt> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>jdbc_url</em><tt> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Properties.html">Properties</a></a> </tt><em>properties</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+</tt><em>driverName</em><tt> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>jdbc_url</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></a>
+</tt><em>propertyDefinition</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+</tt><em>driverName</em><tt> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>jdbc_url</em><tt> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></a>
+</tt><em>username</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></a> </tt><em>password</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/javax/sql/DataSource.html">DataSource</a></tt> <em>dataSource</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/sql/Connection.html">Connection</a></tt> <em>connection</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt> <em>dataSoureceJndiName</em><tt> )</tt> </div>
+</div>
+
+<p>
+Open a JDBC connection.
+</p>
+<p>
+<em>propertyDefinition</em> must be formatted in such a way Properties.load() method can read.
+</P>
+
+<div class="eg">
+<pre>
+jdbc = openJDBC("org.gjt.mm.mysql.Driver",
+                "jdbc:mysql://localhost/mysql",
+                "user=foo\npassword=bar")
+</pre>
+</div>
+<p>
+The rest of the functions in this module are called in method-call style with the result of openJDBC as its target
+</p>
+
+
+<a name=load></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>load</b> ( </tt><em>input</em><tt> {, boolean </tt><em>verbose</em><tt> } )</tt></div>
+</div>
+
+<p>
+Loads sql commands from <em>input</em>. If <em>verbose</em> is true results are printed for each query in <em>input</em>.
+</p>
+
+<div class="eg">
+<pre>
+jdbc.load("/tmp/test.sql")
+</pre>
+</div>
+<a name=execute></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>execute</b> ( </tt><em>query</em><tt> {, </tt><em>parameters</em><tt> } )</tt></div>
+</div>
+<p>
+Send a query to a JDBC connection. The query should be either a string or a java.sql.PreparedStatement.
+If an array or List is given as <em>parameters</em>, they are used as the query's parameters. 
+</p>
+
+<div class="eg">
+<pre>
+jdbc.execute("delete from PERSON where name=?", ["John"])
+</pre>
+</div>
+
+
+<a name="query"></a>
+
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>query</b> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>query</em><tt>  {, </tt><em>parameters</em><tt> })</tt></div>
+</div>
+<p>
+Send a query to a JDBC connection and returns a generator object that generates each row of the query result.
+The query should be either a string or a java.sql.PreparedStatement. If an array or List is given as <em>parameters</em>, they are used as the query's parameters. 
+<p>
+Generated objects implement java.uti.Map and pnuts.lang.Indexed interface, so that
+the columns can be accessed by specifying column names or column indexes.
+</p>
+<div class="eg">e.g.
+<pre>
+for (i : jdbc.query("select * from PERSON")){
+    println(i.name)
+    println(i[0])
+}
+</pre></div>
+
+<p>
+The result of query() might not create a new object for each loop, depending on the JDBC driver's implementation.
+Therefore, when each row is added to a List object, it is necessary to create a copy for each row calling <a href="../../pnuts.lib/doc/array.html#map">map()</a> function
+</p>
+<div class="eg">e.g.
+<pre>
+x = list()
+for (i : jdbc.query("select * from PERSON")) x.add(map(i))
+</pre></div>
+
+<a name="insert"></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>insert</b> ( </tt><em>table</em> , <em>map</em><tt> )</tt></div>
+<div class="synopsis"><em>jdbc</em><tt> . <b>insert</b> ( </tt><em>table</em> , <em>columns</em> , <em>row_generator</em> { , <em>batchSize</em> } <tt> )</tt></div>
+</div>
+
+<p>
+<tt>insert()</tt> adds a row to the specified <em>table</em>.  
+<p>
+When <em>map</em> is specified, that should have column-value mappings.
+</P>
+
+<div class="eg">
+<pre>
+row = {"name" => "Chihiro", "age" => 3}
+jdbc.insert("person", row)
+</pre>
+</div>
+
+<p>
+When <em>columns</em>, <em>row_generator</em>, and optional <em>batchSize</em> are given, 
+<em>columns</em> should be an array or a List of the column names.
+<em>row_generator</em> should be a Generator that generates the rows, each of which is an array or a List of the column values.
+<em>batchSize</em> should be the buffer size of the batch execution.
+</p>
+
+<div class="eg">
+<pre>
+columns = ["name", "age"]
+function gen(){
+  yield ["Chihiro", 5]
+  yield ["Sae", 3]
+  yield ["Yoshikazu", 0]
+}
+jdbc.insert("person", columns, gen())
+</pre>
+</div>
+
+<a name="update"></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>update</b> ( </tt><em>table</em> , <em>condition_map</em> , <em>values_map</em><tt> )</tt></div>
+</div>
+<p>
+<em>condition_map</em> is a java.util.Map object that corresponds to the WHERE clause. <em>values_map</em> is a java.util.Map object that contains the new values.
+</p>
+<div class="eg">
+<pre>
+jdbc.update("person", {"name"=>"Chihiro"}, {"age"=>5})
+</pre>
+</div>
+
+<a name="updateOrInsert"></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>updateOrInsert</b> ( </tt><em>table</em> , <em>condition_map</em> , <em>values_map</em><tt> )</tt></div>
+</div>
+<p>
+<em>condition_map</em> is a java.util.Map object that corresponds to the WHERE clause. <em>values_map</em> is a java.util.Map object that contains the new values.
+</p>
+<p>
+This function requires that the JDBC driver supports updatable ResultSet.
+</p>
+
+<div class="eg">
+<pre>
+jdbc.updateOrInsert("person", {"name"=>"Chihiro"}, {"age"=>5})
+</pre>
+</div>
+
+<a name=session></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>session</b> (  )</tt></div>
+</div>
+
+<p>
+Starts a SQL interpreter session.  This function should be used in batch mode because race condition for System::in occurs in interactive mode.
+</p>
+<div class="eg">e.g. (mysql.pnut)
+<pre>
+use("pnuts.jdbc")
+
+jdbc = openJDBC("org.gjt.mm.mysql.Driver",
+                "jdbc:mysql://localhost/mysql?user=root")
+jdbc.session()
+jdbc.close()
+</pre>
+</div>
+<p>
+<div class="eg">
+<pre>
+C:\&gt;pnuts mysql.pnut
+% show tables
+....
+</pre>
+</div>
+  
+<a name=getConnection></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>getConnection</b> (  )</tt></div>
+</div>
+
+<p>
+Returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/sql/Connection.html">java.sql.Connection</a>
+object which represents the current JDBC connection.
+</p>
+
+<a name=getAutoCommit></a>
+<a name=setAutoCommit></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>getAutoCommit</b> (  )</tt></div>
+<div class="synopsis"><em>jdbc</em><tt> . <b>setAutoCommit</b> ( boolean )</tt></div>
+</div>
+
+<p>
+<tt>getAutoCommit()</tt> retrieves the current auto-commit mode for the current connection.
+<tt>setAutoCommit()</tt> sets this connection's auto-commit mode to the given state.
+</p>
+
+<a name=commit></a>
+<a name=rollback></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>commit</b> (  )</tt></div>
+<div class="synopsis"><em>jdbc</em><tt> . <b>rollback</b> (  )</tt></div>
+</div>
+
+<p>
+<tt>commit()</tt> makes all changes made since the previous
+commit/rollback permanent and releases any database locks currently held
+by the current connection.
+</p>
+<p>
+<tt>rollback()</tt> undoes all changes made in the current transaction
+and releases any database locks currently held by the current connection.
+</p>
+
+<div class="eg">
+<pre>
+try {
+   con.execute("update wiki set name=? text=?", [name, text])
+   ..
+   con.commit()
+} catch(Exception e){
+   con.rollback()
+}
+</pre>
+</div>
+
+<a name=close></a>
+<div class="box">
+<div class="synopsis"><em>jdbc</em><tt> . <b>close</b> (  )</tt></div>
+</div>
+<p>
+Close the JDBC connection.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.jdbc</tt></div>
+
+
+  </body>
+</html>

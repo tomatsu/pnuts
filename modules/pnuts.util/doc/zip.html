@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ZIP File</div>
+
+    <h2>ZIP File</h2>
+
+<a name=readZip></a>
+<div class="box">
+<div class="synopsis"><b>readZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt>, { </tt><em>handler</em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>) } )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>url</b></em><tt>, { </tt><em>handler</em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>) } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>, { </tt><em>handler</em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>) } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>inputStream</b></em><tt>, { </tt><em>handler</em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> </tt><em>entry</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipInputStream.html">ZipInputStream</a></tt> <em>input</em><tt>) } )</tt></div>
+</div>
+
+<p>
+When <em>handler</em> is not specified, the entries of the ZIP file are printed.
+</p>
+
+<pre class="eg">
+&gt; readZip("pnuts.jar")
+       0 Fri May 05 18:30:30 JST 2000 pnuts/
+       0 Fri May 05 18:30:30 JST 2000 pnuts/awt/
+    2869 Tue May 30 16:08:32 JST 2000 pnuts/awt/DialogOutputStream.class
+    4980 Fri May 05 18:30:30 JST 2000 pnuts/awt/Layout.class
+....
+</pre>
+
+
+<p>
+When <em>handler</em> is specified, the function is called with two arguments; a ZipEntry object that represents each entry of the ZIP file, and ZipInputStream object from which the content of the entry is read.
+</p>
+
+<p>
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> has the following properties.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Type</th>
+<th bgcolor=#eeeeee>Property Name</th>
+<th bgcolor=#eeeeee>Remark</th>
+</tr>
+<tr class=wb>
+      <td>String</td>
+      <td>name</td>
+      <td></td>
+</tr>
+<tr class=wb>
+      <td>long</td>
+      <td>time</td>
+      <td></td>
+</tr>
+<tr class=wb>
+      <td>boolean</td>
+      <td>directory</td>
+      <td></td>
+</tr>
+<tr class=wb>
+      <td>long</td>
+      <td>size</td>
+      <td>Need to read <em>input</em> until EOF is found, or just call <em>input</em><tt>.closeEntry()</tt>, before accessing this property</td>
+</tr>
+<tr class=wb>
+      <td>long</td>
+      <td>compressedSize</td>
+      <td>Same as above</td>
+</tr>
+</table>
+</blockquote>
+<p>
+For instance, the following function writes the content of a file in a ZIP file to the specified OutputStream.
+<p>
+
+<pre class="eg">
+function extract(zipfile, name, out){
+  readZip(zipfile, function (e, in) if (e.name == name) read(in, out))
+}
+</pre>
+
+<a name="readZipEntries"></a>
+
+<div class="box">
+<div class="synopsis"><b>readZipEntries</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>fileName</b></em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>url</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>inputStream</b></em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>readZipEntries()</tt> returns a generater which generates references to the archived files.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Property Name</th>
+<th bgcolor=#eeeeee>Type</th>
+</tr>
+<tr class=wb>
+      <td>input</td>
+      <td>InputStream</td>
+</tr>
+<tr class=wb>
+      <td>entry</td>
+      <td>ZipEntry</td>
+</tr>
+<tr class=wb>
+      <td>entry.name</td>
+      <td>String</td>
+</tr>
+<tr class=wb>
+      <td>entry.time</td>
+      <td>long</td>
+</tr>
+<tr class=wb>
+      <td>entry.directory</td>
+      <td>boolean</td>
+</tr>
+<tr class=wb>
+      <td>entry.size</td>
+      <td>long</td>
+</tr>
+<tr class=wb>
+      <td>entry.compressedSize</td>
+      <td>long</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">e.g.
+<pre>
+for (e : readZipEntries(zfile)){
+   println(e.entry.name)
+}
+</pre></div>
+
+
+<a name=openZip></a>
+<div class="box">
+<div class="synopsis"><b>openZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>in</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>out</b></em><tt>)</tt> or</div>
+<div><dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>file</b></em> , <em>mode</em><tt>)</tt> or</div>
+<div><dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em> , <em>mode</em><tt>)</tt></div>
+</div>
+<p>
+If an InputStream is specified, <tt>openZip()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipInputStream.html"><tt>ZipInputStream</tt></a> object. If an OutputStream is specified, it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html"><tt>ZipOutputStream</tt></a> object.
+</p>
+
+<a name=extractZip></a>
+
+<div class="box">
+<div class="synopsis"><b>extractZip</b><tt>(</div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>fileName</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>file</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> <em>input</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> <em>url</em> ),</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>fileName</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>file</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> <em>zout</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> <em>output</em> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> <em>writer</em> ), </tt></div>
+<div class="synopsis2"> {, </tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>entryName</em> | <em>matchFunction</em><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>entryName</em><tt>) ) } )</tt></div>
+</div>
+<p>
+<tt>extractZip()</tt> extracts the specified entries of a ZIP file in a number of ways.
+
+<p>
+First parameter specifies the ZIP file to be read. 
+</p>
+
+<p>
+If <em>entryName</em> is specified as the third parameter, ZIP entries that matches the <em>entryName</em> are extracted.  If <em>matchFunction</em> is specified, ZIP entries that the function returns true are extracted.
+</p>
+
+
+<pre class="eg">
+function matchFunction(entryName) ...
+</pre>
+
+<p>
+If only two parameters are specified, all entries of the ZIP file are extracted.
+</p>
+<div class="eg">e.g.
+<pre>
+extractZip("foo.zip", ".")
+</pre>
+</div>
+
+
+<p>
+If the 2nd argument is a directory, the entries of the ZIP file are saved in the directory.
+If the 2nd argument is a file, the ZIP entries are stored in the file.
+<p>
+<div class="eg">e.g.
+<pre>
+extractZip("rt.jar", "script.jar", function (n) n.startsWith("javax/script/"))
+</pre>
+</div>
+
+<p>
+If the 2nd argument is a ZipOutputStream, the ZIP entries are written to the stream.
+<p>
+<div class="eg">e.g.
+<pre>
+zout = openZip(open("jarfile", "w"))
+extractZip("pnuts.jar", zout, function (n) n.startsWith("javax/script/"))
+zout.close()
+</pre>
+</div>
+
+<p>
+If either <em>output</em> or <em>writer</em> is specified, a Zip entry is written to the stream.
+</p>
+
+<div class="eg">e.g.
+<pre>
+extractZip("pnuts.jar", getContext().getOutputStream(), "pnuts/lang/pnuts.properties")
+</pre>
+</div>
+
+<a name=writeZip></a>
+
+<div class="box">
+<div class="synopsis"><b>writeZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt>, (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String[]</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>) <em>fileList</em><tt>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>outputStream</b></em><tt>, (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String[]</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> ) <em>fileList</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>, (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String[]</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> ) <em>fileList</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>zout</b></em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> <em>zipEntry</em><tt> , </tt><em>streamHandler (zout) </em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeZip()</tt> creates a ZIP file from the all files in <em>fileList</em> or <em>directory</em>, and saves it in the file named <em>fileName</em> or writes to the specified <em>outputStream</em>.
+</p>
+
+<pre class="eg">
+writeZip("foo.zip", ["foo.txt", "bar.class"])
+
+writeZip("classes.zip", "classes")
+</pre>
+
+<p>
+<tt>writeZip()</tt> with three arguments adds a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipEntry.html">ZipEntry</a> to the specified <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> and writes the result of <em>streamHandler</em> for the Zip entry.
+</p>
+
+
+<a name="writeZipEntries"></a>
+
+<div class="box">
+<div class="synopsis"><b>writeZipEntries</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt>, </tt><em>entries</em><tt>)</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>outputStream</b></em><tt>, </tt><em>entries</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>, </tt><em>entries</em><tt>)</tt></div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>zout</b></em><tt>, </tt><em>entries</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeZipEntries()</tt> creates a ZIP file, specifying a generater that generates references to the archived files. The file references should have the following properties.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Property Name</th>
+<th bgcolor=#eeeeee>Type</th>
+</tr>
+<tr class=wb>
+      <td>input</td>
+      <td>InputStream (any objects that open() can handle),　<tt>null</tt></td>
+</tr>
+<tr class=wb>
+      <td>entry.name</td>
+      <td>String</td>
+</tr>
+<tr class=wb>
+      <td>entry.time</td>
+      <td>long</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">e.g.
+<pre>
+function fileEntries(dir){
+    for (i : dir.files()){
+      f = File(i)
+      yield {"entry"=>{"name"=>f.name, "time"=>f.lastModified()},
+             "input"=>isDirectory(f) ? null : f}
+    }
+}
+writeZipEntries(filename, fileEntries("src"))
+</pre></div>
+
+<a name=updateZip></a>
+<div class="box">
+<div class="synopsis"><b>updateZip</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>zipfile</b></em><tt> ,  <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>entryName</b></em><tt> , </tt></tt><em>streamHandler</b></em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>zout</b></em><tt>) )</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>zipfile</b></em><tt> ,  <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>entryName</b></em><tt> , </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>updateZip()</tt> replaces the specified entry ( <em>entryName</em> ) of the ZIP file ( <em>zipfile</em> ) with the output of specified function <em>streamHandler</em>, or the contents of <em>fileName</em>.
+
+<p>
+If the 3rd parameter is null, the ZIP entry is deleted from the ZIP file.  When the 3rd parameter is non-null and the <em>entryName</em> is not in the ZIP file, new ZIP entry is added. 
+</p>
+
+<a name=mergeZip></a>
+
+<div class="box">
+<div class="synopsis"><b>mergeZip</b><tt>(</tt><em>files</em><tt> [], </tt><em>output</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>mergeZip()</tt> reads the all entries of the ZIP <em>files</em> using <a href="#readZip"><tt>readZip</tt></a> and writes them to <em>output</em>.  If a Zip entry duplicates, only the first one is written to the output.
+<p>
+
+
+<pre class="eg">
+mergeZip(["foo.zip", "bar.jar"], "new.zip")
+mergeZip([openURL("http://host/updated.jar"), "original.jar"], "new.jar")
+</pre>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ZIP File</div>
+
+  </body>
+</html>

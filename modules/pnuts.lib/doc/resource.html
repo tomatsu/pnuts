@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> File, URL,
+and Resource/</div>
+
+<h3>File</h3>
+
+<a name=getFile></a>
+<div class="box">
+<div class="synopsis"><b>getFile</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>path</em></a><tt> } )</tt> or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>path</em></a><tt> })</tt></div>
+</div>
+
+<p>
+<tt>getFile()</tt> returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html"><tt>java.io.File</tt></a>
+object.  If the 2nd argument <em>path</em> is specified,  it returns a
+relative File from the one created from the 1st argument.
+</p>
+
+<h3>URL</h3>
+
+<a name=getURL></a>
+<div class="box">
+<div class="synopsis"><b>getURL</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>path</em></a><tt> } )</tt> or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>path</em></a><tt> })</tt>  or</div>
+<div class="synopsis2">(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>path</em></a><tt> })</tt></div>
+</div>
+<p>
+<tt>getURL()</tt> returns a URL object converted from the argument.
+When <em>path</em> is specified, it returns a relative URL from the
+one created from the 1st argument.
+</p>
+
+<h3>Resource</h3>
+
+<p>
+See also <a href="http://java.sun.com/j2se/1.4/docs/guide/resources/">http://java.sun.com/j2se/1.4/docs/guide/resources/</a> for information on resources.
+</p>
+
+<a name=getResource></a>
+
+<div class="box">
+<div class="synopsis"><b>getResource</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt>)</tt>
+</div>
+</div>
+
+<p>
+<tt>getResource()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> Object that represents the specified resource.
+</p>
+
+<div class="eg">e.g.
+<pre>
+rsrc = getResource("pnuts/lib/init.pnut")
+read(rsrc.openStream())
+
+printAll(getResource("pnuts/lib/init.pnut"))
+</pre>
+</div>
+
+<h3>File Name</h3>
+
+<a name="basename"></a>
+<div class="box">
+<div class="synopsis"><b>basename</b><tt>( (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>  | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>　) </tt><em>filename</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>suffix</em></a> } )</tt></div>
+</div>
+<p>
+Given a string containing a <em>path</em> to a file, this function will return the base name of the file. If the filename ends in suffix this will also be cut off.
+</p>
+</p>
+<div class="eg">
+<pre>
+basename("/htdocs/index.html") ---> "index"
+basename("/htdocs/index.html", ".html") ---> "index"
+basename("/htdocs/index.html", ".txt") ---> "index.html"
+</pre>
+</div>
+
+<a name="dirname"></a>
+<div class="box">
+<div class="synopsis"><b>dirname</b><tt>( (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>  | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>　) </tt><em>path</em><tt> )</tt></div>
+</div>
+<p>
+Given a string containing a <em>path</em> to a file, this function will return the name of the directory.
+</p>
+</p>
+<div class="eg">
+<pre>
+dirname("/etc/passwd") ---> /etc
+dirname("/usr/local/bin/") ---> /usr/local
+</pre>
+</div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> File, URL,
+and Resource/</div>
+  </body>
+</html>

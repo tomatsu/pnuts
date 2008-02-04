@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.mail module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.mail</tt></div>
+
+
+<h2><tt>pnuts.mail</tt> module</h2>
+
+<p>
+This module is used for sending emails from Pnuts scripts.
+The <a href="http://java.sun.com/products/javamail">Java Mail</a> API is required to use this module.
+</p>
+
+<ul>
+<li><a href="#emailAddress">emailAddress</a>
+<li><a href="#mimepart">mimepart</a>
+<li><a href="#sendEmail">sendEmail</a>
+<li><a href="#setMailCharset">setMailCharset</a>
+<li><a href="#openMailStore">openMailStore</a>
+<li><a href="#openMailFolder">openMailFolder</a>
+<li><a href="#getMessages">getMessages</a>
+<li><a href="#listMailFolders">listMailFolders</a>
+</ul>
+
+
+<h3>Sending Email</h3>
+
+<a name=sendEmail></a>
+<div class="box">
+<div class="synopsis"><b>sendEmail</b> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> <em>map</em> ) or</div> 
+<div class="synopsis2">( <em>mailhost</em>, <em>subject</em>, <em>content</em>,
+<em>from</em>, <em>to</em> {, <em>cc</em>, <em>bcc</em>,
+<em>replyTo</em>, <em>charset</em> } )</div>
+</div>
+<p>
+<tt>sendEmail()</tt> sends an email. If a Map object is specified, the
+following keys are used.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>Key</th>
+  <th bgcolor=#eeeeee>Value</th>
+</tr>
+<tr class="wb">
+<td><em>mailhost</em>
+<td><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+(if null, "localhost" is used instead)
+<tr class="wb">
+<td><em>subject</em>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<tr class="wb">
+<td><em>content</em>
+<td><a
+href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/MimeMultipart.html">MimeMultipart</a>,
+<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/MimeBodyPart.html">MimeBodyPart</a>
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>, 
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>, 
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>, or Array/Collection/Generator of those objects.
+
+<tr class="wb">
+<td><em>charset</em>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+
+<tr class="wb">
+<td><em>from</em>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> or <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>
+<tr class="wb">
+<td><em>to</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>, or Array/Collection/Generator of those objects.
+<tr class="wb">
+<td><em>cc</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>, or Array/Collection/Generator of those objects.
+<tr class="wb">
+<td><em>bcc</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>, or Array/Collection/Generator of those objects.
+<tr class="wb">
+<td><em>replyTo</em>
+<td><a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>, or Array/Collection/Generator of those objects.
+<tr class=wb>
+<td><em>userid</em>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</td></tr>
+<tr class=wb>
+<td><em>password</em>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</td></tr>
+<tr class=wb>
+<td><em>ssl</em>
+<td>boolean
+</td></tr>
+</table>
+</blockquote>
+
+<div class="eg">e.g.<pre>
+sendEmail("mailhost", "subject", "Hello!", "myname", "friends")
+</pre></div>
+<pre class="eg">
+m = map()
+m.mailhost = "foo.bar.com"
+m.subject = "test"
+m.from = "myname"
+m.to = "friends"
+m.content = "Hello!"
+sendEmail(m)
+</pre>
+
+<a name=emailAddress></a>
+<div class="box">
+<div class="synopsis"><b>emailAddress</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>address</em><tt> { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>personal_information</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>emailAddress()</tt> makes an <a
+href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/InternetAddress.html">InternetAddress</a>
+object from <em>address</em> and optional
+<em>personal_information</em>.  If <em>personal_information</em>
+includes any non-ASCII character, appropriate charset must be
+registerred with <tt>setMailCharset()</tt> before the
+<tt>emailAddress()</tt> call.
+</p>
+
+<div class="eg"><pre>
+emailAddress("foo@bar.com", "whoever")
+</pre>
+</div>
+<a name=setMailCharset></a>
+<div class="box">
+<div class="synopsis"><b>setMailCharset</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>charset</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>setMailCharset()</tt> registers the default charset for email content,
+subject, and personal information of email addresses.
+</p>
+
+<a name=mimepart></a>
+<div class="box">
+<div class="synopsis"><b>mimepart</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>content</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mimeType</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>mimepart()</tt> makes a <a
+href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/internet/MimeBodyPart.html">MimeBodyPart</a>
+object from <em>content</em> and <em>mimeType</em>.
+</p>
+
+<div class="eg"><pre>
+html = mimepart("&lt;html&gt;...&lt;/html&gt;", "text/html")
+</pre>
+</div>
+
+<h3>Receiving Email</h3>
+
+<a name=openMailStore></a>
+<div class="box">
+<div class="synopsis"><b>openMailStore</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>url</em><tt> {, </tt><em>properties</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt> (<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>protocol</em><tt>,  <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>host</em><tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>userid</em><tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>password</em><tt> {, </tt><em>properties</em><tt> } ) </tt></div>
+</div>
+
+<p>
+<tt>openMailStore()</tt> opens a mail store specifying a URL or a set of necessary information to open the store.
+<p>
+<div class="eg"><pre>
+store = openMailStore("imap", "mailhost", "id", "pass")
+</pre>
+</div>
+
+<a name=openMailFolder></a>
+
+<div class="box">
+<div class="synopsis"><b>openMailFolder</b><tt> (<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Store.html">Store</a> </tt><em>store</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>folderName</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>openMailFolder()</tt> opens a mail folder.
+<p>
+<div class="eg"><pre>
+folder = openMailFolder(store, "INBOX")
+</pre>
+</div>
+
+<a name=getMessages></a>
+<div class="box">
+<div class="synopsis"><b>getMessages</b><tt> (<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Folder.html">Folder</a> </tt><em>folder</em> {, <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html">FetchProfile.Item</a>[] <em>fetchProfile</em> { , <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Message.html">Message</a>[] messages } } <tt>)</tt></div>
+</div>
+
+<p>
+<tt>getMessages()</tt> creates an array of <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Message.html">Message</a> objects of the specified mail folder.
+<p>
+If <em>fetchProfile</em> is not null, the corresponding mail headers are prefetched. 
+</p>
+<p>
+The following variables are convenient when specifying the <em>fetchProfile</em>.
+</p>
+<blockquote>
+<dl>
+<dt>FETCH_ENVELOPE
+<dd>From, To, Cc, Bcc, ReplyTo, Subject and Date. See <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html#ENVELOPE">FetchProfile$Item::ENVELOPE</a>.
+<dt>FETCH_CONTENT_INFO
+<dd>ContentType, ContentDisposition, ContentDescription, Size and LineCount. See <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html#CONTENT_INFO">FetchProfile$Item::CONTENT_INFO</a>.
+<dt>FETCH_FLAGS
+<dd>See <a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/FetchProfile.Item.html#FLAGS">FetchProfile$Item::FLAGS</a>.
+</dl>
+</blockquote>
+<p>
+The default value of <em>fetchProfile</em> is [FETCH_FLAGS, FETCH_ENVELOPE].
+</p>
+
+<div class="eg"><pre>
+messages = getMessages(folder)
+
+messages = getMessages(folder, [FETCH_ENVELOPE, FETCH_FLAGS, FETCH_CONTENT_INFO])
+</pre>
+</div>
+
+<a name=listMailFolders></a>
+<div class="box">
+<dt><b>listMailFolders</b><tt> (<a href="http://java.sun.com/products/javamail/1.2/docs/javadocs/javax/mail/Folder.html">Folder</a> </tt><em>folder</em><tt>, </tt><em>callback(folder)</em><tt> {, </tt><em>enterFunc()</em><tt> , </tt><em>exitFunc()</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>listMailFolders()</tt> traverses the folder hierarchy from the specified mail folder as the root and calls the callback function. When <em>enterFunc</em>() and <em>exitFunc</em>() are specified, they are called when the traversal enters/exits a subfolder.
+<p>
+
+<div class="eg"><pre>
+listMailFolders(folder, println)
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.mail</tt></div>
+
+
+  </body>
+</html>

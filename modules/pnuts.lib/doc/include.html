@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Script Inclusion</div>
+
+    <h2>Script Inclusion</h2>
+
+
+<a name=include></a>
+<a name=includeFile></a>
+
+<div class="box">
+<div class="synopsis"><b>include</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>scriptName</em><tt>)</tt></div>
+<div class="synopsis"><b>includeFile</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>include()</tt> executes a script named <em>scriptName</em> in the current context.
+<tt>includeFile()</tt> execute a script file in the current context.
+Unlike <tt>load()</tt> and <tt>loadFile()</tt>, current package and <tt>import()</tt> state are not reset to the default setting.
+</p>
+
+<p>
+In the following example, <tt>["foo.bar", "java.lang.*", "*"]</tt> is printed.
+</p>
+
+<pre class="eg">
+println(format(import()))
+</pre>
+
+<pre class="eg">
+import("foo.bar")
+function test(){
+  includeFile("showImport.pnut")
+}
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Script Inclusion</div>
+
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+
+  <head>
+    <title>pnuts.multithread モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> 排他制御</div>
+
+
+    <h2>排他制御</h2>
+
+<a name=mutex></a>
+
+<div class="box">
+<div class="synopsis"><b>mutex</b><tt>()</tt></div>
+</div>
+
+<p>
+<a href="../../apidoc/pnuts/lib/Mutex.html">pnuts.lib.Mutex</a> オブジェクトを作ります。
+</p>
+
+<div class="box">
+<div class="synopsis"><em>mutex</em><tt> . <b>lock</b>()</tt></div>
+<div class="synopsis"><em>mutex</em><tt> . <b>unlock</b>()</tt></div>
+</div>
+
+<p>
+<em>mutex</em>に対して、ロック(アンロック)します。
+</p>
+<p>
+次の例は、生産者・消費者問題を記述した例です。
+</p>
+
+<pre class="eg">
+buf = Object[1]
+full = mutex()
+empty = mutex()
+counter = 0
+empty.lock()
+
+function producer(){
+    for (i : 0..9){
+	full.lock()
+	buf[0] = currentThread()
+	++::counter
+	println("produce:" + counter)
+	flush()
+	empty.unlock()
+    }
+}
+
+function consumer(){
+    for (i : 0..9){
+	empty.lock()
+	buf[0] = null
+	--::counter
+	println("consume:" + counter)
+	flush()
+	full.unlock()
+    }
+}
+
+fork(consumer)
+fork(producer)
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> 排他制御</div>
+
+  </body>
+</html>

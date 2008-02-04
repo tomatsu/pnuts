@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ループ</div>
+
+    <h2>ループ</h2>
+
+<a name=loopEnum></a>
+
+<div class="box">
+<div class="synopsis"><b>loopEnum</b><tt>(</tt>int <em>n</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>loopEnum()</tt>は、<em>n</em>回ループするjava.util.Enumerationオブジェクトを返します。
+</p>
+
+<div class="eg">例:
+<pre>
+for (always_null : loopEnum(1000)){
+    ..
+}
+</pre></div>
+
+<a name="rangeEnum"></a>
+
+<div class="box">
+<div class="synopsis"><b>rangeEnum</b><tt>(</tt>int <em>start</em> , int <em>end</em> {, int <em>step</em> } <tt>)</tt></div>
+</div>
+
+<p>
+<tt>rangeEnum()</tt>は、<em>start</em>から<em>end</em>までの整数を要素
+として返すjava.util.Enumerationオブジェクトを返します。
+
+<em>step</em>が指定された場合は、返される要素は、<em>start</em>,
+<em>start</em> + <em>step</em>, <em>start</em> + <em>step</em> * 2,
+... のようになります。
+<em>step</em>が指定されない場合の<em>step</em>値は、<em>start</em>が<em>end</em>よりお
+おきい場合は-1、それ以外は1になります。
+</p>
+
+<div class="eg">例:
+<pre>
+for (i : rangeEnum(0, 100, 30)){
+   println(i)
+}
+
+0
+30
+60
+90
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ループ</div>
+
+  </body>
+</html>

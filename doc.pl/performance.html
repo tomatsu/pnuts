@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Podpowiedzi na temat wydajno&#347;ci
+</div>
+
+<!-- body start -->
+
+    <h1>Podpowiedzi na temat wydajno&#347;ci</h1>
+
+<h4>Prekompilowane skrypty</h4>
+<p>&#321;adowanie skrypt&oacute;w mo&#380;e by&#263; odrobine szybsze gdy b&#281;d&#261; to
+skrypty prekompilowane gdy&#380; eliminowane jest kompilowanie
+skrypt&oacute;w.
+</p>
+<pre class="eg">% cd /usr/local/pnuts/modules<br>% pnutsc -o pnuts-modules-C.jar pnuts-modules.jar<br></pre>Wady:
+<ul>
+<li>Skompiloane skrypty nie mog&#261; by&#263; uruchamiane pod odpluskwiaczem.
+</li><li>Nie ma gwarancji &#380;e skompilowany kod b&#281;dzie kompatybilny z innymi wersjami Pnuts.
+</li></ul>
+
+<h3>&#321;&#261;czenie ci&#261;g&oacute;w</h3>
+
+<p>&#321;&#261;czenie napis&oacute;w za pomoc&#261; operatora <tt>+</tt> jest relatywnie wolne.
+</p>
+
+<pre class="eg">a = ""<br>for (i : 1..10000){<br>  a += "."<br>}<br></pre>
+
+<p>Powy&#380;szy kod mo&#380;e by&#263; zast&#261;piony wg procedury.
+</p>
+
+<p>Pierwsze, defininiujemy funkcje drukuj&#261;c&#261; wszystkie napisy kt&oacute;re chcemy po&#322;aczy&#263;, nast&#281;pnie wywo&#322;ujemy funkcje&nbsp; <a href="../modules/pnuts.text/doc/index.html#textGrab"><tt>textGrab()</tt></a> z modu&#322;u <tt>pnuts.text</tt> podaj&#261;c w parametrze funkcje kt&oacute;r&#261; stworzyli&#347;my. &nbsp;Funkcja zwr&oacute;ci nam po&#322;aczony napis.
+
+</p><pre class="eg">function f1(){<br>  for (i : 1..10000){<br>    print(".")<br>  }<br>}<br><br>f2 = textGrab(f1)<br><br>f2()<br></pre>
+
+<h3>P&#281;tla</h3>
+<p>Poni&#380;sza wersja petli&nbsp; <tt>for</tt> jest relatywnie wolna z powodu uzycia operator&oacute;w na zmiennej steruj&#261;cej petl&#261;.
+</p>
+
+<pre class="eg">for(i = 0; i &lt; 1000000; i++){<br>}<br></pre>
+
+<p>Nowa wersja&nbsp; for (i:start..end) jest szybsza od opowyzszej.
+</p>
+
+<div class="eg">np.
+<pre>for (i : 0..999999){<br><br>}<br></pre>
+</div>
+
+<a name="beans"></a>
+<h3>Dostep do w&#322;a&#347;ciwo&#347;ci Java Beans</h3>
+
+<p>Wywo&#322;ywanie metod z rodzaju&nbsp; getXXXX()/setXXXX() mo&#380;na zast&#261;pi&#263;
+odwo&#322;aniem do pola XXXX co jest szybsze gdy&#380; nie u&#380;ywa refleksji.
+</p>
+
+<pre class="eg">now = Date()<br>longValue = now.time<br></pre>
+
+
+<a name="callback"></a>
+<h3>Generatory i wywo&#322;ania zwrotne</h3>
+
+<p>
+Kiedy mamy du&#380;&#261; p&#281;tle rozw&#261;my u&#380;ycie generator&oacute;w lub wywo&#322;a&#324; zwrotnych.
+</p>
+
+<p>Przyk&#322;adowo, kod czytaj&#261;cy sekwencyjnie linie tekstu w Pnuts mo&#380;e zapisa&#263; jak generator przy u&#380;yciu funkcji&nbsp; <a href="../modules/pnuts.text/doc/index.html#readLines"><tt>readLines()</tt></a> co wyeliminuje wywo&#322;ania metod w p&#281;tli.
+</p>
+
+<blockquote>
+<table class="bg2" border="0" cellpadding="3" cellspacing="1" width="45%">
+<tbody><tr class="wb">
+  <th bgcolor="#eeeeee">P&#281;tla w&nbsp; Pnuts (wolno)</th>
+  <th bgcolor="#eeeeee">Generator (szybciej)</th>
+  <th bgcolor="#eeeeee">Wywo&#322;anie zwrotne (jeszcze szybciej)</th>
+</tr>
+<tr class="wb">
+<td valign="top">
+<pre>while ((line = reader.readLine()) != null){<br>    println(line)<br>}<br></pre>
+ </td>
+ <td valign="top">
+<pre>for (line : readLines(reader)){<br>   println(line)<br>}<br></pre>
+ </td>
+<td class="wb" valign="top">
+<pre>readLines(reader, println)<br></pre>
+</td>
+
+</tr>
+<tr class="wb">
+<td valign="top">
+<pre>m = map()<br>m.a = 1<br>m.b = 2<br>m.c = 3<br><br>for (pair : m.entrySet()){<br>   println(pair.key, "=", pair.value)<br>}<br></pre>
+</td>
+<td valign="top">
+<pre>n/a<br></pre>
+</td>
+<td valign="top">
+<pre>m = map()<br>m.a = 1<br>m.b = 2<br>m.c = 3<br><br>mapFunction(function (k, v) println(k, "=", v), m)<br></pre>
+</td>
+</tr>
+</tbody></table>
+</blockquote>
+
+
+<a name="choose"></a>
+<h3>Wyb&oacute;r optymalnej implementacji</h3>
+
+<p><tt>Klasa </tt><a href="../apidoc/pnuts/lang/Implementation.html"><tt>pnuts.lang.Implementation</tt></a>&nbsp; definiuje interfejs implementacji interpretera. 
+ Nast&#281;puj&#261;ce klasy zosta&#322;y zaimplementowane i s&#261; cz&#281;&#347;ci&#261; dystrybucji&nbsp; Pnuts.
+</p><p>
+</p><blockquote>
+<dl>
+<dt><tt><a href="../apidoc/pnuts/lang/PnutsImpl.html">pnuts.lang.PnutsImpl</a></tt>
+</dt><dd>Interpreter AST&nbsp;
+</dd><dt><tt><a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html">pnuts.compiler.CompilerPnutsImpl</a></tt>
+</dt><dd>Kompilator w locie
+</dd><dt><tt><a href="../apidoc/pnuts/ext/CachedPnutsImpl.html">pnuts.ext.CachedPnutsImpl</a></tt>
+</dt><dd>Mieszana implementacja keszuj&#261;ca kompilowane lub parsowane skrypty
+</dd></dl>
+</blockquote>
+
+<p>Kompilacja w locie jest szybsza ni&#380; interpretacja AST&nbsp;. Jest
+zalecana dla interaktywnego u&#380;ycia do czasu gdy czas samej kompilacji
+nie ma znaczeniar.
+</p><p>Je&#380;eli If Pnuts zostanie wbudowany w aplikacje jako silnik
+skrypt&oacute;w a cze&#347;&#263; skrypt&oacute;w jest wykonywana wielokrotnie
+warto wybra&#263; opcje mieszan&#261; gdzie wyeliminowanie czasu potzrebnego na
+kompilacje mo&#380;e zwi&#281;kszy&#263; wydajno&#347;&#263; gdy&#380; sam czas kompilacji mo&#380;e trwa&#263;
+kilka miliskund ale r&oacute;wnie dobrze mo&#380;e trwa&#263; tysi&#261;ce milisekund
+w zale&#380;nosci od wielko&#347;ci skryptu.
+</p><p>Je&#380;eli aplikacja u&#380;ywa niewielkiej ilosci skrypt&oacute;w
+kombinacja interpretacji AST interpreter i prekompilowanych
+skrypt&oacute;w jest wydajna gdy&#380; eleminuje czas potrzebny na
+kompilacje skryptu na kod bajtowy w pami&#281;ci a sam pakiet kompilatora
+Pnuts mo&#380;e by&#263; usuni&#281;ty z dystrybucji jak nie jest potrzebny.
+</p>
+
+<h3>Kiedy wywo&#322;anie metody lub tworzenie instancji jest w&#261;skim gard&#322;em:</h3>
+<p>Mo&#380;na rozwa&#380;y&#263; u&#380;ycie funkcji po&#347;rednika&nbsp; <a href="../modules/pnuts.lib/doc/proxy.html"><tt>makeProxy()</tt></a>.
+</p>
+
+<h3>Implementacja funkcji lub &#322;adowalnej klasy w j&#281;zyku Java</h3>
+<p>Je&#380;eli zachodzi&nbsp; potrzeba eleiminacji wywo&#322;a&#324; refleksyjnych
+mo&#380;emy stworzy&#263; &#322;adowln&#261; klas&#281; lub funkcj&#281; bezpo&#347;rednio w j&#281;zyku Java.
+Zobacz
+"<a href="function.html">Jak zdefiniowa&#263; funkcj&#281; w Javie</a>" i "<a href="loadable.html">Implementowanie &#322;adowlanych klas w Javie</a>".
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt;&nbsp;Podpowiedzi na temat wydajno&#347;ci
+</div>
+
+  </body></html>

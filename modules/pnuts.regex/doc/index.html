@@ -1,0 +1,81 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>pnuts.regex module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.regex</tt></div>
+
+<h2><tt>pnuts.regex</tt> module</h2>
+
+<p>
+<tt>pnuts.regex</tt> module provides regular expression functions without depending on a particular Regex API.  
+</p>
+<p>
+On J2SE1.4, the standard regular expression API is used by default. 
+On older versions of JRE, a third party regular expression package is needed.
+</p>
+<p>
+If the standard property <tt>pnuts.regex.module</tt> is defined at startup time, the specified module is used as the implementation of <tt>pnuts.regex</tt> module.  Otherwise, it searches an available Regex API from the predefined list, which is defined a property file, "pnuts/regex/regex.properties".
+</p>
+
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=65%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Regular Expression API</th>
+<th bgcolor=#eeeeee>Module Name</th>
+<tr class="wb">
+<td class=wb>JSR51 (J2SE1.4.X)</td>
+<td class=wb><tt>pnuts.regex.jsr51</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://jregex.sourceforge.net/">JRegex</a></td>
+<td class=wb><tt>jregex</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://jakarta.apache.org/oro/">Jakarta ORO</a></td>
+<td class=wb><tt>jakarta-oro</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://www.alphaworks.ibm.com/tech/regex4j">Regex4J</a></td>
+<td class=wb><tt>regex4j</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://jakarta.apache.org/regexp/">Jakarta Regexp</a></td>
+<td class=wb><tt>jakarta-regexp</tt></td>
+<tr class="wb">
+<td class=wb><a href="http://www.cacas.org/java/gnu/regexp/">GNU Regexp</a></td>
+<td class=wb><tt>gnu-regexp</tt></td>
+<tr class="wb">
+<td class=wb>Regexp API in Xerces XML parser</td>
+<td class=wb><tt>xerces-regexp</tt></td>
+</tr>
+</table>
+</blockquote>
+<p>
+
+<h3>Function Index</h3>
+<ul>
+<li><a href="regex.html#getMatch">getMatch</a>
+<li><a href="regex.html#getMatches">getMatches</a>
+<li><a href="regex.html#getMatchStart">getMatchStart</a>
+<li><a href="regex.html#getMatchEnd">getMatchEnd</a>
+<li><a href="regex.html#getMatchCount">getMatchCount</a>
+<li><a href="regex.html#getNumberOfGroups">getNumberOfGroups</a>
+<li><a href="regex.html#match">match</a>
+<li><a href="regex.html#matchAll">matchAll</a>
+<li><a href="regex.html#formatMatch">formatMatch</a>
+<li><a href="regex.html#regex">regex</a>
+<li><a href="regex.html#split">split</a>
+<li><a href="regex.html#substitute">substitute</a>
+<li><a href="regex.html#whichRegexAPI">whichRegexAPI</a>
+</ul>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.regex</tt></div>
+
+
+  </body>
+</html>

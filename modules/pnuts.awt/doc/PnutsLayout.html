@@ -1,0 +1,389 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> PnutsLayout</div>
+
+    <h2>PnutsLayout</h2>
+
+<p>
+  The <a href="../../apidoc/pnuts/awt/PnutsLayout.html">PnutsLayout</a> is a general purpose geometry manager. 
+  It is more programmer-friendly than typical LayoutManagers
+  but is as flexible as the GridBagLayout.  Combined with the <a
+href="hierarchicalLayout.html">Hierarchical Layout</a>, it allows layout definition
+similar to TABLE tag in HTML.  Although PnutsLayout is a part of <a href="../index.html">Pnuts</a>, 
+it can be used without Pnuts as an ordinary LayoutManager.
+
+</p> 
+
+<p>In PnutsLayout, components are added with properties.
+Parameter of constructor and add() method is a comma-separated list of "<em>propertyName</em> <tt>=</tt>
+<em>value</em>".  Parameters of a constructor gives default value of properties for components.
+<div class="eg">e.g.:
+<pre>setLayout(new PnutsLayout("columns = 3"));
+add(button1, "padding = 20");
+add(button2, "colspan = 2");
+add(button3, "align = top:left");
+</pre>
+</div>
+</p>
+<p>  
+  Properties are:
+<blockquote>
+
+<table border>
+<tr>
+<th>Property</th>
+<th>Meaning</th>
+<th>Default</th>
+<th>constructor</th>
+<th>add()</th>
+</tr>
+<tr>
+<td>columns</td>
+<td>The number of columns.</td>
+<td>1</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>uniform</td>
+<td>Sets the width or height to be the same for each column. Can be x/y/xy/none.</td>
+<td>none</td>
+<td>true</td>
+<td>false</td>
+</tr>
+<tr>
+<td>colspan</td>
+<td>Number of columns the component occupies.</td>
+<td>1</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>rowspan</td>
+<td>Number of rows the component occupies.</td>
+<td>1</td>
+<td>false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>spacing</td>
+<td>Minimum spacing that will be put around the component. Can be a single value (5) or top:right:bottom:left (eg 5:10:5:10).</td>
+<td>0</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>Padding around the component. Can be a single value (5) or top:right:bottom:left (eg 5:10:5:10).</td>
+<td>0</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>ipadding</td>
+<td>Padding inside the component (making it larger). Can be a single value (5) or x:y (eg 5:10).</td>
+<td>0</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>fill</td>
+<td>Sets the width and/or height of the component to a percentage of the cell width. Can be x/y/xy/none or a single value (5) or
+x:y (eg 25:75). 0 or none sizes the component to its preferred size.</td>
+<td>none</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>align</td>
+<td>Alignment of the component in the cell. Can be top/bottom/left/right/center or top/bottom/center:left/right/center (eg
+top:right).</td>
+<td>center</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>expand</td>
+<td>Expands the size of the cell so the table takes up the size of the container. Can be x/y/xy/none.</td>
+<td>none</td>
+<td>true</td>
+<td>true</td>
+</tr>
+<tr>
+<td>border</td>
+<td>Draws the grid borders of the table. Great for debugging. Can be true/false.</td>
+<td>false</td>
+<td>true</td>
+<td>true</td>
+</tr>
+</table>
+
+</blockquote>
+
+<h4>Number of Columns (columns)</h4>
+
+<table cellpadding=20>
+<tr><td>
+<img src="image/1.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+
+setLayout(new PnutsLayout("columns=3"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</tr>
+</table>
+
+<p>
+In PnutsLayout, the number columns are always defined, and
+the layout of components is from left to right, top to bottom.
+</p>
+
+
+<h4>External Padding (padding)</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="image/2.gif"></img>
+
+</td><td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,padding=4:10"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+PnutsLayout layouts virtual bounding-boxes which includes a component.
+Each size of bounding-boxes is at least "preferredSize" of the corresponding component.
+</p>
+<p>
+When an external padding is specified, bounding-box becomes larger as the
+number of pixels increases.
+</p>
+<p>
+After laying out all components, the width of a bounding-box is the maximum
+width of the same column, and a height of the bounding-box is the 
+maximum height of the same row.
+</p>
+
+<h4>Internal Padding (ipadding)</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="image/3.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,ipadding=4:10"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</td>
+</tr>
+</table>
+
+<p>
+
+The Size of a component is "preferredSize" by default.
+When an internal padding is specified, the component gets larger as the number 
+of pixels increases.
+</p>
+
+<h4>Alignment (align)</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="image/9.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("align=left"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+
+</table>
+
+<p>
+Components are located in the middle of the bounding-box by default.
+When a property <tt>align</tt> is specified, a component can be left/right and/or top/bottom aligned.
+</p>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="image/10.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("align=left,padding=5"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+
+</pre>
+</td>
+</tr>
+</table>
+
+<h4>Fill</h4>
+
+<table cellpadding=20>
+<tr>
+<td>
+<img src="image/4.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("fill=x"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+
+</td>
+</tr>
+</table>
+
+<h4>Multi-rows Component (rowspan)</h4>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="image/14.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=2,fill=x"));
+add(new Button("OK"), "rowspan=2,fill=y");
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+
+</tr>
+</table>
+
+<p>
+A component can occupy multiple columns or rows.
+</p>
+
+<h4>Uniform</h4>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="image/12.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+
+setLayout(new PnutsLayout("columns=3,fill=x,uniform=x"));
+add(new Button("OK"));
+add(new Button("Cancel Command"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+While widths of bounding-boxes usually differ column by column, they can be
+ as long as the longest one uniformly.
+</p>
+
+<h4>Expansion</h4>
+
+<p>
+A size of surrounding container usually does not affect the size of a
+bounding-box.  When a property <tt>expand</tt> is specified a bounding-box
+can be expanded or shrunk as the container.
+
+</p>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="image/5.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,align=left,expand=y"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="image/6.gif"></img>
+
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,expand=y"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help", "fill=x,expand=x"));
+</pre>
+</td>
+</tr>
+<tr>
+<td>
+<img src="image/7.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,expand=xy"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="image/8.gif"></img>
+</td>
+<td align=left valign=top>
+<pre class="eg2">
+setLayout(new PnutsLayout("columns=3,fill=xy,expand=xy"));
+add(new Button("OK"));
+add(new Button("Cancel"));
+add(new Button("Help"));
+</pre>
+</td>
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> PnutsLayout</div>
+
+  </body>
+</html>

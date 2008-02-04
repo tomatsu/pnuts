@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> パフォーマンス向上のためのヒント
+</div>
+
+<!-- body start -->
+
+    <h2>パフォーマンス向上のためのヒント</h2>
+
+<h4>スクリプトのプリコンパイル</h4>
+<p>
+モジュールのスクリプトをプリコンパイルしておくと、コンパイルのためのオーバーヘッドをなくなるため、モジュールの初期化が若干速くなります。
+</p>
+<pre class="eg">
+% cd /usr/local/pnuts/modules
+% pnutsc -o pnuts-modules-C.jar pnuts-modules.jar
+</pre>
+
+ただし、次の点に注意してください。
+<ul>
+<li>スクリプトをコンパイルするとデバッガでステップ実行することができなくなります。
+<li>コンパイルされたバイナリコードは、Pnutsのバージョン間で互換性が保証されません。
+</ul>
+
+<h4>文字列の連結</h4>
+
+<p>
+<tt>+</tt>演算子による文字列の連結はあまり速くありません。
+</p>
+<pre class="eg">
+a = ""
+for (i : 1..10000){
+  a += "."
+}
+</pre>
+
+<p>
+まず、連結したい文字列を順に<a href="../modules/pnuts.lib/doc.ja/console.html#print">print()</a>や<a href="../modules/pnuts.lib/doc.ja/console.html#println">println()</a>等の関数で表示する関数を定義し、
+pnuts.textモジュールの<a href="../modules/pnuts.text/doc.ja/index.html#textGrab">textGrab()</a>関数に渡します。
+
+<pre class="eg">
+function f1(){
+  for (i : 1..10000){
+    print(".")
+  }
+}
+
+f2 = textGrab(f1)
+
+f2()
+</pre>
+
+<h4>ループ</h4>
+<p>
+次のような<tt>for</tt> 文のループは、カウンタ変数に対する演算のオーバーヘッドのため、遅くなります。
+</p>
+
+<pre class="eg">
+for(i = 0; i < 1000000; i++){
+}
+</pre>
+
+<p>
+ベンチマーク等、ループのオーバヘッドが気になるケースでは、次のようにするとよいでしょう。
+</p>
+
+<pre class="eg">
+for (i : 0..999999){
+   ...
+}
+</pre>
+
+<a name="beans"></a>
+<h4>Java Beansのプロパティへのアクセス</h4>
+
+<p>
+<tt>getXXXX()/setXXXX()</tt>のようなメソッド呼び出しは、XXXXプロパティへのアクセスに置き換えることで速くなります。
+</p>
+
+<pre class="eg">
+now = Date()
+longValue = now.time
+</pre>
+
+<a name="callback"></a>
+<h4>Generatorスタイルとコールバック・スタイル</h4>
+
+<p>
+大きなループでメソッド呼び出しがある場合は、Generatorスタイルかコールバック方式を検討してください。
+</p>
+
+<p>
+たとえば、テキストファイルの各行を順に読むコードは、readLines()メソッドを使ってGeneratorスタイルで記述することができ、メソッド呼び出しのオーバーヘッドを軽減することができます。
+</p>
+<p>
+もう一つの例は、Mapのエントリーを一つずつ取り出して、key-valueペアを表示するものですが、これは、<a href="../modules/pnuts.lib/doc.ja/array.html#mapFunction">mapFunction</a>関数を使って、コールバック形式で記述することができます。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=45%>
+<tr class=wb>
+  <th bgcolor=#eeeeee>Pnutsによるループ(遅い)</th>
+  <th bgcolor=#eeeeee>Generatorスタイル(速い)</th>
+  <th bgcolor=#eeeeee>コールバック・スタイル(速い)</th>
+</tr>
+<tr class=wb>
+  <td valign=top>
+<pre>
+while ((line = reader.readLine()) != null){
+    println(line)
+}
+</pre>
+ </td>
+ <td valign=top>
+<pre>
+for (line : readLines(reader)){
+  println(line)
+}
+</pre>
+ </td>
+<td class=wb  valign=top>
+<pre>
+readLines(reader, println)
+</pre>
+</td>
+</tr>
+<tr class=wb>
+<td valign=top>
+<pre>
+m = map()
+m.a = 1
+m.b = 2
+m.c = 3
+
+for (pair : m.entrySet()){
+   println(pair.getKey(), "=", pair.getValue())
+}
+</pre>
+</td>
+<td valign=top>
+<pre>
+n/a
+</pre>
+</td>
+<td valign=top>
+<pre>
+m = map()
+m.a = 1
+m.b = 2
+m.c = 3
+
+mapFunction(function (k, v) println(k, "=", v), m)
+</pre>
+</td>
+</tr>
+</table>
+</blockquote>
+
+<a name=choose></a>
+<h4>適切な Implementation の選択</h4>
+
+<p>
+<a href="../apidoc/pnuts/lang/Implementation.html">pnuts.lang.Implementation</a> インタフェースは、スクリプトインタプリタの実装のインタフェースを定義しています。
+次のクラスがその実装クラスとしてPnutsの配布パッケージに含まれています。
+<p>
+<blockquote>
+<dl>
+<dt><tt><a href="../apidoc/pnuts/lang/PnutsImpl.html">pnuts.lang.PnutsImpl</a></tt>
+<dd>ASTインタプリタ
+<dt><tt><a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html">pnuts.compiler.CompilerPnutsImpl</a></tt>
+<dd>On-the-fly コンパイラ
+<dt><tt><a href="../apidoc/pnuts/ext/CachedPnutsImpl.html">pnuts.ext.CachedPnutsImpl</a></tt>
+<dd>Mixed モード。 コンパイル（パーズ）されたスクリプトをキャッシュして再利用する。
+</dl>
+</blockquote>
+
+<p>
+On-the-fly コンパイラは、通常はASTインタプリタよりも速く実行されます。
+対話的な利用はコンパイルのオーバヘッドが気にならないのでOn-the-flyコンパイラが向いています。
+<p>
+Pnuts が、スクリプトエンジンとしてアプリケーションに埋め込まれ、同じスクリプトが何度も実行される場合、Mixed モードが適しています。
+スクリプトをコンパイルするのに、そのスクリプトの大きさに応じて数ミリ秒から数百ミリ秒かかるので、もし、一部のスクリプトが何度も実行されるようならコンパイルされたコードをキャッシュすると効率が向上します。
+<P>
+もし、アプリケーションが決められたスクリプトしか実行しない場合、ASTインタプリタとプリコンパイルされたスクリプトを組み合わせるのが効果的です。コンパイルのためのオーバヘッドがないですし、必要であればコンパイラパッケージを取り去ることもできます。
+</p>
+
+<h4>メソッド呼び出しやインスタンス生成がボトルネックになる場合</h4>
+<p>
+<a href="../modules/pnuts.lib/doc.ja/proxy.html">makeProxy()</a> の利用を検討してください。
+
+<h4>Javaで関数やload可能なクラスを実装する</h4>
+<p>
+スクリプト実行に伴うオーバーヘッド(Reflection APIやメソッド検索等が原因となる)をなくす必要がある場合は、Javaで関数、あるいはload可能なクラスを実装すればよい。
+"<a href="function.html">Javaによる関数の定義</a>" and "<a
+href="loadable.html">load可能なクラス</a>"を参照。
+</p>
+
+</dl>
+</blockquote>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> パフォーマンス向上のためのヒント
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,161 @@
+<html>
+<head>
+  <title>標準モジュール</title>
+  <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta http-equiv="content-style-type" content="text/css">
+  <link type="text/css" rel="stylesheet" href="stylesheet.css">
+</head>
+
+<body>
+
+<div class="nav"><a href="guide.html">Pnutsユーザーズガイド</a> -> <tt>pnuts.*</tt> モジュール</div>
+
+<!-- body start -->
+
+<h2><tt>pnuts.*</tt> モジュール</h2>
+
+<P>
+これらのモジュールは、Pnutsの標準モジュールであり、Pnutsディストリビューションの、modules/pnuts-modules.jarの中に含まれています。
+</P>
+<p>
+<div><a href="functions.html">関数インデックス</a></div>
+<div><a href="../modules/apidoc/index.html">APIドキュメント</a></div>
+</p>
+<p>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>モジュール名</th>
+<th bgcolor=#eeeeee>説明</th>
+<th bgcolor=#eeeeee>依存関係</th>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.lib/doc.ja/index.html">pnuts.lib</a></td>
+<td>よく使われる関数</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.io/doc.ja/index.html">pnuts.io</a></td>
+<td>I/O関数</td>
+<td>pnuts.lib<br>pnuts.multithread</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.multithread/doc.ja/index.html">pnuts.multithread</a></td>
+<td>マルチスレッド用関数</td>
+<td>pnuts.lib</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.security/doc.ja/index.html">pnuts.security</a></td>
+<td>セキュリティ関数</td>
+<td>pnuts.io</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.beans/doc.ja/index.html">pnuts.beans</a></td>
+<td>Beansデスクリプタへのアクセスをサポート</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.regex/doc.ja/index.html">pnuts.regex</a></td>
+<td>正規表現</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td>pnuts.regex.jsr51</td>
+<td>正規表現 (J2SE1.4.X)</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.awt/doc.ja/index.html">pnuts.awt</a></td>
+<td>GUIレイアウト等</td>
+<td>pnuts.lib<br>pnuts.io<br>pnuts.beans</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.text/doc.ja/index.html">pnuts.text</a></td>
+<td>行の読み書き、テンプレート処理、printf、など</td>
+<td>pnuts.regex<br>pnuts.lib<br>pnuts.io</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.nio/doc.ja/index.html">pnuts.nio</a></td>
+<td>java.nioパッケージに依存する関数</td>
+<td>pnuts.text</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.xml/doc.ja/index.html">pnuts.xml</a></td>
+<td>XMLドキュメントの操作</td>
+<td>pnuts.lib<br>pnuts.io<br>pnuts.beans</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.mail/doc.ja/index.html">pnuts.mail</a></td>
+<td>メール送受信</td>
+<td>pnuts.lib</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.util/doc.ja/index.html">pnuts.util</a></td>
+<td>ユーティリティ関数</td>
+<td>pnuts.lib<br>pnuts.io<br>pnuts.regex<br>pnuts.multithread</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.servlet/doc.ja/index.html">pnuts.servlet</a></td>
+<td>サーブレットスクリプト</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.jdbc/doc.ja/index.html">pnuts.jdbc</a></td>
+<td>JDBC への高レベルインタフェース</td>
+<td>pnuts.io<br>pnuts.lib<br>pnuts.util<br>pnuts.text</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.jdo/doc.ja/index.html">pnuts.jdo</a></td>
+<td>JDO への高レベルインタフェース</td>
+<td>pnuts.lib<br>pnuts.beans</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.math/doc.ja/index.html">pnuts.math</a></td>
+<td>三角関数など</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.net/doc.ja/index.html">pnuts.net</a></td>
+<td>ネットワーク関係</td>
+<td align=center>-</td>
+</tr>
+
+<tr class=wb>
+<td><a href="../modules/pnuts.jmx/doc.ja/index.html">pnuts.jmx</a></td>
+<td>JMX関係</td>
+<td>pnuts.lib</td>
+</tr>
+
+<tr class=wb>
+<td><a href="tools.html">pnuts.tools</a></td>
+<td>サブモジュールを提供: pnuts.math, pnuts.multithread, pnuts.security, pnuts.mail, pnuts.xml, pnuts.util,
+pnuts.awt, pnuts.beans, pnuts.text, pnuts.regex, pnuts.io, pnuts.nio, pnuts.lib, pnuts.net,
+pnuts.jdbc, pnuts.jdo, java.util, java.io, java.net</td>
+<td class="G10">-</td>
+</tr>
+
+</table>
+
+<!-- body end -->
+
+<div class="nav2"><a href="guide.html">Pnutsユーザーズガイド</a> -> <tt>pnuts.*</tt> モジュール</div>
+
+
+</body>

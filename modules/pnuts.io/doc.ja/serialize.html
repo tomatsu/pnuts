@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.io モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> シリアライゼイション</div>
+
+<h2>シリアライゼイション</h2>
+
+<a name=writeObject></a>
+<div class="box">
+<div class="synopsis"><b>writeObject</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Serializable.html">Serializable</a> </tt><em>object</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>filename</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Serializable.html">Serializable</a> </tt><em>object</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Serializable.html">Serializable</a> </tt><em>object</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>writeObject()</tt> は <em>object</em> をシリアライズします。
+<em>file</em>か<em>filename</em>が指定された場合はそのファイルに保存します。
+<em>output</em>が指定された場合はそのOutputStream に書き込みます。
+</p>
+
+<a name=readObject></a>
+
+<div class="box">
+<div class="synopsis"><b>readObject</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>)</tt></div>
+</div>
+
+<p>
+<em>file</em>または<em>filename</em> が指定された場合、そのファイルからシリアライズされたオブジェクトを読み込みます。
+<em>input</em>が指定された場合は、そのInputStreamからシリアライズされたオブジェクトを読み込みます。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> シリアライゼイション</div>
+
+  </body>
+</html>

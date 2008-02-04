@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Using Scripted Classes from Java
+</div>
+
+<!-- body start -->
+
+    <h2>Using Scripted Classes from Java</h2>
+
+<p>
+Scripted classes can be used from Java by following a few steps described below.
+</p>
+
+<h3>Steps</h3>
+
+<h4>1. Set up a Context that will be referenced during script execution</h4>
+
+<p>
+In this step, a context that will be referenced during script execution is prepared and associated with the current thread by calling Runtime.setThreadContext().
+</p>
+
+<div class="eg">
+<pre>
+import pnuts.lang.Context;
+import pnuts.lang.Runtime;
+
+Context context = new Context();
+Runtime.setThreadContext(context);
+context.usePackage("pnuts.tools"); // specifies which module is used
+</pre>
+</div>
+
+<h4>2. Create a ClassLoader</h4>
+
+<p>
+In this step, a ClassLoader is created, which can parse/compile/load scripted classes.
+</p>
+
+<div class="eg">
+<pre>
+ClassLoader classLoadser = Pnuts.createClassLoader(context);
+Thread.currentThread().setContextClassLoader(classLoader);
+Class cls = classLoader.loadClass(<em>className</em>);
+</pre>
+</div>
+
+<h3>An Example</h3>
+
+<div class="eg">mymap.pnc
+<pre>
+import java.util.*
+class mymap extends TreeMap {
+  get(key){
+    if ((v = super.get(key)) == null){
+      super.put(key, v = set())
+    }
+    v
+  }
+}
+</pre>
+</div>
+
+<div class="eg">MyTest.java
+<pre>
+import pnuts.lang.Context;
+import pnuts.lang.Runtime;
+import java.util.Map;
+ 
+public class MyTest {
+   static Context setupContext(){
+      Context context = new Context();
+      context.usePackage("pnuts.tools");
+      return context;
+   }
+   public static void main(String[] args) throws Exception {
+      Context context = setupContext();
+      Runtime.setThreadContext(context);
+      ClassLoader parent = Thread.currentThread().getContextClassLoader();
+      ClassLoader cloader = Pnuts.createClassLoader(context, parent);
+      Thread.currentThread().setContextClassLoader(cloader);
+      Class cls = cloader.loadClass(args[0]);
+      Map m = (Map)cls.newInstance();
+      System.out.println(m.get("no_such_key"));
+   }
+}
+</pre>
+</div>
+
+<div class="eg">
+<pre>
+C:\> set CLASSPATH=pnuts.jar;pnuts-modules.jar;.
+C:\> java MyTest mymap
+</pre>
+</div>
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Using Scripted Classes from Java
+</div>
+
+  </body>
+</html>

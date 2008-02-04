@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik u&#380;ykownika Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Pocz&#261;tek
+</div>
+
+<!-- body start -->
+
+    <h1>Pocz&#261;tek</h1>
+
+<p>Ten podr&#281;cznik opisuje podstawowe aspekty u&#380;ycie j&#281;zyka Pnuts.
+Przedstawione zostan&#261; rodzaje dost&#281;pnych funkcji oraz spos&oacute;b
+integracji z j&#281;zykiem Java w aplikacji.
+</p>
+<p>
+&nbsp;Sekcja wyja&#347;nia kilka za&#322;o&#380;e&#324; i aspekt&oacute;w potrzebnych do dalszego czytania podr&#281;cznika.
+</p>
+
+<h3>&#346;rodowisko wykonawcze</h3>
+
+<p>Pnuts dzia&#322;a pod JRE (Java Runtime Environment) wersja 1.2 lub
+nowsza. Dystrybucja pnuts nie zawiera JRE co oznacza &#380;e u&#380;ytkownik
+powinien sam zaopatrzy&#263; si&#281; w JRE lub JDK gdy nie ma odpowiedniej
+wersji na komputerze.</p><p>Aby mo&#380;na by&#322;o u&#380;ywa&#263; interpretera plik&nbsp; <tt>pnuts.jar</tt>
+musi by&#263; widoczny na &#347;cie&#380;ce poszukiwania klas przez JRE/JDK.
+Plik ten zawiera podstawowe klasy systemu opisane szczeg&oacute;&#322;owo w
+dokumentacji API, klasy te zapewniaj&#261; podstawowa funkcjonalno&#347;&#263;
+interpretera z kt&oacute;rych programi&#347;ci mog&#261; bezpo&#347;rednio korzysta&#263;
+przy integracji z aplikacja.<span style="font-weight: bold;"></span></p><p>Funkcje
+Pnuts dziel&#261; sie na dwie kategorie: wbudowane i inne, ma to szczeg&oacute;lne
+znaczenie przy dystrybucji, u&#380;ycie funkcji wbudowanych daje gwarancje
+&#380;e b&#281;d&#261; zawsze dost&#281;pne nawet jak &nbsp;nie b&#281;d&#261; &#322;adowane &#380;adne inne
+modu&#322;y&nbsp;. <a href="lang.html#builtin">Specyfikacje J&#281;zyka</a> opisuje funkcje i modu&#322;y wbudowane..  
+</p>
+<h3>Modu&#322;y</h3>
+<p>Modu&#322; jest zbiorem funkcji dowolnego zastosowania. Potrzebne modu&#322;y
+mo&#380;na wczytywa&#263; w czasie dzia&#322;ania gdzie inicjalizacyjne modu&#322;y wczytane
+statycznie s&#261; przes&#322;aniane przez te wczytane dynamicznie dzi&#281;ki czemu
+nie trzeba sie obawia&#263; konfliktu nazw. Ka&#380;dy modu&#322; powinien definiowa&#263;
+pakiet w osobnym pliku JAR kt&oacute;ry mo&#380;e by&#263; dodany do CLASSPATH
+lub umieszczony w katalogu
+<tt>${PNUTS_HOME}/modules/</tt>.
+</p>
+
+<p>Sporo modu&#322;&oacute;w jest w&#322;&#261;czonych do dystrybucji Pnuts, modu&#322;y
+og&oacute;lnego zastosowania s&#261; domy&#347;lnie wczytywane przy starcie
+interpretera. Mo&#380;na dowolnie ustali&#263; modu&#322;y wczytywane domy&#347;lnie
+ustawiaj&#261;c zmienna &#347;rodowiskow&#261;(PNUTS_MODULE). Zobacz wi&#281;cej na ten
+temat w&nbsp; "<a href="module.html">Modu&#322;y</a>"&nbsp;.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Pocz&#261;tek
+</div>
+  </body></html>

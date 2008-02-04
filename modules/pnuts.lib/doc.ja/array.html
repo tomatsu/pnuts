@@ -1,0 +1,914 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> コレクション・配列</div>
+
+    <h2>コレクション・配列</h2>
+
+<H3>Collection オブジェクトの生成</H3>
+
+<a name=list></a>
+<div class="box">
+<div class="synopsis"><b>list</b><tt>(</tt><tt> { elements {, type }} )</tt></div>
+</div>
+
+<P><TT>list() </TT>は、順序つきコレクションである<CODE>java.util.List</CODE> オブジェクトを生成します。</P>
+<P>第1引数は、初期状態でコレクションに含まれる要素を指定します。
+ <CODE>list()</CODE> では、配列、整数、Collection、またはGeneratorを指定することができます。</P>
+<P>第2引数は、コレクション型の実装を指定します。たとえば、
+<CODE>list(["element"], &quot;L&quot;)</CODE> は、要素が一つのLinkedList オブジェクトを生成します。第2引数が省略されると、デフォルト実装であるArrayListが選択されます。</P>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第1引数</th>
+<th bgcolor=#eeeeee>動作</th>
+</tr>
+<tr class=wb>
+      <td>int</td>
+      <td>初期状態のキャパシティ</td>
+    </tr>
+<tr class=wb>
+      <TD>Collection, Iterator, Enumeration, 配列, Generator</TD>
+      <td>要素を含むListオブジェクトを作る</td>
+    </TR>
+  </table>
+</BLOCKQUOTE>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第2引数</th>
+<th bgcolor=#eeeeee>List型</th>
+</tr>
+<tr class=wb>
+      <td>&quot;A&quot; (default)</td>
+      <td>ArrayList</td>
+</tr>
+<tr class=wb>
+      <td>&quot;a&quot;</td>
+      <td>Array::asList()</td>
+</tr>
+<tr class=wb>
+      <td>&quot;V&quot;</td>
+      <td>Vector</td>
+</tr>
+<tr class=wb>
+      <td>&quot;L&quot;</td>
+      <td>LinkedList</td>
+</tr>
+  </table>
+</blockquote>
+
+<a name=vector></a>
+<div class="box">
+<div class="synopsis"><b>vector</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>vector()</tt>は、<tt>list([], "V")</tt>の短縮形です。
+<a href="#list"><tt>list()</tt></a>を参照。
+</p>
+
+
+<a name=set></a>
+
+<div class="box">
+<div class="synopsis"><b>set</b><tt>(</tt><tt> { elements {, type }} ) </tt>or</div>
+<div class="synopsis2"><tt>(</tt><tt> { elements, func(arg) {, intValue } ) </tt></div>
+</div>
+
+<P><TT>set() </TT>は、重複のないコレクション<CODE>java.util.Set</CODE> オブジェクトを生成します。</P>
+<P>第1引数は、初期状態でコレクションに含まれる要素を指定します。
+<CODE>set()</CODE> は、配列、整数、Collection、Generatorオブジェクトを指定することができます。</P>
+<P>第2引数は、コレクション型の実装を指定します、たとえば、set(["element"],
+&quot;T&quot;) は、要素数1のTreeSet オブジェクトを作ります。第2引数が省略された場合は、デフォルト実装であるHashSetが選択されます。
+</P>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第1引数</th>
+<th bgcolor=#eeeeee>動作</th>
+</tr>
+<tr class=wb>
+      <td>int</td>
+      <td>初期状態のキャパシティ</td>
+    </tr>
+<tr class=wb>
+      <TD>Collection, Iterator, Enumeration, 配列, Generator</TD>
+      <TD>要素を含むSetオブジェクトを作る</TD>
+    </TR>
+  </table>
+</BLOCKQUOTE>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第2引数</th>
+<th bgcolor=#eeeeee>Set型</th>
+</tr>
+<tr class=wb>
+      <td>&quot;H&quot; (default)</td>
+<td>HashSet</td>
+</tr>
+<tr class=wb>
+      <td>&quot;T&quot;</td>
+<td>TreeSet</td>
+</tr>
+<tr class=wb>
+      <td>&quot;LH&quot;</td>
+<td>LinkedHashSet</td>
+</tr>
+<tr class=wb>
+      <td><em>function(x)</em></td>
+<td>TreeSet</td>
+</tr>
+  </table>
+</blockquote>
+
+
+<p>
+第２引数に関数が指定された場合、戻り値のTreeSetの要素は<em>function</em>を呼び出した結果をもとにソートされます。
+</p>
+<pre class="eg">
+set([1,2,3,4,5,6,7,8,9,10], function (x) -x) ==> [10,9,8,7,6,5,4,3,2,1]
+</pre>
+<p>
+
+第２引数に関数が指定された場合,第３引数に整数が指定されることがあります。第３引数が0の場合（デフォルト）、
+ソート時に二値を比較した結果が等しい場合は、set()の結果には１つだけしか追加されません。
+</p>
+<pre class="eg">
+set([1,2,3,4,5,6,7,8,9,10], function (x) x%2)  ==> [2, 1]
+</pre>
+<p>
+第３引数が正の整数の場合、ソート時に二値を比較した結果が等しい場合は、左辺が小さいとみなします。
+
+<pre class="eg">
+set([1,2,3,4,5,6,7,8,9,10], function (x) x%2, 1)  ==>  [2, 4, 6, 8, 10, 1, 3, 5, 7, 9]
+</pre>
+<p>
+第３引数が負の整数の場合、ソート時に二値を比較した結果が等しい場合は、右辺が小さいとみなします。
+
+<pre class="eg">
+set([1,2,3,4,5,6,7,8,9,10], function (x) x%2, -1)  ==> [10, 8, 6, 4, 2, 9, 7, 5, 3, 1]
+</pre>
+
+<a name=map></a>
+<div class="box">
+<div class="synopsis"><b>map</b><tt>(</tt><tt> { elements {, type }} ) </tt></div>
+</div>
+
+<P><TT>map() </TT>は、key-valueマッピングを表す<CODE>java.util.Map</CODE> オブジェクトを生成します。</P>
+<P>第1引数は、初期状態でコレクションに含まれる要素を指定します。
+<CODE>map()</CODE> は、文字列, 配列, 整数、Map オブジェクトを指定することができます。
+</P>
+<P>第2引数は、コレクション型の実装を指定します。たとえば、map(&quot;a=1&quot;, &quot;T&quot;) は、要素が1つのTreeMap オブジェクトを作ります。
+第2引数が省略されると、デフォルト実装である HashMapが選択されます。
+</P>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第1引数</th>
+<th bgcolor=#eeeeee>動作</th>
+</tr>
+<tr class=wb>
+      <td><I>array</I></td>
+      <td>各要素を[key, value]として解釈し、Mapオブジェクトに登録する</td>
+    </tr>
+<tr class=wb>
+      <td>int</td>
+      <td>初期状態のキャパシティ</td>
+    </tr>
+<tr class=wb>
+      <TD>Map</TD>
+      <TD>指定されたMapの要素をコピーする</TD>
+    </TR>
+<tr class=wb>
+      <td>java.lang.String</td>
+      <td>一時的なパッケージで文字列を評価し、シンボル/値のペアをMapに登録します。</td>
+    </tr>
+</table>
+</BLOCKQUOTE>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第2引数</th>
+<th bgcolor=#eeeeee>Map型</th>
+</tr>
+<tr class=wb>
+      <td>&quot;H&quot; (default)</td>
+<td>HashMap</td>
+</tr>
+<tr class=wb>
+      <td>"HT"</td>
+<td>Hashtable</td>
+</tr>
+<tr class=wb>
+      <td>"T"</td>
+<td>TreeMap</td>
+</tr>
+<tr class=wb>
+      <TD>"WH"</TD>
+      <TD>WeakHashMap</TD>
+    </TR>
+<tr class=wb>
+      <TD>"LH"</TD>
+      <TD>LinkedHashMap (J2sdk1.4.0 以降)</TD>
+    </TR>
+<tr class=wb>
+      <TD>"IH"</TD>
+      <TD>IdentityHashMap (J2sdk1.4.0 以降)</TD>
+    </TR>
+<tr class=wb>
+      <TD>&quot;P&quot;</TD>
+      <TD>Properties</TD>
+    </TR>
+  </table>
+</blockquote>
+
+
+
+<div class="eg">例：
+<pre>p = set()
+p.add(&quot;foo&quot;)
+p.add(&quot;bar&quot;)
+for (i : p) println(i)
+</pre></div>
+
+<a name=hashTable></a>
+<div class="box">
+<div class="synopsis"><b>hashTable</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>hashTable()</tt>は、<tt>map([], "HT")</tt>の短縮形です。<a
+href="#map"><tt>map()</tt></a>を参照。
+</p>
+
+
+<h3>Collectionに対する基本操作</h3>
+
+<a name=isEmpty></a>
+
+<div class="box">
+<div class="synopsis"><b>isEmpty</b><tt>(</tt><em>elements</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>isEmpty()</tt>は<em>elements</em>が空の場合にtrueを返します。<em>elements</em>は、Collection, Map, 配列, pnuts.lang.Packageのいずれかです。
+</p>
+
+<a name=size></a>
+
+<div class="box">
+<div class="synopsis"><b>size</b><tt>(</tt><em>obj</em><tt>)</tt> </div>
+</div>
+
+<p>
+<em>obj</em>の種類と、結果は以下のようになります。
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>引数</th>
+<th bgcolor=#eeeeee>返り値</th>
+</tr>
+<tr class=wb><td>配列</td><td>配列の大きさ</td></tr>
+<tr class=wb><td>Collection</td><td>Collectionの大きさ</td></tr>
+<tr class=wb><td>Map</td><td>Mapの大きさ</td></tr>
+<tr class=wb><td>String</td><td>文字数</td></tr>
+<tr class=wb><td>StringBuffer</td><td>文字数</td></tr>
+<tr class=wb><td>File</td><td>ファイルサイズ</td></tr>
+<tr class=wb><td>null</td><td>0</td></tr>
+</table>
+</blockquote>
+
+
+<a name="count"></a>
+
+<div class="box">
+<div class="synopsis"><b>count</b><tt>(</tt><em>obj</em><tt>)</tt></div>
+</div>
+
+<p>
+<em>obj</em>の種類と、結果は以下のようになります。
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>引数</th>
+<th bgcolor=#eeeeee>返り値</th>
+</tr>
+<tr class=wb><td>Enumeration</td><td>要素数</td></tr>
+<tr class=wb><td>Iterator</td><td>要素数</td></tr>
+<tr class=wb><td>Generator</td><td>生成されるオブジェクト数</td></tr>
+<tr class=wb><td>InputStream</td><td>EOFが見つかるまでに読み込まれたバイト数</td></tr>
+<tr class=wb><td>Reader</td><td>EOFが見つかるまでに読み込まれた文字数</td></tr>
+<tr class=wb><td>それ以外</td><td>size()を参照</td></tr>
+</table>
+</blockquote>
+
+<a name=contains></a>
+
+<div class="box">
+<div class="synopsis"><b>contains</b><tt>(</tt><em>elements</em><tt>, </tt><em>elem</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>contains()</tt>は、<em>elem</em>が<em>elements</em>に含まれるかどうかを返します。<em>elements</em>には、配列、Collection, String, CharSequenceを指定できます。
+</p>
+
+<div class="eg">
+例:
+<pre>
+contains([1,2,3], 1)
+   ==> true
+</pre>
+</div>
+  
+<a name=sort></a>
+<a name=rsort></a>
+<div class="box">
+<div class="synopsis"><b>sort</b><tt>(</tt><em>arrayOrCollection</em><tt> {,
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Comparator.html">Comparator</a>
+</tt><em>comparator</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>arrayOrCollection</em><tt> {, </tt><em>func</em><tt> (element) } )</tt></div>
+<div><b>rsort</b><tt>(</tt><em>arrayOrCollection</em><tt> {, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Comparator.html">Comparator</a>
+</tt><em>comparator</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>arrayOrCollection</em><tt> {, </tt><em>func</em><tt> (element) } )</tt></div>
+</div>
+
+<p>
+<tt>sort()</tt>は、指定された配列または<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a>をソートします。<tt>rsort()</tt>は逆順にソートします。
+<p>
+<em>comparator</em>が指定された場合、２つ要素の大小比較を行うためにそれが使われます。
+<em>func</em>が指定された場合、その関数の結果に対してPnutsの比較演算子<, >, = を使って大きさを比較します。
+どちらも指定されない場合は、単にPnutsの比較演算子 <, >, = で大小比較が行われます。
+<p>
+
+<div class="eg">
+例:
+<pre>
+a = [5, 2, 3]
+sort(a) ==> [2, 3, 5]
+a       ==> [2, 3, 5]
+</pre>
+</div>
+
+<pre class="eg">
+v = Vector()
+v.addElement(2)
+v.addElement(3)
+v.addElement(1)
+sort(v)
+v       ==> [1, 2, 3]
+</pre>
+
+<pre class="eg">
+a = [5, 2, 3]
+sort(a, function (x) x % 4) ==> [5, 2, 3]
+a       ==> [5, 2, 3]
+</pre>
+
+<a name=reverse></a>
+<div class="box">
+<div class="synopsis"><b>reverse</b><tt>(</tt><em>arrayOrListOrMap</em><tt> )</tt></div>
+</div>
+
+<p>
+配列またはListが指定された場合、要素の順序を反転させます。
+</p>
+<pre class="eg">
+x = [1,2,3,4]
+reverse(x) ==> [4,3,2,1]
+</pre>
+
+<p>
+Mapが指定された場合、key-valueの関係をを反転させたMapを返します。
+</p>
+<pre class="eg">
+x = map()
+x.a = 1
+x.b = 2
+x.c = 2
+reverse(x)  => {2=[c, b], 1=[a]}
+</pre>
+
+<a name="binarySearch"></a>
+<a name=reverse></a>
+<div class="box">
+<div class="synopsis"><b>binarySearch</b><tt>(</tt><em>arrayOrList</em>, <em>key</em><tt> )</tt></div>
+</div>
+<p>
+ソートされた<em>arrayOrList</em> から<em>key</em>を検索し、見つかった場合はその要素インデックスを返します。見つからなかった場合は、-(挿入されるインデックス-1) を返します。 
+</p>
+
+<a name="filter"></a>
+
+<div class="box">
+<div class="synopsis"><b>filter</b><tt>(</tt><em>array</em><tt> [], </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a>
+<em>collection</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Enumeration.html">Enumeration</a> <em>enum</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Iterator.html">Iterator</a> <em>it</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a> <em>generator</em><tt>, </tt><em>condition</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>filter()</tt> は、配列、Collection、Enumeration、Iteratorのいずれかが指定された場合、<em>condition</em> が表す条件が true となる要素のみを取り出すことのできるIteratorオブジェクトを返します。<em>condition</em>には、論理値を返す1引数の関数か、論理式を内容とする文字列を指定できます。
+</p>
+
+<div class="eg">
+例:
+<pre>
+> for (i : filter([1, 2, 3], function (x)  x > 1)) println(i)
+2
+3
+</pre>
+</div>
+
+文字列を指定する場合には、「<a href="http://pnuts.org/snapshot/latest/doc.ja/lang.html#selection">Pnuts言語：要素の撰択</a>」と同じように、論理式中の一番左の識別子は、filter()関数の第一引数の要素のBeanプロパティとして解釈されます。
+
+<div class="eg">
+例:
+<pre>
+x = set()
+x.add(date())
+x.add(date())
+
+filter(x, "time % 2 == 0")
+</pre>
+</div>
+
+<p>
+第一引数にGeneratorが指定された場合、そのGeneratorが生成するオブジェクトのうち<em>condition</em> が表す条件が true となる要素のみを生成するGeneratorを返します。
+</p>
+
+<div class="eg">
+例:
+<pre>
+function g() for (i: 1..10) yield i
+g2 = filter(g(), function (x) x % 2 == 0)
+printAll(g2)
+2
+4
+6
+8
+10
+</pre>
+</div>
+
+<a name=collect></a>
+
+<div class="box">
+<div class="synopsis"><b>collect</b><tt>(</tt><em>array</em><tt> [], </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a>
+<em>collection</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Enumeration.html">Enumeration</a> <em>enum</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Iterator.html">Iterator</a> <em>it</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a> <em>generator</em><tt>, </tt><em>condition</em><tt> )</tt></div>
+</div>
+<p>
+<tt>filter()</tt>がIteratorを返すのに対し、<tt>collect()</tt>はListを返します。
+<tt>collect()</tt>は次のように定義されます。
+<pre class=eg>
+function collect(c, cond) list(filter(c, cond))
+</pre>
+
+<div class="eg">
+例:
+<pre>
+x = set()
+x.add(date())
+x.add(date())
+
+collect(x, "time % 2 == 0")
+</pre>
+</div>
+
+  
+<a name="join"></a>
+<div class="box">
+<div class="synopsis"><b>join</b><tt>(</tt><em>delimiter</em><tt>, </tt><em>array</em><tt> [] { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a></tt> <em>collection</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html">Iterator</a></tt> <em>iter</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a></tt> <em>enum</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a></tt> <em>generator</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt></div>
+</div>
+<p>
+<em>callback</em>が指定されない場合、複数のオブジェクトを<em>delimiter</em>で区切った文字列を作ります。
+</p>
+<div class="eg">
+例:
+<pre>
+join(":", [1,2,3])               ---> "1:2:3"
+</pre>
+</div>
+
+<p>
+<em>callback</em>が指定された場合、各オブジェクトと<em>delimiter</em>を交互に渡して<em>callback</em>を呼び出します。
+</p>
+<div class="eg">
+例:
+<pre>
+join(":", [1,2,3], println)
+1
+:
+2
+:
+3
+</pre>
+</div>
+
+
+<a name="reduce"></a>
+
+<div class="box">
+<div class="synopsis"><b>reduce</b><tt>(</tt><em>f (arg1, arg2)</em><tt>, </tt><em>elements</em><tt> { ,</tt> <em>first</em> <tt>} )</tt></div>
+</div>
+<p>
+<em>f</em><tt> (</tt><em>f</em><tt> (</tt><em>f</em><tt> (</tt><em>f</em><tt> (</tt>elem1, elem2<tt>)</tt>, elem3<tt>)</tt>, elem4<tt>)</tt>, ...<tt>)</tt> を返します。
+<em>first</em> が指定された場合は、<em>f</em><tt> (</tt><em>f</em><tt> (</tt></em>f</em><tt> (</tt><em>f</em><tt> (</tt><em>first</em>, elem1<tt>)</tt>, elem2<tt>)</tt>, elem3<tt>)</tt>, ...<tt>)</tt>を返します。
+</p>
+<div class="eg">
+例:
+<pre>
+reduce(function (x, y) x + y, [1,2,3,4]) // --> 10
+reduce(function (x, y) x * y, [1,2,3,4]) // --> 24
+</pre>
+</div>
+
+<a name="call"></a>
+<a name="applyFunction"></a>
+
+<div class="box">
+<div class="synopsis"><b>call</b><tt>(</tt><em>callable</em><tt>(</tt><em>arg</em>,
+...<tt>) {, </tt><em>arguments</em> }<tt>)</tt></div>
+<div class="synopsis"><b>applyFunction</b><tt>(</tt><em>callable</em><tt>(</tt><em>arg</em>,
+...<tt>) { , </tt><em>arguments</em> } <tt>)</tt></div>
+</div>
+
+<p>
+<tt>call()</tt>は、<em>arguments</em>の要素を引数として、指定され
+た関数またはクラス（のコンストラクタ）を呼び出し、結果を返します。
+<em>callable</em>には、pnuts.lang.Callableまたは java.lang.Classを指定します。
+<em>arguments</em>には、配列, List, Iterator, Enumeration, Generatorのいずれかを指定します。
+</p>
+<p>
+<tt>applyFunction()</tt>は<tt>call()</tt>と同じ動きをしますが、call()の方が推奨されます。
+</p>
+<div class="eg">
+例:
+<pre>
+func = println
+call(func, ["hello"])
+
+call(Object)
+
+call(int, ["100"])
+</pre>
+</div>
+
+
+<H3>Generator 生成</H3>
+
+<a name=generator></a>
+<div class="box">
+<div class="synopsis"><b>generator</b><tt>(</tt> <em>elements</em> <tt>)</tt></div>
+</div>
+<p>
+配列、Collectionからジェネレータを作成します。
+</p>
+
+<div class="eg">
+例:
+<pre>
+g = generator([1,2,3])
+printAll(g[function (x) x < 2])
+</pre>
+</div>
+
+
+<a name=range></a>
+<div class="box">
+<div class="synopsis"><b>range</b><tt>(</tt> <em>start</em>, <em>end</em> <tt>)</tt></div>
+</div>
+<p>
+<em>start</em>から<em>end</em>までの整数を生成するジェネレータを返します。
+</p>
+<div class="eg">
+例:
+<pre>
+g = range(1, 100)
+printAll(g[function (x) x < 10])
+</pre>
+</div>
+
+
+<h3>LinkedListに対する操作</h3>
+
+<a name=push></a>
+<a name=pop></a>
+<a name=shift></a>
+<a name=unshift></a>
+
+<div class="box">
+<div class="synopsis"><b>push</b><tt>( </tt><em>collection</em><tt>, </tt><em>element</em><tt> )</tt></div>
+<div class="synopsis"><b>pop</b><tt>( </tt><em>linkedListOrStack</em><tt> )</tt></div>
+<div class="synopsis"><b>shift</b><tt>( </tt><em>linkedList</em><tt> )</tt></div>
+<div class="synopsis"><b>unshift</b><tt>( </tt><em>linkedList</em><tt>, </tt><em>element</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>push()</tt>は、<em>element</em>を<em>collection</em>に追加します。<tt>pop()</tt>は、<em>linkedListOrStack</em>の最後の要素を取り除き、返します。<tt>shift()</tt>は、<em>linkedList</em>の先頭の要素を取り除き、返します。<tt>unshift()</tt>は<em>element</em>を<em>linkedList</em>の先頭に追加します。
+</p>
+<p>
+<tt>shift()</tt>, <tt>unshift()</tt>には<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/LinkedList.html">java.util.LinkedList</a>オブジェクトが渡されます。
+<tt>pop()</tt>には<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/LinkedList.html">java.util.LinkedList</a>オブジェクトか<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Stack.html">java.util.Stack</a>オブジェクトが渡されます。
+<tt>push()</tt>には、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">java.util.Collection</a>オブジェクト(LinkedListを含む)が渡されます。
+</p>
+
+<h3>Mapに対する操作</h3>
+
+<a name=mapget></a>
+<a name=mapput></a>
+
+<div class="box">
+<div class="synopsis"><b>mapget</b><tt>(</tt><em>map</em><tt>, </tt><em>key</em><tt>)</tt></div>
+<div class="synopsis"><b>mapput</b><tt>(</tt><em>map</em><tt>, </tt><em>key</em><tt>, </tt><em>value</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>mapget()</tt>は、<em>map</em>の中で<em>key</em>に対応づけられている値を返します。
+<p>
+<tt>mapput()</tt>は、<em>map</em>の中で<em>key</em>に対して<em>value</em>を対応づけます。
+</p>
+
+
+<h3>リスト処理</h3>
+
+<a name=project></a>
+<div class="box">
+<div class="synopsis"><b>project</b><tt>(</tt><em>elements</em>, </tt><em>func(elem)</em><tt>)</tt></div>
+</div>
+<p>
+<tt>project()</tt>は、配列、List、Set、Iterator、 Enumeration、Map、Generatorのいずれかを引数に取り、同じ型のオブジェクトを返します。
+<em>elements</eM>が配列の場合は、<em>func()</em>を呼び出した結果を要素とするListオブジェクト(Read-Only)を返します。
+<p>
+<em>elements</eM>がjava.util.Listオブジェクトの場合、<em>func()</em>を呼び出した結果を要素とするListオブジェクト(Read-Only)を返します。
+<p>
+<em>elements</eM>がjava.util.Setオブジェクトの場合、<em>func()</em>を呼び出した結果を要素とするSetオブジェクト(Read-Only)を返します。
+<p>
+<em>elements</eM>がjava.util.Iteratorオブジェクトの場合、<em>func()</em>を呼び出した結果を取り出すためのIteratorオブジェクトを返します。
+<p>
+<em>elements</eM>がjava.util.Enumerationオブジェクトの場合、<em>func()</em>を呼び出した結果を取り出すためのEnumerationオブジェクトを返します。
+<p>
+<em>elements</eM>がpnuts.lang.Generatorオブジェクトの場合、<em>func()</em>を呼び出した結果を生成するGeneratorオブジェクトを返します。
+<p>
+<em>elements</eM>がjava.util.Mapオブジェクトの場合、<em>func()</em>を呼び出した結果を値とするMapオブジェクト(Read-Only)を返します。
+<p>
+<em>elements</eM>が<tt>null</tt>の場合、<tt>null</tt>を返します。
+<p>
+
+<div class="eg">
+例:
+<pre>
+> printAll(project(range(1, 5), {x ->  x * 100})
+100
+200
+300
+400
+500
+</pre>
+</div>
+
+<a name=mapFunction></a>
+
+<div class="box">
+<div class="synopsis"><b>mapFunction</b><tt>(</tt><em>func</em><tt>(</tt><em>elem</em><tt>),
+</tt><em>elements</em> {, <em>dest</em> }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>mapFunction()</tt> は、<em>elements</em>の各要素に <em>func</em>を適用します。
+<em>elements</em>は、Collection, Iterator, Enumeration, Map, pnuts.lang.Package, pnuts.lang.Generator のいずれかです。
+MapオブジェクトまたはPackageオブジェクトを指定する場合は、<em>func</em>には、キーと値を受け取る2引数の関数を指定します。
+<p>
+<em>dest</em>にCollectionオブジェクトが指定された場合は、各要素に<em>func</em> を適用した結果を<em>dest</em>に追加します。
+<em>dest</em>が省略された場合は、結果を捨てられます。
+<p>
+
+<div class="eg">
+例:
+<pre>
+> mapFunction(function (x)  x * 100, [1, 2, 3], l = list())
+null
+> l
+[100, 200, 300]
+</pre>
+</div>
+
+<h3>配列に対する操作</h3>
+
+<h4>コピー</h4>
+
+<a name=arraycopy></a>
+
+<div class="box">
+<div class="synopsis"><b>arraycopy</b><tt>(</tt><em>src</em><tt> [ ], </tt><em>dst</em><tt> [ ] )</tt></div>
+<div class="synopsis"><b>arraycopy</b><tt>(</tt><em>src</em><tt> [ ], int </tt><em>idx0</em> <tt>,
+	      </tt><em>dst</em><tt> [ ], int </tt><em>idx1</em> <tt>, int </tt><em>length</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>arraycopy()</tt> は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/System.html#arraycopy(java.lang.Object, int, java.lang.Object, int, int)">System.arraycopy()</a> メソッドを呼んで、指定された配列を別の配列にコピーします。
+</p>
+
+<div class="eg">
+例:
+<pre>
+a = [1, 2, 3]
+b = [0, 0, 0, 4, 5]
+arraycopy(a, b)
+b      ==> [1, 2, 3, 4, 5]
+</pre>
+</div>
+
+<p>
+単に配列のコピーを作るには、空の配列と連結します。
+</p>
+
+<div class="eg">
+例:
+<pre>
+a = [1, 2, 3]
+b = a + []
+b      ==> [1, 2, 3]
+</pre>
+</div>
+
+<h4>部分配列</h4>
+
+<div class="box">
+<div class="synopsis"><em>array</em><tt> [ </tt><em>start</em><tt> .. </tt><em>length</em><tt> ]</tt></div>
+<div class="synopsis"><em>array</em><tt> [ </tt><em>start</em><tt> ]</tt></div>
+</div>
+
+<p>
+<em>array</em><tt>[start..end]</tt> は、<em>array</em>の部分配列を作って返します。 
+      <em>length</em>が省略された場合は、<em>start</em>以降の部分配列を返します。
+</p>
+
+<div class="eg">
+例:
+<pre>
+a = [1,2,3,4]
+a[1.. 2]    ==> [2, 3]
+a[1..]    ==> [2, 3, 4]
+</pre>
+</div>
+
+<h4>基本型配列への変換</h4>
+
+<div class="box">
+<code>
+<div>(int[])[1,2,3,4,5]</div>
+<div>(float[])[1,2,3,4,5]</div>
+<div>(byte[])[#1,#2,#3,#4,#5]</div>
+<div>(char[])['a', 'b']</div>
+<div>(boolean[])[true, false]</div>
+</code>
+</div>
+
+<p>
+配列型へのキャストは、指定された型の配列を新たに作成し、要素をコピーします。
+作成された配列に代入できない要素がある場合は、例外ClassCastException が送出されます。
+<p>
+配列の接続も同じ目的で利用できます。
+</p>
+
+<div class="box">
+<code>
+<div>int[0] + [1,2,3,4,5]</div>
+<div>float[0] + [1,2,3,4,5]</div>
+<div>byte[0] + [#1,#2,#3,#4,#5]</div>
+<div>char[0] + ['a', 'b']</div>
+<div>boolean[0] + [true, false]</div>
+</code>
+</div>
+
+<h3>Collectionの要素を集合として扱う</h3>
+
+<a name=aggregateMode></a>
+
+<div class="box">
+<div class="synopsis"><b>aggregateMode</b><tt>(</tt>{ <em>mode</em> }<tt>)</tt></div>
+</div>
+
+<p>
+aggregateモードが<tt>true</tt>のときは、Collectionに対するフィールド参照は、Collectionの各要素に対するBeanプロパティを参照した結果をすべて含むCollectionを返します。
+</p>
+
+
+<div class="eg">
+例:
+<pre>
+s = set()
+s.add(date(1))
+s.add(date(2))
+s.add(date(3))
+s.add(date(4))
+
+aggregateMode() ==> false
+s.time      ==> error
+s[time % 2 == 0].time ==> 2
+
+aggregateMode(true)
+s.time      ==> [1, 2, 3, 4]
+s[time % 2 == 0].time ==> [2, 4]
+</pre>
+</div>
+
+また、
+<pre class="eg">
+ <em>collection</em><tt>[</tt><em>predicate</em>(elem)...] = value
+</pre>
+という代入は、<em>collection</em>の要素のうち関数<em>predicate</em>がtrueを返す要素を右辺で置き換えます。
+<p>
+
+<pre class="eg">
+<em>collection</em>.<em>name</em> = value
+</pre>
+
+は、<em>collection</em>の要素すべての<em>name</em>フィールドに代入します。
+</ul>
+
+<div class="eg">
+例:
+<pre>
+s = list()
+s.add(date(1))
+s.add(date(2))
+s.add(date(3))
+
+aggregateMode(true)
+
+s[time % 2 == 1].time = 4
+s.time           ==> [4, 2, 4]
+s.time = 0
+s.time           ==> [0, 0, 0]
+</pre>
+</div>
+</li>
+</ul>
+
+<p>
+また、aggregateモードが<tt>true</tt>のときは、java.util.Setに対する二項演算 + - * が定義されます。
+</p>
+<div class="eg">
+例:
+<pre>
+s1 = set([1,2,3])
+s2 = set([1,3,5])
+
+aggregateMode(true)
+
+s1 + s2          ==> [1,2,3,5]
+s1 - s2          ==> [2]
+s1 + 10          ==> [1,2,3,10]
+s1 - 1           ==> [2,3]
+s1 * s2          ==> [1, 3]
+</pre>
+</div>
+</li>
+</ul>
+
+<p>
+引数が指定されない場合は、aggregateモードかどうかを調べて<tt>true</tt>または<tt>false</tt>を返します。
+引数にbooleanが指定された場合は、実行中のコンテクストのaggregateモードを設定します。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> コレクション・配列</div>
+
+  </body>
+</html>

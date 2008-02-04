@@ -1,0 +1,112 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head>
+  
+  <title>J&#281;zyk Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+<body>
+<div class="nav"><a href="lang-TOC.html">Spis tre&#347;ci</a> -&gt; Historia zmian</div>
+
+<h2>Zmiany po wersji 1.2</h2>
+<ul>
+<li><a href="lang.html#beandef">Nowa sk&#322;adnia tworzenia ziarenek JavaBeans</a>
+<pre class="eg">      btn = java.awt.Button {<br>              label : "OK"<br>            }<br></pre>Wyra&#380;enie to zostanie zinterpretowane jako:
+<pre class="eg">      btn = new java.awt.Button()<br>      btn.label = "OK"<br>      btn<br></pre>
+</li><li>Wyra&#380;enie mo&#380;e by&#263; umieszczane w zmiennych tekstowych&nbsp; <a href="lang.html#string">Litera&#322; String</a>
+<pre class="eg">       "Date: \( date() \)"<br></pre>
+</li><li><a href="lang.html#parallel_assign">Parallel assignment returns null</a>
+<pre class="eg">       a,b = [1,2]       --&gt; null<br></pre>
+</li><li><a href="lang.html#classdef">Deklaracja typu w klasie mo&#380;e by&#263; pomini&#281;ta tylko gdy inicjalizowane jest jak&#261;&#347; warto&#347;ci&#261;</a>
+<pre class="eg">     class A {<br>       name2 = null   // W poprzedniej wersji to oznacza&#322;o to samo co  'Object name2 = null'<br>     }<br></pre>
+</li></ul>
+
+<h2>Zmiany po wersji 1.1</h2>
+<ul>
+<li><a href="lang.html#classdef">Definicja klas</a>
+<pre class="eg">package util<br>import java.util.*<br>import java.io.*<br>class mymap extends TreeMap implements Serializable {<br>  get(key){<br>    if ((v = super.get(key)) == null){<br>      super.put(key, v = set())<br>    }<br>    v<br>  }<br>}<br></pre></li>
+<li><a href="lang.html#closure">Kompaktowa sk&#322;adnia funkcji anonimowych</a>
+<pre class="eg">{a, b -&gt; a + b}<br></pre>
+</li>
+<li><a href="lang.html#parallel_assign">Podstawienia wielokrotne (rozpakowywanie tablic/list do zmiennych)</a>
+<pre class="eg">a, b = [1, 2]<br>for (key, value : {1 =&gt; 2}){ ... }<br></pre>
+</li>
+<li><a href="lang.html#arrayIndex">Ujemne indeksowanie tablic</a>
+<pre class="eg">a[-n]&#129;@&#129;@// to samo co a[size(a) - n]<br></pre></li>
+
+<li><a href="lang.html#vararg">Funkcje ze zmienn&#261; ilo&#347;ci&#261; parametr&oacute;w mog&#261; mie&#263; wiecej ni&#380; jeden parametr</a>
+<pre class="eg">function f(a,b,c[]) c<br>f(1,2) --&gt; []<br>f(1,2,3) --&gt; [3]<br>f(1,2,3,4) --&gt; [3,4]<br></pre>
+</li><li><a href="lang.html#concatenation">Binarne operatory (+, -, *, &lt;, &lt;=, &gt;, &gt;=) dla tablic i kolekcji</a>
+<pre class="eg">{1, 2} + {3}<br>{1, 2} - {2, 4}<br>{1, 2} &gt; [2]<br></pre></li>
+
+<li><a href="lang.html#list">Sk&#322;adnia tworz&#261;ca listy</a>
+<pre class="eg">{e1, e2, e3}<br></pre></li>
+<li>bezpo&#347;rednia konwersja pomi&#281;dzy typami prostymi
+<pre class="eg">Thread.sleep(100.0)<br></pre></li>
+<li>Konwersja Tablica &lt;-&gt; Lista
+<pre class="eg">String({65})<br></pre></li>
+</ul>
+
+<h2>Zmiany po wersji 1.0</h2><br><ul><li>Nowe s&#322;owa kluczowe:
+<pre class="eg">  new<br>  do<br>  try<br>  finally<br>  import<br>  yield<br>  =&gt;<br></pre>
+
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#new"><tt>'new'</tt> wyra&#380;enie</a> tworzy instancje podaej klasy
+
+<div class="eg">np.
+<pre>new java.util.ArrayList()<br>new int[10]<br>new int[]{1, 2, 3}<br></pre>
+</div>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#subclass"><tt>'new'</tt> wyra&#380;enie</a> tworzace podklas&#281;
+
+<div class="eg">np.
+<pre>new WindowAdapter(){<br>   windowClosing(e){<br>      ...<br>   }<br>}<br></pre>
+</div>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#import"><tt>import</tt> instrukcja</a>, alternatywa dla funkcji&nbsp; import()&nbsp;
+
+<div class="eg">np.
+<pre>import java.util.*<br>import java.rmi.Remote<br>import static java.awt.Color.*<br></pre>
+</div>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#yield"><tt>yield</tt> instrukcja</a> do definicji generator&oacute;w funkcji
+<div class="eg">np.
+<pre>function integers(min, max){<br>   for (i: min..max) yield i<br>}<br><br>for (i : integers(0, 3)) println(i)<br></pre>
+</div>
+
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#throw"><tt>throw</tt> instrukcja</a>
+<div class="eg">
+<pre>throw new java.io.IOException("message")<br></pre>
+</div>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#cast">Cast wyra&#380;enie</a> and <a href="../../../pnuts%201.2/doc/lang.html#instanceof"><tt>instanceof</tt> wyra&#380;enie</a> teraz pobiera litera&#322; typu a nie obiekt Class.
+
+<p>W 1.0, wyra&#380;enie cast wymaga obiektu Class &nbsp;do wyspecyfikowania
+typu docelowego rzutowania. W 1.1 i nowszychr wyra&#380;enie cast pobiera
+litera&#322; typu jak w j&#281;zyku&nbsp;Java.
+</p>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#try"><tt>try</tt>/<tt>catch</tt>/<tt>finally</tt> instrukcja</a>
+<div class="eg">np.
+<pre>try {<br>  ...<br>} catch (java.io.IOException e){<br>  e.printStackTrace()<br>}<br></pre>
+</div>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#dowhile"><tt>do</tt>/<tt>while</tt> instrukcja</a>
+<div class="eg">np.
+<pre>i = 0<br>do {<br>  i++<br>} while (i &lt; 10)<br></pre>
+</div>
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#ternary"><tt><em>warunek</em> ? wyr : wyr</tt></a>
+<div class="eg">np.
+<pre>pnuts_version.startsWith("1.1") ? 1 : 0<br></pre>
+</div>
+
+</li><li>Kiedy metoda instacji jest wo&#322;ana i nie zostanie znaleziona wo&#322;ana jest metoda klasy.
+<div class="eg">np.
+<pre>System.gc()<br></pre>
+</div>
+
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#map">Map wyra&#380;enie</a>
+<pre class="eg">{ "name"=&gt;"Sae",  "age" =&gt; 1 }<br></pre>
+
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#array">Array wyra&#380;enie</a>
+<pre class="eg">{ "name",  "age" }       // same as ["name", "age"]<br></pre>
+
+</li><li><a href="../../../pnuts%201.2/doc/lang.html#scope">Zasady Widoczno&#347;ci</a> zosta&#322;y uproszczone</li><p>
+</p><div class="eg">Stare:
+<pre>import java.awt.*<br>swing = false<br>function f(){<br>  if (swing){<br>    Menu = JMenu<br>  }<br>  Menu   // java.awt.Menu<br>}<br></pre>
+</div><div class="eg">Nowe:
+<pre>import java.awt.*<br>swing = false<br>function f(){<br>  if (swing){<br>    Menu = JMenu<br>  }<br>  Menu   // null<br>}</pre></div></ul><div class="nav2"><a href="lang-TOC.html">Spis tre&#347;ci</a> -&gt; Historia zmian</div>
+</body></html>

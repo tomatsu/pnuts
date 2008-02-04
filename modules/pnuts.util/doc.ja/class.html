@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.utilモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Classのメンバーの表示</div>
+
+    <h2>Classのメンバーの表示</h2>
+
+<a name=dumpclass></a>
+
+<div class="box">
+<div class="synopsis"><b>dumpclass</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>dumpclass()</tt> は、クラス <em>class</em> のすべての public のメンバー を表示します。
+</p>
+
+<div class="eg">例:
+<pre>
+&gt; dumpclass(Object)
+
+--- constructors  -----------------------
+ Object()
+
+--- instance methods -----------------------
+ Class getClass()
+ int hashCode()
+ boolean equals(Object)
+ String toString()
+ void notify()
+ void notifyAll()
+ void wait(long)
+ void wait(long,int)
+ void wait()
+</pre></div>
+
+<a name=supertypes></a>
+
+<div class="box">
+<div class="synopsis"><b>supertypes</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>supertypes()</tt> は <em>class</em> のスーパークラスとインタフェースをすべて表示します。
+</p>
+
+<div class="eg">例:
+<pre>
+&gt; supertypes(class java.util.Vector)
+
+java.util.AbstractList class
+java.util.AbstractCollection class
+java.lang.Object class
+java.util.List interface
+java.util.Collection interface
+java.lang.Cloneable interface
+java.io.Serializable interface
+java.util.List interface
+java.util.Collection interface
+java.util.Collection interface
+null
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Classのメンバーの表示</div>
+
+  </body>
+</html>

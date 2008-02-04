@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnutsユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC_JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnutsユーザーズガイド</a> -> スクリプトで定義されたクラスをJavaから使う
+</div>
+
+<!-- body start -->
+
+    <h2>スクリプトで定義されたクラスをJavaから使う</h2>
+
+<p>
+スクリプトで定義されたクラスは、以下の手順に従うことでJavaから使うことができます。
+</p>
+
+<h3>手順</h3>
+
+<h4>1. スクリプトを実行するときに参照されるContextを用意する</h4>
+
+<p>
+この段階では、スクリプトを実行するときに参照されるContextを準備し、Runtime.setThreadContext()を呼び出して、現在のスレッドに対応づけます。
+
+</p>
+
+<div class="eg">
+<pre>
+import pnuts.lang.Context;
+import pnuts.lang.Runtime;
+
+Context context = new Context();
+Runtime.setThreadContext(context);
+context.usePackage("pnuts.tools"); // specifies which module is used
+</pre>
+</div>
+
+<h4>2. Pnuts用のClassLoaderを作成する</h4>
+
+<p>
+この段階では、スクリプトで定義されたクラスをパーズ・コンパイル・ロードするために Pnuts用のClassLoaderを作成します。
+</p>
+
+<div class="eg">
+<pre>
+ClassLoader classLoadser = Pnuts.createClassLoader(context);
+Thread.currentThread().setContextClassLoader(classLoader);
+Class cls = classLoader.loadClass(<em>className</em>);
+</pre>
+</div>
+
+<h3>例</h3>
+
+<div class="eg">mymap.pnc
+<pre>
+import java.util.*
+class mymap extends TreeMap {
+  get(key){
+    if ((v = super.get(key)) == null){
+      super.put(key, v = set())
+    }
+    v
+  }
+}
+</pre>
+</div>
+
+<div class="eg">MyTest.java
+<pre>
+import pnuts.lang.Context;
+import pnuts.lang.Runtime;
+import java.util.Map;
+ 
+public class MyTest {
+   static Context setupContext(){
+      Context context = new Context();
+      context.usePackage("pnuts.tools");
+      return context;
+   }
+   public static void main(String[] args) throws Exception {
+      Context context = setupContext();
+      Runtime.setThreadContext(context);
+      ClassLoader parent = Thread.currentThread().getContextClassLoader();
+      ClassLoader cloader = Pnuts.createClassLoader(context, parent);
+      Thread.currentThread().setContextClassLoader(cloader);
+      Class cls = cloader.loadClass(args[0]);
+      Map m = (Map)cls.newInstance();
+      System.out.println(m.get("no_such_key"));
+   }
+}
+</pre>
+</div>
+
+<div class="eg">
+<pre>
+C:\> set CLASSPATH=pnuts.jar;pnuts-modules.jar;.
+C:\> java MyTest mymap
+</pre>
+</div>
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnutsユーザーズガイド</a> -> スクリプトで定義されたクラスをJavaから使う
+</div>
+
+  </body>
+</html>

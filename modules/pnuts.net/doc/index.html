@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.net module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt></a> -> pnuts.net module</div>
+
+<h2><tt>pnuts.net</tt> module</h2>
+
+<a name=getLocalHost></a>
+<div class="box">
+<div class="synopsis"><b>getLocalHost</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getLocalHost()</tt> returns an <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/InetAddress.html">InetAddress</a>
+object that represents the address of the local host.
+</p>
+
+<a name=getInetAddress></a>
+<div class="box">
+<div class="synopsis"><b>getInetAddress</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>host</em><tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>address</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>hostOrAddress</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getInetAddress()</tt> returns an <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/InetAddress.html">InetAddress</a>
+object of the specified address.
+</p>
+
+<div class="eg">e.g.
+<pre>
+getInetAddress("127.0.0.1")
+getInetAddress("pnuts.org")
+</pre>
+</div>
+
+<a name=isLocalHost></a>
+<div class="box">
+<div class="synopsis"><b>isLocalHost</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/InetAddress.html">InetAddress</a></tt>
+<em>address</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>hostOrddress</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>isLocalHost()</tt> checks if the specified address is one of the
+addresses of the local host.
+</p>
+
+<div class="eg">e.g.
+<pre>
+isLocalHost("127.0.0.1")
+isLocalHost("pnuts.org")
+</pre>
+</div>
+
+<a name=encodeURL></a>
+<div class="box">
+<div class="synopsis"><b>encodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>str</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>encodeURL()</tt> converts a plain text to <tt>x-www-form-urlencoded</tt> text.
+</p>
+<p>
+<em>encoding</em> is one of Java's encoding name.
+When <em>encoding</em> is omitted, the default encoding is used.
+</p>
+<div class="eg">
+<pre>
+encodeURL("How are you?", "UTF-8") ==> "How+are+you%3F"
+</pre>
+</div>
+
+<a name=decodeURL></a>
+<div class="box">
+<div class="synopsis"><b>decodeURL</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>urlEncodedString</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>decodeURL()</tt> converts <tt>x-www-form-urlencoded</tt> text to plain text.
+</p>
+
+<p>
+<em>encoding</em> is one of Java's encoding name.
+When <em>encoding</em> is omitted, the default encoding is used.
+</p>
+<div class="eg">
+<pre>
+decodeURL("How+are+you%3F", "UTF-8") ==> "How are you?"
+</pre>
+</div>
+
+<a name="makeQueryString"></a>
+<div class="box">
+<div class="synopsis"><b>makeQueryString</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> </tt><em>map</em><tt> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> )</tt></div>
+</div>
+<p>
+<tt>makeQueryString()</tt> returns a query string in
+<tt>x-www-form-urlencoded</tt> format, from the specified <em>map</em>
+which defines parameter-value pairs .
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt></a> -> pnuts.net module</div>
+
+  </body>
+</html>

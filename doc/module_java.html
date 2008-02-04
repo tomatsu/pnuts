@@ -1,0 +1,278 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Implementing Modules in Java
+</div>
+
+<!-- body start -->
+
+<a name=module_in_java></a>
+
+<h2>Implementing Modules in Java</h2>
+
+<p>
+Initialization scripts of modules can be implemented as <a href="loadable.html">loadable classes</a>.  So it is legal to implement initialization scripts as <tt>pnuts.lang.Executable</tt> implementation classes, but it is more common to implement them as <tt>pnuts.ext.ModuleBase</tt> subclass.
+</p>
+
+<p>
+For example, let's define <tt>"my_module"</tt> module in Java.
+we define <tt>my_module.init</tt> class that inherits <tt>pnuts.ext.ModuleBase</tt>. 
+<a href="../apidoc/pnuts/ext/ModuleBase.html#execute(pnuts.lang.Context)"><tt>public
+Object execute(Context)</tt></a> method defines the function <tt>hello()</tt> in the <tt>"my_module"</tt> package
+</p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.ext.ModuleBase;
+import pnuts.lang.Context;
+import pnuts.lang.Package;
+
+public class init extends ModuleBase {
+    public Object execute(Context context){
+      Package pkg = Package.getPackage("my_module", context);
+	pkg.set("hello".intern(), new hello(), context);
+	return null;
+    }
+}
+</pre>
+
+<p>
+Note that the symbol <tt>"hello"</tt> is an interned String, since <tt>pnuts.lang.Package</tt>
+manages symbols as interned String objects. 
+</p>
+<p>
+
+</p>
+
+<h3>Dependency on other modules</h3>
+<p>
+The easiest way to define dependency on other modules is to override <tt>ModuleBase.getRequredModules()</tt>.  The following example define <tt>my_module</tt> module that depends on <tt>"pnuts.lib"</tt> and <tt>"pnuts.io"</tt> module.
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    protected String[] getRequiredModules(){
+        return new String[]{"pnuts.lib", "pnuts.io"};
+    }
+    ...
+}
+</pre>
+
+<h3>Defining Sub-modules</h3>
+
+Module may define subsets of its functionality as sub-modules,
+which can be defined by overriding <tt>ModuleBase.getSubModules()</tt> method.
+<p>
+For example,  the following initialization script defines a module that has <tt>"functional"</tt> module as
+a sub-module.
+<p>
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    protected String[] getSubModules(){
+        return new String[]{"functional"};
+    }
+    ...
+}
+</pre>
+
+<h3>Defining Dependency/Submodules at Run Time</h3>
+
+<p>
+Dependency or submodule can be defined at run time by 
+using appropriate modules in <tt>ModuleBase.execute(Context)</tt> method,
+as the following steps.
+<p>
+
+<ol>
+<li>Call <tt>Context.usePackage()</tt> with sub-modules
+<li>Call <tt>Context.clearPackage()</tt> method
+<li>Call <tt>Context.usePackage()</tt> with requred modules to implement the module
+</ol>
+
+<p>
+For example, the following code defines <tt>"my_module"</tt> module that depends on <tt>"pnuts.lib"</tt> module and <tt>"pnuts.io"</tt> module and has a sub-module <tt>"functional"</tt> module.
+<p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    public Object execute(Context context){
+        context.usePackage("functional");
+        context.clearPackages();  // reset the module list
+        context.usePackage("pnuts.lib");
+        context.usePackage("pnuts.io");
+	...
+    }
+}
+</pre>
+
+
+<h3>Specifying the intialization script</h3>
+<p>
+The initialization script of a module can be specified in <tt>META-INF/pnuts/module/</tt><em>moduleName</em>.
+For example, <tt>java.net</tt> module's initialization script is defined at the 1st line of <tt>META-INF/pnuts/module/java.net</tt>, as follows.
+</p>
+<pre class="eg">
+org/pnuts/java_net/init
+</pre>
+
+<h3>Autoloading in Java</h3>
+<p>
+Autoloading is used in order to minimize start-up time of modules.
+<p>
+<a href="../apidoc/pnuts/lang/Package.html#autoload(java.lang.String,
+java.lang.String, pnuts.lang.Context)"><tt>Package.autoload()</tt></a> method can be used to autoload Pnuts scripts and loadable classes.  <tt>pnuts.ext.ModuleBase</tt> class provides more convenient methods for autoloading.
+</p>
+<h4>(1) Autoloading Pnuts Scripts</h4>
+<p>
+To autoload Pnuts scripts (and loadable classes), <a href="../apidoc/pnuts/ext/ModuleBase.html#autoload(java.lang.String[], java.lang.String, pnuts.lang.Context)"><tt>ModuleBase.autoload()</tt></a> can be used.  For example, the following code defines the name <tt>'hello'</tt>, which is expected to be defined in the script <tt>"my_module/hello"</tt>, but the script is not loaded until the name is first used.
+</p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    static String[] files  = { "my_module/hello" };
+    static String[][] functions = {
+        { "hello" }
+    };
+    
+    public Object execute(Context context){
+	for (int i = 0; i < files.length; i++){
+	    autoload(functions[i], files[i], context);
+	}
+	return null;
+    }
+}
+</pre>
+
+<h4>(2) Autoloading Pnuts Functions</h4>
+<P>
+To autoload functions implemented in Java, <a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadFunction(java.lang.String, pnuts.lang.Context)"><tt>ModuleBase.autoloadFunction()</tt></a> method can be used.
+For example, the following class defines the initialization of <tt>my_module</tt> module.
+When the symbol '<tt>hello</tt>' is first dereferenced, <tt>org.pnuts.my_module.hello</tt> class is loaded and instantiated by the default constructor and returned to Pnuts interpreter.
+</p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    static String[] javaFunctions = { "hello" };
+
+    protected String <b>getPrefix</b>(){
+        return "org.pnuts";
+    }
+    
+    public Object execute(Context context){
+	for (int i = 0; i < javaFunctions.length; i++){
+	    <b>autoloadFunction</b>(javaFunctions[i], context);
+	}
+	return null;
+    }
+}
+</pre>
+
+<p>
+<a href="../apidoc/pnuts/ext/ModuleBase.html#getPrefix()"><tt>getPrefix()</tt></a> method defines the prefix of the class names (the default prefix is <tt>null</tt>).
+In this example, the class name is constructed from the prefix <tt>"org.pnuts"</tt>, module name <tt>"my_module"</tt>, and the function name <tt>"hello"</tt>.  If <a href="../apidoc/pnuts/ext/ModuleBase.html#getPrefix()"><tt>getPrefix()</tt></a> method is not defined, the prefix is an empty string.
+</p>
+
+<h4>(3) Autoloading Java Classes</h4>
+
+<p>
+To autoload Java classes, <a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadClass(java.lang.String, java.lang.String, pnuts.lang.Context)"><tt>ModuleBase.autoloadClass()</tt></a> can be used.  For example, the following code defines two names 'Vector' and 'Hashtable', which will be the corresponding Class objects, but the classes are not loaded until the names are first used.
+</p>
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    public Object execute(Context context){
+	for (int i = 0; i < javaFunctions.length; i++){
+	    <b>autoloadClass</b>("java.util", "Vector", context);
+	    <b>autoloadClass</b>("java.util", "Hashtable", context);
+	}
+	return null;
+    }
+}
+</pre>
+
+
+<h3>Localization of Error Messages</h3>
+
+<p>
+When <a href="../modules/pnuts.lib/doc/index.html"><tt>pnuts.lib</tt></a> module is being used, the <a href="../modules/pnuts.lib/doc/i18n.html#formatMessage"><tt>formatMessage()</tt></a>
+function could be used to show localized message. But how can be do
+that in a module which does not depend on <a href="../modules/pnuts.lib/doc/index.html"><tt>pnuts.lib</tt></a> module?
+<p>
+If the initialization code is a subclass of <tt>pnuts.ext.ModuleBase</tt>,
+<a href="#ERROR"><tt>ERROR()</tt></a> function can be used in the functions of the module.
+<p>
+
+<a name=ERROR></a>
+
+<div class="box">
+<div class="synopsis"><b>ERROR</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>errorType</em><tt> {, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>param_1</em> ... <tt>} )</tt></div>
+</div>
+
+<p>
+This function finds a message resource from <tt>"errors.properties"</tt>,
+format the error message in the same way as <a href="../modules/pnuts.lib/doc/i18n.html#formatMessage"><tt>formatMessage()</tt></a>, and then
+throw <tt>pnuts.lang.PnutsException</tt> with the formatted message.</p>
+
+<pre class="eg">
+if (!isFunction(obj)){
+  ERROR("must_be_a_function", obj)
+}
+</pre>
+
+<div class="eg"><tt>my_module/errors.properties</tt>
+<pre>
+must_be_a_function=A function is expected: {0}
+</pre>
+</div>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Implementing Modules in Java
+</div>
+
+  </body>
+</html>

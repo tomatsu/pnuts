@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Javaクラスの生成</div>
+
+    <h2>Javaクラスの生成</h2>
+
+<ul>
+<li><a href="#classGenerator">classGenerator</a>
+<li><a href="#subclass"><em>cg</em> . subclass</a>
+<li><a href="#interface"><em>cg</em> . interface</a>
+<li><a href="#beanclass"><em>cg</em> . beanclass</a>
+<li><a href="#getClassLoader"><em>cg</em> . getClassLoader</a>
+</ul>
+
+<a name="classGeneretor"></a>
+<div class="box">
+<div class="synopsis"><em>cg</em> = <b>classGenerator</b><tt>(
+{ ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/ClassLoader.html">ClassLoader</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> ) </tt><em>parameter</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>classGenerator()</tt>が返すオブジェクトは、次のようなクラスを生成して読み込んだり、クラスファイルとして保存したりするために使われます。
+</p>
+
+<ul>
+<li>サブクラス
+<li>インタフェース
+<li>JavaBeans
+</ul>
+
+<p>
+<em>parameter</em>に<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/ClassLoader.html">ClassLoader</a>オブジェクトが指定された場合、それを親とするクラスローダが対応づけられたオブジェクトを返します。
+<em>parameter</em>が省略された場合は、Thread.currentThread.getContextClassLoader()の値が暗黙的に渡されます。
+いずれの場合も、<tt>classGenerator()</tt>の値ごとにクラスローダが一つ対応づけられ、各メソッドで作成されるクラスを読み込むために使われます。もし同じ名前のクラスを2度以上作成しようとするとエラーになります。
+<p>
+<em>parameter</em>に<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>または<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>オブジェクトが指定された場合、そのオブジェクトが表すディレクトリ以下に、生成されるクラスをクラスファイルの形で保存します。
+<em>parameter</em>に<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a>が指定された場合、生成されるクラスファイルがそれに書き込まれます。
+</p>
+
+<a name="subclass"></a>
+<h3>サブクラスの生成</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>subclass</b> <tt>(</tt></div>
+<div class="synopsis2"><tt> { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>className</em><tt> , }</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>supertypes</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> | <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> ) </tt><em>methods</b></em></div>
+<div class="synopsis2"><tt> { , boolean </tt><em>hasThis</em><tt> { , boolean <em>hasSuper</em><tt> } } )</tt></div>
+</div>
+
+
+<p>
+<tt>subclass()</tt> は、classGenerator()の返すオブジェクトのメソッドとして呼び出されます。
+引数<em>supertypes</em>がClassオブジェクトの場合、インタフェースならばそれを実装するクラス、そうでなければそれを継承するクラスを生成して返します。<em>supertypes</em>が配列の場合、その配列に含まれるインターフェイスを実装し、その配列に含まれるクラス(最大1つ)を継承するクラスを生成して返します。
+</p>
+
+<p>
+引数<em>methods</em>には、メソッド名-関数のマッピングを1つ以上含む<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">java.util.Map</a>オブジェクト、または<a href="../../../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a> オブジェクトを指定します。型階層の中にメソッド名および引数の数がマッチするオーバーライド可能なメソッドがある場合、そのメソッドをオーバーライドするクラスが生成されます。そうでない場合は、'<tt>public Object メソッド名(Object, ...)</tt>'のようなメソッドが新たに定義されます。
+</p>
+
+<div class="eg">例:
+<pre>
+cg = classGenerator()
+methods = map()
+methods.hello = function () println("hello")
+helloClass = cg.subclass("Hello", Object, methods)
+a = helloClass()
+a.hello()
+</pre></div>
+
+<p>
+<em>hasThis</em>と<em>hasSuper</em> の両方に<tt>true</tt>が指定された場合、各関数の第一引数はインスタンスへの参照(this)、第二引数は<tt>super</tt>への参照になります。
+<em>hasThis</em>のみ<tt>true</tt>が指定された場合、各関数の第一引数はインスタンスへの参照(this)になり、また、<em>hasThis</em>のみ<tt>true</tt>が指定された場合は、各関数の第一引数は<tt>super</tt>への参照になります。
+</p>
+
+<div class="eg">
+<pre>
+cg = classGenerator()
+hello = cg.subclass("Hello", Object, $(function toString(super) {println("called"); super.toString()}), false, true)
+hello()
+</pre>
+</div>
+
+<p>
+<em>className</em>が省略された場合、クラス名は自動的に生成されます。
+</p>
+
+<a name="signature"></a>
+<h4>メソッドのシグネチャ</h4>
+<p>
+パッケージの要素名に、<a href="http://java.sun.com/docs/books/vmspec/html/ClassFile.doc.html#7035">The Java Virtual Machine Specification</a> で定義されているmethod descriptor が含まれる場合は、その method descriptor をシグネチャとするメソッドが定義されます。
+たとえば、次のスクリプトは、<tt>public void hello(String s)</tt>というメソッドを定義します。
+</p>
+
+<div class="eg">例:
+<pre>
+cg = classGenerator()
+methods = map()
+methods.set("hello(Ljava/lang/String;)V", function (x) println("hello " + x))
+helloClass = cg.subclass("Hello", Object, methods)
+a = helloClass()
+a.hello("world")
+</pre></div>
+
+<p>
+例外情報をメソッド・シグネチャの直後に追加することができます。
+例外の型をパラメータの型と同じフォーマットで列挙します。
+<p>
+
+<div class="eg">例:
+<pre>
+cg = classGenerator()
+methods = map()
+methods["hello(Ljava/lang/String;)VLjava/rmi/RemoteException"] = function (x) println("hello " + x)
+helloClass = cg.subclass("Hello", class java.rmi.Remote, methods)
+a = helloClass()
+
+a.hello("world")
+</pre></div>
+
+<h4>スクリプト・パッケージ</h4>
+<p>
+次のサンプルは、<tt>subclass()</tt>を呼び出す際に<a href="script_package.html">スクリプト・パッケージ</a>を使うやりかたを示しています。
+</p>
+
+<div class="eg">例:
+<pre>
+cg = classGenerator()
+helloClass = cg.subclass(Object, $(function hello () "hello"))
+a = helloClass()
+a.hello()
+</pre></div>
+
+<p>
+スクリプト・パッケージが関数内で作られる場合、スクリプト・パッケージの関数からクロージャの変数にアクセスできます。また、このような使い方をすることで、スクリプト・パッケージの関数が名前空間を消費することを防げます。
+</p>
+
+<div class="eg">例:
+<pre>
+import("java.util.*")
+gen = classGenerator()
+function arrayEnum(array) $(
+  index = 0,
+  function hasMoreElements() index < array.length,
+  function nextElement() array[index++]
+)
+enum = gen.subclass(Enumeration, arrayEnum([1,2,3]))
+for (i : enum()) println(i)
+</pre>
+</div>
+
+<h4>クラスファイルの保存</h4>
+<p>
+<tt>classGenerator()</tt>のパラメータに、String/File/ZipOutputStreamのいずれかが指定されると、生成されたクラスファイルは各々の出力先に書き出されます。
+</p>
+<p>
+たとえば、次のスクリプトは、<tt>"/tmp"</tt>にHello.classを保存します。
+</p>
+<pre class="eg">
+cg = classGenerator("/tmp")
+cg.subclass("Hello", Object, $(function hello() "hello"))
+</pre>
+
+<p>
+保存されたクラスファイルを読み込む場合、メソッドを呼び出す前に、次のようにstaticメソッド<tt>attach(Context)</tt>を呼び出して、実行中のContextを対応づける必要があります。
+</p>
+<pre class="eg">
+Hello::attach(getContext())
+Hello().hello() ==> "hello"
+</pre>
+
+クラスファイルを保存して、後でそれを読み込んで利用する場合の制限事項
+
+<ul>
+<li>3番目の引数<em>metohds</em>はシリアライズできる必要があります。
+<li>メソッドとして指定された関数から呼び出された関数定義を再現するのはユーザの責任です。
+<li>メソッドとしてネストした関数を使用できません。
+</ul>
+
+<h4><tt>classGenerator()</tt>を使わないやりかた</h4>
+
+<a name="javaAdapter"></a>
+
+<div class="box">
+<div class="synopsis"><b>subclass</b><tt>( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>className</em><tt> , } </tt></div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>supertypes</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> | <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> )
+</tt> <em>methods</b></em></div>
+<div class="synopsis2"><tt> { , boolean <em>hasThis</em> { , boolean <em>hasSuper</em> } } <tt> )</tt></div>
+<div class="synopsis"><b>javaAdapter</b><tt>( ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>supertypes</b></em> <tt>, ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> | <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> ) </tt> <em>methods</b></em><tt> {, Object </tt><em>args</em><tt>, ... })</tt></div>
+</div>
+<p>
+<tt>classGenerator()</tt>を使わずに<tt>subclass()</tt>関数を呼び出すと、生成するクラスごとにクラスローダが割り当てられ、contextのクラスローダに設定されます。
+</p>
+<pre class="eg">
+methods = map()
+methods.hello = function () println("hello")
+subclass("A", Object, methods)
+A().hello()
+</pre>
+
+<p>
+関数<tt>javaAdapter()</tt> は、<tt>subclass()</tt>と同様にクラスを生成し、3番目以降の引数をコンストラクタに渡してインスタンスを生成します。ただし、<tt>subclass()</tt>と違い<em>hasThis</em>や<em>hasSuper</em>は指定できません。
+</p>
+
+<pre class="eg">
+methods = map()
+methods.hello = function () println("hello")
+a = javaAdapter(Object, methods)
+a.hello()
+</pre>
+
+
+<h4>制限事項</h4>
+
+<p>
+<tt>subclass()</tt>関数、<tt>javaAdapter()</tt> 関数には次のような制限があります。
+</p>
+
+<ul>
+<li>コンストラクタを定義できない。
+</ul>
+
+<a name="interface"></a>
+<h3>インタフェースの生成</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>interface</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>superInterfaces</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>[] </tt><em>signatures</b></em> <tt> )</tt></div>
+<div class="synopsis"><b>interface</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>superInterfaces</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>[] </tt><em>signatures</b></em> <tt> )</tt></div>
+</div>
+<p>
+<tt>interface()</tt> は、<em>superInterfaces</em>に指定されたインタフェースを親とするインタフェースを定義して、そのClassオブジェクトを返します。<em>signatures</em>には、<a href="#signature">「メソッドのシグネチャ」</a>で説明した形式の文字列の配列を指定します。
+</p>
+<p>
+classGenerator()の返すオブジェクトのメソッドとして呼び出された場合、生成されたコードはそのオブジェクトに取りこまれます。
+</p>
+
+<pre class="eg">
+cg = classGenerator()
+Hello = cg.interface("Hello", [], ["hello()V"])
+Hello.methods ==> [public abstract void Hello.hello()]
+</pre>
+
+<p>
+<tt>classGenerator()</tt>を使わずに<tt>interface()</tt>関数を呼び出すと、生成するクラスごとにクラスローダが割り当てられ、contextのクラスローダに設定されます。
+</p>
+<pre class="eg">
+interface("Hello", [], ["hello()V"])
+Hello.methods ==> [public abstract void Hello.hello()]
+</pre>
+
+<a name="beanclass"></a>
+<h3>JavaBeans</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>beanclass</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>superTypes</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> </tt><em>typeMap</b></em></div>
+<div class="synopsis2"> { , <em>constructorParams</em>[] } <tt> )</tt></div>
+<div class="synopsis"><b>beanclass</b><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>className</em><tt>,</tt></div>
+<div class="synopsis2"><tt>  ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>[] ) </tt><em>superTypes</b></em> <tt>,</tt></div>
+<div class="synopsis2"><tt> <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> </tt><em>typeMap</b></em></div>
+<div class="synopsis2"> { , <em>constructorParams</em>[] } <tt> )</tt></div>
+</div>
+
+<p>
+<tt>beanclass()</tt> は、<em>typeMap</em>に指定された、Beanプロパティ名->型の対応表から、それらのBeanプロパティをもつクラスを定義します。
+</p>
+
+<p>
+classGenerator()の返すオブジェクトのメソッドとして呼び出された場合、生成されたコードはそのオブジェクトに取りこまれます。
+</p>
+
+<pre class="eg">
+cg = classGenerator()
+Bean = cg.beanclass("Bean", [], map([["name", String]]))
+b = Bean()
+b.name = "foo"
+b.name     ==> "foo"
+</pre>
+<p>
+<tt>classGenerator()</tt>を使わずに<tt>beanclass()</tt>関数を呼び出すと、生成するクラスごとにクラスローダが割り当てられ、contextのクラスローダに設定されます。
+</p>
+<pre class="eg">
+beanclass("Bean", [], map([["name", String]]))
+b = Bean()
+b.name = "foo"
+b.name  ==> "foo"
+</pre>
+
+<p>
+Beanプロパティ名の配列が<em>constructorParams</em>に指定された場合、それらのプロパティを初期化するコンストラクタが定義されます。
+</p>
+<pre class="eg">
+beanclass("Bean", [], map([["name", String]]), ["name"])
+b = Bean("foo")
+b.name     ==> "foo"
+</pre>
+
+<a name="getClassLoader"></a>
+<h3>ClassLoader</h3>
+
+<div class="box">
+<div class="synopsis"><em>cg</em> . <b>getClassLoader</b><tt>( )</tt></div>
+</div>
+
+<p>
+<tt>getClassLoader()</tt>は、classGenerator()の返すオブジェクトのメソッドとして呼び出され、対応付けられたClassLoaderを返します。
+</p>
+
+<pre class="eg">
+cg = classGenerator()
+cg.getClassLoader()   ==> pnuts.lib.ClassFileLoader@f0eed6
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Javaクラスの生成</div>
+
+  </body>
+</html>

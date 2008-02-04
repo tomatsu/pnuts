@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Compiling Scripts from Java
+</div>
+
+<!-- body start -->
+
+<h2>Compiling Scripts from Java</h2>
+
+<h3>1. Compiling Scripted Classes</h3>
+
+<p>
+Scripted classes are usually compiled and loaded by PnutsClassLoader, but sometimes they
+need to be compiled manually.  pnuts.compiler.Compiler class provides a way to compile scripted classes.
+</p>
+
+<h4><tt>pnuts.compiler.Compiler</tt></h4>
+
+<dl>
+<dt></dt><dd><tt>public Object compileClassScript(Reader reader, Object scriptSource, ClassFileHandler handler)
+	    throws ParseException</tt></dd>
+</dl>
+<p>
+<tt>compileClassScript()</tt> compiles a script read from <em>reader</em>, then let <em>handler</em> handle the result.
+<p>
+<a href="../apidoc/pnuts/compiler/ClassFileHandler.html"><tt>pnuts.compiler.ClassFileHandler</tt></a> is an abstract interface to get a result of compilation.
+Two concrete classes of ClassFileHandler are provided: <a href="../apidoc/pnuts/compiler/FileWriterHandler.html"><tt>pnuts.compiler.FileWriterHandler</tt></a> and <a href="../apidoc/pnuts/compiler/ZipWriterHandler.html"><tt>pnuts.compiler.ZipWriterHandler</tt></a>.
+The following example compiles <tt>mymap</tt> class and saves as "e:\tmp\mymap.class".
+</p>
+
+<div class="eg">
+<pre>
+import pnuts.compiler.FileWriterHandler;
+import pnuts.compiler.Compiler;
+import pnuts.lang.ParseException;
+import java.io.File;
+import java.io.Reader;
+import java.io.FileReader;
+
+public class CompileTest {
+    public static void main(String[] args){
+	try {
+	    File file = new File("mymap.pnc");
+	    Reader reader = new FileReader(file);
+	    Compiler compiler = new Compiler();
+	    compiler.compileClassScript(reader, file.toURL(), new FileWriterHandler(new File("e:\\tmp")));
+	} catch (Exception e){
+	    e.printStackTrace();
+	}
+    }
+}
+</pre>
+</div>
+
+<h3>2. Compiling Executable Scripts</h3>
+<p>
+<a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html">pnuts.compiler.CompilerPnutsImpl</a>
+can be used to execute Pnuts scripts with on-the-fly compilation.  On the
+other hand, <tt>pnuts.compiler.Compiler</tt> class is used to compile
+scripts without executing.
+</p>
+
+
+<pre class="eg">
+import pnuts.lang.*;
+
+public void compile(<a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> function, <a href="../apidoc/pnuts/lang/Context.html">Context</a> context)
+public Pnuts compile(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> expr, <a href="../apidoc/pnuts/lang/Context.html">Context</a> context)
+public Pnuts compile(<a href="../apidoc/pnuts/lang/PnutsFunction.html">Pnuts</a> pnuts, <a href="../apidoc/pnuts/lang/Context.html">Context</a> context)
+</pre>
+
+<p>
+<tt>pnuts.compiler.Compiler</tt> class provides these public methods to
+compile functions, expressions,  and parsed scripts.
+<tt>java.lang.ClassFormatError</tt> may occur when its compilation fails.
+</p>
+
+<div class="eg">e.g.
+<pre>
+import pnuts.lang.*;
+import pnuts.compiler.*;
+
+class CompileTest {
+  public Object compileAndRun(InputStream in, Context context) throws ParseException {
+    Compiler compiler = new Compiler();
+    Pnuts pn = null;
+    try {
+      pn = Pnuts.parse(in);
+      pn = compiler.compile(pn, context);
+      return pn.run(context);
+    } catch (ParseException pe){
+      throw pe;
+    } catch (ClassFormatError cfe){
+      return pn.accept(new PnutsInterpreter(), context);
+    }
+  }
+  ...
+}
+</pre>
+</div>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+public Object compile(<a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> function, <a href="../apidoc/pnuts/compiler/ClassFileHandler.html">ClassFileHandler</a> handler)
+public Object compile(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> expr, <a href="../apidoc/pnuts/compiler/ClassFileHandler.html">ClassFileHandler</a> handler)
+public Object compile(<a href="../apidoc/pnuts/lang/Pnuts.html">Pnuts</a> pnuts, <a href="../apidoc/pnuts/compiler/ClassFileHandler.html">ClassFileHandler</a> handler)
+</pre>
+
+<p>
+The class also provides public methods to define how generated class files are processed.  <a href="../apidoc/pnuts/compiler/ClassFileHandler.html"><tt>pnuts.compiler.ClassFileHandler</tt></a> is an abstract interface to get a result of compilation.
+</p>
+<p>
+Two concrete classes of ClassFileHandler are provided: <a href="../apidoc/pnuts/compiler/FileWriterHandler.html"><tt>pnuts.compiler.FileWriterHandler</tt></a> and <a href="../apidoc/pnuts/compiler/ZipWriterHandler.html"><tt>pnuts.compiler.ZipWriterHandler</tt></a>.
+The following code compiles the expression <tt>1+2</tt> and saves the result in <tt>"e:\tmp\test.class"</tt>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+String expression = "1 + 2";
+Compiler compiler = new Compiler("test");
+try {
+    compiler.compile(Pnuts.parse(expression), new FileWriterHandler(new File("e:\\tmp")));
+} catch (ParseException pe){
+} catch (ClassFormatError cfe){
+    ...
+}
+</pre>
+</div>
+
+<p>
+There are two ways to load a compiled script:
+<ol>
+<li>Set the property <tt>'pnuts.compiled.script.prefix'</tt> to the package name of the generated class, then call <tt>load()</tt>.
+
+<pre class="eg">
+load("test")
+</pre>
+
+<li>Call <tt><a href="../apidoc/pnuts/lang/Executable.html#run(pnuts.lang.Context)">Executable.run(Context)</a></tt> method on an instance of the generated class.<br>
+</p>
+
+
+<pre class="eg">
+test().run(getContext())
+</pre>
+
+</ol>
+
+<p>
+See also <a href="pnutsc.html">'Compiling Scripts from Command Line'</a>.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Compiling Scripts from Java
+</div>
+
+  </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Mutual Exclusion</div>
+
+    <h2>Mutual Exclusion</h2>
+
+<a name=mutex></a>
+<div class="box">
+<div class="synopsis"><b>mutex</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>mutex()</tt> creates a <a href="../../apidoc/pnuts/multithread/Mutex.html">pnuts.multithread.Mutex</a> object.
+</p>
+
+<div class="box">
+<dl>
+<div class="synopsis"><em>mutex</em><tt> . </tt><b>lock</b><tt>()</tt></div>
+<div class="synopsis"><em>mutex</em><tt> . </tt><b>unlock</b><tt>()</tt></div>
+</div>
+
+<p>
+<em>mutex</em><tt>.lock()</tt> locks the target <em>mutex</em>.
+<em>mutex</em><tt>.unlock()</tt> unlocks the target <em>mutex</em>.
+</p>
+
+<p>
+The following code is an implementation of the producer-consumer problem.
+</>
+
+<div class="eg">e.g.
+<pre>
+buf = Object[1]
+full = mutex()
+empty = mutex()
+counter = 0
+empty.lock()
+
+function producer(){
+    for (i : 0..9){
+	full.lock()
+	buf[0] = currentThread()
+	++::counter
+	println("produce:" + counter)
+	flush()
+	empty.unlock()
+    }
+}
+
+function consumer(){
+    for (i : 0..9){
+	empty.lock()
+	buf[0] = null
+	--::counter
+	println("consume:" + counter)
+	flush()
+	full.unlock()
+    }
+}
+
+fork(consumer)
+fork(producer)
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Mutual Exclusion</div>
+
+  </body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head><title>Podr&#281;cznik Pnuts</title> <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"> <meta http-equiv="Content-Style-Type" content="text/css"> <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body style="background-color: rgb(255, 255, 255);"><div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>
+-&gt; Linia polece&#324;
+</div><h2>Linia polece&#324;</h2>
+<a name="pnuts"></a><h3>Uruchamianie i
+zamykanie interpretera</h3>
+<div class="box"><code>C:\&gt; pnuts</code>
+</div><p>Komenda "<tt>pnuts</tt>" uruchamia
+interpreter w konsoli. Powitalny napis pokazuje wersje Pnuts, wersje
+JDK i producenta JVM.
+</p><pre class="eg">C:\&gt; pnuts<br>Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)<br>Java HotSpot(TM) Client VM (mixed mode)<br>&gt; </pre>
+<div class="box"><div class="synopsis"><tt>&gt;&nbsp;</tt><em>wyra&#380;enie</em></div>
+<div class="synopsis"><em>wynik</em></div>
+</div><p>
+Wpisanie wyra&#380;enia po znaku zach&#281;ty i
+wci&#347;niecie klawisza ENTER
+powoduje ewaluacje wyra&#380;enia i jego wynik jest
+wy&#347;wietlany w konsoli.
+</p><pre class="eg">&gt; 1 + 2<br>3<br></pre>
+<div class="box"> <div class="synopsis"><code>&gt;
+exit() </code></div>
+</div><p>Polecenie <a href="../modules/pnuts.lib/doc/shutdown.html#exit"><tt>exit()</tt></a>
+lub <a href="lang.html#quit"><tt>quit()</tt></a>
+jest u&#380;ywane do zamkni&#281;cia interpretera.
+</p><h3><tt>Opcje lini komend pnus</tt></h3>
+<div class="box"><div class="synopsis"><tt>C:\&gt;
+pnuts { -e </tt><em>expression</em><tt> | -r </tt><em>resource</em><tt>
+| -R </tt><em>resource</em><tt> | -f </tt><em>initfile</em><tt>
+| -F </tt><em>initfile</em> | -u <em>URL</em><tt>
+| -U </tt><em>URL</em><tt> | -m </tt><em>moduleName</em><tt>
+| -a | -b | -p | -w | -s | -v | -encoding <em>enc</em> |
+-inputlog <em>file</em> | -version | -help }* { </tt><em>fileName</em><tt>
+{ arg1, ... }}</tt></div>
+</div><p>
+<tt>-version</tt> opcja drukuje wersje Pnuts i
+ko&#324;czy prace.
+</p><a name="-encoding"></a>
+<p><tt>-encoding</tt> opcja ustala kodowanie
+znak&oacute;w dla skrypt&oacute;w.
+</p><p>
+<tt>-e</tt> opcja ewaluuje nast&#281;pny
+parametr jako wyra&#380;enie.
+</p><pre class="eg">C:\&gt; pnuts -e <a href="../modules/pnuts.lib/doc/console.html#println">println</a>(\"hello\")<br>...<br>C:\&gt;<br></pre>
+<a name="-r"></a><p>
+<tt>-r</tt> opcja wczytuje (zas&oacute;b) <a href="http://java.sun.com/j2se/1.3/docs/guide/resources/index.html">resource</a>
+zawarty w pliku podanym w nast&#281;pnym argumencie i kontynuuje
+sesje interaktywn&#261;.
+</p><a name="-R"></a>
+<p><tt>-R</tt> dzia&#322;a tak samo jak poprzenia
+opcja z t&#261; r&oacute;&#380;nic&#261;
+&nbsp;&#380;e ko&#324;czy sesje.
+</p><pre class="eg">C:\&gt; pnuts -r examples/fact.pnut<br>Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)<br>Java HotSpot(TM) Client VM (mixed mode)<br>&gt;<br></pre>
+<a name="-f"></a><p>
+<tt>-f</tt> opcja wczytuje plik lokalny podany w argumencie
+i kontynuuje sesje.
+</p><a name="-F"></a>
+<p><tt>-F</tt> opcja dzia&#322;a tak samo jak -f tylko
+&#380;e ko&#324;czy sesje.
+</p><pre class="eg">C:\&gt; pnuts -f "$HOME/init.pnut"<br>Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)<br>Java HotSpot(TM) Client VM (mixed mode)<br>&gt;<br></pre>
+<a name="-u"></a><p>
+<tt>-u</tt> opcja wczytuje skrypt z podanego URL'a i
+kontyn&#322;uje sesje.</p>
+<p><tt>-U</tt> opcja dzia&#322;a tak samo jak -u z
+tym &#380;e ko&#324;czy sesje.
+</p><pre class="eg">C:\&gt; pnuts -u http://javacenter.sun.co.jp/pnuts/examples/calculator.pnut -e quit()<br></pre>
+<a name="-m"></a><p>
+<tt>-m</tt> opcja dodaje (modu&#322;) <a href="module.html">module</a> do kontekstu. Funkcje
+zawarte w module mog&#261; by&#263; u&#380;ywane bez
+prefiksu modu&#322;u.
+</p><pre class="eg">C:\&gt; pnuts -m my.module<br></pre>
+<p><tt>-v</tt> opcja w&#322;&#261;cza tryb
+gadatliwy. Drukuje du&#380;o tekstu w przypadku
+b&#322;&#281;du.
+</p><pre class="eg">C:\&gt; pnuts -v<br>Pnuts interpreter Version 1.0, 1.1.8 (Sun Microsystems Inc.)<br>&gt; <a href="lang.html#exception">throw</a>("hogehoge") <br>java.lang.RuntimeException: hogehoge<br>	at java.lang.Throwable.<init>(Compiled Code)<br>	at pnuts.lang.PnutsFunction.call_builtin(Compiled Code)<br>	at pnuts.lang.PnutsFunction.exec(Compiled Code)<br>	at pnuts.lang.PnutsInterpreter._applicationNode(Compiled Code)<br>	at pnuts.lang.SimpleNode.jjtAccept(Compiled Code)<br>	at pnuts.lang.PnutsInterpreter._expressionList(Compiled Code)<br>	...<br>	...<br></init></pre>
+<a name="-a_option"></a><p>
+je&#380;eli opcja <tt>-a</tt> jest podana w
+&#347;rodowisku Java2, wszystkie niepubliczne sk&#322;adniki
+klas s&#261; dost&#281;pne.
+</p><pre class="eg">string = "Hello"<br>string.value ==&gt; ['H', 'e', 'l', 'l', 'o']<br></pre>
+<a name="-p_option"></a><p>
+je&#380;eli opcja <tt>-p</tt> jest ustawiona jedynie
+publiczne sk&#322;adniki s&#261; dost&#281;pne.
+</p><a name="-b_option"></a>
+<p>opcja <tt>-b</tt> jest domy&#347;lna i
+pozwala na &#322;atwy dost&#281;p do
+w&#322;a&#347;ciwo&#347;ci zgodnych z JavaBeans.
+</p><pre class="eg">import("java.awt.*")<br>f = Button("OK")<br>f.label<br></pre>
+<a name="-w_option"></a><p>&nbsp;<tt>-w</tt>
+opcja uruchamia prost&#261; konsole w trybie graficznym.
+</p><pre class="eg">C:\&gt; pnuts -w<br></pre>
+<a name="-s_option"></a><p>
+je&#380;eli jest podana opcja <tt>-s</tt> skrypt
+wykonywany jest w trybie bezpiecznym.
+</p><pre class="eg">C:\&gt; pnuts -s unsecure_script.pnut<br></pre>
+<a name="-inputlog"></a><p>
+<tt>-inputlog</tt> powoduje tworzenie pliku logu w podanym
+miejscu .
+</p><pre class="eg">C:\&gt; pnuts -inputlog c:\tmp\input.log<br></pre>
+<p>Zobacz <a href="pnuts_engine.html">'Kompilator i
+interpreter drzewa AST w locie'</a> <span style="font-family: monospace;">aby dowiedzie&#263;
+si&#281; o opcjach </span><tt>-pure</tt> i <tt>-O</tt>,
+opis odpluskwiania i opcji -d i -vd znajdziesz tu&nbsp; <a href="debug.html">'Odpluskwianie skrypt&oacute;w'</a>
+</p><a name="args"></a>
+<h3>Przekazywanie parametr&oacute;w do JVM</h3>
+<p>je&#380;eli -J&lt;<i>option</i>&gt;
+jest podana, to &lt;<i>option</i>&gt; jest
+&nbsp;przekazywane do JVM. Dla przyk&#322;adu podana komenda
+przekazuje parametr -Xmx4m do JVM.</p>
+<pre class="eg">pnuts -J-Xmx4m<br></pre><h3><code>${PNUTS_HOME}/modules</code>
+katalog</h3>
+<p>Kiedy uruchamiany jest interpreter pliki JAR
+znajduj&#261;ce si&#281; w katalogu&nbsp; ${PNUTS_HOME}
+&nbsp;s&#261; dodawane do CLASSPATH.
+</p><h3>Argumenty linii polece&#324;</h3>
+<p>Argumenty z linii polece&#324; mog&#261; by&#263;
+odczytane przez globaln&#261; zmienn&#261; $args w
+nast&#281;puj&#261;cy spos&oacute;b:
+</p><div>
+<pre class="eg">for (i : 0..$args.length - 1) println($args[i])<br></pre><center><tt>echo.pnut</tt></center>
+</div><pre class="eg">C:\&gt; pnuts echo.pnut 1 2 3<br>echo.pnut<br>1<br>2<br>3<br></pre>
+<h3>Zmienne &#347;rodowiskowe</h3>
+<blockquote> <table class="bg2" border="0" cellpadding="3" cellspacing="1" width="95%"> <tbody>
+<tr class="wb"> <th bgcolor="#eeeeee">Zmienna
+&#347;rodowiskowa</th> <th bgcolor="#eeeeee">Opis</th>
+</tr> <tr class="wb"> <td width="185">PNUTS_JAVA_COMMAND</td>
+<td width="344">Wyznacza &#347;cie&#380;k&#281; do
+aplikacji Java, domy&#347;lnie warto&#347;ci&#261; jest
+"java". </td> </tr> <tr class="wb"> <td width="185">PNUTS_JDK11_COMPATIBLE</td> <td width="344">Zapewnia kompatybilno&#347;&#263; ze
+starymi wersjami JVM
+wymuszaj&#261;c wczytywanie klas ze zmiennej CLASSPATH przez
+systemowy
+ClassLoader, w przeciwnym przypadku u&#380;yty zostanie boot
+classloader.<br> </td> </tr> <tr class="wb">
+<td width="185">PNUTS_MODULE</td> <td width="344">Modu&#322;y
+startowe rozdzielone &#347;rednikiem, domy&#347;lnie "<tt>pnuts.tools</tt>".</td>
+</tr> <tr class="wb"> <td width="185">HTTP_PROXY_HOST</td>
+<td width="344">Host po&#347;rednika&nbsp; HTTP. </td>
+</tr> <tr class="wb"> <td width="185">HTTP_PROXY_PORT</td>
+<td width="344">Port po&#347;rednika HTTP. </td>
+</tr> </tbody> </table>
+</blockquote><a name="properties"></a>
+<h3>Systemowe w&#322;a&#347;ciwo&#347;ci</h3>
+<p>Przedstawione w&#322;a&#347;ciwo&#347;ci
+musz&#261; by&#263; ustawione zanim zostanie wczytana
+jakakolwiek klasa z API Pnuts.
+</p><blockquote> <table class="bg2" border="0" cellpadding="3" cellspacing="1" width="95%"> <tbody>
+<tr class="wb"> <th bgcolor="#eeeeee">W&#322;a&#347;ciwo&#347;&#263;</th>
+<th bgcolor="#eeeeee">Opis</th> </tr> <tr class="wb"> <td><tt>pnuts.lang.defaultPnutsImpl</tt></td>
+<td>Je&#380;eli zmienna definiuje nazw&#281; klasy
+implementuj&#261;cej
+interfejs&nbsp; pnuts.lang.Implementation zostanie ona
+u&#380;yta jako
+domy&#347;lna implementacja zast&#281;puj&#261;c
+domy&#347;ln&#261; klas&#281; <a href="pnutsImpl.html">Implementacji</a>.
+Zobacz '<a href="pnutsImpl.html#defaultPnutsImpl">The <code>pnuts.lang.defaultPnutsImpl</code>
+Property</a>'&nbsp;. </td> </tr> <tr class="wb"> <td><tt>pnuts.lang.defaultConfiguration</tt></td>
+<td>Je&#380;eli jest podklas&#261; <code>pnuts.lang.Configuration</code>
+zast&#281;puje domy&#347;ln&#261; klas&#281; <a href="configuration.html">Konfiguracja (Configuration</a>).
+</td> </tr> <tr class="wb"> <td><tt>pnuts.compiler.optimize</tt></td>
+<td>Je&#380;eli zawiera true Pnuts generuje szybszy kod
+jednak w przypadku b&#322;&#281;du nie ma informacji o numerze
+wiersza gdzie b&#322;&#261;d
+wyst&#261;pi&#322;. </td> </tr> <tr class="wb">
+<td><tt>pnuts.compiler.traceMode</tt></td> <td>Je&#380;eli
+ustawione, kompilator Pnuts wykonuje metod&#281;
+Context.updateLine(int) dla ka&#380;dego wyra&#380;enia. </td>
+</tr> <tr class="wb"> <td><tt>pnuts.compiler.useDynamicProxy</tt></td>
+<td>Je&#380;eli
+ustawione, metoda/konstruktor jest wywo&#322;ywany przez dynamiczna
+klas&#281;
+proxy a nie przez refleksyjne API. Mo&#380;e to by&#263; odrobin&#281;
+szybsze przy
+u&#380;yciu kompliatora JIT.</td> </tr> <tr class="wb"> <td><tt>pnuts.compiled.script.prefix</tt></td>
+<td>If this property is set at start up time, when the function <tt>load()</tt>
+is called with a parameter that does not end with the suffix '.pnut',
+Pnuts interpreter tries to load a precompiled script as a Java class.
+The class name is the script name that '<tt>/</tt>' is
+replaced by '<tt>.</tt>' after the value of the property.
+For instance, when a script name is "<tt>lib/stream</tt>"
+and the property "<tt>pnuts.compiled.script.prefix</tt>" is
+"<tt>pnuts.precompiled.</tt>", <tt>pnuts.precompiled.lib.stream</tt>
+class is loaded if it exists. The <tt>pnuts</tt> command
+defines the property as "" by default.</td> </tr>
+<tr class="wb"> <td><tt>pnuts.package.factory</tt></td>
+<td>If this property is specified at start up time, the class
+becomes the default package factory. See <a href="../apidoc/pnuts/lang/PackageFactory.html">pnuts.lang.PackageFactory</a>.
+</td> </tr> </tbody> </table></blockquote>
+<p>The following properties are related to the <tt>pnuts</tt>
+command.
+</p><blockquote> <table class="bg2" border="0" cellpadding="3" cellspacing="1" width="95%"> <tbody>
+<tr class="wb"> <th bgcolor="#eeeeee">Property</th>
+<th bgcolor="#eeeeee">Description</th> </tr> <tr class="wb"> <td><tt>pnuts.interactive</tt></td>
+<td>If this property is not specified, when neither script files
+nor expression (with -e) nor redirection are given, <tt>pnuts</tt>
+command runs in interactive mode, which means that the prompt string
+and results are displayed. The property <tt>pnuts.interactive</tt>
+allows to specify explicitly that <tt>pnuts</tt> command
+runs in interactive or batch mode no matter what is given in the
+command line. </td> </tr> <tr class="wb"> <td><tt>pnuts.debugger</tt></td>
+<td>When -d
+option is given to the pnuts command, a class name of the debugger can
+be specified to the 'pnuts.debugger' property. If the property value is
+"pnuts.tools.VisualDebugger", the graphical debugger is used instead of
+the terminal-style debugger. </td> </tr> <tr class="wb"> <td><tt>pnuts.tools.modules</tt></td>
+<td>Specifies the modules to be used at the startup time. It
+should be a comma-separated list. </td> </tr> <tr class="wb"> <td><tt>pnuts.home</tt></td>
+<td>The directory where Pnuts is installed. This property is
+read-only.</td> </tr> </tbody> </table>
+</blockquote><h3>Numer wersji</h3>
+<p>Warto&#347;&#263; zmiennej&nbsp; <tt>pnuts_version</tt>
+jest numerem wersji Pnuts.
+</p><!-- body end -->
+<div class="nav2"><a href="guide.html">Podr&#281;cznik
+Pnuts</a> -&gt; Linia polece&#324;
+</div> </body></html>

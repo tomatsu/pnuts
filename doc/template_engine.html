@@ -1,0 +1,119 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Using Pnuts as a Template Engine
+</div>
+
+<!-- body start -->
+
+    <h2>Using Pnuts as a Template Engine</h2>
+
+<h3>Overview</h3>
+<p>
+Templates, which embed <tt>&lt;%=</tt> ... <tt>%&gt;</tt> or <tt>&lt;%</tt> ... <tt>%&gt;</tt> tags, are converted to executable Pnuts scripts.  The code fragments in those tags may reference variables.  Also code fragments may execute any script to generate dynamic contents.  
+</p>
+<p>
+This feature is a part of <a href="../modules/pnuts.servlet/doc/index.html">pnuts.servlet module</a>. 
+For details on the template file format, please consult <a href="servlet.html#dynamic_pages">'Dynamic Pages'</a> section.
+</p>
+
+<h3>pnuts.servlet.DynamicPage</h3>
+
+<dl>
+<dt></dt><dd><tt>public DynamicPage(URL <em>url</em>, String <em>encoding</em>, Context <em>context</em>) throws IOException, ParseException</tt></dd>
+<dt></dt><dd><tt>public DynamicPage(URL <em>url</em>, String <em>encoding</em>, Context <em>context</em>, boolean <em>checkUpdates</em>) throws IOException, ParseException</tt></dd>
+</dl>
+<p>
+When a DynamicPage object is created, the template specified by <em>url</em> is compiled.
+When DynamicPage.run(Context) method is called,  expanded content is written to the Writer associated with the context.  If <em>checkUpdates</em> is true (default),  the last modified time of the template file is checked and if it has been updated since the template generated an output, it automatically re-compile the template.
+</p>
+
+<h4>An Example</h4>
+
+<div class="eg">
+<pre>
+import pnuts.lang.Pnuts;
+import pnuts.lang.Context;
+import pnuts.lang.Package;
+import pnuts.lang.ParseException;
+import pnuts.servlet.DynamicPage;
+import java.net.*;
+import java.util.*;
+import java.io.*;
+
+public class MyClass {
+    DynamicPage page;
+    Context context;
+
+    static Context setupContext(){
+	Context context = new Context();
+	context.usePackage("pnuts.servlet");
+	return context;
+    }
+
+    public MyClass(URL template, String encoding) throws IOException, ParseException {
+	this(template, encoding, setupContext());
+    }
+
+    public MyClass(URL template, String encoding, Context context)
+	throws IOException, ParseException
+    {
+	this.context = context;
+	this.page = new <b>DynamicPage(</b>template, encoding, context<b>)</b>; // compiles the template
+    }
+
+    public void format(Map<String,Object> vars, Writer writer){
+	Package pkg = Package.wrap(vars);
+	Context context = (Context)this.context.clone();
+	context.setCurrentPackage(pkg);
+	context.setWriter(writer);
+	this.page.run(context);
+    }
+
+    public String format(Map<String,Object> vars){
+	StringWriter sw = new StringWriter();
+	format(vars, sw);
+	return sw.toString();
+    }
+
+    public static void main(String[] args) throws Exception {
+	MyClass instance = new MyClass(new File("template.txt").toURL(), "utf-8");
+	Map vars = new HashMap();
+	vars.put("properties", System.getProperties());
+	System.out.println(instance.format(map));
+   }
+}
+</pre>
+</div>
+
+<div class="eg">template.txt
+<pre>
+&lt;%@escape%&gt;
+&lt;table&gt;
+&lt;% for (k, v : properties) { %&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;%=k%&gt;&lt;/td&gt;
+&lt;td&gt;&lt;%=v%&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;% } %&gt;
+&lt;/table&gt;
+</pre>
+</div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Using Pnuts as a Template Engine
+</div>
+
+  </body>
+</html>

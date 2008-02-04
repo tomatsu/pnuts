@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h2>コードソースに基づく安全なスクリプティング</h2>
+
+<p>
+コードソースとは、コードがもともとあった場所(URL)およびコードの作成者に関する証明書を指します。
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/security/index.html">Java2セキュリティ</a>では、コードソースごとにセキュリティポリシーを定義することができます。セキュリティポリシーは<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/security/PolicyFiles.html">ポリシーファイル</a>に定義されます。
+</p>
+<p>
+<tt>pnuts</tt>コマンドからスクリプトを実行する場合は <tt>-s</tt>オプションを指定すればセキュリティポリシーに基づいてスクリプトを安全に実行することができます。
+</p>
+
+<h3>Pnuts APIを使ってスクリプトを安全に実行する</h3>
+
+<p>
+<a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a> クラスは PnutsImpl クラスのラッパークラスで、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/security/index.html">Java2 セキュリティ</a>を使ってセキュリティ機能を追加します。
+このクラスを使うと、デフォルトでJavaアプレットと同様のセキュリティ下で遠隔地のスクリプトを実行できます。また、ポリシーファイルによってコードソース別にセキュリティポリシーを定義することもできます。
+</p>
+
+<p>
+スクリプトを安全に実行するためには、まず、SecurityManager が設定されていなければなりません。SecurityManager を設定するには、<tt>java</tt>コマンドのオプションに<tt>-Djava.security.manager</tt>を指定するか、スクリプトを実行する前に <tt>System.setSecurityManager(new SecurityManager());</tt> を実行します。
+</p>
+<p>
+また、使用する<tt>pnuts.jar</tt>のURLに <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/AllPermission.html"><tt>java.security.AllPermission</tt></a> を与える必要があります。実際には次のいずれかを行う必要があります。
+<p>
+<ul>
+<li><tt>pnuts.jar</tt>を<tt>${JAVA_HOME}/jre/lib/ext/</tt>にコピー
+<li><tt>java</tt>コマンドの<tt>-Xbootclasspath</tt>オプションで<tt>pnuts.jar</tt>を指定(<tt>pnuts</tt>コマンドはこれを行う)
+<li>ポリシーファイルで明示的に指定する
+<div class="eg">
+例： （${user.home}/.java.policy）
+<pre>
+grant codebase "file:/c:/pnuts/pnuts.jar" {
+    permission java.security.AllPermission;
+};
+</pre></div>
+
+</ul>
+</p>
+<p>
+そして、次のようにコンテクストにSecurePnutsImplを設定した状態でスクリプトを実行すると、Java2セキュリティのもとで安全に実行されます。
+</p>
+
+<pre class="eg">
+context.setImplementation(SecurePnutsImpl(context.getImplementation()));
+</pre>
+
+
+<h3>例</h3>
+
+<p>
+たとえば、次のようなスクリプトファイルがあったとします。
+</p>
+
+<div class="eg">file:/${user.home}/test1.pnut
+<pre>
+println(getProperty("java.home"))
+</pre>
+</div>
+
+<p>
+Java2セキュリティの下でこのスクリプトを実行するには、次のように SecurePnutsImplオブジェクトを
+コンテクストに設定した上で実行します。
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+import pnuts.security.*;
+
+...
+if (System.getSecurityManager() == null){
+   System.setSecurityManager(new SecurityManager());
+}
+Context context = new Context();
+context.setImplementation(new SecurePnutsImpl(context.getImplementation()));
+
+Pnuts.loadFile("test1.pnut", context);
+</pre>
+
+<p>
+"<tt>java.home</tt>"というプロパティの値を調べるには、そのプロパティに対応する<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/PropertyPermission.html"><tt>java.util.PropertyPermission</tt></a>が許可されるようにセキュリティポリシーが定義されていなければなりません。
+したがって、何もポリシーファイルを定義していない場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/AccessControlException.html">AccessControlException</a>が送出されエラーになります。
+</p>
+<p>
+次のようなポリシーファイルが定義されていれば、エラーになりません。
+</p>
+
+<div class="eg">${user.home}/.java.policy
+<pre>
+grant codebase "file:${user.home}/-" {
+   permission java.util.PropertyPermission "java.home", "read";
+};
+</pre>
+</div>
+
+<p>
+プロパティ"<tt>user.home</tt>"で表されるディレクトリ以下のスクリプトに対して、"<tt>java.home</tt>"というプロパティの値を読むためのパーミッション（許可）を与えるという意味です。このポリシーファイルを<tt>${user.home}/.java.policy</tt>に保存するか、<tt>java</tt>コマンドの引数として、<code>-Djava.security.policy=</code>でそのポリシーファイルを指定すれば、そのセキュリティポリシーを反映させることができます。
+</p>
+
+
+
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">戻る</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+  </body>
+</html>

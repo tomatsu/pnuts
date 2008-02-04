@@ -1,0 +1,353 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Hierarchical Layout</div>
+
+    <h2>Hierarchical Layout</h2>
+
+<p>
+In GUI programming in Java, it needs much more code to layout components.  The
+      procedure consists of three steps:
+<ol>
+<li>make a container,
+<li>set a LayoutManager, and
+
+<li>add components.
+</ol>
+
+When containment relationship of components has hierarchical structure the code is not readable.
+</p>
+
+<pre class="eg">
+Panel panel1 = new Panel();
+panel1.setLayout(LayoutManagerA);
+panel1.add(component1);
+...
+Panel panel2 = new Panel();
+ppanel2.setLayout(LayoutManagerB);
+panel2.add(component3);
+...
+panel1.add(panel2);
+...
+add(panel1);
+</pre>
+
+<p>
+Hierarchical Layout allows intuitive representation of hierarchical structure
+      of components using nested array.
+</p>
+
+
+<pre class="eg">
+Object[] format = new Object[]{ LayoutManagerA.class, component1,
+                    new Object[]{ LayoutManagerB.class,  component2, ... }, ...
+                  };
+Layout.layout(container, format);
+
+</pre>
+
+<p>
+The first element of the array is a </tt>Class</tt> object, which typically denotes a subclass
+      of <tt>java.awt.LayoutManager</tt>.  There should be a mapping from
+      an array structure to its layout behavior for each <tt>Class</tt>.
+  The mapping is responsible for processing the rest of the array.
+</p>
+
+<a name=Layout></a>
+<h3><a href="../../apidoc/pnuts/awt/Layout.html">pnuts.awt.Layout</a></h3>
+
+<tt>pnuts.awt.Layout</tt> class is a "Manager" class for hierarchical layout.
+    In most case it needs only the following method.
+
+<blockquote>
+<dl>
+<dt><tt>public static Container</tt> <b>layout</b><tt>(Container</tt> <i>container</i><tt>, Object[]</tt> <i>format</i><tt>)</tt></dt>
+<dd>Layout components in <i>container</i> using <i>format</i> and return the <i>container</i>.</dd>
+
+</dl>
+</blockquote>
+
+<p>
+If the first element of the array is a Class object of a <tt>java.awt.LayoutManager</tt> subclass, 
+this method does the layout of components from the structure of the
+array using the mapping rule registered for the LayoutManager subclass.
+</p>
+
+
+<p>
+In <tt>Layout</tt> class, the following mappings are registered by default.
+</p>
+
+<ul>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/BorderLayout.html">BorderLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/FlowLayout.html">FlowLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/GridLayout.html">GridLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/GridBagLayout.html">GridBagLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/CardLayout.html">CardLayout</a>
+<li><a href="PnutsLayout.html">PnutsLayout</a>
+</ul>
+
+
+<p>
+If the first element of the array is not a Class object, the following
+rule is applied:
+<ul>
+<li>If an element is a Component object, the component is added to the
+<em>container</em> with the <a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Container.html#add(java.awt.Component)">Container.add(Component)</a> method.
+<li>If an element is a two object array that starts with a Component, the
+component is added to the <em>container</em> with the
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Container.html#add(java.awt.Component, java.lang.Object)">Container.add(Component, Object)</a> method.
+<li>If an element is a three object array that starts with a Component, the
+component is added to the <em>container</em> with the
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/Container.html#add(java.awt.Component, java.lang.Object)">Container.add(Component, Object)</a> method. The third element must be an array and the Component added must be a Container. Layout.layout(container, array) is called.
+
+</ul>
+
+<div class="eg">e.g.
+<pre>
+Layout.layout(new JTabbedPane(), new Object[]{
+     new Object[]{new JLabel("One"), "One"},
+     new Object[]{new JLabel("Two"), "Two"}
+});
+</pre>
+</div>
+
+<h3>BorderLayout Mapping</h3>
+
+<div class="eg">e.g.
+<pre>
+Layout.layout(<em>panel</em>, new Object[]{
+  BorderLayout.class, new Object[]{new Integer(5), new Integer(5)},
+  new Object[]{ "Center", new Button("Center") },
+  new Object[]{ "South", new Button("South") },
+  new Object[]{ "North", new Button("North") }
+});
+</pre>
+
+</div>
+
+<p>
+When the first element of array is <tt>BorderLayout.class</tt>, the 2nd element 
+      is an Object array that includes the parameters of the constructor.  The rest
+      of the elements must each be an array of two or three elements.
+<ul>
+<li>String that is "North", "South", "East", "West", or "Center".
+<li>One of these:
+<ul>
+<li>The component to be added.
+<li>Array which starts with Class object.  This part is processed recursively.
+</ul>
+<li>If a third element exists, it must be an array and the Component added must be a Container. Layout.layout(container, array) is called.
+</ul>
+</p>
+
+<h3>FlowLayout Mapping</h3>
+
+<div class="eg">e.g.
+<pre>
+
+Layout.layout(<em>panel</em>, new Object[]{
+  FlowLayout.class, new Object[]{},
+  new Button("One"),
+  new Button("Two"),
+  new Button("Three")
+});
+</pre>
+</div>
+
+<p>
+When the first element of array is <tt>GridLayout.class</tt>, the 2nd element 
+      is Object array that includes the parameters of the constructor.  The rest
+      of the elements are one of these:
+<ul>
+<li>A component to be added.
+<li>Array which starts with Class object.  This part is processed recursively.
+<li>Array which contains a Container to be added and an array. Layout.layout(container, array) is called.
+</ul>
+</p>
+
+<h3>GridLayout Mapping</h3>
+
+<div class="eg">e.g.
+<pre>
+Layout.layout(<em>panel</em>, new Object[]{
+  GridLayout.class, new Object[]{},
+  new Button("One"),
+  new Button("Two"),
+  new Button("Three"),
+  new Button("Four")
+});
+</pre>
+</div>
+
+<p>
+When the first element of array is <tt>GridLayout.class</tt> the 2nd element 
+      is Object array that includes the parameters of the constructor.  The rest
+      of the elements are one of these:
+<ul>
+<li>A component to be added.
+<li>Array which starts with Class object.  This part is processed recursively.
+<li>Array which contains a Container to be added and an array. Layout.layout(container, array) is called.
+</ul>
+</p>
+
+<h3>GridBagLayout Mapping</h3>
+
+<div class="eg">e.g.
+<pre>
+Layout.layout(<em>panel</em>, new Object[]{
+  GridBagLayout.class,
+  new Object[]{"gridx=0, ...", new Button("One")},
+  new Object[]{"gridx=0, ...", new Button("Two")},
+  new Object[]{"gridx=0, ...", new Button("Three")},
+  new Object[]{"gridx=0, ...", new Button("Four")}
+});
+</pre>
+</div>
+
+<p>
+When the first element of the array is <tt>GridBagLayout.class</tt> the rest
+      of the elements are array of two or three elements.
+
+<ul>
+<li>String to build GridBagConstraints. (comma-separated list of "<i>field</i>=<i>value</i>")
+<li>One of these.
+<ul>
+<li>Component to be add()ed.
+<li>Object array which is processed recursively.
+</ul>
+<li>If a third element exists, it must be an array and the Component added must be a Container. Layout.layout(container, array) is called.
+</ul>
+</p>
+
+<p>
+Each value for '<tt>fill</tt>' and '<tt>anchor</tt>' is a name of static variable.
+
+For '<tt>insets</tt>', colon-separated list of integer like <tt>2:2:2:2</tt> .
+
+</p>
+
+<h3>CardLayout Mapping</h3>
+
+<div class="eg">e.g.
+<pre>
+Layout.layout(<em>panel</em>, new Object[]{
+  CardLayout.class, new Object[]{},
+  new Object[]{"1", new Button("One")},
+  new Object[]{"2", new Button("Two")},
+  new Object[]{"3", new Button("Three")}
+});
+</pre>
+</div>
+
+<p>
+When the first element of array is <tt>CardLayout.class</tt> the 2nd element 
+      is Object array that includes the parameters of the constructor.  The rest
+      of the elements must each be an array of two or three elements.
+
+<ul>
+<li>String that is the keyword for add() method.
+<li>One of these:
+<ul>
+<li>Component to be added.
+<li>Array which starts with Class object.  This part is processed recursively.
+</ul>
+<li>If a third element exists, it must be an array and the Component added must be a Container. Layout.layout(container, array) is called.
+</ul>
+</p>
+
+<h3><a href="PnutsLayout.html">PnutsLayout</a> Mapping</h3>
+
+<div class="eg">e.g.
+<pre>
+Layout.layout(<em>panel</em>, new Object[]{
+  PnutsLayout.class, "cols=2",
+  button1,
+  "label",
+  null,
+  new Object[]{
+    button2, "colspan=2, padx=10"
+  }
+});
+</pre>
+
+</div>
+
+<p>
+If the first element of the array is <tt>PnutsLayout.class</tt> the second
+      element will be the parameter of PnutsLayout constructor. The rest of the array are
+      elements which are in a container.
+Each element is either a <tt>Component</tt> object, <tt>String</tt> object,
+      <tt>Object</tt> array, or <tt>null</tt>.
+
+<ul>
+<li>If an element is a <tt>Component</tt> object, it is add()ed with null string ("").
+<li>If an element is a String object, <tt>java.awt.Label</tt> object is	created and add()ed with null string ("").
+<li>If an element is <tt>null</tt>, Object of same class as the container is created and add()ed with null
+      string ("").
+<li>When an element is an <tt>Object</tt> array the procedure is as follows.
+<ul>
+
+<li>If the 1st element of the array is a <tt>Class</tt> object,the array is processed as a whole recursively.
+<li>If the 1st element of the array is a <tt>Component</tt> object, it is add()ed with the 2nd element.
+<li>If the 1st element of the array is a <tt>String</tt> object, <tt>Label</tt> object is created and add()ed with the 2nd element.
+<li>If the 1st element of the array is <tt>null</tt>, Object of same class as
+	    the container is created and add()ed with the 2nd element.
+<li>If a third element exists, it must be an array and the Component added must be a Container. Layout.layout(container, array) is called.
+
+</ul>
+</ul>
+</p>
+<p>
+Therefore, the example above has following meaning.
+</p>
+
+<pre class="eg">
+setLayout(new PnutsLayout("cols=2"));
+add(button1);
+add(new Label("label"));
+add(new Panel());
+add(button2, "colspan=2, padx=10");
+</pre>
+
+<table cellpadding=10>
+<tr>
+<td>
+<img src="image/11.gif"></img>
+</td>
+<td>
+
+<pre class="eg">
+Frame f = new Frame("11");
+Layout.layout(f,
+   new Object[]{PnutsLayout.class, "cols=2,padx=5,pady=5",
+              new Object[]{PnutsLayout.class, "halign=left",
+		 new Checkbox("8 points"),
+		 new Checkbox("10 points"),
+		 new Checkbox("12 points"),
+		 new Checkbox("24 points")},
+              new Object[]{PnutsLayout.class, "halign=left",
+		 new Checkbox("Bold"),
+		 new Checkbox("Italic"),
+		 new Checkbox("Underline")}});
+f.pack();
+f.show();
+</pre>
+</td>
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Hierarchical Layout</div>
+
+  </body>
+
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="nodeAccess">functions.html#nodeAccess</function>
+ <function name="nodeEdit">functions.html#nodeEdit</function>
+ <function name="selectSingleNode">functions.html#selectSingleNode</function>
+ <function name="selectNodeList">functions.html#selectNodeList</function>
+ <function name="element">functions.html#element</function>
+ <function name="defineTags">functions.html#defineTags</function>
+ <function name="newDocument">functions.html#newDocument</function>
+ <function name="writeDocument">functions.html#writeDocument</function>
+ <function name="traverseDocument">functions.html#traverseDocument</function>
+ <function name="readDocument">functions.html#readDocument</function>
+ <function name="transformXSL">functions.html#transformXSL</function>
+ <function name="parseXML">functions.html#parseXML</function>
+</reference>

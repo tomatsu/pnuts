@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xmlモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a href="digest.html">XML文書のダイジェスト</a> -> DigestReaderの使用例(Pnuts)</div>
+
+    <h2>DigestReaderの使用例(Pnuts)</h2>
+
+<h4>目次</h4>
+<ul>
+<li><a href="#1">1. 特定のパスの要素の内容に対してコールバックを呼び出す</a>
+<li><a href="#2">2. 要素の属性を使ってコールバックを呼び出す</a>
+<li><a href="#3">3. 要素の属性から引数リストを作ってコールバックを呼び出す</a>
+<li><a href="#4">4. 要素の属性と内容から引数リストを作ってコールバックを呼び出す</a>
+<li><a href="#5">5. 子供の要素の情報から引数リストを作ってコールバックを呼び出す</a>
+<li><a href="#6">6. Map/Listで構成される構造を作る</a>
+<li><a href="#7">7. 子供の要素の情報をプロパティとするJavaBeansを作る</a>
+<li><a href="#8">8. 要素の属性をプロパティとするJavaBeansを作る</a>
+</ul>
+
+<a name="1"></a>
+<h4>1. 特定のパスの要素の内容に対してコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+
+function endAction(f) javaAdapter(DigestAction, $(function end(path, key, text, top) f(text)))
+myAction = endAction(function (t) println(t))
+dr = DigestReader()
+dr.rules = [[myAction, "/addressbook/address/name"]]
+dr.parse(open($args[1]))
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="2"></a>
+<h4>2. 要素の属性を使ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+
+function startAction(f) javaAdapter(DigestAction, $(function start(path, key, amap, top) mapFunction(f, amap)))
+myAction = startAction(function (k, v) println(k, " = ", v))
+dr = DigestReader()
+dr.rules = [[myAction, "/addressbook/address"]]
+dr.parse(open($args[1]))
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address name="James" phone="111-2222"/&gt;
+  &lt;address name="Ken" phone="333-4444"/&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="3"></a>
+<h4>3. 要素の属性から引数リストを作ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+import pnuts.xml.action.*
+
+myAction = javaAdapter(SimpleCallAction, $(function call(args) println(args[0], " : ", args[1])))
+myAction.parameterNames = ["name", "phone"]
+dr = DigestReader()
+dr.rules = [[myAction, "/addressbook/address"]]
+dr.parse(open($args[1]))
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address name="James" phone="111-2222"/&gt;
+  &lt;address name="Ken" phone="333-4444"/&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="4"></a>
+<h4>4. 要素の属性と内容から引数リストを作ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+import pnuts.xml.action.*
+
+setting = map()
+myAction = javaAdapter(ElementCallAction,
+  $(function call(key, attr, text) {
+    if (setting[key] == null){
+       setting[key] = list()
+       setting[key + "_selection"] = list()
+    }
+    lst = setting[key]
+    sel = setting[key + "_selection"]
+    lst.add(text)
+    sel.add(attr.selected == "true")
+   }))
+
+dr = DigestReader()
+dr.rules = [
+  [myAction, "/setting/type/option", "types"],
+  [myAction, "/setting/state/option", "states"]
+]
+dr.parse(getResource("setting.xml").openStream(), setting)
+</pre>
+
+<pre class="eg">
+&lt;setting&gt;
+  &lt;type&gt;
+    &lt;option selected="true"&gt;bug&lt;/option&gt;
+    &lt;option&gt;change&lt;/option&gt;
+  &lt;/type&gt;
+  &lt;state&gt;
+    &lt;option selected="true"&gt;open&lt;/option&gt;
+    &lt;option selected="true"&gt;assigned&lt;/option&gt;
+    &lt;option selected="true"&gt;fixed&lt;/option&gt;
+    &lt;option&gt;resolved&lt;/option&gt;
+    &lt;option&gt;closed&lt;/option&gt;
+    &lt;option&gt;rejected&lt;/option&gt;
+  &lt;/state&gt;
+&lt;/setting&gt;
+</pre>
+
+<a name="5"></a>
+<h4>5. 子供の要素の情報から引数リストを作ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+import pnuts.xml.action.*
+
+myAction = javaAdapter(CallAction, $(function call(args) println(args[0], " : ", args[1])))
+myAction.parameterNames = ["name", "phone"]
+paramAction = ParameterAction()
+dr = DigestReader()
+dr.rules = [[myAction, "/addressbook/address"],
+            [paramAction, "/addressbook/address/name", "name"],
+            [paramAction, "/addressbook/address/phone", "phone"]]
+dr.parse(open($args[1]))
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="6"></a>
+<h4>6. Map/Listで構成される構造を作る</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+import pnuts.xml.action.*
+
+dr = DigestReader()
+listAction = ListAction()
+textAction = TextAction()
+dr.rules = [[listAction, "/addressbook/address", "address"],
+	    [textAction, "/addressbook/address/name"],
+	    [textAction, "/addressbook/address/phone"]]
+println("result = " + dr.parse(open($args[1])))
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="7"></a>
+<h4>7. 子供の要素の情報をプロパティとするJavaBeansを作る</h4>
+
+<pre class="eg">
+beanclass("Address", null, map("name=phone=String"))
+</pre>
+
+<pre class="eg">
+import pnuts.xml.*
+import pnuts.xml.action.*
+
+dr = DigestReader()
+bean = BeanPropertyAction(Address)
+list = ListAction()
+dr.rules = [[list, "/addressbook/address", "address"],
+	    [bean, "/addressbook/address/name"],
+	    [bean, "/addressbook/address/phone"]]
+result = dr.parse(open($args[1]))
+for (addr : result.address)  println(addr.name, " : ", addr.phone)
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="8"></a>
+<h4>8. 要素の属性をプロパティとするJavaBeansを作る</h4>
+
+<pre class="eg">
+import pnuts.xml.*
+import pnuts.xml.action.*
+
+dr = DigestReader()
+myAction = BeanAction(Address)
+dr.rules = [[myAction, "/addressbook/address", "address"]]
+dr.parse(open($args[1]), x = list());
+for (addr : x) println(addr.name, " : ",  addr.phone)
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address name="James" phone="111-2222"/&gt;
+  &lt;address name="Ken" phone="333-4444"/&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a href="digest.html">XML文書のダイジェスト</a> -> DigestReaderの使用例</div>
+
+  </body>
+</html>

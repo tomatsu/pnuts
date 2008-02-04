@@ -1,0 +1,161 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Pnuts からスクリプトのコンパイル</div>
+
+    <h2>Pnuts からスクリプトのコンパイル</h2>
+
+<a name=compile></a>
+
+<div class="box">
+<div class="synopsis"><b>compile</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+</tt><em>input</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>expression</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="../../../apidoc/pnuts/lang/Pnuts.html">Pnuts</a> </tt><em>parsedExpression</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+</tt><em>file</em> { , boolean <em>recompileIfUpdated</em> } <tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+</tt><em>url</em> { , boolean <em>recompileIfUpdated</em> } <tt>)</tt></div>
+</div>
+
+
+<p>
+<p>
+<tt>compile(</tt><tt>)</tt> は、指定されたオブジェクトをコンパイルして、
+<tt>pnuts.lang.Pnuts</tt> オブジェクトを返します。
+返されたオブジェクトを実行するには、<a href="#run"><tt>run()</tt></a>関数か<tt>run(pnuts.lang.Context)</tt>
+メソッドを呼びます。
+</p>
+
+<div class="eg">例:
+<pre>
+code1 = compile(open("/tmp/test.pnut"))
+run(code1)
+
+code2 = compile("1 + 2")
+run(code2)
+</pre></div>
+
+<p>
+FileまたはURLが指定されるとき、第二引数に<em>recompileIfUpdated</em>を指定することができる。
+<em>recompileIfUpdated</em>が<tt>true</tt>の場合、<tt>compile()</tt>はスクリプトが最後にコンパイルしてから更新されていたら再コンパイルする。
+</p>
+
+<p>
+<tt>compile(</tt><em>parsedExpression</em>) には、<a href=loading.html#parse><tt>parse()</tt></a>関数で得られるPnuts オブジェクトを指定します。
+</p>
+
+<p>
+入力が大きすぎる場合など、JVMの制限を越えるバイトコードが生成される場合には、<tt>compile()</tt> は、実行可能な<a href="../../../apidoc/pnuts/lang/Pnuts.html">pnuts.lang.Pnuts</a> オブジェクト(コンパイルされていない)を返します。
+</p>
+
+<div class="box">
+<div class="synopsis"><b>compile</b><tt>(<a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> </tt><em>function</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>compile(</tt><em>function</em><tt>)</tt> は、指定された関数を
+コンパイルし、実行速度を最適化します。
+</p>
+
+<div class="eg">例:
+<pre>
+function func (x) x + 1
+compile(func)
+</pre></div>
+
+
+<div class="box">
+<div class="synopsis"><b>compile</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>source</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>dest</b></em><tt>) </tt> or </div>
+<div class="synopsis2"><tt>(<a href="../../../apidoc/pnuts/lang/Pnuts.html">Pnuts</a> </tt><em>source</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>dest</b></em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>source</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>dest</b></em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="../../../apidoc/pnuts/lang/Pnuts.html">Pnuts</a> </tt><em>source</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>name</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/zip/ZipOutputStream.html">ZipOutputStream</a> </tt><em>dest</em><tt>)</tt></div>
+</div>
+
+<p>
+<em>source</em>が文字列または構文解析済み式の場合、それをコンパイルして <em>name</em>クラスを作成します。
+<em>source</em>が関数の場合、その関数をコンパイルして<em>name</em>クラスを作成します。
+</p>
+<p>
+<em>dest</em>が文字列または java.io.File オブジェクトの場合、そのディレクトリにクラスファイルを保存します。
+<em>dest</em>が java.util.zip.ZipOutputStream の場合、それにクラスファイルを追加します。
+</p>
+
+<a name="isCompiled"></a>
+
+<div class="box">
+<div class="synopsis"><b>isCompiled</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>isCompiled()</tt> は <em>object</em> がコンパイルされたものかどうかを調べます。
+</p>
+
+<div class="eg">例:
+<pre>
+p = parse("function f() 100")
+isCompiled(p) ==> false
+
+p = compile(p)
+isCompiled(p) ==> true
+
+f = run(p)
+isCompiled(f) ==> false
+
+compile(f)
+isCompiled(f) ==> true
+</pre></div>
+
+<a name=parse></a>
+
+<div class="box">
+<div class="synopsis"><b>parse</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>expression</em><tt> ) </tt> or</div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> ) or</tt></div>
+<div class="synopsis2"><tt> ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+</tt><em>input</em><tt> ) or</tt></div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+</tt><em>file</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>url</em><tt> )</tt></div>
+</div>
+
+
+<p>
+<tt>parse()</tt> はスクリプトを解析して <a href="../../../apidoc/pnuts/lang/Pnuts.html"><tt>pnuts.lang.Pnuts</tt></a>オブジェクトを返します。後でその <a href="#run"><tt>run()</tt></a>関数を呼び出すことで実行できます。解析の途中でエラーが起きると、例外<a href="../../../apidoc/pnuts/lang/ParseException.html">ParseException</a> が送出されます。
+</p>
+
+<a name="unparse"></a>
+<div class="box">
+<div class="synopsis"><b>unparse</b><tt> ( <a href="../../../apidoc/pnuts/lang/Pnuts.html">pnuts.lang.Pnuts</a> <em>parsedExpression</em> ) </tt></div>
+</div>
+<p>
+<tt>unparse()</tt>は、指定されたパーズ済の式から、パーズ前の式を文字列として返します。
+</p>
+
+
+<a name="run"></a>
+
+<div class="box">
+<div class="synopsis"><b>run</b><tt> ( <a href="../../../apidoc/pnuts/lang/Executable.html">Executable</a> </tt><em>executable</em><tt> ) </tt></div>
+</div>
+
+<p>
+<tt>run()</tt>は、 <tt>parse()</tt>や<tt>compile()</tt>で作った<a href="../../../apidoc/pnuts/lang/Executable.html">Executable</a>オブジェクトを実行してその結果を返します。
+</p>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Pnuts からスクリプトのコンパイル</div>
+
+  </body>
+</html>

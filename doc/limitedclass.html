@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Limiting Accessible Methods/Classes
+</div>
+
+<!-- body start -->
+
+<h2>Limiting Accessible Methods/Classes</h2>
+
+<p>
+Imagine that you have the following class and you want to expose only
+<tt>test()</tt> method; you don't want to expose other methods.
+</p>
+
+<pre class="eg">
+public class MyClass {
+       public void test(){
+	      System.out.println("test");
+       }
+       public String getName(){
+	      return "foo";
+       }
+       ...
+}
+</pre>
+
+<p>
+BeanInfo is used to specify exposed methods. For example, BeanInfo of
+MyClass class can be made by defining <tt>MyClassBeanInfo</tt> class,
+which is a subclass of <tt>java.beans.SimpleBeanInfo</tt> class, as follows.
+</p>
+
+<pre class="eg">
+import java.beans.*;
+
+public class MyClassBeanInfo extends SimpleBeanInfo {
+    public MethodDescriptor[] getMethodDescriptors(){
+	try{
+	    return new MethodDescriptor[]{
+		new MethodDescriptor(MyClass.class.getMethod("test", new Class[]{}))
+	    };
+	} catch (NoSuchMethodException e){
+	    return new MethodDescriptor[]{};
+	}
+    }
+}
+</pre>
+
+<p>
+In order to prepare a context such that only <tt>MyClass.test()</tt>
+can be called, register <tt>MyClass</tt> to a
+<tt>pnuts.ext.LimitedClassesConfiguration</tt> object with
+<tt>registerClass()</tt> method, then call
+<tt>Context.setConfiguration()</tt> method with the <tt>LimitedClassesConfiguration</tt> object.
+</p>
+
+<pre class="eg">
+import pnuts.ext.LimitedClassesConfiguration;
+
+Configuration conf = new LimitedClassesConfiguration(false);
+conf.registerClass(MyClass.class);
+Context c = new Context();
+c.setConfiguration(conf);
+
+Pnuts.load(file, c);
+</pre>
+
+<p>
+In a context that a <tt>pnuts.ext.LimitedClassesConfiguration</tt> object is
+set, a field access operation is interpreted as an access to a Bean property.
+</p>
+
+<pre class="eg">
+myobj = MyClass()
+myobj.test()  ===> "test" is printed
+myobj.getName() ===> an exception is thrown
+myobj.name    ===> "foo"
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Limiting Accessible Methods/Classes
+</div>
+
+  </body>
+</html>

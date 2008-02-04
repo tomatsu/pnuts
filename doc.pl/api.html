@@ -1,0 +1,562 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="pl"><head>
+      
+      <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <meta http-equiv="Content-Style-Type" content="text/css">
+      <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Przegl&#261;d Pnuts API
+</div>
+
+<h2>Przegl&#261;d Pnuts API</h2>
+
+<h3>Wprowadzenie</h3>
+<p>
+Pnuts API to zestaw klas zawieraj&#261;cych metody pozwalaj&#261;ce na
+oprogramowanie interpretera. Nie ma &#380;adnych wst&#281;pnych inicjalizacji aby
+u&#380;ywa&#263; API interpretera w dowolnym programie. Interpreter
+wsp&oacute;&#322;dzieli zasoby z wykonywanym programem w ramach sesji jaka
+program u&#380;ywa.
+</p>
+
+
+<blockquote>
+<table class="bg2" border="0" cellpadding="3" cellspacing="1" width="95%">
+<tbody><tr class="wb">
+<th bgcolor="#eeeeee">Klasa</th>
+<th bgcolor="#eeeeee">Opis</th>
+</tr><tr class="wb">
+  <td class="wb">pnuts.lang.Pnuts</td>
+  <td class="wb">zawiera publiczne statyczne metody wykonuj&#261;ce skrypty</td>
+</tr>
+<tr class="wb">
+  <td class="wb">pnuts.lang.Context</td>
+  <td class="wb">&#347;rodowisko wykonawcze skryptu</td>
+</tr>
+<tr class="wb">
+  <td class="wb">pnuts.lang.Package</td>
+  <td class="wb">nielokalna przestrze&#324; nazw</td>
+</tr>
+<tr class="wb">
+  <td class="wb">pnuts.lang.PnutsFunction</td>
+  <td class="wb">reprezentacja funkcji Pnuts w Javie</td>
+</tr>
+<tr class="wb">
+  <td class="wb">pnuts.lang.PnutsException</td>
+  <td class="wb">wyj&#261;tek wykonania skryptu</td>
+</tr>
+</tbody></table>
+<center>Podstawowe klasy Pnuts API</center>
+</blockquote>
+
+<h3><a href="../apidoc/pnuts/lang/Pnuts.html">pnuts.lang.Pnuts</a></h3>
+
+<p>Klasa pnuts.lang.Pnuts zawiera statyczne metody kt&oacute;re uruchamiaj&#261; interpreter.
+<tt>Pnuts.eval()</tt> i <tt>Pnuts.load()</tt> to dwie najwa&#380;niejsze metody uruchamiaj&#261;ce skrypty z poziomu kodu Javy.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Object <b>eval</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>wyra&#380;enie</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>kontekst</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> in , <a href="../apidoc/pnuts/lang/Context.html">Context</a>&nbsp;<em>kontekst</em>  <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> <em>in</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>kontekst</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> <em>scriptURL</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a>&nbsp;<em>kontekst</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>rsrc</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a>&nbsp;<em>kontekst</em> <tt>) throws FileNotFoundException;</tt></dt>
+</dl>
+</blockquote>
+
+<p>Poni&#380;szy przyk&#322;ad ilustruje proste u&#380;ycie metody&nbsp; <tt>Pnuts.eval()</tt>.
+</p>
+
+<pre class="eg">import pnuts.lang.*;<br>import java.math.*;<br><br>class Foo {<br>   public static void main(String arg[]){<br>       Context context = new Context();<br>       BigInteger bint = (BigInteger)<b>Pnuts.eval</b>("1&lt;&lt;100", context);<br>       ...<br>   }<br>}<br></pre>
+
+<p>
+<tt>Instancja klasy pnuts.lang.Pnuts</tt> mo&#380;e by&#263; zwr&oacute;cona jedynie przez metody&nbsp; <tt>Pnuts::parse(InputStream/Reader)</tt>. Instancja klasy&nbsp; <tt>pnuts.lang.Pnuts</tt> mo&#380;e by&#263; wykonana przez metod&#281;&nbsp; <tt>run(Context)</tt>.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> <em>in</em> <tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> <em>in</em> <tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+<em>in</em>, Object <em>scriptSource</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>) throws ParseException;</tt></dt>
+<dt><tt>public Object <b>run</b>(</tt> <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>Przyk&#322;ad pokazuje jak prasowa&#263; skrypt a nast&#281;pnie go wykona&#263;.
+</p>
+
+<pre class="eg">import pnuts.lang.*;<br>import java.io.*;<br><br>class ParseTest {<br>  public static void main(String a[]){<br>     Pnuts p = null;<br>     try {<br>        p = Pnuts.parse(new FileInputStream(a[0]));<br>     } catch (ParseException e1){<br>        ...<br>     } catch (IOException e2){<br>        ...<br>     }<br>     ...<br>     p.run(new Context());<br>  }<br>}<br></pre>
+
+<a name="ParseEnvironment"></a>
+<h4>Przechwytywanie b&#322;&#281;d&oacute;w parsowania&nbsp;</h4>
+<p>Jedna z poni&#380;szych metod mo&#380;e by&#263; u&#380;yta do przechwycenia b&#322;&#281;d&oacute;w w czasie parsowania.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> <em>in</em> , <a href="../apidoc/pnuts/lang/ParseEnvironment.html">ParseEnvironment</a> <em>env</em><tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+<em>in</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>scriptSource</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em>, <a href="../apidoc/pnuts/lang/ParseEnvironment.html">ParseEnvironment</a> <em>env</em><tt>) throws ParseException;</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">import pnuts.lang.*;<br>import java.io.*;<br><br>public class Test {<br>    public static void main(String[] args) throws IOException {<br>	try {<br>	    FileReader r = new FileReader(args[0]);<br>	    Pnuts.parse(r, new ParseEnvironment(){<br>		    public void handleParseException(ParseException e) throws ParseException {<br>			System.out.println(e);<br>		    }<br>		});<br>	} catch (ParseException e){<br>	    throw new Error(); // never happens<br>	}<br>    }<br>}<br></pre>
+
+<h4>&#377;r&oacute;d&#322;o skryptu</h4>
+<p>&#377;r&oacute;d&#322;o skryptu jest atrybutem obiektu Pnuts kt&oacute;ry zawiera zazwyczaj lokalizacj&#281; skryptu (obiekt URL).
+</p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>getScriptSource</b>();</tt></dt>
+<dt><tt>public void <b>setScriptSource</b>(Object </tt><em>scriptSource</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>&#377;r&oacute;d&#322;o skryptu zazwyczaj jest u&#380;ywane przez odpluskwiacz.
+</p>
+
+<h3><a href="../apidoc/pnuts/lang/PnutsFunction.html">pnuts.lang.PnutsFunction</a></h3>
+
+<p>PnutsFunction pozwala na wywo&#322;ywanie funkcji Pnuts z poziomu kodu
+Javy a tak&#380;e na definiowanie funkcji dla interpretera w j&#281;zyku Java.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Object <b>call</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>name</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>args</em>[], <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">import pnuts.lang.*;<br><br>class Foo {<br>   public static void main(String arg[]){<br>       Context context = new Context();<br>       Pnuts.eval("function foo() 100", context);<br>       ...<br>       System.out.println(<b>PnutsFunction.call</b>("foo", new Object[]{}, context));<br>   }<br>}<br></pre>Je&#380;eli program posiada referencje do obiektu&nbsp; PnutsFunction object to funkcja mo&#380;e by&#263; wywo&#322;ana za pomoc&#261; metody.
+
+<blockquote>
+<dl>
+<dt><tt>public Object <b>call</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">import pnuts.lang.*;<br><br>class Foo {<br>   public static void main(String arg[]){<br>       Context context = new Context();<br>       PnutsFunction func = (PnutsFunction)Pnuts.eval("function foo() 100", context);<br>       ...<br>       System.out.println(<b>func.call</b>(new Object[]{}, context));<br>   }<br>}<br></pre>
+
+<p>
+Poni&#380;sze metody pobieraj&#261; definicj&#281; funkcji z obiektu&nbsp; PnutsFunction&nbsp;
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public String <b>unparse</b>(</tt>int <em>narg</em><tt>);</tt></dt>
+<dd>Cia&#322;o definicji funkcji.
+</dd><dt><tt>public String[] <b>getImportEnv</b>(</tt>int <em>narg</em><tt>);</tt></dt>
+<dd>Tablica importowanych nazw pakiet&oacute;w i klas Javy
+</dd><dt><tt>public Package <b>getPackage</b>();</tt></dt>
+<dd>Pakiet w kt&oacute;rym funkcja jest zdefiniowana.
+</dd></dl>
+</blockquote>
+
+<pre class="eg">function f(n) n * n<br><br>f.unparse(1) ==&gt; "function f(n) n * n"<br>f.getPackage() ==&gt; package ""<br>f.getImportEnv(1) ==&gt; ["java.lang.*", "*"]<br></pre>
+
+<p>Zobacz r&oacute;wnie&#380; <a href="function.html">"Definiowanie funkcji w j&#281;zyku Java"</a>.
+</p>
+
+<a name="package"></a>
+<h3><a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a></h3>
+<p>Pakiet jest przestrzeni&#261; nazw kt&oacute;ra zapobiega konfliktowi nazw w r&oacute;&#380;nych skryptach.</p><p>Ka&#380;dy skrypt posiada w&#322;asn&#261; tablice symboli nazw.
+</p>
+
+<h4>&nbsp;Hierarchia Pakietu</h4>
+
+<p>Klasa Package posiada konstruktory umo&#380;liwiaj&#261;ce nadanie nazwy pakietowi oraz zdefiniowanie pakietu nadrz&#281;dnego.</p><p> 
+Pakiet jawnie czy nie zawsze jest tworzony przy pomocy jednego &nbsp;z konstruktor&oacute;w: </p><blockquote>
+<dl>
+<dt><tt>public <b>Package</b>();</tt></dt>
+<dt><tt>public <b>Package</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em><tt>);</tt></dt>
+
+<dt><tt>public <b>Package</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a href="../apidoc/pnuts/lang/Package.html">Package</a>
+<em>parent</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>
+<b>Pakiet g&#322;&oacute;wny</b> jest najwy&#380;szym w hierarchi pakietem kt&oacute;ry nie posiada pakietu nadrz&#281;dnego. Je&#380;eli parametr <em>parent</em> jest ustawiony na NULL tworzony jest nowy pakiet g&#322;&oacute;wny.
+Kiedy skrypt jest &#322;adowany jest wykonywany w pakiecie g&#322;&oacute;wnym jako pakietem bie&#380;&#261;cym.
+</p>
+<p>
+Kiedy <em>parent</em> nie jest podany to globalny pakiet jest u&#380;yty jak pakiet nadrz&#281;dny. Komendy  
+<tt>pnuts</tt> u&#380;ywaj&#261; globalnego pakietu jako domy&#347;lnego pakietu w kt&oacute;rym si&#281; wykonuj&#261;. Gdy wykonywane s&#261; tylko komendy&nbsp; <tt>pnuts</tt> nie ma potrzeby tworzenia nowego pakietu g&#322;&oacute;wnego.
+</p>
+<p>Pakiety g&#322;&oacute;wne tworzone s&#261; na potrzeby&nbsp;&nbsp;<a href="isolation.html">Izolowane &#347;rodowiska skryptowe</a>.
+Dla ka&#380;dego izolowanego &#347;rodowiska tworzony jest pakiet g&#322;&oacute;wny.
+Ka&#380;dy pakiet g&#322;&oacute;wny posiada w&#322;asne drzewo pakiet&oacute;w.Nazwy
+zdefiniowane w &#347;rodowisku s&#261; trzymane w kt&oacute;rym&#347; z
+pakiet&oacute;w i nie s&#261; widoczne dla innych &#347;rodowisk.
+</p>
+<p>Globalny pakiet traktowany jest jako statyczne pole klasy <a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a>
+kt&oacute;re nigdy nie jest uwzgl&#281;dniane przez GC, inne pakiety mog&#261;
+by&#263; usuwane przez GC w momencie gdy nie ma do nich referencji.
+</p>
+
+<h4>Pod pakiety</h4>
+
+<p>
+Poni&#380;sza metoda jest u&#380;ywana do tworzenia pakietu, gdy pakiet o nazwie&nbsp; <em>pkgName</em> nie istnieje jest tworzony w przeciwnym przypadku jest zwracany istniej&#261;cy pakiet.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Package <b>getPackage</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>pkgName</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Dost&#281;p do tablicy symboli</h4>
+
+<p>Poni&#380;sze metody s&#322;u&#380;&#261; do pobierania/ustawiania symboli w pakiecie. 
+</p>
+
+
+<blockquote>
+<dl>
+<dt><tt>public Object <b>get</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>set</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> value , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public boolean <b>defined</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>clear</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>Gdzie&nbsp;  <em>symbol</em> musi by&#263; internowanym obiektem klasy&nbsp; String.
+</p>
+<p>
+
+</p><h4>AutoloadHook</h4>
+
+<p>
+
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>autoload</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>file</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>autoload</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="../apidoc/pnuts/lang/AutoloadHook.html">AutoloadHook</a> <em>hook</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+Je&#380;eli zmienna nie jest zdefiniowana w tabeli nazw wtedy wywo&#322;ywana jest metoda&nbsp; <a href="../apidoc/pnuts/lang/Package.html#get%28java.lang.String,%0D%0Apnuts.lang.Context%29"><tt>Package.get(String, Context)</tt></a>&nbsp; i&nbsp; AutoloadHook dla zmiennej jest zarejetrowany przez &nbsp;metode <a href="../apidoc/pnuts/lang/Package.html#autoload%28java.lang.String,%20pnuts.lang.AutoloadHook%29"><tt>autoload()</tt></a>
+wtedy AutoloadHook zostaje wykonany. W przeciwnym przypadku wykonywana
+jest analogiczna operacja dla pakietu nadrz&#281;dnego w celu odnalezienia
+zmiennej.
+<h4>Modu&#322;y i Pakiety</h4>
+
+<p>Kiedy metoda&nbsp; <a href="../apidoc/pnuts/lang/Context.html#usePackage%28java.lang.String%29"><tt>Context.usePackage()</tt></a>&nbsp;jest
+wywo&#322;ywana w celu instalacji modu&#322;u jest wykonywany skrypt
+inicjalizacyjny modu&#322;u.Podmodu&#322;y s&#261; pod&#322;&#261;czane lub tworzone gdy nie
+istniej&#261; oraz funkcje modu&#322;u s&#261; zapisywane do pakietu.&nbsp;
+</p>
+<p>Pakiet utrzymyje liste eksportowanych nazw kiedy pakiet jest u&#380;yty
+jako modu&#322;. Modu&#322; mo&#380;e rejestrowa&#263; eksportowane nazwy w skrypcie
+inicjalizacyjnym za pomoc&#261; metody&nbsp; <a href="../apidoc/pnuts/lang/Package.html#export%28java.lang.String%29"><tt>Package.export(</tt></a>.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>export</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>Je&#380;eli nie ma okre&#347;lonych nazw do eksportu to wszytskie nazwy funkcji s&#261; domyslnie eksportowane.
+</p>
+<p>Kiedy modu&#322; jest zaiplementowany za pomoc&#261; klasy <a href="../apidoc/pnuts/ext/ModuleBase.html"><tt>pnuts.ext.ModuleBase</tt></a>
+metoda <tt>export()</tt> nie jest wywo&#322;ywana gdy&#380; metoda <a href="../apidoc/pnuts/ext/ModuleBase.html#autoload%28java.lang.String%5B%5D,%20java.lang.String,%20pnuts.lang.Context%29"><tt>autoload()</tt></a> lub funkcja
+<href ="../apidoc/pnuts/ext/ModuleBase.html#autoloadFunction(java.lang.String, pnuts.lang.Context)"><tt>autoloadFunction()</tt> wywo&#322;yje wewn&#281;trznie metod&#281; <tt>export()</tt>.
+</href></p>
+
+<a name="context"></a>
+<h3><a href="../apidoc/pnuts/lang/Context.html">pnuts.lang.Context</a></h3>
+
+<p>Kontekst reprezentuje wewn&#281;trzny stan interpretera w czasie wykonania i zawiera nast&#281;puj&#261;ce informacje:
+</p>
+
+<ul>
+<li>Stos ramek (tylko interpreter AST)
+</li><li>Jakie pakiety zosta&#322;y u&#380;yte
+</li><li>List&#281; importowanych pakiet&oacute;w Javy
+</li><li>OutputStream gdzie metoda <tt>write()</tt> wypisuje wyniki
+</li><li>PrintWriter gdzie metoda <tt>print()</tt> wysy&#322;a dane
+</li><li>PrintWriter gdzie metoda <tt>error()</tt> wypisuje komunikaty
+</li><li>PrintWriter &nbsp;gdzie pobierane s&#261; dane i wysy&#322;ane wyniki
+</li><li>ClassLoader by which <tt>load()</tt> find a script
+</li><li>A <a href="pnutsImpl.html"><tt>pnuts.lang.Implementation</tt> object</a>
+</li><li>Zmienne kontekstu
+</li><li>List&#281; modu&#322;&oacute;w zarejestrowan&#261; przez funkcj&#281; <tt>use()</tt>
+</li><li>List&#281; plik&oacute;w wczytanych przez <tt>load()</tt>
+</li></ul>
+
+<p>Obiekt kontekstu jest potrzebny do ewaluacji skryptu.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public <b>Context</b>();</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Package.html">Package</a> <em>pkg</em><tt>);</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Package.html">Package</a> <em>pkg</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>source</em><tt>);</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>template</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>Domy&#347;lny konstruktor tworzy kontekst w globalnym pakiecie. Konstruktor <tt>Context(Package </tt><em>anPackage</em><tt>)</tt> pozwala na ustalenie domy&#347;lnego pakietu.  
+</p>
+
+<p>Obiekt kontekstu jest mo&#380;e by&#263; przekazywany w parametrze w r&oacute;&#380;nych metodach interpretera: <tt>Pnuts.eval()</tt>, <tt>Pnuts.load()</tt>, or
+<tt>Pnuts.loadFile()</tt>&nbsp;. Kontekst mo&#380;e by&#263; u&#380;ywany w r&oacute;&#380;nych w&#261;tkach w tym samym czasie.
+</p>
+
+<a name="clone"></a>
+<h4>Klony</h4>
+
+<p>Kiedy jedna z funkcji wbudowanych jest wywo&#322;ana w skrypcie <tt>eval()</tt>,<tt>load()</tt>, <tt>require()</tt>, and <tt>loadFile()</tt>
+wtedy klon kontekstu jest przekazywany do tych funkcji gdzie bie&#380;&#261;cym
+pakietem jest pakiet g&#322;&oacute;wny, zazwyczaj jest to pakiet globalny.
+</p>
+
+
+
+<p>Niekt&oacute;re z atrybut&oacute;w s&#261; dzielone przez klony kontekstu a niekt&oacute;re s&#261; kopiowane.
+</p>
+
+<blockquote>
+<table class="bg2" border="0" cellpadding="3" cellspacing="1" width="95%">
+<tbody><tr class="wb">
+<th bgcolor="#eeeeee">Atrybut</th>
+<th bgcolor="#eeeeee">Co si&#281; dzieje gdy powstaje klon</th>
+</tr><tr class="wb">
+  <td class="wb">&nbsp;<a href="context.html#classloader">classloader</a> skojarzony z kontekstem</td>
+  <td class="wb" align="center">wsp&oacute;&#322;dzielony</td>
+</tr><tr class="wb">
+  <td class="wb">Modu&#322;y dodane przez&nbsp; <tt>use()</tt></td>
+  <td class="wb" align="center">wsp&oacute;&#322;dzielony</td>
+</tr><tr class="wb">
+  <td class="wb">Lista plik&oacute;w wczytana&nbsp;<tt>load()</tt></td>
+  <td class="wb" align="center">wsp&oacute;&#322;dzielony</td>
+</tr><tr class="wb">
+  <td class="wb"><a href="context.html#stream">OutputStream for messages</a></td>
+  <td class="wb" align="center">kopia</td>
+</tr><tr class="wb">
+  <td class="wb"><a href="context.html#contextlocal">Context-local Variables</a></td>
+  <td class="wb" align="center">kopia</td>
+</tr><tr class="wb">
+  <td class="wb"><a href="pnutsImpl.html">Implementation object</a></td>
+  <td class="wb" align="center">kopia</td>
+</tr><tr class="wb">
+  <td class="wb"><a href="#configuration">Configuration</a></td>
+  <td class="wb" align="center">kopia</td>
+</tr><tr class="wb">
+  <td class="wb"><a href="#encoding">Encoding</a></td>
+  <td class="wb" align="center">kopia</td>
+</tr><tr class="wb">
+  <td class="wb">Lista importowanych pakiet&oacute;w Javy</td>
+  <td class="wb" align="center">resetowany</td>
+</tr><tr class="wb">
+  <td class="wb">Bie&#380;&#261;cy pakiet</td>
+  <td class="wb" align="center">resetowany</td>
+</tr></tbody></table>
+</blockquote>
+<p>Gdy zachodzi potrzeba pe&#322;nej kopii atrybut&oacute;w nale&#380;y u&#380;y&#263; konstruktora kopiuj&#261;cego&nbsp; <a href="../apidoc/pnuts/lang/Context.html#Context%28pnuts.lang.Context%29"><tt>Context(Context)</tt></a> a nie metody <tt>clone()</tt>.
+</p><p>
+
+
+</p><h4>Strumienie wyj&#347;cia (OutputStream) dla komunikat&oacute;w (Messages)</h4>
+
+<p>Jak wida&#263; poni&#380;ej istniej&#261; trzy rodzaje strumieni wyj&#347;ciowych jakie mog&#261; by&#263; ustawione w kontek&#347;cie.
+</p>
+
+<ul>
+<li>Strumie&#324; wyj&#347;cie Output Stream
+<blockquote>
+<dl>
+<dt><tt>public OutputStream  <b>getOutputStream</b> ();</tt></dt>
+<dt><tt>public void <b>setOutputStream</b> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>out</em><tt>);</tt></dt>
+<dt><tt>public PrintWriter  <b>getWriter</b> ();</tt></dt>
+<dt><tt>public void <b>setWriter</b> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>writer</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+</li><li>Strumie&#324; b&#322;&#281;d&oacute;w Error stream
+<blockquote>
+<dl>
+<dt><tt>public PrintWriter <b>getErrorWriter</b> ();</tt></dt> 
+<dt><tt>public void <b>setErrorWriter</b> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>out</em><tt> );</tt></dt>
+</dl>
+</blockquote>
+
+</li><li>Strumie&#324; konsoli Terminal stream (prompt and the result)
+<blockquote>
+<dl>
+<dt><tt>public PrintWriter <b>getTerminalWriter</b> ();</tt></dt>
+<dt><tt>public void <b>setTerminalWriter</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> <em>writer</em><tt> );</tt></dt>
+</dl>
+</blockquote>
+</li></ul>
+
+
+<a name="contextlocal"></a>
+<h4>Zmienne kontekstu</h4>
+
+<p>Zmienne kontekstu s&#261; rodzajem zmiennych &#347;rodowiskowych nale&#380;&#261;cych do kontekstu.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>set</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> <tt>, Object </tt><em>value</em><tt>);</tt></dt> 
+<dt><tt>public Object <b>get</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> <tt>);</tt></dt> 
+</dl>
+</blockquote>
+<p>Gdzie&nbsp;  <em>symbol</em> musi by&#263; internowanym obiektem klasy&nbsp; String.
+</p>
+
+<p>Dost&#281;p do zmiennych wygl&#261;da jak dost&#281;p do p&oacute;l obiektu kontekstu.
+</p>
+
+<pre class="eg">context = getContext()<br>context.foo       ==&gt; null<br>context.foo = date()<br></pre>
+
+
+<a name="encoding"></a>
+<h4>Kodowanie</h4>
+
+<p>
+Kontekst mo&#380;e mie&#263; zdeklarowane kodowanie skrypt&oacute;w za pomoc&#261; metody setScriptEncoding().
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setScriptEncoding</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encodingName</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <b>getScriptEncoding</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<h4>ClassLoader</h4>
+
+<p>Kontekst mo&#380;e mie&#263; ustawiony loader klass kt&oacute;ry jest u&#380;ywany do poszukiwania skrypt&oacute;w gdy funkcja&nbsp; <tt>load()</tt> zostanie u&#380;yta.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setClassLoader</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ClassLoader.html">ClassLoader</a> <em>loader</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ClassLoader.html">ClassLoader</a> <b>getClassLoader</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<h4>Implementacja</h4>
+
+<p>Zobacz <a href="pnutsImpl.html">"Dostosowywanie interpretera"</a>.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>setImplementation</b> (</tt><a href="../apidoc/pnuts/lang/Implementation.html">Implementation</a> <em>impl</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="../apidoc/pnuts/lang/Implementation.html">Implementation</a> <b>getImplementation</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<a name="configuration"></a>
+<h4>Konfiguracja</h4>
+
+<p>
+Configuration defines how to find method/field candidates, and semantics of field access. 
+</p>
+
+<blockquote>
+<dl>
+<dt><em>context</em> . <b>setConfiguration</b><tt> ( <a href="../apidoc/pnuts/lang/Configuration.html">Configuration</a> </tt><em>impl</em> <tt> )</tt></dt>
+<dt><em>context</em> . <b>getConfiguration</b><tt> (  )</tt></dt>
+</dl>
+</blockquote>
+
+<p>Zobacz <a href="configuration.html">"</a><a href="configuration.html">Dostosowywanie zachowania podstawowych wyra&#380;e&#324;</a><a href="configuration.html">"</a>.
+</p>
+
+<h4>Modu&#322;y</h4>
+
+<p>
+<tt>Funkcja use()</tt> rejestruje modu&#322; w kontek&#347;cie.
+&nbsp;Zarejestrowane modu&#322;y s&#261; zarz&#261;dzane i wsp&oacute;&#322;dzielone przez
+rodzin&#281; klon&oacute;w kontekstu.
+</p><p>
+
+</p><blockquote>
+<dl>
+<dt><tt>public boolean <b>usePackage</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>name</em> <tt>);</tt></dt> 
+<dt><tt>public String[] <b>usedPackages</b> ();</tt></dt> 
+<dt><tt>public void <b>clearPackages</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<p>
+<tt>usePackage()</tt>&nbsp;rejestruje modu&#322; w kontek&#347;cie oraz wykonuje metod&#281; inicjalizacujn&#261; modu&#322;u.
+</p>
+<p>
+<tt>usedPackages()</tt> zwraca list&#281; nazw zarejestrowanych modu&#322;&oacute;w.
+</p>
+<p>
+<tt>clearPackages()</tt> czy&#347;ci list&#281; modu&#322;&oacute;w.
+</p>
+
+
+<h4>R&oacute;&#380;nice mi&#281;dzy <tt>eval()</tt> i <tt>Pnuts::eval()</tt></h4>
+
+<blockquote>
+<dl>
+<dt><tt>eval(<em>expr</em>)</tt></dt>
+<dd>Ewalu&#322;uje <em>expr</em> na kopii bie&#380;&#261;cego kontekstu</dd>
+<dt><tt>eval(<em>expr</em>, <em>context</em>)</tt></dt>
+<dd>Ewalu&#322;uje&nbsp;<em>expr</em>&nbsp;<span style="font-style: italic;">na kopii podanego</span><em></em></dd>
+<dt><tt>Pnuts::eval(<em>expr</em>)</tt></dt>
+<dd>Ewaluuje&nbsp;<em>expr</em> na stworzonym nowym kontek&#347;cie</dd><dd>
+</dd><dd>same as <tt>Pnuts::eval(<em>expr</em>, Context())</tt></dd>
+<dt><tt>Pnuts::eval(<em>expr</em>, <em>context</em>)</tt></dt>
+<dd>Ewaluuje&nbsp;<em>expr</em>&nbsp;<span style="font-style: italic;">w kontek&#347;cie</span><em></em></dd>
+</dl>
+</blockquote>
+
+<p>Gdy obiekt kontekstu jest przekazywany&nbsp; <tt>Pnuts::eval(</tt><em>expr</em><tt>, </tt><em>context</em><tt>)</tt>, <tt>import()</tt>
+&nbsp;i niekt&oacute;re inne funkcje mog&#261; modyfikowa&#263; kontekst
+wywo&#322;uj&#261;cego. Z drugiej strony oryginalny kontekst nie mo&#380;e by&#263;
+modyfikowany przez funkcje&nbsp; <tt>egal()<span style="font-family: Verdata,Geneva,Arial,Helvetica,sans-serif;">gdy&#380; u&#380;ywa ona kopii kontekstu</span></tt>.
+</p>
+
+
+<a name="exception"></a>
+<h3><a href="../apidoc/pnuts/lang/PnutsException.html">pnuts.lang.PnutsException</a></h3>
+
+<p>Kiedy zostanie rzucony wyj&#261;tek podczas wykonywania/&#322;adowania skryptu przez metody <tt>Pnuts.eval()</tt>, <tt>Pnuts.load()</tt>, or <tt>Pnuts.loadFile()</tt> wyj&#261;tek jest propagowany do wywo&#322;uj&#261;ce.
+</p>
+
+<p>Wyj&#261;tki s&#261; opisane obiekcie klasy&nbsp;<a href="../apidoc/pnuts/lang/PnutsException.html"><tt>pnuts.lang.PnutsException</tt></a> kt&oacute;ry mo&#380;e by&#263; pobrany za pomoc&#261; metody <a href="../apidoc/pnuts/lang/PnutsException.html#getThrowable%28%29"><tt>PnutsException.getThrowable()</tt></a>.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public Throwable <b>getThrowable</b>();</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">import pnuts.lang.*;<br>import java.io.*;<br><br>class Foo {<br>   public static void main(String arg[]){<br>      try {<br>         Object ret = Pnuts.eval(arg[0], new Context());<br>	 System.out.println("ret = " + ret);<br>      } catch (<b>PnuteException</b> e){<br>	 if (e.<b>getThrowable</b>() instanceof IOException){<br>	   e.printStackTrace();<br>	 } else {<br>	   System.out.println("caught: " + e);<br>	 }<br>      }<br>   }<br>}<br></pre>
+
+<p>
+<tt>getScriptSource()</tt> zwraca &#378;r&oacute;d&#322;o skryptu gdy zdarzy si&#281; b&#322;&#261;d kt&oacute;re jest najcz&#281;&#347;ciej URL skryptu.
+<tt>getLine()</tt> zwraca linie gdzie wyst&#261;pi&#322; b&#322;&#261;d.
+</p><p>
+</p><blockquote>
+<dl>
+<dt><tt>public Object <b>getScriptSource</b>();</tt></dt>
+<dt><tt>public int <b>getLine</b>();</tt></dt>
+</dl>
+</blockquote>
+<p>Aby uzyska&#263; pozycje b&#322;&#281;du jaki si&#281; zdarzy&#322; w skrypcie nale&#380;y przed jego wykonaniem przez metod&#281;
+<tt>Pnuts.run(Context)</tt>nale&#380;y stawi&#263; &#378;r&oacute;d&#322;o skryptu przez 
+<tt>Pnuts.setScriptSource()</tt>.
+</p><p>
+
+</p><div class="eg">np.
+<pre>import pnuts.lang.*;<br>import java.io.*;<br><br>class Foo {<br>   public static void main(String arg[]) throws IOException {<br>      try {<br>         File file = new File(arg[0]);<br>         FileInputStream in = new FileInputStream(file);<br>         Pnuts expr = Pnuts.parse(in);<br>	 expr.setScriptSource(file);<br>	 expr.run(new Context());<br>      } catch (PnutsException e){<br>         System.out.println(e.getScriptSource() + ": " + e.getLine());<br>      }<br>   }<br>}<br></pre></div>
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt;&nbsp;Przegl&#261;d Pnuts API
+</div>
+</body></html>

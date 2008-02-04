@@ -1,0 +1,733 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Podr&#281;cznik Pnuts</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -> Web Scripting in Pnuts
+</div>
+
+<!-- body start -->
+
+<h1>Web Scripting in Pnuts</h1>
+
+<p>
+<a href="../modules/pnuts.servlet/doc/index.html">pnuts.servlet module</a> allows simple and easy servlet programming.  
+<p>
+It supports two styles of Web scripting. One is HTML document which
+scripts are embedded within a special tag, which is similar to JSP and PHP.  The other is that some program generates a web contents proactively, as Java servlet and CGI does.  In this chapter, we call the former <em>Dynamic Pages</em>, and the latter <em>Servlet Scripts</em>.
+
+<ul>
+<li><a href="#preparation">1. Preparation</a>
+<ul>
+<li><a href="#servlet-container">Servlet Container</a>
+<li><a href="#required-files">Required Files</a>
+<li><a href="#configuration">Configuration</a>
+</ul>
+<li><a href="#concepts">2. Concepts</a>
+<ul>
+<li><a href="#servlet_scripts">Servlet Scripts</a>
+<li><a href="#classpath">Classpath</a>
+<li><a href="#scope">Scope Rules</a>
+<li><a href="#dynamic_pages">Dynamic Pages</a>
+</ul>
+
+<li><a href="#senarios">3. Senario of Use</a>
+<ul>
+<li><a href="#3.1">Simple Servlet Scripts</a>
+<li><a href="#3.2">Simple Dynamic Pages</a>
+<li><a href="#3.3">Servlet Scripts with Actions and Templates</a>
+</ul>
+<li><a href="#url_rewrite">4. URL Rewriting</a>
+<ul>
+<li><a href="#url_rewrite_config">Configuration</a>
+</ul>
+</ul>
+
+<a name="preparation"></a>
+<h2>1. Preparation</h2>
+
+<a name="servlet-container"></a>
+<h3>Servlet container</h3>
+<p>
+Pnuts servlets require a servlet container which supports Java Servlet API 2.2 or better.
+<li><a href="http://java.sun.com/products/servlet/industry.html#servers">http://java.sun.com/products/servlet/industry.html#servers</a>
+</p>
+
+<a name="required-files"></a>
+<h3>Required Files</h3>
+
+Copy the following files to the right place where the servlet container can find.
+
+<UL>
+  <LI><tt>pnuts.jar</tt>
+  <LI><tt>pnuts-modules.jar</tt>
+</ul>
+
+For example, on Tomcat-5.X, copy those files to common/lib/.
+
+<a name="configuration"></a>
+<h3>Configuration</h3>
+
+<a name="servlet-class"></a>
+<h4>Servlet Class</h4>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Servlet class</th>
+<th bgcolor=#eeeeee>Description</th>
+<tr class="wb">
+      <td>pnuts.servlet.PnutsServlet</td>
+      <td>When this class is used, a servlet script is executed for each request.</td>
+<tr class="wb">
+      <td>pnuts.servlet.DynamicPageServlet</td>
+      <td>When this class is used, a template-based dynamic page is executed for each request.</td>
+</tr>
+</table>
+</blockquote>
+<p>
+Other than those servlet classes, <tt>pnuts.servlet.URLRewriteServlet</tt> class is used
+for <a href="#url_rewrite">URL rewriting</a>.
+
+
+<a name="init-param"></a>
+<h4>The Initialization Parameters for Servlet Scripts and Dynamic Pages</h4>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>init-param</th>
+<th bgcolor=#eeeeee>the meaning</th>
+<tr class="wb">
+      <td>module</td>
+      <td>If one or more comma-separated module names are specified, those modules would be added to the context.</td>
+<tr class="wb">
+      <td>initialScript</td>
+      <td>If specified, the script is loaded when the
+      servlet is initialized.</td>
+<tr class="wb">
+      <td>script</td>
+      <td>If specified, the script is executed for each request. Otherwise, the script file that corresponds the URL is used.</td>
+<tr class="wb">
+      <td>locale
+      <td>The default locale
+      <ul><li>Typically an empty string is specified.</li>
+      <li>Locale information, language, country, and variant, can
+      be specified as a <tt>'_'</tt> separated string in that order.</li></ul>
+<tr class="wb">
+      <td>timezone
+      <td>The default timezone
+<tr class="wb">
+      <td>compile
+      <td>If <tt>true</tt> (default), scripts are compiled into Java bytecode.
+<tr class="wb">
+      <td>encoding
+      <td>Character encoding of script files.
+<tr class="wb">
+      <td>buffering
+      <td>If <tt>true</tt> (default), contents are buffered and <tt>Content-Length</tt> is set.
+<tr class="wb">
+      <td>execute-latest-script
+      <td>If <tt>true</tt> (default), timestamp of contents are checked and a script is compiled and loaded only if it is updated since last loaded.
+<tr class="wb">
+      <td>debug
+      <td>If true, the stack trace is appended to the log file when an error occurs.
+<tr class="wb">
+      <td>isolation
+      <td>If <tt>true</tt> (default), scripts are executed in an <a href="isolation.html">isolated scripting environment</a>.
+<tr class="wb">
+      <td>workdir</td>
+      <td>The name of the subdirectory in which converted dynamic
+      pages are saved. The same place as <tt>.pea</tt> file can be specified as
+      <tt>"."</tt>.  If this parameter is not specified, dynamic pages are
+      converted on-memory and not saved to a file.</td>
+<tr class="wb">
+      <td>error-page
+      <td>If specified, redirect requests to the location when exception is not caught.</a>.
+</table></blockquote>
+
+<a name="example-web-xml"></a>
+<h4>An example of web.xml</h4>
+
+<div class="eg">
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/dtd/web-app_2_2.dtd"&gt;
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.PnutsServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;execute-latest-script&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;script&lt;/param-name&gt;
+            &lt;param-value&gt;scripts/index.pnut&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;module&lt;/param-name&gt;
+            &lt;param-value&gt;pnuts.servlet&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;compile&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;debug&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;includeLineNo&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;buffering&lt;/param-name&gt;
+            &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+
+</pre>
+</div>
+
+<a name="concepts"></a>
+<h2>2. Concepts</h2>
+
+<a name="servlet_scripts"></a>
+<h3>Servlet Scripts</h3>
+
+<p>
+The programming servlet scripts in Pnuts is basically same as ordinary
+Pnuts scripts.  The only difference is that servlet scripts rely on <a
+href="../modules/pnuts.servlet/doc/index.html"><tt>pnuts.servlet</tt> module</a>.
+Also the rich functionalities of the <a href="http://java.sun.com/products/servlet/">Java Servlet API</a> are all available to the scripts.</p>
+<p>
+<div class="eg">np. <tt>test.pnut</tt>
+<pre>
+response.setContentType("text/html")
+print("&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;")
+for (i : 1..6) {
+    print("Hello, World!!")
+}
+print("&lt;/body&gt;&lt;/html&gt;")
+</pre></div>
+
+<h4>Binary Contents</h4>
+
+<p>
+The default output stream, to which the messages are printed, is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PrintWriter.html">PrintWriter</a> object.  If <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> is required, <tt>response.getOutputStream()</tt> should be used instead of the default output stream.
+</p>
+
+<div class="eg">np. (<tt>${TOMCAT}/webapps/test/image.pnut</tt>)
+<pre>
+use("pnuts.awt")
+
+response.setContentType("image/png")
+
+import("java.awt.Color")
+im = <a href="../modules/pnuts.awt/doc/image.html#makeImage">makeImage</a>(20, 20, function (g) {
+   g.setColor(Color::white)
+   g.fillRect(0, 0, 20, 20)
+   g.setColor(Color::orange)
+   g.fillOval(0, 0, 20, 20)
+})
+<a href="../modules/pnuts.awt/doc/image.html#writeImage">writeImage</a>(im, "image/png", response.getOutputStream())
+</pre>
+</div>
+
+<a name="classpath"></a>
+<h3>Classpath</h3>
+
+<p>
+The directory where the servlet script is located is added to the application's classpath, i.e. WEB-INF/classes, WEB-INF/lib/*jar.
+<p>
+
+<a name=scope></a>
+<h3>Scope Rules</h3>
+
+<p>
+Scopes for variables in servlet scripting falls into the following scopes.
+
+<ul>
+<li><a href="#script_scope">Script Scope</a>
+<li><a href="#request_scope">Request Scope</a>
+<li><a href="#session_scope">Session Scope</a>
+</ul>
+
+<a name=script_scope></a>
+<p>
+<b>Script scope</b> is a name space created for each servlet script specified in a URL.  It is shared by requests that
+designate the same script.  So, it is used for storing data
+which are not changed by requests, and defining functions which are
+called to construct a response.
+</p>
+<p>In <em>script scope</em>, the following variable is pre-defined.
+
+<blockquote>
+<dl>
+<dt><tt>this</tt>
+<dd>The <tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/Servlet.html">Servlet</a></tt> object.
+</dl>
+</blockquote>
+
+<a name=request_scope></a>
+<p>
+<b>Request scope</b> is a child name space of a <em>script scope</em>, which is created
+for each request.  It is used for storing request-specific data.
+A servlet script specified in a URL are executed in <em>request scope</em>.
+Other script files loaded by <tt>load()</tt> or <tt>loadFile()</tt>
+are executed in the parent <em>script scope</em>.
+</p>
+
+<p>In <em>request scope</em>, the following variables are defined.
+
+<blockquote>
+<dl>
+<dt><tt>request</tt>
+<dd>The <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletRequest.html">ServletRequest</a> object passed to the <tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/Servlet.html#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)">Servlet.service()</a></tt> method
+<dt><tt>response</tt>
+<dd>The <a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/ServletResponse.html">ServletResponse</a> object passed to the <tt><a href="http://java.sun.com/products/servlet/2.2/javadoc/javax/servlet/Servlet.html#service(javax.servlet.ServletRequest, javax.servlet.ServletResponse)">Servlet.service()</a></tt> method
+</dl>
+</blockquote>
+
+<p>
+Since <em>request scope</em> is a child packge of the <em>script scope</em>, variables
+in the <em>script scope</em> are visible from the <em>request scope</em>. But the
+opposite is not true.
+</p>
+<p>
+It is possible to access the <em>request scope</em> from other scope, by using the 
+Package object that <a
+href="../modules/pnuts.servlet/doc/index.html#requestScope"><tt>requestScope()</tt></a>
+returns.
+</p>
+
+<div class="eg">np.
+<pre>
+package(requestScope())
+</pre>
+</div>
+
+<p>
+It is also possible to access the <em>script scope</em> from the request scope, by using the 
+Package object that <a
+href="../modules/pnuts.lib/doc/package_op.html#rootScope"><tt>rootScope()</tt></a>
+returns.
+</p>
+<div class="eg">np.
+<pre>
+root = rootScope()
+if (root.a == null) root.a = 1 else root.a++
+println(root.a)
+</pre>
+</div>
+
+<a name=session_scope></a>
+<p>
+<b>Session scope</b> is a name space  created by calling <a
+href="../modules/pnuts.servlet/doc/index.html#getSession"><tt>getSession()</tt></a>
+function.  It can be shared by not only multiple requests, but also multiple scripts.
+<p>
+
+
+
+<h4>Special Characters</h4>
+
+<p>
+For HTML or XML templates, care must be taken for special characters such as <tt>&lt;</tt>, <tt>&gt;</tt>, and <tt>&amp;</tt>.
+</p>
+<p>
+<a href="../modules/pnuts.servlet/doc/index.html#escape"><tt>escape()</tt></a>
+function is used for sanitizing the input that may include special characters.
+</p>
+
+<div class="eg">
+<pre>
+response.setContentType("text/html")
+
+head = "&lt;TABLE BORDER=1&gt;"
+row = template("&lt;TR&gt;&lt;TD&gt;%key%&lt;/TD&gt;&lt;TD&gt;%value%&lt;/TD&gt;&lt;/TR&gt;", "%([A-Za-z]+)%")
+footer = "&lt;/TABLE&gt;"
+
+props = System::getProperties()
+m = map()
+
+println(head)
+for (i : props.keys()){
+   m.key = <b>escape(i)</b>
+   m.value = <b>escape(string(props.get(i)))</b>
+   applyTemplate(row, m)()
+}
+println(footer)
+</pre>
+</div>
+
+<p>
+Note that URL string embedded in a HTML document should be encoded
+differently.  The following example illustrates how to encode a part
+of URL with <a href="../modules/pnuts.servlet/doc/index.html#encodeURL"><tt>encodeURL()</tt></a>.
+</p>
+
+<div class="eg">
+<pre>
+templ = template("%link%",  "%([A-Za-z]+)%")
+
+m = map()
+m.link = "http://host/index.pnut?name=" + encodeURL("%&?+")
+
+applyTemplate(templ, m)()
+</pre>
+</div>
+
+<p>
+An alternative is to use <a
+href="../modules/pnuts.servlet/doc/index.html#makeQueryString"><tt>makeQueryString()</tt></a>
+function that makes a query string from a Map.
+</p>
+
+<div class="eg">
+<pre>
+templ = template("%link%",  "%([A-Za-z]+)%")
+q = map()
+q.name = "%&?+"
+
+m = map()
+m.link = "http://host/index.pnut?" + makeQueryString(q)
+
+applyTemplate(templ, m)()
+</pre>
+</div>
+
+
+<a name="dynamic_pages"></a>
+<h3>Dynamic Pages</h3>
+
+<p>
+Dynamic pages of Pnuts are HTML documents with the special tag , <tt>&lt;%</tt>
+and <tt>%&gt;</tt> . The file name extension is  <tt>.pea</tt>.  Any Pnuts
+expression can be embedded in the special tag.
+<p>
+Dynamic pages are translated to the equivalent servlet script at the first request.
+Then the servlet script is executed for each request, unless the original.pea file is updated.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<tr class=wb><td><tt>&lt;%- ... %&gt;</tt></td><td>Comment</tr>
+<tr class=wb><td><tt>&lt;%= ... %&gt;</tt></td><td>Evaluate the expression and embed the result</tr>
+<tr class=wb><td><tt>&lt;% ... %&gt;</tt></td><td>Evaluate the expression (does not embed the result)</tr>
+<tr class=wb><td><tt>&lt;%@ ... %&gt;</tt></td><td>Directive. <br><tt>&lt%@ include file=".."%&gt;</tt> includes a page file. <br><tt>&lt%@ include expr=".."%&gt;</tt>
+includes the result of the script execution (at compile time).<br>
+<tt>&lt%@ escape %&gt;</tt> escapes special characters in the following <tt>&lt;%=..%&gt;</tt> sections.<br>
+<tt>&lt%@ no-escape %&gt;</tt> does not escape special characters in the following <tt>&lt;%=..%&gt;</tt> sections.</tr>
+</table></blockquote>
+
+<center>Types of tags</center>
+
+
+<div class="eg">np. <tt>test.pea</tt>
+<pre>
+&lt;% response.setContentType("text/html") %&gt;
+&lt;% for (i : 1..6) { %&gt;
+    &lt;H&lt;%=i%&gt;&gt; &lt;%=i%&gt;: Hello, World!! &lt;/H&lt;%=i%&gt;&gt;&lt;p&gt;
+&lt;%}%&gt;
+</pre></div>
+
+
+<h4>Including HTML/PEA file</h4>
+<p>
+The following directive replace itself with the servlet script converted from the <em>file</em>.
+</p>
+<div class="box">
+<div class="synopsis">
+&lt;%@ include file="<em>file</em>" %&gt;
+</div></div>
+
+<div class="eg"><tt>test.pea</tt>
+<pre>
+&lt;% response.setContentType("text/html") %&gt;
+&lt;%@ include file="date.pea" %&gt;
+</pre></div>
+
+<div class="eg"><tt>date.pea</tt>
+<pre>
+It is &lt;%= date()  %&gt; now.
+</pre></div>
+
+<h4>Embedding Dynamic Contents at Compile-Time</h4>
+
+<p>
+The following directive replace itself with the result of executing
+<em>expreesion</em> at compile time.
+</p>
+
+<div class="box">
+<div class="synopsis">
+&lt;%@ include expr="<em>expression</em>" %&gt;
+</div></div>
+
+<div class="eg"><tt>test.pea</tt>
+<pre>
+This page was compiled at &lt;%@ include expr="Date()" %&gt;.
+</pre></div>
+
+<a name="senarios"></a>
+<h2>3. Senario of Use</h2>
+
+<a name="3.1"></a>
+<h3>3.1 Simple Servlet Scripts</h3>
+
+<tt>&lt;servlet-mapping&gt;</tt> element in <tt>WEB-INF/web.xml</tt> specifies which file runs which servlet.
+<p>
+For example, with the folowing web.xml, .pnut files are mapped to PnutsServlet.
+</p>
+
+<div class="eg">WEB-INF/web.xml
+<pre>
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.PnutsServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.pnut&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+</div>
+
+When a .pnut file is visited by a web browser, the script is executed and the printed message is displayed.
+
+<div class="eg">index.pnut
+<pre>
+response.setContentType("text/html")
+println("&lt;html&gt;&lt;body&gt;")
+println("Hello ", getParameter("name"))
+println("&lt;/body&gt;&lt;/html&gt;")
+</pre>
+</div>
+
+<a name="3.2"></a>
+<h3>3.2 Simple Dynamic Pages</h3>
+<p>
+With the folowing web.xml, .pea files are mapped to DynamicPageServlet.
+</p>
+
+<div class="eg">WEB-INF/web.xml
+<pre>
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;dynamicPages&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.DynamicPageServlet&lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dynamicPages&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.pea&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+</div>
+
+When a .pea file is visited by a web browser, the template is formatted and displayed.
+
+<div class="eg">hello.pea
+<pre>
+&lt;html&gt;
+&lt;body&gt;
+Hello &lt;%= getParameter("name")%&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</div>
+
+<a name="3.3"></a>
+<h3>3.3 Servlet Scripts with Separate Actions and Templates</h3>
+
+<div class="eg">WEB-INF/web.xml
+<pre>
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;pnuts.servlet.PnutsServlet&lt;/servlet-class&gt;
+        <b>&lt;init-param&gt;
+            &lt;param-name&gt;initialScript&lt;/param-name&gt;
+            &lt;param-value&gt;setup.pnut&lt;/param-value&gt;
+        &lt;/init-param&gt;</b>
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;pnuts&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;list/*&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</pre>
+</div>
+
+With this web.xml, the following script is executed when the servlet is initialized.
+
+<div class="eg">setup.pnut
+<pre>
+<a href="../modules/pnuts.servlet/doc/index.html#setupActions">setupActions</a>("actions")
+<a href="../modules/pnuts.servlet/doc/index.html#setupPages">setupPages</a>("templates")
+</pre>
+</div>
+
+<p>
+The <tt>setup.pnut</tt> compiles the scripts in "actions/" and the templates in "templates/".
+Once all files are compiled,
+<ul>
+<li>an action script can be called by <tt>dispatch(</tt><em>base name of the action script</em><tt>)</tt>
+<li>a template can be displayed by <tt>render(</tt><em>base name of the template</em><tt>)</tt>
+</ul>
+
+
+<div class="eg">actions/list.pnut
+<pre>
+name = path[1]     // name is defined in the <a href="#request_scope">request scope</a>
+render("list")     // format and display 'templates/list.pea'
+</pre>
+</div>
+
+<div class="eg">templates/list.pea
+<pre>
+&lt;html&gt;
+  &lt;body&gt;
+   Hello &lt;%=<a href="../modules/pnuts.servlet/doc/index.html#escape">escape</a>(name)%&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+</div>
+
+
+<div class="eg">index.pnut
+<pre>
+path = <a href="../modules/pnuts.servlet/doc/index.html#requestPath">requestPath</a>()
+if (size(path) > 1){
+   dispatch(path[0])      // executes "actions/<em>something</em>.pnut"
+}
+</pre>
+</div>
+
+
+<a name="url_rewrite"></a>
+<h2>4. URL Rewriting</h2>
+
+Under normal configuration, the URL patterns <tt>*.pnut</tt> and <tt>*.pea</tt> are mapped to Servlet Script and Dynamic Page respectively. By rewriting URLs, server-side scripts can be accessed with simpler URL.  For example, 
+<div class="eg">
+<pre>
+http://localhost/help/encodeURL
+</pre>
+</div>
+
+<pre class="eg">
+http://localhost/help.pnut?function=encodeURL
+</pre>
+
+The former URL can be rewritten to the latter.
+<p>
+
+<a name="url_rewrite_config"></a>
+<h3>Configuration</h3>
+
+pnuts.servlet.URLRewriteServlet shoule be specified in web.xml.  The initial parameters are as follows.
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=80%>
+<tr class=wb>
+<th bgcolor=#eeeeee>init-param</th>
+<th bgcolor=#eeeeee>description</th>
+<tr class="wb">
+      <td>configuration</td>
+      <td>Configuration File (default: WEB-INF/classes/url_rewrite.conf)</td>
+</tr>
+<tr class="wb">
+      <td>verbose</td>
+      <td>If <tt>true</tt>, rewritten URLs are printed to System.err.</td>
+</tr>
+<tr class="wb">
+      <td>validating</td>
+      <td>If <tt>true</tt>, configuration file are validated.</td>
+</tr>
+</table>
+</blockquote>
+
+Configuration file should be a XML file that looks like the following. URL that matches the pattern in a <tt>rewrite-rule</tt> element is replaced by the corresponding replacement string.  If no pattern matches or
+any of the patterns in <tt>exclude-pattern</tt> elements matches, the URL is used as it is.
+
+<div class="eg">
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;url-rewrite&gt;
+  &lt;rewrite-rule&gt;
+    &lt;pattern&gt;<em>Regular Expression</em>&lt;/pattern&gt;
+    &lt;replacement&gt;<em>Replacement String</em>&lt;/replacement&gt;
+  &lt;/rewrite-rule&gt;
+  ...
+
+  &lt;exclude-pattern&gt;/scripts/*pnut&lt;/exclude-pattern&gt;
+  ...
+&lt;/url-rewrite&gt;
+</pre>
+</div>
+
+<p>
+Here is an example.
+<p>
+<div class="eg">WEB-INF/classes/url_rewrite.conf
+<pre>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;url-rewrite&gt;
+  &lt;rewrite-rule&gt;
+    &lt;pattern&gt;[^/]*/help/(\w+)&lt;/pattern&gt;
+    &lt;replacement&gt;help.pnut?function=$1&lt;/replacement&gt;
+  &lt;/rewrite-rule&gt;
+&lt;/url-rewrite&gt;
+</pre>
+</div>
+<div class="eg">web.xml
+<pre>
+ &lt;web-app&gt;
+    ...
+    &lt;servlet&gt;
+      &lt;servlet-name&gt;url_rewrite&lt;/servlet-name&gt;
+      &lt;servlet-class&gt;
+       pnuts.servlet.URLRewriteServlet
+      &lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;url-pattern&gt;help*&lt;/url-pattern&gt;
+        &lt;servlet-name&gt;url_rewrite&lt;/servlet-name&gt;
+    &lt;/servlet-mapping&gt;
+    ...
+</pre>
+</div>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -> Web Scripting in Pnuts
+</div>
+
+  </body>
+</html>

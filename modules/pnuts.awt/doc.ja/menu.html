@@ -1,0 +1,104 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> メニュー</div>
+
+    <h2>メニュー</h2>
+
+<a name=menubar></a>
+<div class="box">
+<div class="synopsis"><b>menubar</b><tt>(Object[] </tt><em>list</b></em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/Frame.html">Frame</a> </tt><em>frame</b></em> <tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>bundleName</em> } , Object[] </tt><em>list</b></em><tt>)  or </tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/javax/swing/JFrame.html">JFrame</a> </tt><em>jFrame</b></em> <tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>bundleName</em> } , Object[] </tt><em>list</b></em><tt>)</tt></div>
+</div>
+
+<p>
+メニューバーを作成します。次のような配列の構造で階層的メニューを表します。
+</p>
+
+<blockquote>
+<p>
+<dl>
+<dt><i>list</i> ::= [<em>menuList</em>, ...]</dt>
+<dt><i>menuList</i> ::= [<em>title</em>, <em>itemList</em>, ...]</dt>
+<dt><i>itemList</i> ::= [<em>string</em>, <em>function</em>, <em>shortcut</em>]                or  [<em>string</em>, <em>function</em>]</dt>
+<dt><i>shortcut</i> ::= character or KeyStroke
+</dl>
+</p>
+</blockquote>
+
+<p>
+<em>bundleName</em>が指定された場合、<a href="i18n.html#formatMessage">formatMessage()</a>関数を使ってラベルがローカライズされます。
+<p>
+<em>frameOrJFrame</em> が JFrame オブジェクトの場合、JMenuBar オブジェクトを返し、それ以外の場合、java.awt.MenuBar オブジェクトを返します。JMenuBar オブジェクトを返す場合、java.awt.swing.JMenuBar、com.sun.java.swing.JMenuBar の順にクラスを参照します。
+</p>
+
+<div class="eg">例:
+<pre>
+fr = frame("title")
+menubar(fr, [["File",
+              ["Open", open, 'o'],
+              ["Save", save, 's'],
+              ["Quit", quit, 'q']],
+ 	     ["Edit",
+	      ["Cut", cut, 'x'],
+	      ["Copy", copy, 'c'],
+	      ["Paste", paste, 'v']]])
+fr.show()
+</pre></div>
+
+<a name=menu></a>
+<div class="box">
+<div class="synopsis"><b>menu</b><tt>( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> <em>bundleName</em> , } <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a>[] </tt><em>menuList</b></em>)</tt></div>
+</div>
+
+<p>
+メニューを作成します。
+<em>bundleName</em>が指定された場合、<a href="i18n.html#formatMessage">formatMessage()</a>関数を使ってラベルがローカライズされます。
+<p>
+</p>
+
+<div class="eg">例:
+<pre>
+require("menu")
+menubar = ...
+menubar.setHelpMenu(menu(["Help", ["About...", about]]))
+fr = frame("title")
+fr.setMenuBar(menuBar)
+fr.show()
+</pre></div>
+
+<a name=getMenuItem></a>
+<div class="box">
+<div class="synopsis"><b>getMenuItem</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/javax/swing/JMenuBar.html">JMenuBar</a> </tt><em>menuBar</b></em> <tt>, Object[] </tt><em>list</b></em>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/awt/MenuBar.html">MenuBar</a> </tt><em>menuBar</b></em> <tt>, Object[] </tt><em>list</em>)</tt></div>
+</div>
+
+<p>
+メニューの選択項目を順に指定することで MenuItem または JMenuItemオブジェクトを求めます。
+</p>
+
+<blockquote>
+<p>
+<dt><em>list</em> ::= [<em>string</em>, ... ]</dt>
+</p>
+</blockquote>
+
+
+<div class="eg">例:
+<pre>
+getMenuItem(menubar, ["File", "Open"]).setEnabled(false)
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> メニュー</div>
+
+  </body>
+</html>

@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Javaによるモジュールの実装
+</div>
+
+<!-- body start -->
+
+<a name=module_in_java></a>
+
+<h3>Javaによるモジュールの実装</h3>
+
+<p>
+モジュールの初期化スクリプトは、<a href="loadable.html">load可能なクラス</a>で実装することができます。
+したがって、pnuts.lang.Executableインタフェースの実装クラスで実現できます。
+しかし、通常はpnuts.ext.ModuleBaseのサブクラスで実装されることが多いです。
+</p>
+
+<p>
+たとえば、<tt>"my_module"</tt>モジュールのを定義してみましょう。デフォルトの初期化スクリプトは、<tt>"my_module/init"</tt> なので、<tt>my_module.init</tt>クラスをpnuts.ext.ModuleBaseのサブクラスとして定義します。<tt>public Object execute(Context)</tt>メソッドで、"my_module"パッケージに関数helloを定義します。
+</p>
+
+
+<pre class="eg">
+package my_module;
+
+import pnuts.ext.ModuleBase;
+import pnuts.lang.Context;
+import pnuts.lang.Package;
+
+public class init extends ModuleBase  {
+    public Object execute(Context context){
+        Package pkg = Package.getPackage("my_module", context);
+	  pkg.set("hello".intern(), new hello(), context);
+	  return null;
+    }
+}
+</pre>
+
+<p>
+Package.set()メソッドに渡すシンボルはintern()されたStringオブジェクトでなければならないことに注意して下さい。
+</p>
+
+<h3>他のモジュールへの依存</h3>
+<p>
+モジュールが別のモジュールに依存している場合（モジュール実装のために他のモジュールが必要になる場合）、
+ModuleBase.getRequiredModules()メソッドでモジュール名の配列を返すように定義します。
+<p>
+たとえば、次の例は、pnuts.libとpnuts.ioに依存するmy_moduleモジュールを定義する例です。
+<p>
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    protected String[] getRequiredModules(){
+        return new String[]{"pnuts.lib", "pnuts.io"};
+    }
+    ...
+}
+</pre>
+
+<h3>サブモジュール</h3>
+
+モジュールをuse()したときに自動的にuse()されるモジュールを<b>サブモジュール</b>と呼びます。
+サブモジュールを定義するには、ModuleBase.getSubModules()メソッドでモジュール名の配列を返すように
+定義します。
+<p>
+たとえば、次の例は、functionalモジュールをサブモジュールとして定義します。
+<p>
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    protected String[] getSubModules(){
+        return new String[]{"functional"};
+    }
+    ...
+}
+</pre>
+
+<h3>サブモジュールや依存するモジュールを実行時に指定する方法</h3>
+<p>
+getRequiredModules()やgetSubModules()でモジュールのリストを定義するのではなく、execute()メソッドで
+Context.usePackage()を呼び出すことで、サブモジュールや依存するモジュールを実行時に定義することができます。
+<p>
+手順は、次のようになります。
+<ol>
+<li>context.usePackage()でサブモジュールを指定する。
+<li>context.clearPackage()メソッドを呼び出す。
+<li>context.usePackage()で依存するモジュールを指定する。
+</ol>
+
+<p>
+たとえば、次の例は、functionalモジュールをサブモジュールとし、pnuts.libとpnuts.ioに依存するmy_moduleモジュールを定義する例です。
+<p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    public Object execute(Context context){
+        context.usePackage("functional");
+        context.clearPackages();  // モジュール・リストのリセット
+        context.usePackage("pnuts.lib");
+        context.usePackage("pnuts.io");
+	...
+    }
+}
+</pre>
+
+
+
+<h3>初期化スクリプトの指定</h3>
+<p>
+META-INF/pnuts/module/モジュール名　というリソースファイルの一行目に初期化スクリプトの名前を指定することができます。
+たとえば、java.netモジュールの初期化スクリプトは、<tt>META-INF/pnuts/module/java.net</tt>というファイルの一行目で、
+</p>
+<pre class="eg">
+org/pnuts/java_net/init
+</pre>
+のように指定されています。
+
+
+<h3>JavaによるAutoload機能の利用</h3>
+
+<p>
+Autoloadはモジュールの初期化のためにかかる時間を小さくするために使われます。
+<p>
+pnuts.lang.Packageクラスの<a
+href="../apidoc/pnuts/lang/Package.html#autoload(java.lang.String, java.lang.String, pnuts.lang.Context)">autoload()</a>メソッドは、Pnutsのスクリプト、またはLoad可能なクラスを<a href="loading.html#autoload">autoload</a>するために利用できます。しかし、ここで説明する<a href="../apidoc/pnuts/ext/ModuleBase.html"><tt>pnuts.ext.ModuleBase</tt></a>クラスは、autoloadを行うためのもっと使いやすいメソッドをいくつか提供しています。
+</p>
+
+<h4>(1) Pnutsで実装された関数のAutoload</h4>
+<p>
+Pnutsのスクリプト、またはLoad可能なクラスを<a href="lang.html#loading">autoload</a>するには<a href="../apidoc/pnuts/ext/ModuleBase.html#autoload(java.lang.String[], java.lang.String, pnuts.lang.Context)">ModuleBase.autoload()</a>メソッドを使います。 次の例は、my_module/hello.pnutにhello()という関数が定義されているとして、その関数が使われたときにはじめてスクリプトをロードするように設定しています。
+</p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    static String[] files  = { "my_module/hello" };
+    static String[][] functions = {
+        { "hello" }
+    };
+    
+    public Object execute(Context context){
+	for (int i = 0; i < files.length; i++){
+	    <b>autoload</b>(functions[i], files[i], context);
+	}
+	return null;
+    }
+}
+</pre>
+
+<h4>(2) Javaで実装された関数のAutoload</h4>
+
+<p>
+PnutsFunctionのサブクラスとして定義されたPnuts関数をautoloadするには、<a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadFunction(java.lang.String, pnuts.lang.Context)">ModuleBase.autoloadFunction()</a>メソッドを使います。 たとえば、次のクラスは<em>my_module</em>モジュールの初期化処理を定義しています。シンボル'<tt>hello</tt>'の値を初めて参照したとき、<tt>org.pnuts.my_module.hello</tt> クラスが読み込まれて、デフォルト・コンストラクタでインスタンス化され、Pnutsインタプリタに返されます。
+</p>
+
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    static String[] javaFunctions = { "hello" };
+    
+    protected String <b>getPrefix</b>(){
+	return "org.pnuts";
+    }
+
+    public Object execute(Context context){
+	for (int i = 0; i < javaFunctions.length; i++){
+	    <b>autoloadFunction</b>(javaFunctions[i], context);
+	}
+	return null;
+    }
+}
+</pre>
+
+<p>
+<a href="../apidoc/pnuts/ext/ModuleBase.html#getPrefix()"><tt>getPrefix()</tt></a>メソッドは、クラス名のプリフィックスを定義します(デフォルトはnull)。
+この例では、クラス名は、プリフィックス"org.pnuts"、モジュール名
+"my_module"、関数名 "hello"から"org.pnuts.my_module.hello"というクラス名が構成されます。
+<a href="../apidoc/pnuts/ext/ModuleBase.html#getPrefix()"><tt>getPrefix()</tt></a>メソッドを定義しない場合は、クラス名のプリフィックスが空文字になります。</p>
+</p>
+
+<h4>(3) JavaのクラスのAutoload</h3>
+
+<p>
+クラス名（短い名前）をはじめて参照したときにクラスをロードするには、<a href="../apidoc/pnuts/ext/ModuleBase.html#autoloadClass(java.lang.String, java.lang.String, pnuts.lang.Context)">ModuleBase.autoloadClass()</a>メソッドを使います。たとえば、次の例は、VectorとHashtableという名前を定義しています。
+</p>
+<pre class="eg">
+package my_module;
+
+import pnuts.lang.Context;
+import pnuts.ext.ModuleBase;
+
+public class init extends ModuleBase {
+    public Object execute(Context context){
+	for (int i = 0; i < javaFunctions.length; i++){
+	    <b>autoloadClass</b>("java.util", "Vector", context);
+	    <b>autoloadClass</b>("java.util", "Hashtable", context);
+	}
+	return null;
+    }
+}
+</pre>
+
+
+<h3>エラーメッセージのローカライズ</h3>
+
+<p>
+pnuts.libモジュールが使われている場合は、関数<a
+href="../modules/pnuts.lib/doc.ja/i18n.html#formatMessage"><tt>formatMessage()</tt></a>が利用できますが、pnuts.libモジュールに依存しないモジュールで同じことをするにはどうしたらよいでしょう?
+<p>
+初期化コードがpnuts.ext.ModuleBaseのサブクラスである場合、モジュールの関数定義の中で関数<a href="#ERROR"><tt>ERROR()</tt></a>を利用できます。
+<p>
+
+<a name=ERROR></a>
+
+<div class="box">
+<div class="synopsis"><b>ERROR</b><tt> ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>errorType</em><tt> {, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>param_1</em> ... <tt>} )</tt></div>
+</div>
+
+<p>
+この関数は、"errors.properties"ファイルからメッセージ・リソースを見つけ、関数<a href="../modules/pnuts.lib/doc.ja/i18n.html#formatMessage"><tt>formatMessage()</tt></a>,と同じやりかたでメッセージをフォーマットし、<tt>pnuts.lang.PnutsException</tt>を送出します。
+</p>
+
+<pre class="eg">
+if (!isFunction(obj)){
+  ERROR("must_be_a_function", obj)
+}
+</pre>
+
+<pre class="eg">
+must_be_a_function=A function is expected: {0}
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Javaによるモジュールの実装
+</div>
+
+  </body>
+</html>

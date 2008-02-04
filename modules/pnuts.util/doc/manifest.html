@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Getting Manifest Information</div>
+
+<a name=manifest></a>
+    <h2>Getting Manifest Information</h2>
+
+<div class="box">
+<div class="synopsis"><b>manifest</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>module_name</em><tt> { , </tt><em>handler( key, value )</em><tt> } )</tt> or </div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+</tt><em>class</b></em><tt> { , </tt><em>handler( key, value )</em><tt> } )</tt> or</div> 
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+</tt><em>file</b></em><tt> { , handler( <em>key</em>, <em>value</em> ) } )</tt> or</div> 
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/jar/JarFile.html">JarFile</a>
+</tt><em>jarfile</b></em><tt> { , handler( <em>key</em>, <em>value</em> ) } )</tt></div> 
+</div>
+
+<p>
+<tt>manifest()</tt> prints the manifest information of the specified class or module.
+</p>
+<p>
+If <em>handler</em> is specified and is a function which takes two
+arguments, the function is called with the attribute key and the
+attribute value.
+</p>
+
+<div class="eg">e.g. (1):
+<pre>
+manifest("pnuts.lib")
+</pre>
+</div>
+
+<div class="eg">e.g. (2):
+<pre>
+m = map()
+manifest(class pnuts.lang.Pnuts, function (k, v) m.put(k, v))
+</pre>
+</div>
+
+<h3>Version Information</h3>
+
+<a name=versionInfo></a>
+<div class="box">
+<div class="synopsis"><b>versionInfo</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>module_name</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+</tt><em>class</b></em><tt>)</tt></div> 
+</div>
+
+<p>
+<tt>versionInfo()</tt> returns a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Package.html">java.lang.Package</a>
+object which represents the version information of the specified class
+or module.
+ When a module name is specified, the initialization class
+is required; that is, init.class is used, not init.pnut.
+</p>
+<p>This function requires JDK1.2 or better.
+</P>
+<div class="eg">e.g. (1):
+<pre>
+versionInfo("pnuts.lib")
+</pre>
+</div>
+
+<div class="eg">e.g. (2):
+<pre>
+versionInfo(class pnuts.lang.Pnuts)
+</pre>
+</div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Getting Manifest Information</div>
+
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Kompilacja skrypt&oacute;w z poziomu Javy
+</div>
+
+<!-- body start -->
+
+<h2>Kompilacja skrypt&oacute;w z poziomu Javy</h2>
+
+<h3>1. Kompilacja skryptowych klas</h3>
+
+<p>Skryptowe klasy zazwyczaj s&#261; kompilowane i &#322;adowane przez&nbsp;
+PnutsClassLoader jednak czasami wymagaj&#261; one r&#281;cznej kompilacji.
+Klasa&nbsp; pnuts.compiler.Compiler daje mo&#380;liwo&#347;&#263; kompilacji
+skryptowych klas.
+</p>
+
+<h4><tt>pnuts.compiler.Compiler</tt></h4>
+
+<dl>
+<dt></dt><dd><tt>public Object compileClassScript(Reader reader, Object scriptSource, ClassFileHandler handler)
+	    throws ParseException</tt></dd>
+</dl>
+<p>
+<tt>compileClassScript()</tt> kompiluje skrypt z&nbsp; <em>reader</em> a nast&#281;pnie pozwala&nbsp; <em>handler</em> pobra&#263; wynik kompilacji.
+</p><p>
+<a href="../apidoc/pnuts/compiler/ClassFileHandler.html"><tt>pnuts.compiler.ClassFileHandler</tt></a> jest abstrakcyjnym interfejsem obs&#322;ugi wyniku kompilacji. Dwie klasy s&#261; zdefiniowane na jego bazie: <a href="../apidoc/pnuts/compiler/FileWriterHandler.html"><tt>pnuts.compiler.FileWriterHandler</tt></a> i <a href="../apidoc/pnuts/compiler/ZipWriterHandler.html"><tt>pnuts.compiler.ZipWriterHandler</tt></a>.
+Poni&#380;szy przyk&#322;ad kompiluje klas&#281; <tt>mymap</tt> &nbsp;i zapisuj&#281; j&#261; jako "e:\tmp\mymap.class".
+</p>
+
+<div class="eg">
+<pre>import pnuts.compiler.FileWriterHandler;<br>import pnuts.compiler.Compiler;<br>import pnuts.lang.ParseException;<br>import java.io.File;<br>import java.io.Reader;<br>import java.io.FileReader;<br><br>public class CompileTest {<br>    public static void main(String[] args){<br>	try {<br>	    File file = new File("mymap.pnc");<br>	    Reader reader = new FileReader(file);<br>	    Compiler compiler = new Compiler();<br>	    compiler.compileClassScript(reader, file.toURL(), new FileWriterHandler(new File("e:\\tmp")));<br>	} catch (Exception e){<br>	    e.printStackTrace();<br>	}<br>    }<br>}<br></pre>
+</div>
+
+<h3>2. Kompiloanie wykonywalnych skrypt&oacute;w</h3>
+<p>
+<a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html">pnuts.compiler.CompilerPnutsImpl</a>
+mo&#380;e by&#263; u&#380;yta do wykonania skryptu Pnuts przy kompilacji w locie. Czyli klasa&nbsp; <tt>pnuts.compiler.Compiler</tt> jest uzywana do kompilacji skrypt&oacute;w bez ich wykonywania.
+</p>
+
+
+<pre class="eg">import pnuts.lang.*;<br><br>public void compile(<a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> function, <a href="../apidoc/pnuts/lang/Context.html">Context</a> context)<br>public Pnuts compile(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> expr, <a href="../apidoc/pnuts/lang/Context.html">Context</a> context)<br>public Pnuts compile(<a href="../apidoc/pnuts/lang/PnutsFunction.html">Pnuts</a> pnuts, <a href="../apidoc/pnuts/lang/Context.html">Context</a> context)<br></pre>
+
+<p>
+klasa<tt> pnuts.compiler.Compiler</tt> dostarcza publicznych metod
+kompiluj&#261;cych funkcje, wyra&#380;enia i parsowane skrypty. Gdy kompilacja
+si&#281; nie powiedzie wywo&#322;any zostaje wyjatek klasy
+<tt>java.lang.ClassFormatError</tt>.
+</p>
+
+<div class="eg">np.
+<pre>import pnuts.lang.*;<br>import pnuts.compiler.*;<br><br>class CompileTest {<br>  public Object compileAndRun(InputStream in, Context context) throws ParseException {<br>    Compiler compiler = new Compiler();<br>    Pnuts pn = null;<br>    try {<br>      pn = Pnuts.parse(in);<br>      pn = compiler.compile(pn, context);<br>      return pn.run(context);<br>    } catch (ParseException pe){<br>      throw pe;<br>    } catch (ClassFormatError cfe){<br>      return pn.accept(new PnutsInterpreter(), context);<br>    }<br>  }<br>  ...<br>}<br></pre>
+</div>
+
+<pre class="eg">import pnuts.lang.*;<br><br>public Object compile(<a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> function, <a href="../apidoc/pnuts/compiler/ClassFileHandler.html">ClassFileHandler</a> handler)<br>public Object compile(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> expr, <a href="../apidoc/pnuts/compiler/ClassFileHandler.html">ClassFileHandler</a> handler)<br>public Object compile(<a href="../apidoc/pnuts/lang/Pnuts.html">Pnuts</a> pnuts, <a href="../apidoc/pnuts/compiler/ClassFileHandler.html">ClassFileHandler</a> handler)<br></pre>
+
+<p>Klasa r&oacute;wnie&#380; posiada publiczne metody definiuj&#261;ce jak ma przebiega&#263; proces generowania klas.  <a href="../apidoc/pnuts/compiler/ClassFileHandler.html"><tt>pnuts.compiler.ClassFileHandler</tt></a> jest abstrakcyjnym interfejsem do pobierania rezultat&oacute;w kompilacji.
+</p>
+<p>Dwie konkretne klasy&nbsp; ClassFileHandler: <a href="../apidoc/pnuts/compiler/FileWriterHandler.html"><tt>pnuts.compiler.FileWriterHandler</tt></a> i&nbsp; <a href="../apidoc/pnuts/compiler/ZipWriterHandler.html"><tt>pnuts.compiler.ZipWriterHandler</tt></a>.
+Przedstawiony kod kompiluje wyra&#380;enie&nbsp; <tt>1+2</tt> i zapisuje wynik jako&nbsp;<tt>"e:\tmp\test.class"</tt>.
+</p>
+
+<div class="eg">np.
+<pre>String expression = "1 + 2";<br>Compiler compiler = new Compiler("test");<br>try {<br>    compiler.compile(Pnuts.parse(expression), new FileWriterHandler(new File("e:\\tmp")));<br>} catch (ParseException pe){<br>} catch (ClassFormatError cfe){<br>    ...<br>}<br></pre>
+</div>
+
+<p>
+Instej&#261; dwa sposoby &#322;adowania skompilowanych skrypt&oacute;w:
+</p><ol>
+<li>Ustawi&#263; w&#322;a&#347;ciwo&#347;&#263; <tt>'pnuts.compiled.script.prefix'</tt> na nazw&#281; pakietu generowanych klas a nast&#281;pnie wywo&#322;a&#263; <tt>load()</tt>.
+
+<pre class="eg">load("test")<br></pre>
+
+</li><li>Wywo&#322;a&#263; metod&#281; <tt><a href="../apidoc/pnuts/lang/Executable.html#run%28pnuts.lang.Context%29">Executable.run(Context)</a></tt> na instancji wygenerowanej klasy.<br>
+<p></p>
+
+
+<pre class="eg">test().run(getContext())<br></pre>
+
+</li></ol>
+
+<p>Zobacz <a href="pnutsc.html">'Kompilacja skrypt&oacute;w z linii polece&#324;'</a>.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt;&nbsp;Kompilacja skrypt&oacute;w z poziomu Javy
+</div>
+
+  </body></html>

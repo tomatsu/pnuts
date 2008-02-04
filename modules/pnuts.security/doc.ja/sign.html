@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.securityモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> 電子署名</div>
+
+    <h2>電子署名</h2>
+
+<a name=getKeyStore></a>
+
+<div class="box">
+<div class="synopsis"><b>getKeyStore</b><tt>( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/KeyStore.html">KeyStore</a> </tt><em>database</b></em> <tt>,} <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>password</b></em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>getKeyStore()</tt>は、キーストア(X.509証明書データベース)を表す<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/KeyStore.html"><tt>java.security.KeyStore</tt></a>オブジェクト返します。
+<em>database</em> が指定されない場合は、<tt>${user.home}/.keystore</tt>ファイルを読み込み、
+<em>database</em> が指定された場合は、そのファイルを読み込みます。
+</p>
+<p>
+あらかじめ <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/guide/security/cert3.html#tools"><tt>keytool</tt></a>でキーストアを作っておく必要があります。 
+</p>
+
+<div class="eg">例:
+<pre>
+ks = getKeyStore("key_pass")
+</pre></div>
+
+<a name=getPublicKey></a>
+<a name=getPrivateKey></a>
+
+<div class="box">
+<div class="synopsis"><b>getPublicKey</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/KeyStore.html">KeyStore</a> </tt><em>keystore</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>alias</b></em><tt> )</tt></div>
+<div class="synopsis"><b>getPrivateKey</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/KeyStore.html">KeyStore</a> </tt><em>keystore</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>alias</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>pass</b></em><tt> )</tt></div>
+</div>
+
+<p>
+キーストアから <em>alias</em> の公開鍵および秘密鍵(private key)を求めます。
+</p>
+
+<div class="eg">例:
+<pre>
+my_key = getPrivateKey(ks, "my_name", "my_pass")
+my_pub = getPublicKey(ks, "my_name")
+</pre></div>
+
+<a name=signObject></a>
+<a name=verifyObject></a>
+
+<div class="box">
+<div class="synopsis"><b>signObject</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Serializable.html">Serializable</a> </tt><em>object</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/PrivateKey.html">PrivateKey</a> </tt><em>privateKey</b></em><tt> )</tt></div>
+<div class="synopsis"><b>verifyObject</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/SignedObject.html">SignedObject</a> </tt><em>signedObject</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/PublicKey.html">PublicKey</a> </tt><em>publicKey</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>signObject()</tt>は、<em>object</em> を <em>privateKey</em>で署名した<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/security/SignedObject.html"><tt>java.security.SignedObject</tt></a>オブジェクトを返します。
+</p>
+
+<p>
+<tt>verifyObject()</tt>は、<em>signedObject</em> オブジェクトが<em>publicKey</em>の持ち主によって署名されたかどうかを確認します。
+</p>
+
+<div class="eg">例:
+<pre>
+signed = signObject("something", my_key)
+verifyObject(signed, my_pub)
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> 電子署名</div>
+
+  </body>
+</html>

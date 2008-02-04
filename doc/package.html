@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Packages
+</div>
+
+<!-- body start -->
+
+    <h2>Packages</h2>
+
+<p>
+<em>Package</em> is a separate name space in which variables and functions are defined.  
+</p>
+
+<a name=package></a>
+
+<div class="box">
+<div class="synopsis"><b>package</b><tt>( )</tt> or
+<dd><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>packageName</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="../apidoc/pnuts/lang/Package.html">Package</a> </tt><em>aPackage</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>package()</tt> with one argument changes the current package to the
+specified package.  <tt>package()</tt> with no argument returns the <a
+	href="../apidoc/pnuts/lang/Package.html">Package</a> object of the
+      current package.
+</p>
+
+<pre class="eg">
+package("foo")   ==> package "foo"
+package()        ==> package "foo"
+package("")      ==> package ""
+package()        ==> package ""
+</pre>
+
+<a name="use"></a>
+
+<div class="box">
+<div class="synopsis"><b>use</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>packageName</em><tt>)</tt></div>
+</div>
+
+<p>
+This builtin function imports all functions from a <a href="module.html">module</a>, <em>pkgName</em>.  Imported functions can be called without specifying the package name.  
+</p>
+
+<pre class="eg">
+package("foo")
+function x() 100
+y = 200
+
+package("bar")
+use("foo")
+x ==> function x
+y ==> error
+
+package("")
+x ==> error
+y ==> error
+</pre>
+
+<div class="box">
+<div class="synopsis"><em>aPackage</em><tt> . symbol</tt></div>
+<div class="synopsis"><em>aPackage</em><tt> . symbol = </tt><em>value</em></div>
+</div>
+
+<pre class="eg">
+foo = 100
+package().foo     ==> 100
+package().foo = 200
+foo               ==> 200
+package().bar     ==> null
+</pre>
+
+
+<div class="box">
+<div class="synopsis"><em>aPackage</em> <b>.defined</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>symbolName</em> <tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>Package.defined</tt> method checks if the specified symbol name is defined 
+      in the target package.
+</p>
+
+<pre class="eg">
+getPackage("foo")
+context = getContext()
+findPackage("foo").defined("bar", context)   ==> false
+foo::bar = 100
+findPackage("foo").defined("bar", context)   ==> true
+</pre>
+
+<div class="box">
+<div class="synopsis"><em>aPackage</em> <b>.clear</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>symbolName</em><tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>Package.clear</tt> method removes the specified symbol
+in the target package.
+</p>
+
+<pre class="eg">
+context = getContext()
+findPackage("foo").defined("bar", context)   ==> true
+findPackage("foo").clear("bar", context)
+findPackage("foo").defined("bar", context)   ==> false
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Packages
+</div>
+
+</BODY></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> スレッド・ローカル変数</div>
+
+    <h2>スレッド・ローカル変数</h2>
+
+<a name=threadLocal></a>
+
+<div class="box">
+<div class="synopsis"><b>threadLocal</b><tt> (  )</tt></div>
+</div>
+
+<p>
+<tt>threadLocal()</tt>は、スレッド・ローカルなシンボル・テーブルを返します。
+</p>
+
+<div class="eg">例:
+<pre>
+local = threadLocal()
+local.counter = 0
+local.counter++
+....
+threadLocal().counter
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> スレッド・ローカル変数</div>
+
+  </body>
+</html>

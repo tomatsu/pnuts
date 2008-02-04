@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="pl"><head>
+  
+  <title>Modu&#322;y java.*</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <meta http-equiv="content-style-type" content="text/css">
+  <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Modu&#322;y java.*
+</div>
+
+<!-- body start -->
+
+<h2>Modu&#322;y<tt> java.*</tt>&nbsp;</h2>
+
+<p>Kiedy zostaj&#281; u&#380;yta komenda&nbsp; <tt>pnuts</tt> wykonuj&#261;ca skrypt domy&#347;lnie modu&#322;&nbsp; <tt>pnuts.tools</tt> jest &#322;adowany, kt&oacute;ry wczytuje nast&#281;puj&#261;ce modu&#322;y.
+</p>
+
+<table class="bg2" border="0" cellpadding="3" cellspacing="1" width="95%">
+<tbody><tr class="wb">
+<th bgcolor="#eeeeee" width="10%">Nazwa modu&#322;u</th>
+<th bgcolor="#eeeeee">Klasy</th>
+</tr>
+
+<tr class="wb">
+<td class="G12"><a href="http://java.sun.com/j2se/1.4.2/docs/api/java/net/package-summary.html">java.net</a></td>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URI.html">URI</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/Socket.html">Socket</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/ServerSocket.html">ServerSocket</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/MulticastSocket.html">MulticastSocket</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/Authenticator.html">Authenticator</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/DatagramSocket.html">DatagramSocket</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/DatagramPacket.html">DatagramPacket</a></td>
+</tr>
+
+<tr class="wb">
+<td class="G12"><a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/package-summary.html">java.util</a></td>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/BitSet.html">BitSet</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Calendar.html">Calendar</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Hashtable.html">Hashtable</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Vector.html">Vector</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Stack.html">Stack</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/List.html">List</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Set.html">Set</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collections.html">Collections</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Arrays.html">Arrays</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Random.html">Random</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Locale.html">Locale</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/TimeZone.html">TimeZone</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html">Iterator</a></td>
+</tr>
+
+<tr class="wb">
+<td class="G12"><a href="http://java.sun.com/j2se/1.4.2/docs/api/java/io/package-summary.html">java.io</a></td>
+<td><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/IOException.html">IOException</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a></td>
+</tr>
+</tbody></table>
+
+<p>Od czasu gdy eksportowane nazwy z modu&#322;&oacute;w maj&#261; wi&#281;kszy priorytet ni&#380; importowane klasy funkcja <tt>import</tt> nie mo&#380;e nadpisa&#263; eksportowanej nazwy z modu&#322;u.
+Przyk&#322;adowo odwo&#322;anie do klasy&nbsp; <tt>java.awt.List</tt>&nbsp; zamiast do klasy&nbsp; <tt>java.util.List wymaga wyrejestrowania modu&#322;u</tt>&nbsp; <tt>java.util</tt> z listy modu&#322;&oacute;w a nast&#281;pnie zaimportowania klasy java<tt>.awt.List</tt>.
+</p>
+<pre class="eg">unuse("java.util")<br>import java.awt.List<br></pre>
+<p>
+
+<!-- body end -->
+
+</p><div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Modu&#322;y java.*
+</div>
+
+</body></html>

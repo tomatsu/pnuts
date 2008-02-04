@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> スクリプト・パッケージ</div>
+
+    <h2>スクリプト・パッケージ</h2>
+
+<a name=$></a>
+<div class="box">
+<div class="synopsis"><tt>$( )</tt></div>
+<div class="synopsis"><tt>$( ` </tt><em>expression</em><tt> ; ... `)</tt></div>
+<div class="synopsis"><tt>$( </tt><em>expression</em><tt> , ... )</tt></div>
+</div>
+
+<p>
+<b>スクリプト・パッケージ</b>とは、ユーザのスクリプトの中でハッシュテーブルとして用いられるパッケージで、<a href="../../apidoc/pnuts/ext/ScriptPackage.html">pnuts.ext.ScriptPackage</a> オブジェクトで表されます。
+スクリプト・パッケージは $ 関数で作成できます。(<a href="../../apidoc/pnuts/ext/ScriptPackage.Function.html">pnuts.ext.ScriptPackage.Function</a> クラスで実装されています。)
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>引数の数</th>
+<th bgcolor=#eeeeee>型</th>
+<th bgcolor=#eeeeee>動作</th>
+<tr class="wb">
+<td>1</td>
+<td>java.lang.String</td>
+<td>スクリプトパッケージ内で文字列を評価する</td>
+</tr>
+<tr class="wb">
+<td>1</td>
+<td>java.lang.Object[]</td>
+<td>各要素を[key, value] のペアと解釈して、スクリプトパッケージでそれらを定義する。</td>
+</tr>
+<tr class="wb">
+<td>任意</td>
+<td>任意</td>
+<td>引数の中に関数がある場合は、スクリプトパッケージでその関数を関数名で登録する</td>
+</tr>
+</table>
+</blockquote>
+
+<div class="eg">
+例:
+<pre>
+p = $( )
+p.x = 1
+p.y = 2
+
+q = $("x = 1; y = 2")
+q.x     ==> 1
+q.y     ==> 2
+
+r = $([["a", "hello"], ["b", "world"]])
+r.a  ==> "hello"
+r.b  ==> "world"
+</pre></div>
+
+
+<h4>スクリプト・パッケージ内の関数定義</h4>
+
+<p>
+関数が $ のパラメータに指定された場合は、その関数が関数名でスクリプト・パッケージに登録されます。
+そして、メソッド呼び出しのスタイルでその関数を呼び出すことができます。
+</p>
+
+<div class="eg">
+例:
+<pre>
+s = $(function hello () "hello", function bye () "bye")
+s.hello()    ==> "hello"
+s.bye()      ==> "bye"
+</pre></div>
+
+<p>
+スクリプト・パッケージ内で定義される関数は、そのスクリプト・パッケージと同じスコープに定義されます。上の例では、
+トップレベル・スコープには、<tt>s</tt>の他に関数<tt>hello()</tt>と、<tt>bye()</tt>が定義されます。
+</p>
+
+<pre class="eg">
+hello()      => "hello
+bye()        => "bye"
+</pre>
+
+<p>
+スクリプト・パッケージ内で定義される関数が名前空間を消費しないようにするには、2通りの方法があります。
+１つは、匿名の関数をそれぞれの名前に代入する方法です。
+</p>
+<pre class="eg">
+s = $([["hello", function () "hello"],
+       ["bye",   function () "bye"]])
+</pre>
+
+<p>
+もう１つは、関数を入れ子にする方法です。
+<pre class="eg">
+function create() $(
+   function hello() "hello",
+   function bye() "bye"
+)
+s = create()
+</pre>
+
+
+<h4>スクリプト・パッケージによる抽象データ型</h4>
+<p>
+スクリプト・パッケージを使うと、ある種の抽象データ型を定義できます。次のスクリプトはスタックオブジェクトを定義する例です。
+</p>
+
+<div class="eg">例:
+<pre>
+function Stack() $(
+   function Cell(x){
+     this = $()
+     this.object = x
+     this
+   },
+   cell = null,
+   function pop(){
+      c = cell
+      if (c == null) throw("underflow")
+      cell = c.next
+      c.object
+   },
+   function push(x){
+      c = cell
+      cell = Cell(x)
+      cell.next = c
+      null
+   }
+)
+s = Stack()
+s.push(100)
+s.pop()
+</pre></div>
+
+<p>
+スクリプトパッケージをカレントパッケージにすることもできます。
+</p>
+
+<div class="eg">例:
+<pre>
+package(Stack())
+push(100)
+pop()
+</pre></div>
+
+<a name="print"></a>
+<h4>スクリプト・パッケージの文字列表現</h4>
+
+<p>
+スクリプト・パッケージの変数printがゼロ引数の関数の場合、その関数が呼ばれたときにprint/println()で表示される内容がそのスクリプト・パッケージの文字列表現になります。
+</p>
+
+<div class="eg">例:
+<pre>
+s = $()
+s.print = function () print("foo")
+string(s)   ==> "foo"
+</pre></div>
+
+
+<h4>スクリプト・パッケージに対する操作</h4>
+<p>
+<tt>pnuts.ext.ScriptPackage</tt>は<tt><a href="../../../apidoc/pnuts/lang/AbstractData.html">pnuts.lang.AbstractData</a></tt>インタフェースを実装しているため、スクリプト・パッケージに対しては、<a href="../../../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a> のインスタンスメソッドをPnuts から直接呼ぶことができません。
+そのかわりに次のようなメソッドが用意されています。
+</p>
+<ul>
+<li><tt><b>$.set</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em> <tt>, Object </tt><em>value</b></em><tt>)</tt>
+<li><tt><b>$.get</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em><tt>)</tt>
+<li><tt><b>$.defined</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em><tt>)</tt>
+<li><tt><b>$.clear</b>(Package </tt><em>package</b></em> <tt>, String </tt><em>symbol</b></em><tt>)</tt>
+<li><tt><b>$.keys</b>(Package </tt><em>package</em><tt>)</tt>
+<li><tt><b>$.save</b>(Package </tt><em>package</em><tt>, OutputStream </tt><em>outputStream</em><tt>)</tt>
+<li><tt><b>$.clone</b>(Package </tt><em>package</em><tt>)</tt>
+</ul>
+
+
+<div class="eg">
+例:
+<pre>
+t = $()
+
+symbol = "%%%".intern()
+$.set(t, symbol, "value")         // t.set(symbol, "value")
+$.get(t, symbol)                  // t.get(symbol)
+$.keys(t)                         // t.keys()
+$.save(t, open("test.ser", "w"))  // t.save(open("test.ser", "w"))
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> スクリプト・パッケージ</div>
+
+  </body>
+</html>

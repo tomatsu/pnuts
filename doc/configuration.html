@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Customizing the Behavior of Java API Access
+</div>
+
+<!-- body start -->
+
+<h2>Customizing the Behavior of Basic Expressions</h2>
+
+<p>
+The behavior of field access, index access, and method/constructor call, and binary/unary operations can be
+customized by changing an attribute of a Context object.
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=45%>
+<tr class=wb>
+<td><b>Field Access</td></b>
+<td><tt>
+<div>target . field</div>
+<div>target :: field</div>
+</tt></td>
+</tr>
+<tr class=wb>
+<td><b>Index Access</b></td>
+<td><tt>target [ index ]</tt></td>
+</tr>
+<tr class=wb>
+<td><b>Method Call</b></td>
+<td><tt>
+<div>target . method (...)</div>
+<div>target :: method (...)</div>
+</tt></td>
+</tr>
+<tr class=wb>
+<td><b>Constructor</b></td>
+<td><tt>
+<div>target (...)</div>
+</tt></td>
+</tr>
+<tr class=wb>
+<td><b>Binary/Unary Operations<a/b></td>
+<td><tt>+</tt>,<tt>-</tt>,<tt>*</tt>,<tt>/</tt>,<tt>&</tt>,<tt>|</tt>,<tt>^</tt>,<tt>&lt;&lt;</tt>,<tt>&gt;&gt;</tt>,<tt>&gt;&gt;&gt;</tt>,<tt>&&</tt>,<tt>||</tt>,<tt>++</tt>,<tt>--</tt></td>
+</tr>
+</table>
+</blockquote>
+
+<h3>Setting up a configuration</h3>
+<p>
+A Configuration of a context can be set up with <a href="../apidoc/pnuts/lang/Context.html#setConfiguration(pnuts.lang.Configuration)"><tt>Context.setConfiguration(Configuration)</tt></a> method.
+</p>
+
+<pre class="eg">
+Context context = new Context();
+context.setConfiguration(new NonPublicMemberAccessor());
+...
+</pre>
+
+<h3><tt>pnuts.lang.Configuration</tt> class</h3>
+
+<p>
+<a
+href="../apidoc/pnuts/lang/Configuration.html"><tt>pnuts.lang.Configuration</tt></a>
+defines the default behavior of basic expressions. A subclass may override its methods to define its own behavior.
+</p>
+
+<h4>Field Access</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em> );</tt></dt>
+<dt><tt>public void <b>putField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em> );</tt></dt>
+
+
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getStaticField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em> );</tt></dt>
+<dt><tt>public void <b>putStaticField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em> );</tt></dt>
+
+</dl>
+</blockquote>
+
+<h4>Index Access</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getElement</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>key</em>  );</tt></dt>
+<dt><tt>public void <b>setElement</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>key</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em>);</tt></dt>
+</dl>
+</blockquote>
+
+
+<h4>Constuctor</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>callConstructor</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> <em>c</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] <em>types</em> );</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Method Call</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>callMethod</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> ,
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[]
+<em>types</em> );</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Binary/Unary Operations</h4>
+
+Binary/unary operations can be customized by setting the following protected variables in the constructor.
+
+<blockquote>
+<dl>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/BinaryOperator.html">BinaryOperator</a> _add, _subtract, _multiply, _divide, _mod, _and, _or, _xor, _shiftLeft, _shiftRight, _shiftArithmetic;</tt>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/UnaryOperator.html">UnaryOperator</a> _add1, _subtract1, _negate, _not;</tt>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/BooleanOperator.html">BooleanOperator</a> _lt, _le, _gt, _ge, _eq;</tt>
+</dl>
+</blockquote>
+
+
+<h3>Predefined Configuration</h3>
+
+<p>
+The following classes are defined in pnuts.lang package, each of which
+defines a behavior of Java API access.
+</p>
+<blockquote>
+<dl>
+<dt><a href="../apidoc/pnuts/lang/Configuration.html"><b><tt>pnuts.lang.Configuration</tt></b></a>
+<dd>The default configuration, which can access Beans proeprties,
+Beans methods, context-local variables, and pnuts.lang.Property's
+attributes.  On Java2 platform, it can access Map entries as well.
+<dt><a href="../apidoc/pnuts/ext/PublicMemberAccessor.html"><b><tt>pnuts.ext.PublicMemberAccessor</tt></b></a>
+<dd>Same as the default configuration, except that it can access
+public members instead of Beans properties.
+<dt><a href="../apidoc/pnuts/ext/NonPublicMemberAccessor.html"><b><tt>pnuts.ext.NonPublicMemberAccessor</tt></b></a>
+<dd>It can access non-public methods and fields.  It requires Java2 environment.
+<dt><a href="../modules/pnuts.awt/apidoc/pnuts/awt/EventQueueConfiguration.html"><b><tt>pnuts.awt.EventQueueConfiguration</tt></b></a>
+<dd>Use AWT Event thread to access Java API.
+</dl>
+</blockquote>
+
+
+<h3>The <tt>pnuts.lang.defaultConfiguration</tt> Property</h3>
+<p>
+If the system property, <tt>pnuts.lang.defaultConfiguraion</tt>, is a valid Configuration
+subclass when Pnuts API is first loaded, the specified Configuration
+is used as the default configuration.
+</p>
+
+<p>
+For example, if the Pnuts interpreter is started as the following
+command line, all field access in the scripts will be interpreted as
+access to public members.
+</p>
+
+<pre class="eg">
+% java -Dpnuts.lang.defaultConfiguration=pnuts.lang.PublicMemberConfiguration pnuts.tools.Main
+</pre>
+
+See also '<a href="context_setup.html">Setting up a Context</a>'.
+
+<h3>Function definition and Configuration</h3>
+<p>
+Since Java API accesses are likely to assume a particular
+configuration, scripts should be executed in the same configuration
+as the one which was used when the scripts were loaded.  Therefore,
+function defined in a script is executed in the configuration in
+which the function is defined.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Customizing the Behavior of Java API Access
+</div>
+
+  </body>
+</html>

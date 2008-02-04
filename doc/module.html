@@ -1,0 +1,205 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Modules
+</div>
+
+<!-- body start -->
+
+<a name=module></a>
+<h1>Modules</h1>
+
+<p>
+<em>Module</em> allows you to build reusable scripts.  
+Each module is usually packaged as a separate JAR file, which should be added to <em>CLASSPATH</em> or located in the directory <tt>${PNUTS_HOME}/modules/</tt>. 
+<p>
+This section explains how to write a module.  For the concept of modules, please refer to <a href="lang.html#modules"></tt>"The Pnuts Language"</tt></a>.
+</p>
+
+<h3>Steps to make a module</h3>
+
+<p>
+Modules can be written by either Pnuts, Java, or both.
+This section explains how to write a module in Pnuts.
+For information on module in Java, see <a href="module_java.html">"Implementing a Module in Java"</a>.
+</p>
+
+<ol>
+<li>Name the corresponding package.  e.g. "<tt>org.acme.util</tt>"
+<div>The module will be identified by this name.</div>
+<li>Edit the initialization script. "<tt>org/acme/util/init.pnut</tt>" in this case.
+When this script is executed, the current package is set to "<tt>org.acme.util</tt>".
+Once this script is loaded, the functions in the module should be available.
+<li>If the module depends on other module, register the module with
+<a href="lang.html#use"><tt>use()</tt></a> after resetting the module list in <tt>org/acme/util/init.pnut</tt> file.
+For instance, if <tt>org.acme.util</tt> depends on <tt>pnuts.lib</tt> module, it would be like:
+
+<pre class="eg">
+use(null)
+use("pnuts.lib")
+
+package("org.acme.util")
+
+function hello(){
+  println("hello")
+}
+</pre>
+
+
+<li>Archives the script files into a JAR file when you distribute the module.
+
+</UL></ol>
+
+<h3>Autoloading</h3>
+
+<p>
+When the module defines a lot of functions, <a href="loading.html#autoload"><tt>autoload()</tt></a> can be used to
+separate the scripts into smaller script files and defer the script
+loading until a symbol in a script is first used.
+<ul>
+<li>Insert the statement '<tt>package("org.acme.util")</tt>' in the beginning of each script file.
+<li>Save script files as <tt>org/acme/util/*.pnut</tt>.
+<li>Register the scripts with <a href="loading.html#autoload"><tt>autoload</a>()</tt></tt> call in <tt>org/acme/util/init.pnut</tt>.  For example, if function <tt>play()</tt> is defined in <tt>org/acme/util/cdplayer.pnut</tt>,
+then it would be:
+</ul>
+
+<div>
+<pre class="eg">
+autoload("play", "org/acme/util/cdplayer")
+</pre>
+<center>org/acme/util/init.pnut</center>
+</div>
+
+<pre class="eg">
+> use("org.acme.util")
+...
+> play("something")
+...
+</pre>
+
+<p>
+Autoloaded scripts are executed with the module list that was in use
+when <tt>autoload()</tt> was called.
+</p>
+
+<h3>Exporting Symbols</h3>
+
+<p>
+By default, symbols that references a function of the name are
+automatically exported.  To export arbitrary objects which would not be
+exported by default, or to prevent symbols that would exported from
+being exported, <a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)"><tt>Package.export()</tt></a> method call is needed to define
+exported symbols.
+<p>
+
+<pre class="eg">
+pkg = package()
+pkg.export("play")
+</pre>
+
+<p>
+Note that exported symbols must be defined or autoloaded when <a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)"><tt>Package.export()</tt></a> is called.
+</p>
+
+<p>
+When implementing a module in Java, <tt>pnuts.ext.ModuleBase</tt> class provides a simpler way.  
+Symbols can be initialized and exported at the same time as follows.
+</p>
+
+<pre class="eg">
+EXPORTS.play = &lt;<em>object</em>&gt;
+</pre>
+
+<h3>Module Initialization in Java</h3>
+
+<p>
+Since it is possible to implement loadable class in Java, 
+module initialization can also be done in Java.
+</p>
+<p>
+See <a href="loadable.html">"Implementing Loadable Class in Java"</a> and <a href="module_java.html">"Implementing a Module in Java"</a>.
+
+<h3>Module Version Information</h3>
+
+<p>
+Module Version Information identifies a particular specification and a
+particular build number of a module. The version information can be used 
+for defining module dependency.
+Also, bug reports would be more helpful with the information.
+</p>
+<p>
+To add a module version information, define  <a
+href="http://java.sun.com/j2se/1.3/docs/guide/versioning/index.html">'Package
+Version ID</a> in the JAR file.
+</p>
+<p>
+For instance, prepare the following manifest
+file. <tt>Specification-Version</tt> and <tt>Implementation-Version</tt> defines the
+specification and the implementation version of the module, respectively.
+</p>
+
+<pre class="eg">
+Manifest-version: 1.0
+Name: org.acme.util
+Specification-Title: Acme Library Functions
+Specification-Version: 1.0
+Specification-Vendor: Foo Bar, Inc.
+Implementation-Title: org.acme.util
+Implementation-Version: 20020704000000
+Implementation-Vendor: Foo Bar, Inc.
+</pre>
+<p>
+To add the manifest file to the JAR file, specify the file with the
+<tt>m</tt> option of <tt>jar</tt> command.
+</p>
+<pre class="eg">
+% jar cfm module.jar manifest.mf *
+</pre>
+<p>
+To retrieve the version information of a module, use <a
+href="../modules/pnuts.util/doc/manifest.html#versionInfo"><tt>versionInfo()</tt></a> or
+<a
+href="../modules/pnuts.util/doc/manifest.html#manifest"><tt>manifest()</tt></a>.
+</p>
+
+<a name="dynamic_modules"></a>
+<h2>Dynamic Modules</h2>
+<p>
+Normal modules that we have been discussing above must be implemented before execution and identified by their names.
+Dynamic module is different in that it is defined on-the-fly without executing an initialization script and does not have to be identified by the name.
+</p>
+<p>
+Here are the steps to create a dynamic module:
+<ol>
+<li>Create a pnuts.lang.Package object using <a href="../modules/pnuts.lib/doc/package_op.html#createPackage"><tt>createPackage()</tt></a>, etc.
+<li>Define names in the Package
+<li>Call <a href="lang.html#use"><tt>use()</tt></a> specifying the Package object
+<li>Call <a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)"><tt>Package.export()</tt></a> method for each name to be exported
+</ol>
+</p>
+<pre class="eg">
+p = createPackage()
+p.add = function (x, y) x + y
+use(p)
+p.export("add")
+
+add(2, 3) ==> 5
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Modules
+</div>
+
+  </body>
+</html>

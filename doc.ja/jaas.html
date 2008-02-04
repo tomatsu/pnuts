@@ -1,0 +1,93 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h2>ユーザ認証に基づく安全なスクリプティング</h2>
+
+<h3>pnuts.security.JAASPnutsImpl クラス</h3>
+
+<p>
+<a href="../apidoc/pnuts/security/JAASPnutsImpl.html"><tt>pnuts.security.JAASPnutsImpl</tt></a> クラスは <a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a> クラスのサブクラスで、<a href="http://java.sun.com/products/jaas/">JAAS</a>によって認証されたサブジェクトとポリシー定義を使ってスクリプトを安全に実行します。
+<p>
+JDK1.3を使う場合には、<a href="http://java.sun.com/products/jaas/">JAAS</a>を別にインストールする必要があります。また、SolarisやWindows NTの認証機構を使う場合は、それらに対応するモジュールをインストールします。（jaas.jarとjaasmod.jarを${java.home}/lib/ext/にコピーし、Solarisの場合libsolaris.so を${java.home}/lib/sparc/または${java.home}/lib/i386/にコピーします。Windows NTの場合nt.dllを${java.home}/binにコピーします。）
+<p>
+
+<h4>Unix用認証モジュールを使った例</h4>
+
+<p>
+以下の例は、UnixのtestUserというアカウントに対して、
+"java.home"プロパティの読込みを許可する例です。
+</p>
+
+<div class="eg">
+${user.home}/.java.policy
+<pre>
+grant codebase "file:/c:/pnuts/pnuts.jar" {
+    permission java.security.AllPermission;
+};
+</pre>
+</div>
+
+<div class="eg">
+test.config 
+<pre>
+Unix {
+   com.sun.security.auth.module.UnixLoginModule required;
+};
+</pre>
+</div>
+
+<div class="eg">test_auth.policy
+<pre>
+grant Principal com.sun.security.auth.UnixPrincipal "testUser" {
+   permission java.util.PropertyPermission "java.home", "read";
+};
+</pre>
+</div>
+
+
+<div class="eg">
+test.pnut
+<pre>
+println(getProperty("java.home"))
+</pre>
+</div>
+
+<pre class="eg">
+import("pnuts.security.*")
+import("com.sun.security.auth.*")
+import("javax.security.auth.*")
+
+setProperty("java.security.auth.policy", "test_auth.policy")
+setProperty("java.security.auth.login.config", "test.config")
+
+subject = Subject()
+subject.getPrincipals().add(UnixPrincipal("testUser"))
+
+c = getContext().clone()
+c.setImplementation(JAASPnutsImpl(c.getImplementation(), null, subject))
+System::setSecurityManager(SecurityManager())
+
+load("test.pnut", c)
+</pre>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">戻る</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+  </body>
+</html>

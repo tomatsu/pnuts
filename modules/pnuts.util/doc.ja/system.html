@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.utilモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> プラットフォームのコマンド呼出し</div>
+
+    <h2>プラットフォームのコマンド呼出し</h2>
+
+<a name=system></a>
+
+<a name=system></a>
+<div class="box">
+<div class="synopsis"><b>system</b>(<href
+a="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>platformCommand</em> {, (<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a> | <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>)
+<em>input</em> {, (<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>|<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a>)
+<em>output</em> } } )</div>
+</div>
+
+<p>
+<tt>system()</tt>は外部コマンドを実行して結果を表示します。第2引数<em>input</em>が指定された場合は、そのストリームから読み込まれたデータが標準入力に書き込まれます。
+</p>
+
+<div class="eg">例1:
+<pre>
+> system("ls -l")
+...
+</pre></div>
+
+<div class="eg">例2
+<pre>
+> system("wc", open("file.txt"))
+</pre></div>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> プラットフォームのコマンド呼出し</div>
+
+  </body>
+</html>

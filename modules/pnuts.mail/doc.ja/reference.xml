@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="emailAddress">index.html#emailAddress</function>
+ <function name="mimepart">index.html#mimepart</function>
+ <function name="sendEmail">index.html#sendEmail</function>
+ <function name="setMailCharset">index.html#setMailCharset</function>
+ <function name="openMailStore">index.html#openMailStore</function>
+ <function name="getMessages">index.html#getMessages</function>
+ <function name="listMailFolders">index.html#listMailFolders</function>
+</reference>

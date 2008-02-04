@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html style="direction: ltr;" lang="pl"><head>
+
+    
+    
+  
+  <title>Podręcznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-2">
+
+    
+  <meta http-equiv="Content-Style-Type" content="text/css">
+
+    
+  <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+<body style="direction: ltr;">
+
+
+<div class="nav">
+<a href="guide.html">Podręcznik Pnuts</a> -&gt; Moduły
+</div>
+
+
+<!-- body start -->
+
+<a name="module"></a>
+<h1>Moduły</h1>
+
+
+<p>
+<em>Modył</em> pozwala na tworzenie skryptów do wielokrotnego
+użycia.Każdy moduł jest zazwyczaj pakietem jak pojedyńczy plik JAR
+który może być dodany do&nbsp; <em>CLASSPATH</em> &nbsp;lub zlokalizowany w katalogu <tt>${PNUTS_HOME}/modules/</tt>. 
+</p>
+<p>Sekcja wyjaśnia jak tworzyć moduły.  Aby zapoznać się z koncepcją modułów proszę zajrzeć do <a href="lang.html#modules">"Język Pnuts"</a>.
+</p>
+
+
+<h3>Kroki do stworzenia modułu</h3>
+
+
+<p>Moduły mogą być pisane jako Pnuts, Java lub oba jednocześnie.Sekcja
+wyjaścnia jak pisać moduły w języku Pnuts. Pisanie modułów w Javie
+znajduje sie w&nbsp;&nbsp; <a href="module_java.html">"Implementowanie modułów w Javie"</a>.
+</p>
+
+
+<ol>
+
+  <li>Nazwa identyfikuje pakiet np. "<tt>org.acme.util</tt>"
+    <div>Moduł jest idetyfikowany przez tą nazwę.</div>
+
+  </li>
+  <li>Moduł posiada specjany skrypt inicjalizacyjny <em>init.pnuts</em>, dla naszego przykładu będzie to&nbsp; "<tt>org/acme/util/init.pnut</tt>".Kiedy skrytpt zostanie wykonany bierzący pakiet jest ustawiany na&nbsp; "<tt>org.acme.util</tt>" oraz funkcje zawarte w module stają się dostepne.
+  </li>
+  <li>Jeżeli moduł uzywa innych modułów trzeba je zarejestrować przy pomocy&nbsp;
+    <a href="lang.html#use"><tt>use()</tt></a> po zresetowaniu listy modułów w skrypcie <tt>org/acme/util/init.pnut</tt>. Jeżli nasz moduł używa modułu <tt>pnuts.lib</tt> nazleży zapisać to w następujący sposób:
+
+    <pre class="eg">use(null)<br>use("pnuts.lib")<br><br>package("org.acme.util")<br><br>function hello(){<br>  println("hello")<br>}<br></pre>
+
+
+
+  </li>
+  <li>Archiwizacja skryptów w pliku JAR w celu dystrybucji.
+
+  </li>
+</ol>
+
+
+<h3>Automatyczne ładowanie</h3>
+
+
+<p>Kiedy moduł definiuje dużą ilość funkcji można użyć&nbsp; <a href="loading.html#autoload"><tt>autoload()</tt></a> do separacji skryptów na mniejsze jednostki i pozostawić ładownaie symbolów do czasu ich pierwszego użycia.
+</p>
+<ul>
+
+  <li>Wstaw instrukcje&nbsp; '<tt>package("org.acme.util")</tt>' na początku każdego skryptu.
+  </li>
+  <li>Zapisz skrypt jako&nbsp; <tt>org/acme/util/*.pnut</tt>.
+  </li>
+  <li>Zarejestruj skrypty za pomocą <a href="loading.html#autoload"><tt>autoload</tt></a><tt>()</tt> która wywoła <tt>org/acme/util/init.pnut</tt>.&nbsp;Dla przykładu: jeżeli funkcja&nbsp; <tt>play()</tt> jest zdefiniowana w <tt>org/acme/util/cdplayer.pnut</tt> wtedy moża wykonać to tak:
+  </li>
+</ul>
+
+
+<div>
+<pre class="eg">autoload("play", "org/acme/util/cdplayer")<br></pre>
+
+<center>org/acme/util/init.pnut</center>
+
+</div>
+
+
+<pre class="eg">&gt; use("org.acme.util")<br>...<br>&gt; play("something")<br>...<br></pre>
+
+
+<p>Automatycznie ładowane skrypty są wykonywane w momencie użycia komendy use().
+</p>
+
+
+<h3>Exportowanie symboli</h3>
+
+
+<p>Domyślnie synbole odnoszące sie do funkcji są automatycznie
+eksportowane. Aby wyeksportowac inne symbole lub zdecydować które
+symbole maja być eksportowane a które nie można użyć metody&nbsp;&nbsp;
+<a href="../apidoc/pnuts/lang/Package.html#export%28java.lang.String%29"><tt>Package.export()</tt></a> w następujący sposób:
+</p>
+<p>
+
+</p>
+<pre class="eg">pkg = package()<br>pkg.export("play")<br></pre>
+
+
+<p>Eksportoane sytmbole muszą być zdefiniowane lub być automatycznie ładowane w przypadku wywołania&nbsp; <a href="../apidoc/pnuts/lang/Package.html#export%28java.lang.String%29"><tt>Package.export()</tt></a>.
+</p>
+
+
+<p>Kiedy implementujemy moduł w Javie dziedziczac po klasie&nbsp; <tt>pnuts.ext.ModuleBase</tt> &nbsp;mamy możliwość prostrzego i jednoczesnego sposobu na inicjazlizację i eksport symbolu:&nbsp;
+</p>
+
+
+<pre class="eg">EXPORTS.play = &lt;<em>object</em>&gt;<br></pre>
+
+
+<h3>Inicjazlizacja modułu w Javie&nbsp;</h3>
+
+
+<p>Od czasu gdy istnieje możliwość tworzenia ładowlnych klass w Javie można inicjalizować moduły za pomoca kodu javy.
+</p>
+
+<p>
+See <a href="loadable.html">"Implementing Loadable Class in Java"</a> and <a href="module_java.html">"Implementing a Module in Java"</a>.
+
+</p>
+<h3>Informacje o wersji modułu</h3>
+
+
+<p>Imformacja o wersji modułu identyfikuje moduł i pozwala na
+sprawdzanie aktualność modułu oraz umożliwia tworzenie dokładnych
+informacji o błędach.
+</p>
+
+<p>Aby dodać informację o wersji do modułu należy zdefiniować&nbsp;  <a href="http://java.sun.com/j2se/1.3/docs/guide/versioning/index.html">'Package
+Version ID</a> w pliku JAR.
+</p>
+
+<p>Dla przykładu zobaczmy plik manifestu gdzie właściwości <tt>Specification-Version</tt> i <tt>Implementation-Version</tt> definiują wersje specyfikacji i implementacji
+</p>
+
+
+<pre class="eg">Manifest-version: 1.0<br>Name: org.acme.util<br>Specification-Title: Acme Library Functions<br>Specification-Version: 1.0<br>Specification-Vendor: Foo Bar, Inc.<br>Implementation-Title: org.acme.util<br>Implementation-Version: 20020704000000<br>Implementation-Vendor: Foo Bar, Inc.<br></pre>
+
+<p>Aby dodać manifest do pliku JAR należy przygotować plik manifest.mf i dodać go za pomocą komendy narzędzia JAR:.
+</p>
+
+<pre class="eg">% jar cfm module.jar manifest.mf *<br></pre>
+
+<p>Aby zobaczyć informację o wersji można użyć funkcji&nbsp; <a href="../modules/pnuts.util/doc/manifest.html#versionInfo"><tt>versionInfo()</tt></a> lub
+<a href="../modules/pnuts.util/doc/manifest.html#manifest"><tt>manifest()</tt></a>.
+</p>
+
+
+<a name="dynamic_modules"></a>
+<h2>Dynamiczne Moduły</h2>
+
+<p>Normalnie moduły o których mowiliśmy muszą być zaiplementowane przed
+ich wykonaniem.&nbsp;Dynamiczne moduły są inne, są definiowane w locie
+bez inicjalizacji i wykonywania co powoduje że nie mają nazwy.
+</p>
+
+<p>Przepis na stworzenie modułu dynamicznego:
+</p>
+<ol>
+
+  <li>Utworzyć objekt klasy pnuts.lang.Package wywołując funkcję <a href="../modules/pnuts.lib/doc/package_op.html#createPackage"><tt>createPackage()</tt></a>, etc.
+  </li>
+  <li>Zdefiniować zmienne w pakiecie
+  </li>
+  <li>Wywołać <a href="lang.html#use"><tt>use()</tt></a> podając w parametrze obiekt pakietu.
+  </li>
+  <li>Wywołać <a href="../apidoc/pnuts/lang/Package.html#export%28java.lang.String%29"><tt>Package.export()</tt></a> dla każdej eksportowanej zmiennej.
+  </li>
+</ol>
+
+<p></p>
+
+<pre class="eg">p = createPackage()<br>p.add = function (x, y) x + y<br>use(p)<br>p.export("add")<br><br>add(2, 3) ==&gt; 5<br></pre>
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podręcznik Pnuts</a>&nbsp;-&gt; Moduły
+</div>
+
+
+  
+</body></html>

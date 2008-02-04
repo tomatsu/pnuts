@@ -1,0 +1,381 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+    <head>
+        <title>Pnuts ユーザーズガイド</title>
+        <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+        <META Http-Equiv="Content-Style-Type" Content="text/css">
+        <LINK type="text/css" rel="stylesheet" href="stylesheet.css">
+    </head>
+
+    <body>
+
+        <div class="nav">
+            <a href="guide.html">Pnuts ユーザーズガイド</a> -> コマンド環境
+        </div>
+
+        <!-- body start -->
+
+        <h2>コマンド環境</h2>
+        <h3>インタプリタの起動と終了</h3>
+
+        <div class="box">
+            <code>
+                <div>C:\> pnuts</div>
+            </code>
+        </div>
+
+        <p>
+            起動時のメッセージでは、Pnuts と JDK のバージョンと JVM のベンダー名が表示されます。
+        </p>
+
+        <div class="box">
+            <code>
+                <div>C:\&gt; pnuts</div>
+                <div>Pnuts version 1.0 (03/26/2002), 1.3.1_02 (Sun Microsystems Inc.)</div>
+                <div>Java HotSpot(TM) Client VM (mixed mode)</div>
+                <div>&gt; </div>
+            </code>
+        </div>
+
+        <pre class="eg">
+            > 式
+            結果
+        </pre>
+
+        <p>
+            プロンプト(>) の後ろに式を入力し Enter キーを押すと、式が評価され
+            結果が表示されます。
+        </p>
+
+        <pre class="eg">
+            > 1 + 2
+            3
+        </pre>
+
+        <pre class="eg">
+            > exit()
+        </pre>
+
+        <p>
+            コマンド環境を終了するには、<a
+            href="lang.html#quit"><tt>quit()</tt></a>関数、または、<a href="../modules/pnuts.lib/doc.ja/shutdown.html#exit"><tt>exit()</tt></a> 関数を呼び出します。
+        </p>
+
+        <h3><tt>pnuts</tt> コマンドのオプション</h3>
+
+        <div class="box">
+            <div class="synopsis">
+            <tt>
+            C:\> pnuts { -e </tt><em>式</em><tt> | -r </tt><em>リソース</em><tt> | -R </tt><em>リソース</em><tt> | -f </tt><em>初期化ファイル</em><tt> | -F </tt><em>初期化ファイル</em><tt> | -u </tt><em>URL</em><tt> | -U </tt><em>URL</em><tt> | -m </tt><em>モジュール名</em><tt> | -a
+            | -p | -b | -w | -s | -v | -encoding <em>文字コード</em> | -input <em>ファイル名</em> | -version | -help }* { </tt><em>ファイル名</em><tt> { 引数1, ... }}</tt></div>
+        </div>
+
+        <p>
+            <tt>-version</tt> オプションはバージョン情報を表示して終了します。
+        </p>
+
+        <p>
+            <tt>-encoding</tt>オプションはスクリプトファイルの文字コードを指定します。
+        </p>
+
+        <p>
+            <tt>-e</tt> オプションは次に指定された式を評価します。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -e read(openURL(\"http://java.sun.com/\")
+            ...
+            C:\>
+        </pre>
+        <div align="center">Windows</div>
+
+        <pre class="eg">
+            % pnuts -e 'read(openURL("http://java.sun.com/")'
+            ...
+            C:\>
+        </pre>
+        <div align="center">Unix (/bin/sh)</div>
+
+
+        <a name="-r"></a>
+        <p>
+            <tt>-r</tt> オプションは次に指定された<a href="http://java.sun.com/j2se/1.3/ja/docs/ja/guide/resources/index.html">リソースファイル</a>を読み、セッションを継続します。
+        </p>
+
+        <a name="-R"></a>
+        <p>
+            <tt>-R</tt> オプションは次に指定された<a href="http://java.sun.com/j2se/1.3/ja/docs/ja/guide/resources/index.html">リソースファイル</a>を読み、セッションを終了します。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -r "/examples/fact.pnut"
+            Pnuts interpreter Version 1.0beta2, 1.1.7 (Sun Microsystems Inc.)
+            > 
+        </pre>
+
+        <a name="-f"></a>
+        <p>
+            -f オプションは、次に指定されたファイルを読み、セッションを継続します。
+        </p>
+
+        <a name="-F"></a>
+        <p>
+            -F オプションは、次に指定されたファイルを読み、セッションを終了します。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -f "$HOME/init.pnut"
+            Pnuts interpreter Version 1.0beta2, 1.1.7 (Sun Microsystems Inc.)
+            > 
+        </pre>
+
+        <a name="-u"></a>
+        <p>
+            -u オプションは、次に指定されたURLからスクリプトを読み、セッションを継続します。
+        </p>
+
+        <a name="-U"></a>
+        <p>
+            -U オプションは、次に指定されたURLからスクリプトを読み、セッションを終了します。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -u http://javacenter.sun.co.jp/pnuts/examples/calculator.pnut
+        </pre>
+
+        <a name="-m"></a>
+        <p>
+            <tt>-m</tt> オプションは <a href="lang.html#use">use</a>()で登録されるモジュールリストに、指定したモジュールを追加します。そのモジュール（パッケージ）の関数は、パッケージ名のプリフィックスを指定せずにアクセスできます。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -m "my.module"
+        </pre>
+
+        <p>
+            -v オプションは、スタックトレースを表示します。また、スクリプトが読み込まれるときにメッセージを表示します。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -v
+            Pnuts interpreter Version 1.0beta2, 1.1.7 (Sun Microsystems Inc.)
+            > throw("hogehoge") 
+            java.lang.RuntimeException: hogehoge
+            at java.lang.Throwable.<init>(Compiled Code)
+            at pnuts.lang.PnutsFunction.call_builtin(Compiled Code)
+            at pnuts.lang.PnutsFunction.exec(Compiled Code)
+            at pnuts.lang.PnutsInterpreter._applicationNode(Compiled Code)
+            at pnuts.lang.SimpleNode.jjtAccept(Compiled Code)
+            at pnuts.lang.PnutsInterpreter._expressionList(Compiled Code)
+            ...
+            ...
+        </pre>
+
+
+        <a name="-a_option"></a>
+        <p>
+            Java2の環境で<tt>-a</tt>オプションが指定されると、public でないメンバーがスクリプトからアクセスできるようになります。
+        </p>
+
+        <pre class="eg">
+            string = "Hello"
+            string.value ==> ['H', 'e', 'l', 'l', 'o']
+        </pre>
+
+        <a name="-p_option"></a>
+
+        <p>
+            <tt>-p</tt>オプションが指定されると、public メンバーがスクリプトからアクセスできるようになります。
+        </p>
+
+        <a name="-b_option"></a>
+        <p>
+            <tt>-b</tt>オプションが指定されると、フィールド・アクセス式はすべてJavaBeansへのアクセスだと解釈されます。
+            このオプションは、デフォルトの動作なので、指定する必要がありませんが、互換性のために残されています。
+        </p>
+
+        <pre class="eg">
+            import("java.awt.*")
+            f = Button("OK")
+            f.label
+        </pre>
+
+
+        <a name="-b_option"></a>
+        <p>
+            <tt>-w</tt>オプションが指定されると、GUIコンソールが表示されて、その中でインタプリタが動きます。
+        </p>
+        <pre class="eg">
+            C:\> pnuts -w
+        </pre>
+
+        <a name="-s_option"></a>
+        <p>
+            <tt>-s</tt>オプションが指定されると、セキュアなサンドボックスの中でスクリプトが実行されます。
+        </p>
+
+
+        <pre class="eg">
+            C:\> pnuts -s unsecure_script.pnut
+        </pre>
+
+
+        <a name="-inputlog"></a>
+        <p>
+            <tt>-inputlog</tt>オプションは、対話的なセッションでのユーザ入力を保存するためのログファイルの名前を指定します。
+        </p>
+
+        <pre class="eg">
+            C:\> pnuts -inputlog c:\tmp\input.log
+        </pre>
+
+        <p>
+            その他、<tt>-pure</tt>オプション、<tt>-O</tt>オプションについては<a href="pnuts_engine.html">「On-The-FlyコンパイラとASTインタプリタ」</a>を、<tt>-d</tt>オプション<tt>-vd</tt>オプションについては<a href="debug.html">「スクリプトのデバッグ」</a>を参照。
+        </p>
+
+        <a name=command></a>
+        <H3>JVMに引数を渡す</H3>
+        <P><CODE>pnuts</CODE>コマンドに-J&lt;<I>オプション</I>&gt; を渡すと、&lt;<I>オプション</I>&gt;の部分がJVMに渡されます。たとえば、次のコマンドは -Xmx4m をJVMに渡します。</P>
+
+        <pre class="eg">
+            pnuts -J-Xmx4m
+        </pre>
+
+        <H3>${PNUTS_HOME}/modules/ ディレクトリ</H3>
+        <P><CODE>pnuts</CODE>コマンドが実行されるとき、${PNUTS_HOME}/modules
+        ディレクトリの中のJARファイルがCLASSPATHに追加されます。</P>
+        <h3>コマンド引数</h3>
+
+        <p>
+            pnutsコマンドにファイル名が指定された場合、それ以降のコマンド行引数は変数<tt>$args</tt>でスクリプトからアクセスすることができます。
+        </p>
+        <pre class="eg">
+            for (i : 0..$args.length - 1) println($args[i])
+        </pre>
+        <div align="center"><tt>echo.pnut</tt></div>
+
+        <pre class="eg">
+            C:\> pnuts echo.pnut 1 2 3
+            echo.pnut
+            1
+            2
+            3
+        </pre>
+
+        <H3>環境変数</H3>
+
+        <blockquote>
+        <table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+            <tr class=wb>
+                <th bgcolor=#eeeeee>環境変数</th>
+                <th bgcolor=#eeeeee>説明</th>
+            </tr>
+            <tr class=wb>
+            <TD width="185">PNUTS_JAVA_COMMAND</TD>
+            <TD width="344">javaコマンドのパスを指定します。デフォルト値は "java"。
+            <tr class=wb>
+            <TD width="185">PNUTS_JDK11_COMPATIBLE</TD>
+            <TD width="344">この環境変数が設定されている場合、PnutsのクラスはCLASSPATH
+            に追加されて、システムクラスローダで読み込まれます。この環境変数が設定されていない場合は、Pnutsのクラスはブートクラスローダで読み込まれます。</TD>
+            <tr class=wb>
+            <TD width="185">PNUTS_MODULE</TD>
+            <TD width="344">起動時に読み込まれるモジュールのリストをセミコロンで区切って定義します。デフォルトは "<tt>pnuts.tools</tt>"。</TD>
+            <tr class=wb>
+            <TD width="185">HTTP_PROXY_HOST</TD>
+            <TD width="344">HTTPプロキシホスト</TD>
+            <tr class=wb>
+            <TD width="185">HTTP_PROXY_PORT</TD>
+            <TD width="344">HTTPプロキシポート番号</TD>
+        </table></blockquote>
+
+        <a name="properties"></a>
+        <h3>プロパティ</h3>
+
+        <p>
+            次のプロパティは、Pnuts APIのクラスが読み込まれる前に設定されていなければなりません。
+        </p>
+
+        <blockquote>
+            <table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+                <tr class=wb>
+                    <th bgcolor=#eeeeee>プロパティ</th>
+                    <th bgcolor=#eeeeee>説明</th>
+                </tr>
+                <tr class=wb>
+                    <td><tt>pnuts.lang.defaultPnutsImpl</tt></td>
+                    <td>pnuts.lang.Implementationの実装クラスが指定された場合、それがデフォルトのImplementationになります。</td>
+                </tr>
+                <tr class=wb>
+                    <td><tt>pnuts.lang.defaultConfiguration</tt></td>
+                    <td>pnuts.lang.Configurationのサブクラスが指定された場合、それがデフォルトのConfigurationになります。
+                    </td>
+                </tr>
+                <tr class="wb">
+                    <td><tt>pnuts.compiler.optimize</tt></td>
+                    <td>trueが指定された場合は、Pnutsコンパイラが生成するコードの実行速度が若干速くなります。そのかわり、エラー表示の行番号が表示されなくなります。</td>
+                </tr>
+                <tr class="wb">
+                    <td><tt>pnuts.compiler.traceMode</tt></td>
+                    <td>trueが指定された場合は、Pnutsコンパイラは式ごとにContext.updateLine(int)メソッド呼び出しのコードを生成します。</td>
+                </tr>
+                <tr class="wb">
+                    <td><tt>pnuts.compiler.useDynamicProxy</tt></td>
+                    <td>trueが指定された場合は、メソッドやコンストラクタの実装として、 Reflection APIではなく、動的に生成するプロキシクラスを使います。JITコンパイラとの組合せにより、メソッドやコンストラクタの呼び出しが若干速くなります。</td>
+                </tr>
+                <tr class="wb">
+                <td><tt>pnuts.compiled.script.prefix</tt></td>
+                <td>起動時にプロパティこプロパティが設定されいる場合、<tt>load()</tt> 関数を呼び出したとき、パラメータ値の拡張子'.pnut' が省略されると、Pnuts インタプリタはコンパイル済みのスクリプトを Java のクラスとして読み込もうとします。そのクラス名は、スクリプト名の '<tt>/</tt>'を'<tt>.</tt>'で置き換えたものをそのプロパティ値の後ろにつけたものです。たとえば、スクリプトの名前が"<tt>lib/stream</tt>"でプロパティ
+                "<tt>pnuts.compiled.script.prefix</tt>" の値が "pnuts.precompiled." の場合、
+                <tt>pnuts.precompiled.lib.stream</tt> クラスがもしあれば読み込まれます。
+                <tt>pnuts</tt> コマンドは、このプロパティのデフォルト
+                の値として"<tt></tt>"を定義しています。</td></tr>
+                <tr class="WB">
+                <td><tt>pnuts.package.factory</tt></td>
+                <td>起動時にこのプロパティが指定されていた場合、そのクラスがデフォルトのパッケージ・ファクトリになります。<a href="../apidoc/pnuts/lang/PackageFactory.html">pnuts.lang.PackageFactory</a>クラスを参照。</td>
+                </TR>
+            </table>
+        </blockquote>
+
+        <p>
+            また、次のプロパティは、<tt>pnuts</tt>コマンド用です。
+        </p>
+        <blockquote>
+            <table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+                <tr class=wb>
+                    <th bgcolor=#eeeeee>プロパティ</th>
+                    <th bgcolor=#eeeeee>説明</th>
+                </tr>
+
+                <tr class="wb">
+                    <td><tt>pnuts.interactive</tt></td>
+                    <td>このプロパティが設定されていない場合、<tt>pnuts</tt>コマンドは、スクリプトファイ
+                    ルや、式(-e オプション)や、リダイレクションが指定されないときに対話モードになり
+                    ます。対話モードでは、プロンプトや結果が表示されます。プロパティ <tt>pnuts.interactive</tt> が指定されると、コマンド引数にかかわらず、対話モードかバッチモードかを明示的に指定できます。</td>
+                </tr>
+                <tr class="wb">
+                    <td><tt>pnuts.debugger</tt></td>
+                    <td>pnuts コマンドに -d オプションが指定されたとき、デバッガのクラス名をこのプロパティに指定することができます。このプロパティの値が "pnuts.tools.VisualDebugger" の場合は、端末型のデバッガのかわりにグラフィカルなデバッガが使われます。
+                </tr>
+                <tr class="wb">
+                <td><tt>pnuts.tools.modules</tt></td>
+                <td>起動時に使用状態になるモジュールをカンマで区切って指定します。</td></tr>
+                <tr class=wb>
+                    <td><tt>pnuts.home</tt></td>
+                    <td>Pnutsがインストールされているディレクトリ。Read Only です。</td>
+                </tr>
+            </table>
+        </blockquote>
+
+        <h3>バージョン名</h3>
+        <p>
+            <tt>pnuts_version</tt>の値はPnutsのバージョン名です。
+        </p>
+
+        <!-- body end -->
+
+        <div class="nav2">
+            <a href="guide.html">Pnuts ユーザーズガイド</a> -> コマンド環境
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> On-the-fly Compiler and AST Interpreter
+</div>
+
+<!-- body start -->
+
+<h2>On-the-fly Compiler and AST Interpreter</h2>
+
+<p>
+The on-the-fly compiler of Pnuts compiles scripts at runtime and generate Java bytecode on memory,
+so that the processing speed gets faster.  
+<a href="command.html"><tt>pnuts</tt></a> command uses the on-the-fly compiler unless -pure option is explicitly specified.
+</p>
+<p>
+On the other hand, the AST (Abstract Syntax Tree) interpreter executes scripts without compiling them.
+</p>
+
+<h3>Command Options</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts { -pure } { scripts }</tt></div>
+</div>
+
+<p>
+When "<tt>-pure</tt>" option is given to <tt>pnuts</tt> command, 
+the on-the-fly compiler is disabled and the AST interpreter is used.
+</p>
+
+<pre class="eg">
+C:\> pnuts
+Pnuts version 1.0rc2 (04/16/2002), 1.3.1_02 (Sun Microsystems Inc.)
+Java HotSpot(TM) Client VM (mixed mode)
+&gt; getContext().getImplementation()
+pnuts.compiler.CompilerPnutsImpl@df503
+</pre>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts -O { scripts }</tt></div>
+</div>
+<p>
+-O option optimizes the compilation. The line number of error is not printed.
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> On-the-fly Compiler and AST Interpreter
+</div>
+
+  </body>
+</html>

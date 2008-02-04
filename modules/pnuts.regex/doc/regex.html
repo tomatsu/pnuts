@@ -1,0 +1,283 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>pnuts.regex module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.regex</tt></a> -> Functions</div>
+
+<h2>pnuts.regex Module Functions</h2>
+
+<a name=match></a>
+<div class="box">
+<div class="synopsis"><b>match</b><tt> (</tt><em>regular_expression</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>options</em><tt> }) </TT></div>
+</div>
+
+<p>
+<tt>match()</tt> checks if the String <em>input</em> includes a
+<em>regular_expression</em> and returns the result.
+</p>
+<p>
+<em>regular_expression</em> can be either a String or a Pattern object
+of a particular regex API.
+The syntax of regular expression depends on the regex API. 
+</p>
+
+<div class="eg">e.g.
+<pre>
+match("a*b", "aaaaabbb")  => true
+</pre>
+</div>
+
+<p>
+<em>options</em> is a string of the following characters.
+</p>
+
+<blockquote>
+<table border>
+<tr><th>option<th>meaning
+<tr><td><tt>i</tt>
+    <td>Case-insensitive pattern matching</td>
+<tr><td><tt>m</tt>
+    <td>Treats string as multiple lines</td>
+<tr><td><tt>s</tt>
+    <td>Treats string as single line. "." matches any single character</td>
+<tr><td><tt>n</tt>
+    <td>Meta characters are escaped.</td>
+<tr><td><em>other</em>
+    <td>Passed to a particular Regex API</td>
+</table>
+</blockquote>
+
+<div class="eg">e.g.
+<pre>
+match("a", "ABC", "i")  => true
+</pre>
+</div>
+
+<a name=getMatch></a>
+<div class="box">
+<div class="synopsis"><b>getMatch</b><tt> (int </tt><em>index</em><tt>) </TT></div>
+</div>
+
+<p>
+<tt>getMatch(0)</tt> returns the previously matched string.  <tt>getMatch(n)</tt> returns the string that matches the Nth regex group.
+</p>
+
+<div class="eg">e.g.
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatch(0)  => "aaabcc"
+getMatch(1)  => "aaa"
+getMatch(2)  => "cc"
+</pre>
+</div>
+
+<a name=getMatches></a>
+<div class="box">
+<div class="synopsis"><b>getMatches</b><tt> ( ) </tt></div>
+</div>
+
+<p>
+<tt>getMatches()</tt> returns an array of matched string with pattern groups.
+</p>
+
+<div class="eg">e.g.
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatches()  => ["aaa", "cc"]
+</pre>
+</div>
+
+
+
+<a name=getMatchStart></a>
+<div class="box">
+<div class="synopsis"><b>getMatchStart</b><tt> (int </tt><em>index</em><tt>) </TT></div>
+</div>
+
+<p>
+<tt>getMatchStart(0)</tt> returns the start index of previously matched string.  <tt>getMatchStart(n)</tt> returns the start index of string that matches the Nth regex group.
+</p>
+
+<div class="eg">e.g.
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatchStart(0)  => 0
+getMatchStart(1)  => 0
+getMatchStart(2)  => 4
+</pre>
+</div>
+
+<a name=getMatchEnd></a>
+<div class="box">
+<div class="synopsis"><b>getMatchEnd</b><tt> (int </tt><em>index</em><tt>) </TT></div>
+</div>
+
+<p>
+<tt>getMatchEnd(0)</tt> returns the end index of previously matched string.  <tt>getMatchEnd(n)</tt> returns the end index of string that matches the Nth regex group.
+</p>
+
+<div class="eg">e.g.
+<pre>
+match("(a*)b(c*)", "aaabcc")  => true
+
+getMatchEnd(0)  => 6
+getMatchEnd(1)  => 3
+getMatchEnd(2)  => 6
+</pre>
+</div>
+
+<a name=getNumberOfGroups></a>
+<div class="box">
+<div class="synopsis"><b>getNumberOfGroups</b><tt> ()</tt></div>
+</div>
+
+<p>
+<tt>getNumberOfGroups()</tt> returns the number of parenthesized subexpressions available after a successful match. 
+</p>
+<p>
+The result of this function is undefined if it is called after a unsuccessful match.
+</p>
+
+
+<a name=formatMatch></a>
+<div class="box">
+<div class="synopsis"><b>formatMatch</b><tt> ( <a
+	href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>replacement_string</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>formatMatch()</tt> formats the <em>replacement_string</em>, substituting
+captured subsequences of the previous pattern match.
+</p>
+<div class="eg">e.g.
+<pre>
+match("(a+)(b+)", "aaaabbbb")
+formatMatch("$2$1")
+  => "bbbbaaaa"
+</pre>
+</div>
+
+<a name=matchAll></a>
+<div class="box">
+<div class="synopsis"><b>matchAll</b><tt> (</tt><em>regular_expression</em><tt>,
+	<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>input</em><tt>
+	{ , </tt><em>func</em><tt> (</tt><em>word</em><tt>) { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>options</em><tt> } }</TT></div>
+</div>
+
+<p>
+If <em>func</em> is specified, <tt>matchAll()</tt> searches the <em>regular_expression</em> in <em>input</em> and calls <em>func</em> passing the matched words in turn, then returns the number of matches.
+<p>
+If <em>func</em> is not specified, it returns an Iterator that can be used to get the matched words.
+</p>
+
+<div class="eg">e.g.
+<pre>
+for (word : matchAll("[a-z]+", "abc def")){
+   println(word)
+}
+</pre></div>
+
+<a name=substitute></a>
+<div class="box">
+<div class="synopsis"><b>subsitute</b><tt> (</tt><em>regular_expression</em><tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>replacement</em><tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>input</em><tt> {, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>options</em><tt> }) or </TT>
+        <dd><TT>(</tt><em>regular_expression</em><tt>, </tt><em>func( {<em>matchedWord</em>} )</em><tt> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>options</em><tt> }) </TT></div>
+</div>
+
+<p>
+When a string is specified as the 2nd parameter, <tt>substitute()</tt>
+replaces the string which matches the <em>regular_expression</em> with
+<em>replacement</em>.
+When '<tt>n</tt>' is included in <em>options</em>, meta characters in <em>replacement</em>, if any, have no effect.
+</p>
+<p>
+When a function is specified as the 2nd parameter, <tt>substitute()</tt> replaces the string which matches the <em>regular_expression</em> with the result of the function call.  The function must be able to take zero or one argument. If the function takes one argument, matched word is passed as the argument.
+</p>
+<p>
+<em>regular_expression</em> can be either a String or a Pattern object
+of a particular regex API.
+The syntax of regular expression depends on the regex API. 
+</p>
+
+<div class="eg">e.g.
+<pre>
+substitute("[a-zA-Z]+", {x-> toUpperCase(x)}, "aBcDe")  => "ABCDE"
+</pre>
+</div>
+
+<a name=split></a>
+<div class="box">
+<div class="synopsis"><b>split</b><tt> (</tt><em>regular_expression</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>options</em><tt> }) </TT></div>
+</div>
+
+<p>
+<tt>split()</tt> tokenizes a string with the
+<em>regular_expression</em> as the delimiter.  It returns a java.util.List object which contains the resulting tokens.
+</p>
+<p>
+<em>regular_expression</em> can be either a String or a Pattern object
+of a particular regex API.
+The syntax of regular expression depends on the regex API. 
+</p>
+
+<div class="eg">e.g.
+<pre>
+split(`\.`, "a.b.c") => ["a", "b", "c"]
+</pre>
+</div>
+
+<a name=whichRegexAPI></a>
+<div class="box">
+<div class="synopsis"><b>whichRegexAPI</b><tt> ( )</tt></div>
+</div>
+
+<p>
+<tt>whichRegexAPI()</tt> returns the module name which is currently used.
+It returs <tt>null</tt> if no scripts is loaded.
+</p>
+
+<a name=getMatchCount></a>
+<div class="box">
+<div class="synopsis"><b>getMatchCount</b><tt> ( )</tt></div>
+</div>
+
+<p>
+<tt>getMatchCount()</tt> returns the number of substitution done by previous <tt>substitute()</tt> call.
+</p>
+
+<a name=regex></a>
+<div class="box">
+<div class="synopsis"><b>regex</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>expression</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>options</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>regex()</tt> makes a Pattern object of a particular regex API
+from <em>expression</em>. For example, when using pnuts.regex.jsr51 module,
+it returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/regex/Pattern.html">java.util.regex.Pattern</a> object.
+</p>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.regex</tt></a> -> Functions</div>
+
+  </body>
+</html>

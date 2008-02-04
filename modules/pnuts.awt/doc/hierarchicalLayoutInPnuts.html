@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> ->
+Hierarchical Layout in Pnuts</div>
+
+    <h2>Hierarchical Layout in Pnuts</h2>
+<p>
+<a href="hierarchicalLayout.html">Hierarchical Layout</a> is a tip of GUI scripting with Pnuts, although it can be used even in Java.
+</p>
+
+<a name=layout></a>
+<div class="box">
+<dt><b>layout</b> ( <em>container</em> , <em>format</em> )</div>
+</div>
+
+<p>
+<tt>layout()</tt> does the same as <tt><a
+href="hierarchicalLayout.html#Layout">pnuts.awt.Layout</a>.layout()</tt>.
+</p>
+
+e.g.(1)
+<table cellpadding=20>
+<tr valign=top><td>
+<img src="image/simplelayout.gif"></img>
+
+</td><td class="box"><pre>
+import("java.awt.*")
+import("pnuts.awt.*")
+f = frame("test")
+f.show()
+layout(f, [PnutsLayout, "expand=xy", b1 = Button("OK") ] )
+</pre></td></tr></table>
+
+e.g.(2)
+<table cellpadding=20>
+<tr valign=top><td>
+<img src="image/layout1.gif"></img>
+
+</td><td class="box">
+<pre>
+import("java.awt.*")
+
+fr = frame("test")
+layout(fr, [BorderLayout, [],
+		 ["North",
+                   [FlowLayout, [], Button("A"), Button("B"), Button("C")]],
+                 ["East", Button("2")],
+                 ["West", Button("3")],
+                 ["South", Button("4")],
+                 ["Center",
+                   [BorderLayout, [], 
+		     ["North", Button("11")],
+                     ["East", Button("22")],
+                     ["West", Button("33")],
+                     ["South", Button("44")],
+                     ["Center", [GridLayout, [0, 2],
+				  Button("55"),
+				  [CardLayout, [],
+                                    ["", b1=Button("one")],
+                                    ["", b2=Button("two")],
+                                    ["", b3=Button("three")]]]]]]])
+buttons=[b1, b2, b3]
+for (i : buttons){
+  bind(i, "actionPerformed", 
+         function (e) {
+           c = i.getParent()
+           c.getLayout().next(c)
+         })
+}
+fr.show()
+</pre>
+</td>
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> ->
+Hierarchical Layout in Pnuts</div>
+
+  </body>
+</html>

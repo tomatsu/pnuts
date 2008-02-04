@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.utilモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Manifest情報の取得</div>
+
+<a name=manifest></a>
+
+    <h2>Manifest情報の取得</h2>
+
+<div class="box">
+<div class="synopsis"><b>manifest</b><tt>( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>module_name</b></em><tt> { , handler( <em>key</em>, <em>value</em> ) } )</tt> or </div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>
+</tt><em>class</b></em><tt> { , handler( <em>key</em>, <em>value</em> ) } )</tt> or</div> 
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+</tt><em>file</b></em><tt> { , handler( <em>key</em>, <em>value</em> ) } )</tt> or</div> 
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/jar/JarFile.html">JarFile</a>
+</tt><em>jarfile</b></em><tt> { , handler( <em>key</em>, <em>value</em> ) } )</tt></div> 
+</div>
+
+<p>
+<tt>manifest()</tt>は、クラスやモジュールが含まれるJARファイルからManifest情報を取得して、その内容を表示します。
+</p>
+<p>
+<em>handler</em>に2引数の関数が指定された場合は、Manifestの属性とその値を引数にしてその関数が呼び出されます。
+</p>
+
+<div class="eg">例(1):
+<pre>
+manifest("pnuts.lib")
+</pre></div>
+<p>
+<div class="eg">例(2):
+<pre>
+m = map()
+manifest(class pnuts.lang.Pnuts, function (k, v) m.put(k, v))
+</pre></div>
+
+    <h3>モジュールのバージョン情報</h3>
+
+<div class="box">
+<div class="synopsis"><b>versionInfo</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>module_name</b></em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html">Class</a>
+</tt><em>class</b></em><tt>)</tt></div> 
+</div>
+
+<p>
+<tt>versionInfo()</tt>は、指定されたクラスやモジュールのバージョン情報を表す<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Package.html">java.lang.Package</a>オブジェクトを返します。モジュール名を指定する場合は、初期化用のクラスが必要になります(つまり、init.pnutでなくinit.classが必要)。
+</p>
+<p>
+この関数はJDK1.2以降が必要です。
+</p>
+
+<div class="eg">例(1):
+<pre>
+versionInfo("pnuts.lib")
+</pre></div>
+
+<div class="eg">例(2):
+<pre>
+versionInfo(class pnuts.lang.Pnuts)
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Manifest情報の取得</div>
+
+  </body>
+</html>

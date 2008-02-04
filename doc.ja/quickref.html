@@ -1,0 +1,408 @@
+<html>
+  <head>
+    <title>Pnuts Quick Reference</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+<body bgcolor=#ffffff>
+
+<!-- body start -->
+
+<center>
+<table border=0 cellspacing=1 class=bg2>
+<tr>
+<th bgcolor=#eeeeee>Pnuts
+<th bgcolor=#eeeeee>Java
+<th bgcolor=#eeeeee>条件
+<tr class=wb>
+
+<td rowspan=2>
+<pre>
+target :: x ( ... )
+</pre>
+<td>
+<pre>
+<tt>target</tt>パッケージの関数<tt>x</tt> の呼び出し
+</pre>
+<td>
+<p>
+"target" はパッケージ名<br>
+x はそのパッケージで定義された関数
+</p>
+<tr class=wb>
+<td>
+static メソッド呼び出し
+<pre>
+target.x(...);
+</pre>
+<td>
+<p>
+target は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> オブジェクト
+</p>
+<tr class=wb>
+
+<td rowspan=2>
+<pre>
+target :: x
+</pre>
+<td>
+<pre>
+<tt>target</tt>パッケージの変数<tt>x</tt> の参照
+</pre>
+<td>
+<p>
+"target" はパッケージ名<br>
+x はそのパッケージで定義された変数または関数
+</p>
+<tr class=wb>
+<td>
+static 変数参照
+<pre>
+target.x;
+</pre>
+<td>
+<p>
+target は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> オブジェクト
+</p>
+
+<tr class=wb>
+<td rowspan=4>
+<pre>
+<em>target</em> . <em>x</em> ( ... )
+</pre>
+<td>
+<tt><em>target</em> オブジェクトのインスタンスメソッド <em>x</em> を呼び出す。
+<td>
+<p>
+<em>target</em> は <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> オブジェクトでない
+</p>
+<tr class=wb>
+<td>
+Class オブジェクトのインスタンスメソッドを呼び出す。
+<pre>
+<em>target</em>.class.<em>x</em>(...);
+</pre>
+<td>
+<p>
+<em>target</em> は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> オブジェクト
+</p>
+
+<tr class=wb>
+<td>
+targetクラスのstaticメソッドを呼び出す。
+<pre>
+<em>target</em>.<em>x</em>(...);
+</pre>
+<td>
+<p>
+<div><em>target</em> は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> オブジェクト</div>
+<div><tt>java.lang.Class</tt>クラスにxというインスタンスメソッドがない</div>
+<div>targetクラスにxというstaticメソッドがある</div>
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+target.invoke("x", new Object[]{...})
+</pre>
+<td>
+<p>
+target は<a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a> オブジェクト
+</p>
+
+<tr class=wb>
+<td rowspan=5>
+<pre>
+target . xxx
+target . xxx = value
+</pre>
+
+<td>
+<pre>
+target.get("xxx".intern())
+target.set("xxx".intern(), value)
+</pre>
+<td>
+<p>
+target は<tt>pnuts.lang.Context</tt>オブジェクト
+</p>
+</td>
+
+<tr class=wb>
+<td>
+<pre>
+target.get("xxx")
+target.put("xxx", value)
+</pre>
+<td>
+<p>
+target は<tt>java.util.Map</tt>オブジェクト
+</p>
+</td>
+<tr class=wb>
+
+<td>
+<pre>
+target.getXxx()
+target.setXxx(value)
+</pre>
+<td>
+<p>
+target は xxxというプロパティを持つJavaBeans
+</p>
+</td>
+<tr class=wb>
+
+<td>
+<pre>
+target.get("x")
+target.set("x", value)
+</pre>
+<td>
+<p>
+target は <a href="../apidoc/pnuts/lang/Property.html"><tt>pnuts.lang.Property</tt></a> または <a href="../apidoc/pnuts/lang/AbstractData.html"><tt>pnuts.lang.AbstractData</tt></a> オブジェクト
+</p>
+</td>
+
+<tr class=wb>
+<td>
+static変数にアクセスする
+<pre>
+<em>targetClass</em>.xxx
+<em>targetClass</em>.xxx = value
+</pre>
+<td>
+<p>
+<div>上記の条件を１つも充たさない</div>
+<div>target は<em>targetClass</em>クラスを表す<tt>java.lang.Class</tt>オブジェクト</div>
+<div><em>targetClass</em>にxxxというstatic変数がある</div>
+</p>
+</td>
+
+<tr class=wb>
+<td rowspan=3>
+<pre>
+target [x]
+target [x] = value
+</pre>
+<td>
+配列の要素を参照または代入
+<pre>
+target[x];
+target[x] = value;
+</pre>
+<td>
+<p>
+targetが配列
+</p>
+<tr class=wb>
+<td>
+<pre>
+indexed.get(x)
+indexed.set(x, value)
+</pre>
+<td>
+<p>
+targetは <a
+href="../apidoc/pnuts/lang/Indexed.html"><tt>pnuts.lang.Indexed</tt></a>
+オブジェクト、または、<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/List.html"><tt>java.util.List</tt></a>オブジェクト
+</p>
+<tr class=wb>
+<td>
+<pre>
+map.get(key)
+map.put(key, value)
+</pre>
+<td>
+<p>
+targetは <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html"><tt>java.util.Map</tt></a> オブジェクト
+</p>
+
+<tr class=wb>
+<td rowspan=2>
+<pre>
+target ( ... )
+</pre>
+<td>
+<pre>
+関数targetの呼び出し
+</pre>
+<td>
+<p>
+target は <a href="../apidoc/pnuts/lang/PnutsFunction.html"><tt>pnuts.lang.PnutsFunction</tt></a> オブジェクト
+</p>
+<tr class=wb>
+<td>
+<pre>
+インスタンス生成<br>
+new target(...);
+</pre>
+<td>
+<p>
+target は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Class.html"><tt>java.lang.Class</tt></a> オブジェクト
+</p>
+
+<tr class=wb>
+
+<td rowspan=3>
+<pre>
+for (i : x) 式
+foreach i (x) 式
+</pre>
+<td>
+<pre>
+while (x.hasNext()){
+    Object i = x.next();
+    ...
+}
+</pre>
+<td>
+<p>
+x は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Iterator.html"><tt>java.util.Iterator</tt></a>
+</p>
+<tr class=wb>
+<td>
+<pre>
+while (x.hasMoreElements()){
+    Object i = x.nextElement();
+    ...
+}
+</pre>
+<td>
+<p>
+x は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Enumerator.html"><tt>java.util.Enumerator</tt></a>
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+for (Iterator it = x.iterator();
+     it.hasNext(); )
+{
+    Object i = x.next();
+    ...
+}
+</pre>
+<td>
+<p>
+x は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html"><tt>java.util.Collection</tt></a>
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+target < object
+target == object
+</pre>
+<td>
+<pre>
+target.compareTo(object) < 0
+target.compareTo(object) == 0
+</pre>
+<td>
+<p>
+target は <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html"><tt>java.lang.String</tt></a> または <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Comparable.html"><tt>java.lang.Comparable</tt></a>
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+[1,2]
+</pre>
+<td>
+<pre>
+new Object[]{
+  new Integer(1),
+  new Integer(2)
+}
+</pre>
+<td>
+<p>
+</p>
+
+<tr class=wb>
+
+<td>
+<pre>
+(int[])[1,2]
+</pre>
+<td>
+<pre>
+new int[]{1, 2}
+</pre>
+<td>
+<p>
+</p>
+
+
+<tr class=wb>
+<td>
+<pre>
+n1 + n2
+n1 - n2
+n1 * n2
+n1 / n2
+</pre>
+<td>
+<pre>
+n1.add(n2)
+n1.subtract(n2)
+n1.multiply(n2)
+n1.divide(n2)
+</pre>
+<td>
+<p>
+n1 または n2 は <a href="../apidoc/pnuts/lang/Numeric.html"><tt>pnuts.lang.Numeric</tt></a> オブジェクト
+</p>
+
+<tr class=wb>
+<td>
+<pre>
+&lt;10進数&gt;&lt;単位&gt;
+例: 1.2cm
+</pre>
+<td>
+<pre>
+factory.make(&lt;10進数&gt;, &lt;単位&gt;)
+</pre>
+<td>
+<p>
+&lt;単位&gt;に対するfactoryオブジェクトが登録されていること<br>
+</p>
+<pre>
+<a
+href="../apidoc/pnuts/lang/Context.html">Context</a>.registerQuantityFactory(
+    &lt;単位&gt;, 
+    <a href="../apidoc/pnuts/lang/QuantityFactory.html">QuantityFactory</a>)
+</pre>
+</table>
+表1:Pnutsの記法
+</center>
+<p>
+
+<!-- body end -->
+
+<div class="footer">
+<a href="http://pnuts.org/">Pnuts ホーム</a>
+<tt>|</tt>
+<a href="guide.html">ユーザーズガイド</a>
+<tt>|</tt>
+<a href="lang-TOC.html">Pnuts 言語</a>
+<tt>|</tt>
+クイックリファレンス
+<tt>|</tt>
+<a href="../apidoc/index.html">API doc</a>
+<tt>|</tt>
+<a href="faq.html">FAQ</a>
+<tt>|</tt>
+<a href="/">ダウンロード</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">ライセンス</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">お問い合わせ</a>
+</div>
+
+</body>
+</html>

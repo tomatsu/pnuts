@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.security module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> Permissions</div>
+
+    <h2>Permissions</h2>
+
+
+<a name="permissions"></a>
+
+<div class="box">
+<div class="synopsys"><b>permissions</b><tt>( </tt><em>permitted</em><tt> { ,</tt><em>notPermitted</em><tt>} )</tt></div>
+</div>
+<p>
+<tt>permissions()</tt> creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/PermissionCollection.html">PermissionCollection</a> object, specifying what are permitted and what aren't.
+<em>permitted</em> and <em>notPermitted</em> shoule be
+<ul>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/security/Permission.html">java.security.Permission</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/security/PermissionCollection.html">java.security.PermissionCollection</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">java.lang.Class</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">java.net.URL</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/security/CodeSource.html">java.security.CodeSource</a>
+<li><tt>null</tt>
+</ul>
+or an Array/Collection/Generator of those types.
+</p>
+<P>
+If <tt>null</tt> is specified, it returns the permissions for the Pnuts runtime classes.
+</P>
+<p>
+For example, the following code creates a permission collection that the all permissions except exiting VM are added.
+</p>
+<div class="eg">e.g.
+<pre>
+noExitPermissions = permissions(new java.security.AllPermission(), RuntimePermission("exitVM"))
+</pre></div>
+
+<a name="secureFunc"></a>
+
+<div class="box">
+<div class="synopsys"><b>secureFunc</b><tt>( </tt><em>func(...)</em><tt>, </tt><em>permissions</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>secureFunc()</tt> creates a function that calls the <em>func</em> with the specified permissions.  The following script illustrates how to prevent VM exit.
+</p>
+
+<div class="eg">e.g.
+<pre>
+function mayExit(){
+   // ..
+   exit()
+}
+
+noexit = secureFunc(mayEdit, noExitPermissions)
+
+noexit()
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> Permissions</div>
+
+  </body>
+</html>

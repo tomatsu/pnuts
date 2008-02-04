@@ -1,0 +1,139 @@
+<html>
+    <head>
+      <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body>
+
+<!-- body start -->
+
+<table cellpadding=15>
+<tr>
+<td colspan=2 align=center><h2>Pnutsプロジェクト</h2></td>
+</tr>
+<tr>
+<td valign=top align=right width=20%><b>概略</b></td>
+<td>
+<p>
+PnutsはJVMをベースとするスクリプト言語です。Javaプラットフォーム上の、複数言語システム(dual-language system)の一部として利用されることが想定されています。特長は以下のとおり。
+</p>
+
+<ul>
+<li>単純な構文規則
+<li>対話的なインタプリタ
+<li>モジュールシステムによる拡張性
+<li>Pnuts APIを使って埋め込みやカスタマイズが可能
+<li>JVMバイトコードへの動的/静的な変換
+<li>JVM上のスクリプト言語処理系の中で最速
+<li>Javaの優位性をそのまま継承 (セキュリティ、プラットホーム非依存性等) 
+</ul>
+
+<p>
+このプロジェクトのWebページは、<a href="http://pnuts.dev.java.net/">http://pnuts.dev.java.net/</a>で、最新のソースコードやドキュメントが配付されています。
+</p>
+</td>
+</tr>
+
+<tr>
+<td valign=top align=right><b>動機</b></a></td>
+<td>
+<p>
+PnutsはもともとJavaのテストツールとして1997年に開発されました。それ以来、Pnutsは、主にスクリプト言語に求められる本質的な機能(モジュールシステム、バイトコードコンパイラ等)に着目して拡張を続けられています。
+</p>
+<p>
+2002年頃から、WebスクリプティングをPnutsで実現するために力が注がれています。Javaプラットフォームには、JSPベースの技術がすでにありますが、Webアプリケーション開発者の多くはJavaの開発者ではない、ということはよく知られています。そのような人達はJSPベースの技術を敬遠してPHPやそれ以外の技術に留まる傾向があるようです。Pnutsプロジェクトでは、Java言語を使いこなせない人にもJavaプラットホームを活用できるようなスクリプト環境を実現することを目指しています。
+</td>
+</tr>
+<tr>
+<td valign=top align=right><b>優位性</b></td>
+<td>
+<ol>
+<li><b>Javaプラットホームに特化した言語設計</b>
+<p>
+JVM上のスクリプト言語システムは２つに分類できます。１つは既存の言語をJavaに移植したもので、もう１つは新たに設計された言語です。Pnutsは後者に該当します。
+<p>
+既存システムをJavaに移植することは、既存システムに新たな価値を付加することになります。しかし、このようなシステムが抱える共通の問題点は、既存システムとの互換性を優先させる必要があるということです。このため、言語システム間のモデルの違いをそのまま残すことになります。たとえば、オリジナルのシステムの型システムをJavaベースのシステムでも再現する必要があります。そのため、Javaベースのスクリプト言語システムと、Javaの間ではデータの変換が必要になり、性能を低下させます。また、Java言語とスクリプト言語が共存する環境では、データの表現形式の違いを意識しなければなりません。
+</p>
+<p>
+PnutsのようなJavaに特化した言語では、このような制約がありません。Pnutsスクリプトの値はすべて、きちんと定義されたJavaクラス(あるいはインタフェース)のインスタンスとして表現できます。
+</p>
+</li>
+<li><b>部品化を徹底したAPI</b>
+<p>
+Pnuts APIは、スクリプトエンジンとしてアプリケーションに埋めこむための柔軟なインタフェースを提供しています。他の多くのシステムはこの領域に欠陥があります。
+</p></li>
+<li><b>充実した標準モジュール</b>
+<p>
+Pnutsは、すぐ使うことのできるライブラリ関数を標準モジュールとして提供しています。それらの関数のおかげで、アプリケーション開発をJavaだけで開発した場合よりもずっと単純にすることができます。また、Pnutsのモジュールシステムは洗練されていて、ユーザがアプリケーションの要求に応じて独自のモジュールを開発して追加することができます。
+</p></li>
+<li><b>高性能</b>
+<p>
+Pnutsは、Java上のスクリプト言語システムのうち最も速いものの１つです。スクリプトエンジンを大きなアプリケーションに組みこむ場合、スクリプトエンジンのスピードが重要になります。スクリプトエンジンがボトルネックになることが多いからです。
+</p></li></ol>
+</td>
+</tr>
+
+<tr>
+<td valign=top align=right><b>利用事例</b></td>
+<td>
+<ul>
+<li>PnutsWiki - Pnutsで書かれたシンプルなWikiアプリ
+<div><a href="http://pnuts.org/wiki/">http://pnuts.org/wiki/</a></li>
+     
+<li>PnutsBlog - Pnutsで書かれたシンプルなWeblogアプリ
+<div><a href="http://pnuts.org/~tomatsu/blog/">http://pnuts.org/~tomatsu/blog/</a> (Japanese)</li>
+     
+<li>JAS3
+<div><a href="http://jas.freehep.org/jas3/index.html">http://jas.freehep.org/jas3/index.html</a></li>
+
+<li>JASP - Javaベースの統計処理システム
+<div><a href="http://jasp.ism.ac.jp/">http://jasp.ism.ac.jp/</a></li>
+
+<li>Jakarta Bean Scripting Engine
+<div><a href="http://jakarta.apache.org/bsf/">http://jakarta.apache.org/bsf/</a></li>
+
+<li>Java GuiBuilder
+<div><a href="http://www.guibuilder.de/">http://www.guibuilder.de/</a></li>
+
+<li>Alma
+<div><a href="http://www.desnoix.com/guillaume/alma/">http://www.desnoix.com/guillaume/alma/</a></li></li>
+
+<li>docproc - XSLの標準化以前に開発されたXML/XSL処理パッケージ
+<div><a href="http://javalab.uoregon.edu/ser/software/docproc_2/">http://javalab.uoregon.edu/ser/software/docproc_2/</a></li>
+
+<li>Mulcci
+<div><a href="http://member.nifty.ne.jp/mulcci/">http://member.nifty.ne.jp/mulcci/</a></li>
+</ul>
+
+</td>
+</tr>
+</table>
+
+
+<!-- body end -->
+
+
+
+<div class="footer">
+<a href="http://pnuts.org/">Pnuts ホーム</a>
+<tt>|</tt>
+<a href="guide.html">ユーザーズガイド</a>
+<tt>|</tt>
+<a href="lang-TOC.html">Pnuts 言語</a>
+<tt>|</tt>
+<a href="quickref.html">クイックリファレンス</a>
+<tt>|</tt>
+<a href="../apidoc/index.html">API doc</a>
+<tt>|</tt>
+<a href="faq.html">FAQ</a>
+<tt>|</tt>
+<a href="http://pnuts.org/">ダウンロード</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">ライセンス</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">お問い合わせ</a>
+</div>
+
+  </body>
+</html>

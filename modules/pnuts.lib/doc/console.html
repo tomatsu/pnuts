@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Console</div>
+
+<h2>Console</h2>
+
+<h3>Printing to Standard Output</h3>
+
+<p>
+The following functions are defined in the <tt>pnuts.lib</tt> module. The names of functions are simillar to methods of <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PrintWriter.html">PrintWriter</a> class.
+</p>
+
+<a name=print></a>
+<a name=println></a>
+<a name=printAll></a>
+<a name=write></a>
+<a name=flush></a>
+<div class="box">
+<div class="synopsis"><b>println</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>objects</em><tt>, ...)</tt></div>
+<div class="synopsis"><b>print</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>objects</em><tt>, ...)</tt></div>
+<div class="synopsis"><b>printAll</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a> </tt><em>enum</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html">Iterator</a> </tt><em>iterator</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a> </tt><em>generator</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a> </tt><em>collection</em><tt>)</tt></div>
+<div class="synopsis2"><tt>(</tt><em>array</em><tt>[])</tt></div>
+<div class="synopsis"><b>write</b><tt>(byte[] </tt><em>array</em> <tt>, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt>) or </tt></div>
+<div class="synopsis2"><tt>(char[] </tt><em>array</em> <tt>, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt>)</tt></div>
+<div class="synopsis"><b>write</b><tt>(byte[] </tt><em>array</em><tt>) or </tt></div>
+<div class="synopsis2"><tt>(char[] </tt><em>array</em><tt>)</tt></div>
+<div class="synopsis"><b>flush</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>print()</tt> displays <em>objects</em> one by one.
+<tt>println()</tt> additionally appends "<tt>line.separator</tt>" to the stream.
+<tt>write()</tt> just calls a method "<tt>write</tt>" of the stream class.
+</p>
+<p>
+<tt>flush()</tt> flushes the buffered data.
+</p>
+<p>
+<tt>printAll()</tt> prints all elements of the parameter.
+</p>
+
+<a name="getWriter"></a>
+<div class="box">
+<div class="synopsis"><b>getWriter</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getWriter()</tt> returns the PrintWriter object on which console messages are printed.
+</p>
+
+<h3>Reporting errors</h3>
+
+<a name=error></a>
+<div class="box">
+<div class="synopsis"><b>error</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt> {, <a href="../../../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt> }</tt><tt>)</tt></div>
+</div>
+
+<p>
+<tt>error()</tt> displays an error message.  If <em>context</em> is specified the message is written to the error stream of the context.
+</p>
+
+
+<a name="getErrorWriter"></a>
+<div class="box">
+<div class="synopsis"><b>getErrorWriter</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getErrorWriter()</tt> returns the current PrintWriter object on which error messages are printed.
+</p>
+
+<a name="setVerbose"></a>
+<div class="box">
+<div class="synopsis"><b>setVerbose</b><tt>( boolean </tt><em>verbose</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>setVerbose()</tt> turns on/off the verbose mode.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Console</div>
+
+  </body>
+</html>

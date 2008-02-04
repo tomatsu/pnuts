@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Primitive Type Conversion
+</div>
+
+<!-- body start -->
+
+<h2>Primitive Type Conversion</h2>
+
+<a name=conversion></a>
+
+
+<div class="box">
+<div class="synopsis"><b>byte</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt> or <tt>(char </tt><em>character</em><tt>)</tt></div>
+<div class="synopsis"><b>int</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt> or <tt>(char </tt><em>character</em><tt>)</tt></div>
+<div class="synopsis"><b>short</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+<div class="synopsis"><b>long</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+<div class="synopsis"><b>float</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+<div class="synopsis"><b>double</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>) </tt> or <tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+<div class="synopsis"><b>char</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>)</tt></div>
+</div>
+
+<p>
+Converts a given object to an object that represents the corresponding primitive data. If the conversion fails, returns null.
+</p>
+
+<div class="eg">e.g.
+<pre>
+byte(-126)    ==> new Byte(0x82)
+int("123") ==> new Integer(123)
+int("hello") ==> null
+double("123.456") ==> new Double(123.456)
+char(65)   ==> 'A'
+</pre>
+</div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Primitive Type Conversion
+</div>
+
+  </body>
+</html>

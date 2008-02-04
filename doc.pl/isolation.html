@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Izolowane &#347;rodowiska skryptowe
+</div>
+
+<!-- body start -->
+
+    <h2>Izolowane &#347;rodowiska skryptowe</h2>
+
+
+
+<p>
+Nast&#281;puj&#261;ce warunki s&#261; wymagane do realizacji izolacji.
+</p>
+
+<ul>
+<li>R&oacute;&#380;ne skrypty mog&#261; byc wykonywane w dowolnej kolejno&#347;ci.
+</li><li>Zmienne, funkcje i modu&#322;y definiowane w skrypcie nie s&#261; widoczne dla innych skrypt&oacute;.
+</li></ul>
+
+<p>Przyk&#322;adowo, <a href="servlet.html#servlet_scripts">skrtypt_servlet</a>
+jest wykonywany w &#347;rodowisku izolowanym. &#379;adne nie lokalne nazwy
+(zmienne, funkcje, modu&#322;y) zdefiniowane w serwlcie nie wp&#322;ywaj&#261; na inne
+skrypty serwlet&oacute;w.
+</p>
+
+<h3>Pierwsze kroki</h3>
+
+<p>Aby zbudowa&#263; wiele izolowanych &#347;rodowisk wykonawczych trzeba mnie&#263; pewno&#347;&#263; &#380;e&nbsp; <a href="api.html#root_package">pakiet_g&#322;&oacute;wny</a> i obiekty <a href="api.html#context">kontekst&oacute;w</a> nie s&#261; wsp&oacute;&#322;dzielone przez izolowane &#347;rodowiska.
+</p>
+
+<div align="center"><img src="images/Scriptenv.png"></div>
+<p align="center">Elementy &#347;rodowiska skryptowego</p>
+<p>Pierwsze, utworzy&#263;&nbsp; <a href="api.html#root_package">pakiet_g&#322;&oacute;wny</a> kt&oacute;ry nie jest&nbsp; <a href="api.html#global_package">pakietem_globalnym</a>.
+</p>
+<pre class="eg">Package myRootPackage = new Package("root", null);<br></pre>
+
+<p>Konstruktor pobiera nazw&#281; pakietu w pierwszym parametrze
+kt&oacute;rym mo&#380;e by&#263; dowlny napis, drugi parametr okre&#347;la pakiet
+nadrz&#281;dny i w tym przypadku musi by&#263; ustawiony na null.
+</p>
+
+<p>Nast&#281;pnie nale&#380;y utworzy&#263; odseparowany obiekt kontekstu kt&oacute;ry
+otrzyma stworzony pakiet jako pakiet bierz&#261;cy i jednocze&#347;cnie
+g&#322;&oacute;wny, pakiet podajemy w konstyktorze kontekstu <a href="../apidoc/pnuts/lang/Context.html#Context%28pnuts.lang.Package%29"><tt>Context(Package)</tt></a> lub ustawiamy za pomoc&#261; metody <a href="../apidoc/pnuts/lang/Context.html#setCurrentPackage%28%29"><tt>Context.setCurrentPackage(<span style="font-family: Verdata,Geneva,Arial,Helvetica,sans-serif;">)</span></tt></a>.
+</p>
+
+<div class="eg">
+<pre>Context myContext = new Context(myRootPackage);<br></pre>
+
+lub
+
+<pre>Context myContext = new Context();<br>myContext.setCurrentPackage(myRootPackage);<br></pre>
+</div>
+
+<h4>Przyk&#322;ad</h4>
+
+<p>Ponizszy kod pokazuje jak utworzy&#263; dwa izolowane &#347;rodowiska. Nie
+lokalne nazwy (zmienne, funkcje, modu&#322;y) zdefiniowane w skrypcie&nbsp; <em>script_1</em> nie s&#261; widoczne w skrypcie&nbsp;
+<em>script_2</em> i na odwr&oacute;t.
+</p>
+
+<pre class="eg">Package root_1 = new Package("root_1", null);<br>Context context_1 = new Context(root_1);<br>..<br>Package root_2 = new Package("root_2", null);<br>Context context_2 = new Context(root_2);<br>...<br>Pnuts.load(<em>script_1</em>, context_1);<br>Pnuts.load(<em>script_2</em>, context_2);<br></pre>
+
+<h3>Wsp&oacute;&#322;dzielone modu&#322;y</h3>
+
+<p>&#346;rodowiska izolowane nie maja na siebie wp&#322;ywu jednak czasem
+przydaje si&#281; mo&#380;liwo&#347;&#263; wsp&oacute;&#322;dzielenia jaki&#347; modu&#322;&oacute;w jako
+ich modu&#322;&oacute;w "standardowych".
+</p>
+<p>
+S&#261; trzy drogi na realizacj&#281; tego zadania.
+</p>
+
+<h4>1.Inicjalizacja ka&#380;dego pakietu/kontekstu</h4>
+
+<p>
+To jest najprostrzy spos&oacute;b przez wywo&#322;anie w ka&#380;dym kontek&#347;cie metody&nbsp;.  <a href="../apidoc/pnuts/lang/Context.html#usePackage%28%29"><tt>Context.usePackage()</tt></a> kt&oacute;ra zarejestruje wsp&oacute;&#322;dzielone modu&#322;y w ka&#380;dym ze &#347;rodowisk.
+</p>
+
+
+<pre class="eg"><b>
+static void initialize(Context context){
+   context.usePackage(<em>standard_module</em>);<br>   ...<br>}</b>
+...
+Package root_1 = new Package("root_1", null);
+Context context_1 = new Context(root_1);
+<b>initialize(context_1);</b>
+..
+Package root_2 = new Package("root_2", null);
+Context context_2 = new Context(root_2);
+<b>initialize(context_2);</b>
+...
+Pnuts.load(<em>script_1</em>, context_1);<br>Pnuts.load(<em>script_2</em>, context_2);<br></pre>
+
+
+<h4>2. Kopiowanie pakietu</h4>
+
+<p>
+<a href="api.html#package_tree">drzewo_pakiet&oacute;w</a> mo&#380;e by&#263; skopiowane przez wywo&#322;anie metody&nbsp; <a href="../apidoc/pnuts/lang/Package.html#clone%28%29"><tt>Package.clone()</tt></a> na pakiecie g&#322;&oacute;wnym.
+</p><p>Kiedy drzewo pakiet&oacute;w jest kopiowane wszystkie symbole s&#261;
+duplikowane ale tablica symboli nie jest duplikowana. Ka&#380;dy skrypt
+inicjalizacyny modu&#322;u jest wykonywany tylko raz wiec u&#380;yte modu&#322;y s&#261;
+wsp&oacute;&#322;dzielone przez kopie pakiet&oacute;w.
+</p><p>Operacje na skopiowanym pakiecie tj. rejestracja modu&#322;&oacute;w nigdy nie wp&#322;ywaj&#261; na pakiet kt&oacute;ry by&#322; kopiowany.
+</p>
+
+<pre class="eg">Package base = new Package("root", null);<br>Context context = new Context(base);<br>context.usePackage("shared");<br>..<br><b>Package root_1 = (Package)base.clone();</b>
+Context context_1 = new Context(context);
+context_1.setCurrentPackage(root_1);
+...
+<b>Package root_2 = (Package)base.clone();</b>
+Context context_2 = new Context(context);
+context_2.setCurrentPackage(root_2);
+...
+Pnuts.load(script_1, context_1);
+Pnuts.load(script_2, context_2);
+</pre>
+
+<p>
+Przy&#322;ad tworzy kipie kontekstu przez konstruktor kopiuj&#261;cy&nbsp; <a href="../apidoc/pnuts/lang/Context.html#Context%28pnuts.lang.Context%29"><tt>Context(Context)</tt></a>.
+Technika ta jest u&#380;yteczna kiedy wszystkie konteksty w izolowanych
+&#347;rodowiskach powinny mie&#263; identyczn&#261; konfiguracj&#281; pocz&#261;tkow&#261;
+</p>
+
+<div align="center"><img src="images/Package-clone.png"></div>
+<p align="center">Klony pakiet&oacute;w</p>
+
+<h4>3. Kompozycja przestrzeni nazw</h4>
+
+<p>W tym rozwi&#261;zaniu nazwy (zmienne, funkcje i modu&#322;y) u&#380;yte w pakiecie
+s&#261; r&oacute;wnie&#380; widoczne w pakiecie kompozytowym tworzonym przez <a href="../apidoc/pnuts/ext/CompositePackage.html">pnuts.ext.CompositePackage</a>.
+</p><p>
+Nazwy zdefiniowane w pakiecie kompozytowym nie s&#261; widoczne w pakiecie <tt>base</tt>.
+</p>
+<p>W przeciwnie&#324;stwie do poprzednich rozwi&#261;za&#324; zmiany w pakiecie bazowym s&#261; widoczne w pakietach kompozytowych.
+</p>
+
+<pre class="eg">Package base = new Package("root", null);<br>Context context = new Context(base);<br>context.setImplementation(new CompilerPnutsImpl());<br>context.usePackage("module1");<br>context.usePackage("module2");<br>...<br><br><b>Package root_1 = new CompositePackage(base);</b>    // Package composition<br>Context context_1 = new Context(context); // copies context <br>context_1.setCurrentPackage(root_1);<br><br><b>Package root_2 = new CompositePackage(base);</b>    // Package composition<br>Context context_2 = new Context(context); // copies context<br>context_2.setCurrentPackage(root_2);<br>..<br>Pnuts.load(script_1, context_1);<br>Pnuts.load(script_2, context_2);<br></pre>
+
+<div align="center"><img src="images/Composite-package.png"></div>
+<p align="center">Relacja mi&#281;dzy pakietem i pakietem kompozytowym</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Izolowane &#347;rodowiska skryptowe
+</div>
+
+  </body></html>

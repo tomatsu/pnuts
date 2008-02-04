@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Ograniczenie dost&#281;pu do klas/metod
+</div>
+
+<!-- body start -->
+
+<h2>Ograniczenie dost&#281;pu do klas/metod</h2>
+
+<p>
+Wyobr&#378;my sobie ze mamy nast&#281;puj&#261;c&#261; klas&#281; i chcemy udost&#281;pni&#263; tylko metod&#281;&nbsp;
+<tt>test()</tt> a reszt&#281; ukry&#263;.
+</p>
+
+<pre class="eg">public class MyClass {<br>       public void test(){<br>	      System.out.println("test");<br>       }<br>       public String getName(){<br>	      return "foo";<br>       }<br>       ...<br>}<br></pre>
+
+<p>
+BeanInfo s&#322;u&#380;y do wyspecyfikowania widocznych metod. Dla przyk&#322;adu&nbsp; BeanInfo dla klasy
+MyClass mo&#380;e by&#263; stworzona w klasie&nbsp; <tt>MyClassBeanInfo</tt> kt&oacute;ra jest podklas&#261; klasy&nbsp; <tt>java.beans.SimpleBeanInfo</tt> class w nast&#281;puj&#261;cy spos&oacute;b.
+</p>
+
+<pre class="eg">import java.beans.*;<br><br>public class MyClassBeanInfo extends SimpleBeanInfo {<br>    public MethodDescriptor[] getMethodDescriptors(){<br>	try{<br>	    return new MethodDescriptor[]{<br>		new MethodDescriptor(MyClass.class.getMethod("test", new Class[]{}))<br>	    };<br>	} catch (NoSuchMethodException e){<br>	    return new MethodDescriptor[]{};<br>	}<br>    }<br>}<br></pre>
+
+<p>W przypadku konfiguracji kontekstu w kt&oacute;rym chcemy
+wyeksponowa&#263; tylko t&#261; metod&#281; mo&#380;emy zarejestrowa&#263; podan&#261; klas&#281; BeanInfo
+w danej konfiguracji obiektu
+<tt>pnuts.ext.LimitedClassesConfiguration</tt> za pomoc&#261; metody
+<tt>registerClass()</tt>,a nast&#281;pnie ustawi&#263; utworzon&#261; konfiguracj&#281; za pomoc&#261; metody setConfigurtion(Configuration) obiektu Configuration.
+</p>
+
+<pre class="eg">import pnuts.ext.LimitedClassesConfiguration;<br><br>Configuration conf = new LimitedClassesConfiguration(false);<br>conf.registerClass(MyClass.class);<br>Context c = new Context();<br>c.setConfiguration(conf);<br><br>Pnuts.load(file, c);<br></pre>
+
+<p>W kontek&#347;cie w kt&oacute;rym ustawiono konfiguracj&#281; na obiekt klasy&nbsp; <tt>pnuts.ext.LimitedClassesConfiguration</tt> dost&#281;p do p&oacute;l jest interpetowany jako doast&#281;p do w&#322;a&#347;ciwo&#347;ci Beans.
+</p>
+
+<pre class="eg">myobj = MyClass()<br>myobj.test()  ===&gt; "test" is printed<br>myobj.getName() ===&gt; an exception is thrown<br>myobj.name    ===&gt; "foo"<br></pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Ograniczenie dost&#281;pu do klas/metod
+</div>
+
+  </body></html>

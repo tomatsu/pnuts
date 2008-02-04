@@ -1,0 +1,114 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Odpluskwianie skrypt&oacute;w
+</div>
+
+<!-- body start -->
+
+    <h2>Odpluskwianie skrypt&oacute;w</h2>
+
+<h3>Debugger konsolowy (Terminal Debugger)</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\&gt; pnuts -d { </tt><em>script</em><tt> }</tt></div>
+<div class="synopsis"><tt>C:\&gt; pnuts -d:</tt><em>file</em><tt> </tt> <em>scriptFile</em></div>
+<div class="synopsis"><tt>C:\&gt; pnuts -d:</tt><em>file</em><tt> </tt> -e <em>expression</em></div>
+</div>
+
+<p>
+<tt>-d</tt> opcja powoduje uruchomienie interpretera w trybie odpluskwiania. Komendy odpluskwiacza znale&#378;&#263; mo&#380;na&nbsp; <a href="#commands">tutaj</a>.
+</p>
+
+<p>Odpluskwiacz dzia&#322;a tylko w trybie interpretacji drzewa AST.
+</p>
+
+<div class="eg">np.
+<pre>C:\&gt; pnuts -d<br>Pnuts interpreter Version 1.0, 1.2.2 (Sun Microsystems Inc.)<br>&gt; 1<br># Stopped at ?:1<br> &gt;&gt;&gt; 1<br>debug&gt;<br></pre>
+</div>
+
+<p>je&#380;eli <tt>-d:</tt><em>plik</em> jest podane to komendy odczytywane s&#261; z pliku.
+</p>
+
+<div class="eg">np.
+<pre>C:\&gt; pnuts -d:trace.dbg -e 'getProperty("java.version")'<br>reading /tmp/trace.dbg<br># Stopped at ?:1<br> &gt;&gt;&gt; getProperty("java.version")<br>debug&gt; trace<br>on<br>debug&gt; cont<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:1 &gt;&gt;&gt; import("java.lang.System")<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:2 &gt;&gt;&gt; import("java.util.Properties")<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:3 &gt;&gt;&gt; import("java.io.InputStream")<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:4 &gt;&gt;&gt; import("java.io.File")<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:5 &gt;&gt;&gt; import("java.io.FileInputStream")<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:7 &gt;&gt;&gt; function setProperty(name, val) {<br> prop = System::getProperties()<br> if (val == null) {<br>  prop.remove(name)<br> } else {<br>  prop.put(name, val)<br> }<br>}<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:16 &gt;&gt;&gt; function getProperty(name) {<br> System::getProperty(name)<br>}<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:20 &gt;&gt;&gt; function loadProperties(resourceOrStream) {<br> loadProperties(resourceOrStream, Properties())<br>}<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:24 &gt;&gt;&gt; function loadProperties(input, prop) {<br> if (input instanceof String) {<br>  url = getResource(input)<br>  if (url == null) {<br>   return null<br>  }<br>  prop.load(openURL(url))<br> } else if (input instanceof File) {<br>  prop.load(fd = open(input))<br>  fd.close()<br> } else if (input instanceof InputStream) {<br>  prop.load(input)<br> } else {<br>  throw(IllegalArgumentException(string(input)))<br> }<br> prop<br>}<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:16 &gt;&gt;&gt; {<br> System::getProperty(name)<br>}<br>jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:17 &gt;&gt;&gt; System::getProperty(name)<br># Returns "1.4.2"<br></pre>
+</div>
+
+<div class="eg">trace.dbg
+<pre>trace<br>cont<br></pre>
+</div>
+
+<a name="commands"></a>
+<h4>Komendy odpluskwiacza</h4>
+<blockquote>
+<dl>
+<dt><tt>stop at {FILE:}LINENO</tt>
+</dt><dd>Zatrzymuje skrypt na linii&nbsp; LINENO</dd>
+<dt><tt>stop in FUNC{:NARGS}</tt>
+</dt><dd>Zatrzymuje sie w funkcji FUNC gdy zostanie wywo&#322;ana. Gdy jest podane NARGS zatrzymuje si&#281; w FUNC wywo&#322;anej z argumentem NARGS.
+</dd><dt><tt>clear</tt>
+</dt><dd>Czy&#347;ci punkty zatrzyma&#324;
+</dd><dt><tt>cont</tt>
+</dt><dd>Wznawia wykonywanie
+</dd><dt><tt>trace</tt>
+</dt><dd>Prze&#322;&#261;cza tryb &#347;ledzenia. Domy&#347;lnie jest wy&#322;&#261;czony (false).
+</dd><dt><tt>trace function {FUNCTION}</tt>
+</dt><dd>Prze&#322;&#261;cza &#347;ledzenia funkcji.&nbsp;Domy&#347;lnie jest wy&#322;&#261;czony (false).
+</dd><dt><tt>step {NUM}</tt>
+</dt><dd>Wykonuje&nbsp; NUM kolejnych linii. Domy&#347;lnie NUM=1.
+</dd><dt><tt>step up</tt>
+</dt><dd>Wychodzi z bie&#380;&#261;cej funkcji.
+</dd><dt><tt>next {NUM}</tt>
+</dt><dd>To samo co STEP ale pomija wywo&#322;ania funkcji.
+</dd><dt><tt>help</tt>
+</dt><dd>Drukuje podstawowy opis komend
+</dd><dt><tt>?</tt>
+</dt><dd><span style="font-family: monospace;">To samo co HELP</span>.
+</dd><dt>&lt;Dowolne inne s&#322;owo&gt;
+</dt><dd>Ewaluuje tekst jako skrypt
+</dd></dl>
+</blockquote>
+
+
+<a name="visualDebug"></a>
+<h3>Odpluskwoiacz w trybie GUI (Visual Debugger)</h3>
+
+<p>Opcja -vd w linii komend powoduje uruchomienie odpluskwiacza w
+trybie GUI,dzia&#322;anie graficznego odpluskwiacza jest analogiczna do
+konsolowego. Zobacz r&oacute;wnie&#380; <a href="command.html#pnuts.debugger">"Opcje"</a>&nbsp;.
+</p>
+
+
+
+<div class="box">
+<div class="synopsis"><tt>C:\&gt; pnuts -vd { </tt><em><span style="font-family: monospace;">skrypt</span></em><tt> }</tt></div>
+</div>
+
+<p>
+</p><center>
+<img src="images/debugger.png">
+</center>
+
+<p>Jasnoniebieska linia wskazuje aktualna linie.Pomara&#324;czowy kolor
+oznacza ustawiani&#261; pu&#322;apk&#281; na linii. Aby ustawi&#263;/skasowa&#263; pu&#322;apk&#281;
+wystarczy klikn&#261; prawym klawiszem na linii.
+</p>
+
+<center>
+<img src="images/breakpoint.png">
+</center>
+<p>
+
+<!-- body end -->
+
+</p><div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt;&nbsp;Odpluskwianie skrypt&oacute;w
+</div>
+
+  </body></html>

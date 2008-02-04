@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> 複数の隔離されたスクリプト環境を組み込む
+</div>
+
+<!-- body start -->
+
+    <h2>複数の隔離されたスクリプト環境を組み込む</h2>
+
+<h3>隔離されたスクリプト環境</h3>
+<p>
+「スクリプト環境が隔離されている」とは、次の条件を満たす場合を指します。
+</p>
+
+<ul>
+<li>複数のスクリプトを順序を問わず実行できる。
+<li>あるスクリプトを実行する過程で定義される変数、関数、モジュールが、別のスクリプトから観測されない。
+</ul>
+
+<p>
+たとえば、Pnutsの<a href="servlet.html">Webスクリプティング</a>の環境では、<a href="servlet.html#servlet_scripts">サーブレット・スクリプト</a>ごとに、スクリプト実行環境が隔離されています。あるサーブレット・スクリプトで定義した名前(変数、関数、モジュール)は他のサーブレット・スクリプトに影響を与えません。
+</p>
+
+<h3>基本的な手順</h3>
+
+<p>
+複数の隔離されたスクリプト環境を組み込むには、<a href="api.html#root_package">ルート・パッケージ</a>と<a href="api.html#context">Context</a>がスクリプト間で共有されないようにします。
+</p>
+
+<div align=center><img src="../doc/images/Scriptenv.png"/></div>
+<p align=center><font size=-1>スクリプト環境の単位</font></p>
+
+<p>
+まず、次のようにグローバル・パッケージとは異なるルート・パッケージを作ります。
+</p>
+<pre class="eg">
+Package myRootPackage = new Package("root", null);
+</pre>
+
+<p>
+コンストラクタの最初のパラメータはパッケージ名で、任意の名前を付けることができます。2番目のパラメータには、親パッケージがないことを示すためにnullを指定します。
+</p>
+
+<p>
+次に、別々のContextオブジェクトを作成します。そして、コンストラクタ<a href="../apidoc/pnuts/lang/Context.html#Context(pnuts.lang.Package)">Context(Package)</a>、または<a href="../apidoc/pnuts/lang/Context.html#setCurrentPackage()">Context.setCurrentPackage()</a>メソッドで、カレントパッケージを指定します。
+</p>
+
+<pre class="eg">
+Context myContext = new Context(myRootPackage);
+</pre>
+
+または、
+
+<pre class="eg">
+Context myContext = new Context();
+myContext.setCurrentPackage(myRootPackage);
+</pre>
+
+<h4>例</h4>
+
+<p>
+次のプログラムは、2つの隔離されたスクリプト環境を作る例です。
+</p>
+
+<pre class="eg">
+Package root_1 = new Package("root_1", null);
+Context context_1 = new Context(root_1);
+..
+Package root_2 = new Package("root_2", null);
+Context context_2 = new Context(root_2);
+...
+Pnuts.load(script_1, context_1);
+Pnuts.load(script_2, context_2);
+</pre>
+
+<h3>モジュールを共有する</h3>
+
+<p>
+複数のスクリプト環境を互いに隔離したい場合でも、標準的なモジュールを共有したい場合があります。
+</p>
+<p>
+これを実現する方法として、以下のような方法があります。
+</p>
+
+<h4>1. 各Context/Packageを初期化する</h4>
+
+<p>
+これは、もっとも単純なアプローチです。各Contextオブジェクトに対して<a href="../apidoc/pnuts/lang/Context.html#usePackage()">Context.usePackage()</a>を呼び出し、共有モジュールを各スクリプト環境に登録します。
+</p>
+
+<pre class="eg">
+<b>static void initialize(Context context){
+   context.usePackage(<em>standard_module</em>);
+   ...
+}</b>
+...
+Package root_1 = new Package("root_1", null);
+Context context_1 = new Context(root_1);
+<b>initialize(context_1);</b>
+..
+Package root_2 = new Package("root_2", null);
+Context context_2 = new Context(root_2);
+<b>initialize(context_2);</b>
+...
+Pnuts.load(<em>script_1</em>, context_1);
+Pnuts.load(<em>script_2</em>, context_2);
+</pre>
+
+<h4>2. Packageの複製</h4>
+
+<p>
+ルート・パッケージに対してPackage.clone()メソッドを使うと、<a href="api.html#root_package">パッケージ・ツリー</a>を複製することができます。パッケージ・ツリーを複製すると、もとのパッケージ・ツリーの記号表がすべて複製されます(ただし、変数の値は共有されます)。
+<p>
+複製したパッケージ・ツリーで、変数やモジュールを定義しても、もとのパッケージ・ツリーに影響を与えることはありません。
+</p>
+<p>
+また、複製を作った後で、もとのパッケージ・ツリーに対して新しい変数やモジュールを定義しても、複製されたパッケージ・ツリーに影響を与えることはありません。
+</p>
+
+<pre class="eg">
+Package root = new Package("root", null);
+Context context = new Context(root);
+context.usePackage("shared");
+..
+<b>Package root_1 = (Package)root.clone();</b>
+Context context_1 = new Context(context);
+context_1.setCurrentPackage(root_1);
+...
+<b>Package root_2 = (Package)root.clone();</b>
+Context context_2 = new Context(context);
+context_2.setCurrentPackage(root_2);
+...
+Pnuts.load(script_1, context_1);
+Pnuts.load(script_2, context_2);
+</pre>
+
+
+<p>
+この例では、Packageの複製を作ると同時に、<a href="../apidoc/pnuts/lang/Context.html#Context(pnuts.lang.Context)">Context(Context)</a>コンストラクタを使ってContextの複製を作っています。各スクリプトで使うすべてのContextに対して同じ初期設定をしたい場合、一度状態を設定したContextをテンプレートとして複製を作成すると便利です。
+</p>
+
+<div align=center><img src="../doc/images/Package-clone.png"/></div>
+<p align=center><font size=-1>Packageの複製</font></p>
+
+<h4>3. 名前空間の合成</h4>
+
+<p>
+このアプローチでは、ある<a href="api.html#root_package">パッケージ・ツリー</a>で定義される変数、関数、モジュールが、<a href="../apidoc/pnuts/ext/CompositePackage.html">pnuts.ext.CompositePackage</a>クラスを使って合成されたパッケージ・ツリーから参照されます。
+<p>
+一方、CompositePackageを含むパッケージ・ツリーで定義される変数は、ルート・パッケージを含むパッケージ・ツリーからは参照されません。
+</p>
+<p>
+一つ前の方法(Packageの複製)とは異なり、合成されたパッケージ・ツリーは元のパッケージ・ツリーで新たに定義された名前にアクセスできます。
+</p>
+
+<pre class="eg">
+Package pkg = new Package("root", null);
+Context context = new Context(pkg);
+context.setImplementation(new CompilerPnutsImpl());
+context.usePackage("module1");
+context.usePackage("module2");
+...
+
+<b>Package root_1 = new CompositePackage(pkg);</b>  // パッケージ・ツリーの合成
+Context context_1 = new Context(context); // Contextの複製
+context_1.setCurrentPackage(root_1);
+
+<b>Package root_2 = new CompositePackage(pkg);</b>  // パッケージ・ツリーの合成
+Context context_2 = new Context(context); // Contextの複製
+context_2.setCurrentPackage(root_2);
+...
+Pnuts.load(script_1, context_1);
+Pnuts.load(script_2, context_2);
+</pre>
+
+<div align=center><img src="../doc/images/Composite-package.png"/></div>
+<p align=center><font size=-1>CompositePackageとPackageの関係</font></p>
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> 複数の隔離されたスクリプト環境を組み込む
+</div>
+
+  </body>
+</html>

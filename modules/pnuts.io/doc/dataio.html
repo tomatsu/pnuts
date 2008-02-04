@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.io module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> Data I/O</div>
+
+    <h2>Data I/O</h2>
+
+<a name=dataInput></a>
+<a name=dataOutput></a>
+<div class="box">
+<div class="synopsis"><b>dataInput</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>dataOutput</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>out</b></em><tt>)</tt></div>
+</div>
+<p>
+<tt>dataInput()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> object.
+<tt>dataOutput()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> object.
+</p>
+
+<a name=writeBoolean></a>
+<a name=writeShort></a>
+<a name=writeChar></a>
+<a name=writeChars></a>
+<a name=writeInt></a>
+<a name=writeLong></a>
+<a name=writeFloat></a>
+<a name=writeDouble></a>
+<a name=writeUTF></a>
+
+<div class="box">
+<div class="synopsis"><b>writeBoolean</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, boolean </tt><em>trueOrFalse</em><tt>)</tt></div>
+<div class="synopsis"><b>writeShort</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, int </tt><em>s</em><tt>)</tt></div>
+<div class="synopsis"><b>writeChar</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, int </tt><em>ch</em><tt>)</tt></div>
+<div class="synopsis"><b>writeChars</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>str</em><tt>)</tt></div>
+<div class="synopsis"><b>writeInt</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, int </tt><em>n</em><tt>)</tt></div>
+<div class="synopsis"><b>writeLong</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, long </tt><em>n</em><tt>)</tt></div>
+<div class="synopsis"><b>writeFloat</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, float </tt><em>n</em><tt>)</tt></div>
+<div class="synopsis"><b>writeDouble</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, double </tt><em>n</em><tt>)</tt></div>
+<div class="synopsis"><b>writeUTF</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a> </tt><em>out</b></em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>str</em><tt>)</tt></div>
+</div>
+
+<p>
+Writes a value of the corresponding type to the specified <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataOutputStream.html">DataOutputStream</a>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+dout = dataOutput(open("test.dat", "w"))
+dout.writeInt(100)
+dout.close()
+</pre></div>
+
+<a name=readBoolean></a>
+<a name=readUnsignedByte></a>
+<a name=readShort></a>
+<a name=readUnsignedShort></a>
+<a name=readChar></a>
+<a name=readInt></a>
+<a name=readLong></a>
+<a name=readFloat></a>
+<a name=readDouble></a>
+<a name=readUTF></a>
+
+<div class="box">
+<div class="synopsis"><b>readBoolean</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readUnsignedByte</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readShort</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readUnsignedShort</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readChar</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readInt</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readLong</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readFloat</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readDouble</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+<div class="synopsis"><b>readUTF</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a> </tt><em>in</b></em><tt>)</tt></div>
+</div>
+
+<p>
+Reads a value of the corresponding type from the specified <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/DataInputStream.html">DataInputStream</a>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+din = dataInput(open("test.dat"))
+println(din.readInt())
+din.close()
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> Data I/O</div>
+
+  </body>
+</html>

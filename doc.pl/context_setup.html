@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt;&nbsp;<font class="translate"> Ustawianie Kontekstu</font>
+</div>
+
+<!-- body start -->
+
+<h2><font class="translate">
+Ustawianie Kontekstu</font></h2>
+
+<p>Jest opisane w&nbsp; '<a href="pnutsImpl.html">Dostosowywanie interpretera</a>' i '<a href="configuration.html">Dostosowywanie zachowania podstawowych wyra&#380;e&#324;</a>' jak mo&#380;na zmienia&#263; standardowy dost&#281;p do atrybut&oacute;w obiektu kontekstu&nbsp;&nbsp; <a href="../apidoc/pnuts/lang/Context.html">Context</a>.
+Jest to bardzo proste, wystarczy utworzy&#263; obiekt kontekstu i nast&#281;pnie ustwi&#263; implementacj&#281; za pomoc&#261; metody&nbsp; <tt>setImplementation()</tt> lub <tt>setConfiguration()</tt>.
+Jakkolwiek takie postepowanie na d&#322;u&#380;&#261; metee mo&#380;e nie by&#263; do&#347;&#263;
+elastyczne w nikt&oacute;rych przypadkach. Pnuts API pozwala na inne
+drogi konfiguracji kontekst&oacute;w.
+</p>
+
+<h3>1. W&#322;a&#347;ciwo&#347;ci</h3>
+<p>Je&#380;eli <a href="command.html#properties">pedefiniowane systemowe w&#322;a&#347;ciwosci</a>
+s&#261; zdefiniowane przed pierwszym za&#322;adownaiem klas Pnuts s&#261; brane jako
+domy&#347;lne ustawienia kontekst&oacute;w. Przyk&#322;adowo w&#322;a&#347;ciwo&#347;&#263; <tt>pnuts.lang.defaultPnutsImpl</tt> definiuje nazw&#281; klasy jako domy&#347;ln&#261; klas&#281; implementacji.
+</p>
+<pre class="eg">% java -Dpnuts.lang.defaultPnutsImpl=pnuts.compiler.CompilerPnutsImpl <em>MainClass</em>
+</pre>
+<p>Je&#380;eli metoda <a href="../apidoc/pnuts/lang/Pnuts.html#setDefaults%28java.util.Properties%29"><tt>Pnuts.setDefault()</tt></a>
+jest wywo&#322;ana zanim klasa&nbsp; Context zostanie za&#322;adowana podane warto&#347;ci nadpisuj&#261; wartosci systemowe.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static void <b>setDefaults</b>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Properties.html">Properties</a> </tt><em>w&#322;a&#347;ciwo&#347;ci</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">import pnuts.lang.*;<br>import java.util.*;<br>import java.io.*;<br><br>public class Test {<br>    public static void main(String[] args){<br>        try {<br>            Properties p = new Properties();<br>	    p.load(Test.class.getResourceAsStream("test.properites"))<br>            Pnuts.setDefaults(p);<br>	    Context context = new Context();<br>            ...<br>        } catch (IOException e){<br>	    ...<br>        }<br>    }<br>}<br></pre>
+
+<p>Metoda pozwala na zmiean&#281; ustawie&#324; za pomoc&#261; pliku ustawie&#324; bez modyfikacji kodu.
+</p><p>Ustawiwnia nie mog&#261; by&#263; zmieniane po za&#322;adowaniu klasy kontekstu.
+</p>
+
+
+<h3>2. Konstruktor kopiuj&#261;cy klasy <tt>Context(Context)</tt></h3>
+
+<p>Konstruktor kopiuj&#261;cy&nbsp;&nbsp;<tt>Context(Context)</tt> tworzy kontekst kt&oacute;ry dziedziczy ustawiania podanego kontekstu.
+</p>
+
+<pre class="eg">import pnuts.lang.*;<br><br>public class Test {<br>    static Context defaultContext;<br>    static {<br>       defaultContext = new Context();<br>       defaultContext.usePackage("hibernate");<br>    }<br><br>    public Object execute(String script){<br>	Context context = new Context(defaultContext);<br>	try {<br>	    return Pnuts.load(script, context);<br>	} catch (Exception e){<br>	    e.printStackTrace();<br>	}<br>    }<br>}<br></pre>
+
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt;&nbsp;<font class="translate"> Ustawianie Kontekstu</font>
+</div>
+
+  </body></html>

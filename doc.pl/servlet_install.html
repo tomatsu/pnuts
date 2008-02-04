@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Podr&#281;cznik Pnuts</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h2>A Sample Configuration with Tomcat and Apache</h2>
+
+
+<blockquote>/usr/local/apache/conf/httpd.conf
+<table cellpadding=10>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+...
+Include /usr/local/jakarta-tomcat-4.0.4/conf/mod_jk.conf
+</pre>
+</td>
+</tr>
+</table><br>
+</blockquote>
+
+<blockquote>/usr/local/jakarta-tomcat-4.0.4/conf/mod_jk.conf
+<table cellpadding=10>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+LoadModule jk_module libexec/mod_jk.so
+
+&lt;IfModule mod_jk.c&gt;
+JkWorkersFile /usr/local/jakarta-tomcat-4.0.4/conf/workers.properties
+JkLogFile  logs/jk.log
+JkLogLevel error
+JkMount /*.pnut ajp13
+JkMount /WEB-INF/* ajp13
+&lt;/IfModule&gt;
+</pre>
+</td>
+</tr>
+</table><br>
+</blockquote>
+
+
+<blockquote>/usr/local/jakarta-tomcat-4.0.4/conf/workers.properties
+<table cellpadding=10>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+workers.tomcat_home=/usr/local/jakarta-tomcat
+workers.java_home=/usr/java/j2sdk1.4.0
+ps=/
+worker.list=ajp12, ajp13
+
+worker.ajp13.port=8009
+worker.ajp13.host=localhost
+worker.ajp13.type=ajp13
+</pre>
+</td>
+</tr>
+</table><br>
+</blockquote>
+
+
+
+<blockquote>
+<table cellpadding=10>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+% cd /usr/local/jakarta-tomcat-4.0.4
+% mv webapps webapps.bak
+% mkdir webapps
+% cd webapps
+% ln -s /usr/local/apache/htdocs ROOT
+</pre>
+</td>
+</tr>
+</table><br>
+</blockquote>
+<p>
+Resource: <a href="http://jakarta.apache.org/tomcat/tomcat-3.3-doc/tomcat-apache-howto.html">
+http://jakarta.apache.org/tomcat/tomcat-3.3-doc/tomcat-apache-howto.html</a>.
+</p>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<CENTER><H3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+
+  </body>
+</html>

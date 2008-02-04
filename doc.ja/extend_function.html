@@ -1,0 +1,148 @@
+<html>
+    <head>
+      <title>Pnuts ユーザーズガイド</title>
+      <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body 
+	    bgcolor="#ffffff" 
+	    text="#000000" >
+
+<!-- body start -->
+
+<h3>pnuts.lang.PnutsFunction</h3>
+
+<p>
+Pnutsの関数を表す<a href="../apidoc/pnuts/lang/PnutsFunction.html"><tt>pnuts.lang.PnutsFunction</tt></a> クラスのサブクラスを定義する場合、次のメソッドをオーバーライドします。
+</p>
+
+<h4><tt>exec()</tt> メソッド</h4>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected Object <b>exec</b>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> [] </tt><em>args</em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+</dl>
+</blockquote>
+<p>
+次のクラスは、関数を実行する前にパラメータの型があらかじめ与えておいた型に合致するか検査する機能を PnutsFunction クラスに追加したものです。
+</p>
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+import pnuts.lang.*;
+
+public class MyFunc extends PnutsFunction {
+   Class[] paramTypes;
+
+   public MyFunc(String name, Class[] paramTypes){
+     super(name);
+     this.paramTypes = paramTypes;
+   }
+
+   protected Object exec(Object[] args, Context context){
+     if (args.length != paramTypes.length){
+         throw new RuntimeException("type mismatch");
+     }
+     for (int i = 0; i < paramTypes.length; i++){
+         if (!paramTypes[i].isInstance(args[i])){
+             throw new RuntimeException("type mismatch");
+	 }
+     }
+     return super.exec(args, context);
+   }
+}
+</pre></td></tr>
+</table>
+</blockquote>
+
+<p>
+関数を定義するときに同じ名前の変数がすでに定義されていて、
+それが<a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a>
+オブジェクトである場合は、そのオブジェクトに新たな関数定義が
+追加されます。したがって、次の例では、関数 <tt>foo()</tt> を呼び出すと、上で定義した PnutsFunction のサブクラスのメソッドが呼び出されます。
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+foo = MyFunc("foo", [Integer])
+function foo(x) println(x + 1)
+
+foo(1)  ==> 2
+foo(1.0)  ==> error "java.lang.RuntimeException: type mismatch"
+</pre></td></tr>
+</table>
+</blockquote>
+
+<a name=added></a>
+<h4><tt>added()</tt> メソッド</h4>
+
+<p>
+<a href="../apidoc/pnuts/lang/PnutsFunction.html#added(int)"><tt>PnutsFunction.added()</tt></a> メソッドは、PnutsFunctionオブジェクトに n 引数の関数が追加されたときに呼ばれるフックとして利用できます。
+</p>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected void <b>added</b>(int </tt><em>n</em><tt>)</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+次のクラスは、関数定義が追加されるときにその関数がコンパイルされるように<tt>added()</tt>メソッドをオーバライドしています。
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+import pnuts.lang.PnutsFunction;
+import pnuts.compiler.Compiler;
+
+public class AutoCompile extends PnutsFunction {
+    Compiler compiler;
+
+    public AutoCompile(String name){
+	super(name);
+	this.compiler = new Compiler();
+    }
+
+    private boolean flag = false;
+
+    protected void added(int nargs){
+	if (!flag){
+	    flag = true;
+	    System.out.println("compiling " + getName());
+	    compiler.compile(this);
+	    flag = false;
+	}
+    }
+}
+</pre></td></tr>
+</table>
+</blockquote>
+
+<p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+foo = AutoCompile("foo")
+function foo(n) n
+</pre></td></tr>
+</table>
+</blockquote>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<center><h3>
+<a href="guide.html">戻る</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+</body>
+</html>

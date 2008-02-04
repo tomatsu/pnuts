@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Configuration に関するサポート</div>
+
+<h2>Configuration に関するサポート</h2>
+
+
+<h3>Public以外のメンバーへのアクセス</h3>
+
+<a name=nonPublicMemberAccess></a>
+
+<div class="box">
+<div class="synopsis"><b>nonPublicMemberAccess</b><tt>(</tt> { boolean <em>enable</em> }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>true</tt>が渡されると、それ以降、publicでないメンバーにアクセスできるようになります。
+逆に、<tt>false</tt>は、publicでないメンバーへのアクセスを無効にします。
+</p>
+
+<p>
+パラメータがない場合、この関数は、publicでないメンバーにアクセスできるかどうかを返します。
+</p>
+
+<div class="eg">例：
+<pre>
+nonPublicMemberAccess() ==> false
+nonPublicMemberAccess(true)
+"hello".value ==> ['h', 'e', 'l', 'l', 'o']
+nonPublicMemberAccess() ==> true
+</pre></div>
+
+<h3>Publicメンバーへのアクセス</h3>
+
+<a name=publicMemberAccess></a>
+
+<div class="box">
+<div class="synopsis"><b>publicMemberAccess</b><tt>(</tt> { boolean <em>enable</em> }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>true</tt>が渡されると、それ以降、publicメンバーにアクセスできるようになります。
+逆に、<tt>false</tt>は、publicメンバーへのアクセスを無効にします。
+</p>
+
+<p>
+パラメータがない場合、この関数は、publicメンバーにアクセスできるかどうかを返します。
+</p>
+
+<div class="eg">例：
+<pre>
+publicMemberAccess(true)
+import java.awt.Point
+pt = Point(1,2)
+println(pt.x, ", ", pt.y)
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Configuration に関するサポート</div>
+
+  </body>
+</html>

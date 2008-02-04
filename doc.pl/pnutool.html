@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="pl"><head>
+      
+      <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <meta http-equiv="Content-Style-Type" content="text/css">
+      <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt; &#346;rodowisko Pnuts
+</div>
+
+<!-- body start -->
+
+<h2>&#346;rodowisko GUI</h2>
+
+<a name="console"></a>
+<h3>pnuts -w</h3>
+
+<div class="box">
+<div class="synopsis">
+<code>C:\&gt; pnuts -w</code>
+</div>
+</div>
+<p>Gdy opcja <tt>-w</tt> jest podana w lini polece&#324; uruchamia si&#261; konsola graficzna napisana w&nbsp; Swing.
+</p>
+
+<center><img src="images/console.png"></center>
+
+<a name="pnutool"></a>
+<h3>Pnutool</h3>
+
+<p>Pnuttool jest wersja GUI interpretera napisana za pomoc&#261; samego
+j&#281;zyka Pnuts. Od czasu gdy j&#281;zyk mo&#380;e wywo&#322;ywa&#263; dowolne publiczne
+sk&#322;adowe klas Javy u&#380;ytkownik mo&#380;e testowa&#263; dowolne wywo&#322;ania publiczne
+za pomoc&#261; tego narz&#281;dzia.</p><div class="box">
+<div class="synopsis">
+<code>C:\&gt; pnuts -e pnutool()</code>
+</div>
+</div>
+
+<p>Pnuttool posiada dwa pola TextArea - roboczy (Workspace) i wyj&#347;cie
+(Output). Obszar roboczy s&#322;u&#380;y do wpisywania komend a na wyj&#347;ciowy
+&nbsp;podawany jest wynik wykonania polecenia.</p>
+
+<center><img src="images/pnutool.gif"></center>
+
+<p>
+<em></em></p><p><em>Open</em> otwiera pliki lokalne i wy&#347;wietla je w przestrzeni roboczej.  <em>Open URL</em> otwiera pliki z podanego adresu URL.</p><p>  <em>Save</em> zapisuje zawarto&#347;&#263; pola roboczego w pliku lokalnym.  <em>Load</em> wczytuje skrypty z lokalnego pliku. 
+</p>
+
+<h4>Ewaluacja skrypt&oacute;w</h4>
+<p>
+<em>Eval</em> wysy&#322;a komendy do interpretera. Je&#380;eli jest zaznaczony
+fragment tekstu to zaznaczenie to jest wysy&#322;ane jako komenda w
+przeciwnym przypadku ca&#322;o&#347;&#263; jest traktowana jak komenda.
+</p>
+
+<center><img src="images/filemenu.gif"></center>
+
+<p>
+Dla przyk&#322;adu: wprowad&#378;my poni&#380;sze komendy i wykonajmy ewaluacje (File-&gt;Eval lub Ctrl+J)&nbsp;
+</p>
+
+<pre class="eg">import("java.awt.*")<br>frame = Frame("test")<br>frame.setSize(100, 100)<br>frame.show()<br></pre>
+
+<p>Stworzony zostanie obiekt Frame z ustawionym rozmiarem 100x100
+pikseli, gdy nast&#281;pnie zmienimy rozmiar okienka i zaznaczymy linie z
+poleceniem zmiany rozmiaru i wykonamy ewaluacje to rozmiar ramki
+zostanie ponownie ustawiony na 100x100 ale nie poka&#380;e sie nowa ramka
+gdy&#380; zostanie wykonana tylko tak instrukcja.
+</p>
+<center><img src="images/selection.gif"></center>
+<p>
+
+<!-- body end -->
+
+</p><div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt;&nbsp;&#346;rodowisko Pnuts
+</div>
+
+</body></html>

@@ -1,0 +1,89 @@
+<html>
+    <head>
+      <title>Pnuts User's Guide</title>
+      <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> ->  Pnuts GUI Environment
+</div>
+
+<!-- body start -->
+
+<h2>GUI Environment</h2>
+
+<a name="console"></a>
+<h3>pnuts -w</h3>
+
+<div class="box">
+<div class="synopsis">
+<code>C:\> pnuts -w</code>
+</div>
+</div>
+<p>
+When <tt>-w</tt> option is given to the pnuts command, Swing-based GUI
+console comes up.
+</p>
+
+<center><img src="images/console.png"></img></center>
+
+<a name="pnutool"></a>
+<h3>Pnutool</h3>
+
+<p> Pnutool is a GUI version of the Pnuts script interpreter, which is written
+      entirely in the Pnuts script language.  Since the script language can call any public member of a Java class, a User can test any public call to see what happens using this tool.
+</p>
+
+
+<div class="box">
+<div class="synopsis">
+<code>C:\> pnuts -e pnutool()</code>
+</div>
+</div>
+
+<p>
+Pnutool has two TextAreas, a workspace area and an output area. The workspace area is where the User gives commands.  The output of the execution is printed in output area.
+</p>
+
+<center><img src="images/pnutool.gif"></center>
+
+<p>
+<em>Open</em> opens a local file and displays in the workspace area.  <em>Open URL</em> reads from specified URL and displays in the workspace area.  <em>Save</em> saves the contents of the workspace area into the specified local file.  <em>Load</em> loads a script from the local file system. 
+</p>
+
+<h4>Evaluating Scripts</h4>
+<p>
+<em>Eval</em> sends the User's input to interpreter. If some text in the workspace is selected, the selected text is sent as a command. If no text is selected the current line is sent as a command.
+</p>
+
+<center><img src="images/filemenu.gif"></center>
+
+<p>
+For example, input the following commands into the workspace and select all of the commands. Perform an evaluation, Eval(or type Ctrl-j).
+</p>
+
+<pre class="eg">
+import("java.awt.*")
+frame = Frame("test")
+frame.setSize(100, 100)
+frame.show()
+</pre>
+
+<p>
+A Frame object will be created and displayed as the result.  Then to change the size of the window, edit the 2nd command as '<tt>frame.setSize(200, 200)</tt>' and select the command text by dragging the mouse cursor.
+Select the Eval item again.  The window will become twice as large as before.
+</p>
+<center><img src="images/selection.gif"></center>
+<p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> ->  Pnuts GUI Environment
+</div>
+
+</body>
+</html>

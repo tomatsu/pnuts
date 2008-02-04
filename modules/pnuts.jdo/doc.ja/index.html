@@ -1,0 +1,307 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>pnuts.jdo module</title>
+    <META HTTP-EQUIV="Content-Type" CONTENT="text/html; CHARSET=EUC_JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.jdo</tt></div>
+
+    <h2><tt>pnuts.jdo</tt> モジュール</h2>
+
+<p>
+<tt>pnuts.jdo</tt>モジュールは、<a href="http://access1.sun.com/jdo/">Java Data Object</a> APIの上に高レベルな関数を定義します。</P>
+
+<ul>
+<li><a href="#openJDO">openJDO</a>
+<li><a href="#add"><em>jdo</em> . add</a>
+<li><a href="#find"><em>jdo</em> . find</a>
+<li><a href="#list"><em>jdo</em> . list</a>
+<li><a href="#delete"><em>jdo</em> . delete</a>
+<li><a href="#update"><em>jdo</em> . update</a>
+<li><a href="#query"><em>jdo</em> . query</a>
+<li><a href="#currentTransaction"><em>jdo</em> . currentTransaction</a>
+<li><a href="#transaction"><em>jdo</em> . transaction</a>
+<li><a href="#getPersistenceManager"><em>jdo</em> . getPersistenceManager</a>
+<li><a href="#close"><em>jdo</em> . close</a>
+</ul>
+
+<a name=openJDO></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> = <b>openJDO</b> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a> </tt><em>properties</em><tt> )</tt></div>
+</div>
+
+<p>
+JDOへの接続を開始します。
+</p>
+
+<div class="eg">例：
+<pre>jdo = openJDO(loadProperties("lido_mysql.properties"))</pre></div>
+
+<a name=add></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>add</b> ( javax.jdo.PersistenceCapable </tt><em>object</em><tt> { , boolean <em>transaction</em> } )</tt></div>
+</div>
+
+<p>永続オブジェクト(PersisntenceCapableオブジェクト)を、JDOのストレージに追加します。</p>
+
+<P>２番目引数に<tt>true</tt>を指定すると、トランザクションの開始とコミットを伴います。
+デフォルトの値は<tt>false</tt>です。</P>
+
+<div class="eg">例：
+<pre>
+account = Account()
+account.name = &quot;Foo&quot;
+account.email = &quot;foo@bar&quot;
+jdo.add(account, true)
+</pre></div>
+
+<div class="eg">例：
+<pre>
+tran = jdo.currentTransaction()
+tran.begin()
+catch(JDOException, function (e) tran.rollback())
+account = Account()
+account.name = "Foo"
+account.email = "foo@bar"
+jdo.add(account, false)
+...
+tran.commit()
+</pre></div>
+
+<a name=find></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>find</b> ( Class </tt><em>class</em><tt> , String <em>filter_expression</em> )</tt> or</div>
+<div class="synopsis2"><tt>( Query </tt><em>query</em><tt> )</tt></div>
+</div>
+
+<p>
+クラス<em>class</em>の永続オブジェクトで、<em>filter_expression</em>を満たすものを検索します。もしあれば、最初に見つかったものを返します。見つからない場合は、nullを返します。</p>
+
+<blockquote>
+<table>
+<tr>
+<td>
+<table border=1 cellpadding=20>
+<tr>
+<td>
+<div>
+<tt>
+== != > < >= <= & && | || ~ + - * / !
+</tt>
+<div><tt>String.startsWith()</tt></div>
+<div><tt>String.endsWith()</tt></div>
+<div><tt>Collection.isEmpty()</tt></div>
+<div><tt>Collection.contains()</tt></div>
+            </DIV></td>
+</tr>
+</table>
+<tr><td align=center><em>filter_expression</em>で使える演算子</td></tr>
+</table>
+</blockquote>
+
+<div class="eg">例：
+<pre>
+user = jdo.find(Account, `name=="John"`)
+</pre></div>
+
+<p>
+パラメータは、jdo.query() 関数(後述)で得られるQuery オブジェクトでもかまいません。
+</p>
+
+<div class="eg">例：
+<pre>
+q = jdo.query(Account)
+q.filter = `name==&quot;John&quot;`
+user = jdo.find(q)
+</pre></div>
+
+<a name=delete></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>delete</b> ( javax.jdo.PersistenceCapable </tt><em>object</em><tt> { ,  boolean <em>transaction</em> } )</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a> </tt><em>collection</em><tt> { ,  boolean <em>transaction</em> } )</tt></div>
+</div>
+
+<p>
+永続オブジェクト（またはその集合）を、JDOのストレージから削除します。
+</p>
+
+<div class="eg">例：
+<pre>
+john = jdo.find(Account, `name=="John"`)
+jdo.delete(john)
+</pre></div>
+
+<a name=update></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>update</b> ( javax.jdo.PersistenceCapable </tt><em>object</em><tt> , new_properties { ,  boolean <em>transaction</em> } )</tt> or</div>
+<dd><tt>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a> </tt><em>collection</em><tt> , new_properties { ,  boolean <em>transaction</em> } )</tt></div>
+</div>
+<p>
+永続オブジェクト（またはその集合）の属性を変更します。
+</p>
+<P><em>new_properties</em>は、Map, String, 関数のいずれかで指定します。</P>
+<BLOCKQUOTE>
+<dl>
+  <dt>Map
+  <dd>変更のある属性名とその新しい値を定義します。
+  <dt>String
+  <dd>変更のある属性名とその新しい値をPnutsの式として与えます。
+  <dt>関数
+  <dd>変更対象のオブジェクトに対して呼び出す関数を指定します。
+</dl>
+</BLOCKQUOTE>
+
+<div class="eg">例：
+<pre>
+jdo.update(john, map([["email", "john@new"]]))
+jdo.update(john, `email="john@new"`)
+jdo.update(john, function(record) record.setEmail("john@new"))
+</pre></div>
+
+
+<a name=query></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>query</b> ( Class </tt><em>class</em><tt> {, <em>query_properties</em> } )</tt></div>
+</div>
+
+<p>Query オブジェクトを返します。Queryオブジェクトは他の関数<CODE>(find, list)</CODE>で利用されます。</p>
+
+<p><CODE>query()</CODE>関数で得られるQueryオブジェクトに対しては、次の属性を定義できます。
+<BLOCKQUOTE>
+<dl>
+  <dt>ordering
+  <dd>ソート順序を指定する。"ascending"、または、"descending
+  "の後に、"フィールド名1,フィールド名2,..."を続けたもの。（例："ascending
+  age"）
+  <dt>filter
+  <dd>検索条件を指定する。find()関数で指定する式と同じ。
+  <dt>ignoreCache
+  <dd>キャッシュを利用するかどうかを指定する。trueまたはfalse
+</dl>
+</BLOCKQUOTE>
+
+<div class="eg">例：
+<pre>
+q = jdo.query(Account)
+q.filter = `name.startsWith("john")`
+q.ordering = `ascending age`
+john = jdo.find(q)
+</pre></div>
+
+<p>
+Query作成時に、設定したい属性を<em>query_properties</em>に指定することもできます。
+この場合、<em>query_properties</em>には、Map またはPnutsの式を指定します。
+</p>
+
+<div class="eg">例：
+<pre>
+q = jdo.query(Account, map([[&quot;filter&quot;, `name.startsWith(&quot;john&quot;)`]])
+john = jdo.find(q)
+
+q = jdo.query(Account, `filter = name.startsWith(&quot;john&quot;)`)
+john = jdo.find(q)
+</pre></div>
+
+
+<a name=list></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>list</b> ( Class </tt><em>class</em><tt> , String <em>query_properties</em> )</tt> or</div>
+<div class="synopsis2"><tt>( Query </tt><em>query</em><tt> )</tt></div>
+</div>
+
+<p>
+クエリを実行した結果のCollectionを求めます。
+</p>
+
+<div class="eg">例：
+<pre>
+q = jdo.query(Account, "age < 20")
+kids = jdo.list(q)
+printAll(kids)
+</pre></div>
+
+<a name=currentTransaction></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>currentTransaction</b> ( ) </tt></div>
+</div>
+
+<p>
+<tt>currentTransaction()</tt>は現在のトランザクションを返します。
+</p>
+
+<div class="eg">例：
+<pre>
+tran = jdo.currentTransaction()
+tran.begin()
+catch(Exception, function (e) tran.rollback())
+for (i : 0..num - 1){
+  jdo.add(account[i], false)
+}
+tran.commit()
+</pre></div>
+
+<a name=transaction></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>transaction</b> ( <em>func</em>(PersistenceManager) ) </tt>
+</div>
+</div>
+
+<p>
+<tt>transaction()</tt>は指定された関数をトランザクションの中で実行します。関数の実行中に例外が発生した場合はrollbackします。
+</p>
+
+<div class="eg">例：
+<pre>
+jdo.transaction(function (jdo){
+  for (i : 0..num - 1){
+    jdo.add(account[i])
+}
+})
+</pre></div>
+
+
+<a name=getPersistenceManager></a>
+<table border=1 width=90% cellpadding=10>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>getPersistenceManager</b> ( )</tt></div>
+</div>
+
+<p>
+JDO への接続を表す PersistenceManager オブジェクトを返します。
+</p>
+
+<a name=close></a>
+
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . <b>close</b> ( ) </tt></div>
+</div>
+
+<p>
+JDO への接続を終了します。
+</p>
+
+<div class="eg">例：
+<pre>
+jdo.close()
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt></a> -> <tt>pnuts.jdo</tt></div>
+
+  </body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.utilモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ファイル操作</div>
+
+    <h2>ファイル操作</h2>
+
+<a name=exists></a>
+<div class="box">
+<div class="synopsis"><b>exists</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+</div>
+
+<p>
+指定されたファイルが存在するかどうかを返します。
+</p>
+
+<a name=isDirectory></a>
+
+<div class="box">
+<div class="synopsis"><b>isDirectory</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>isDirectory()</tt>は、指定されたファイルがディレクトリかどうかを返します。
+</p>
+
+<a name=canRead></a>
+<a name=canWrite></a>
+
+
+<div class="box">
+<div class="synopsis"><b>canRead</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+<div class="synopsis"><b>canWrite</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>fileName</b></em> <tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>canRead()</tt>は、指定されたファイルが読み込み可能かどうかを返します。
+<tt>canWrite()</tt>は、指定されたファイルが書き込み可能かどうかを返します。
+</p>
+
+<a name=ls></a>
+
+<div class="box">
+<div class="synopsis"><b>ls</b><tt>()</tt></div> 
+<div class="synopsis"><b>ls</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>directory</b></em><tt>)</tt></div>
+</div>
+
+<p>
+ディレクトリのリストを表示します。<em>directory</em>を指定しない場合は、
+プロパティ"user.dir"のファイルリストを表示します。
+</p>
+
+<a name=chdir></a>
+
+<div class="box">
+<div class="synopsis"><b>chdir</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>directory</b></em><tt>)</tt></div>
+</div>
+
+<p>
+カレントディレクトリを変更します(プロパティ"user.dir"を変更します)。
+</p>
+
+<a name=pwd></a>
+
+<div class="box">
+<div class="synopsis"><b>pwd</b><tt>()</tt></div>
+</div>
+
+<p>
+カレントディレクトリ(プロパティ"user.dir")を表示します。 
+</p>
+
+<a name="mkdir"></a>
+
+<div class="box">
+<div class="synopsis"><b>mkdir</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>directory</b></em><tt>)</tt> or </div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>directory</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>mkdir()</tt> はディレクトリを作成します。
+<p>
+
+<a name=renameTo></a>
+
+<div class="box">
+<div class="synopsis"><b>renameTo</b><tt>(</tt><em>old</em> <tt>, </tt><em>new</em><tt>)</tt> </div>
+</div>
+
+<p>
+<tt>renameTo()</tt> は、ファイル<em>old</em> を</em>new</em>にリネームします。
+</p>
+<p>
+<em>old</em>および<em>new</em>には、Fileまたは、カレントディレクトリからの相対パスを表すStringを指定します。
+</p>
+<pre class="eg">
+function moveFiles(files, dir){
+  for (f:files) renameTo(f, getFile(dir, f.name))
+}
+</pre>
+
+<a name=delete></a>
+
+<div class="box">
+<div class="synopsis"><b>delete</b><tt>(</tt><em>file</em><tt> {, boolean </tt><em>recursive</b></em><tt> })</tt> or </div>
+<div class="synopsis2"><tt>(</tt><em>files[]</em><tt> {, boolean </tt><em>recursive</b></em><tt> })</tt></div>
+</div>
+
+<p>
+指定された <em>file</em>を消去します。
+<em>file</em> がディレクトリで、空でない場合、
+<em>recursive</em> に true が指定された場合のみ、そのディレクトリを消去します。
+</p>
+<p>
+<em>file</em>と<em>files</em>の要素には、Fileまたは、カレントディレクトリからの相対パスを表すStringを指定します。
+</p>
+
+<a name="walkDirectory"></a>
+
+<div class="box">
+<div class="synopsis"><b>walkDirectory</b><tt>(</tt><em>dir</em><tt> { , </tt><em>callback</em> (file) <tt> {,
+<em>enterFunc</em>(dir) , <em>exitFunc</em> (dir) }})</tt></div>
+</div>
+
+<p>
+<tt>walkDirectory()</tt> はディレクトリツリーを再帰的にたどります。
+</p>
+<pre class="eg">
+  printAll(walkDirectory("."))
+</pre>
+<p>
+<em>callback</em>()が指定された場合は、ディレクトリツリーを再帰的にたどりながら<em>callback</em>を呼び出します。
+<p>
+<em>enterFunc</em>()および<em>exitFunc</em>()にnullでない関数が指定された場合、ディレクトリに入るときと出るときにそれらの関数を呼び出します。<em>enterFunc</em>()は、<tt>true</tt>または<tt>false</tt>を返さなければなりません。
+<em>enterFunc</em>()がfalseを返すと、そのディレクトリ以下の処理をスキップします。
+<p>
+
+例えば、次の例はカレントディレクトリ以下の "*~" ファイルを消去する方法を示しています。
+</p>
+
+<pre class="eg">
+for (f : walkDirectory(".")){
+  if (f.name.endsWith("~")) delete(f)
+}
+</pre>
+
+<p>
+次の例はディレクトリの構造をインデントを使って表示します。
+<p>
+<pre class="eg">
+function pp(base){
+  level = 0
+  function indent(n) {
+    c = char[n * 2]
+    c[0..] = ' '
+    write(c)
+  }
+  function enter(d) {
+     level++
+     true
+  }
+  function leave(d) level--
+
+  walkDirectory(base,
+     function (f) {
+       indent(level)
+       println(f.getName())
+     },
+     enter,
+     leave)
+}
+</pre>
+
+<a name=copy></a>
+
+<div class="box">
+<div class="synopsis"><b>copy</b><tt>(</tt><em>source</b></em><tt>, </tt><em>destination</b></em> <tt>)</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>files[]</em><tt>, </tt><em>destination</b></em> <tt>)</tt></div>
+</div>
+
+<p>
+<em>source</em>がディレクトリの場合、<tt>copy()</tt> は <em>source</em> ディレクトリおよび以下のすべてのファイルを<em>destination</em> ディレクトリ以下にコピーします。
+<em>source</em>が通常のファイルで、<em>destination</em>がディレクトリの場合、<tt>copy()</tt> は <em>source</em> ファイルを<em>destination</em> ディレクトリ以下にコピーします。
+<em>source</em>と<em>destination</em>が両方ファイルの場合、<tt>copy()</tt> は <em>source</em> ファイルの内容を<em>destination</em> ファイルにコピーします。
+<em>files</em>に複数のファイル（またはディレクトリ）が指定された場合、その要素ごとにcopy()を行います。
+</p>
+
+<a name=cat></a>
+
+<div class="box">
+<div class="synopsis"><b>cat</b><tt>(</tt><em>file</b></em><tt> {, </tt><em>output</b></em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>files[]</em><tt> {,  </tt><em>output</b></em><tt> })</tt></div>
+</div>
+
+<p>
+<em>file</em>、または<em>files</em>の中のファイルの内容を読んで、<em>output</em>が指定された場合は、<em>output</em>に、指定されない場合は、getContext().getOutputStream()に書き込みます。<em>file</em>と<em>files</em>の要素には、Fileまたは、カレントディレクトリからの相対パスを表すStringを指定します。
+</p>
+
+
+<a name=createTempFile></a>
+
+<div class="box">
+<div class="synopsis"><b>createTempFile</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/api/java/lang/String.html">String</a> </tt><em>prefix</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>suffix</em><tt> {, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> <em>directory</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>createTempFile()</tt> は、指定したディレクトリにprefix と suffixを使って命名された空ファイルを作ります。Java2の場合、作成されたファイルは、仮想マシンが正常に終了するときに消去されます。
+</p>
+
+<a name=shellExpand></a>
+
+<div class="box">
+<div class="synopsis"><b>shellExpand</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>pattern</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>shellExpand()</tt> は <em>pattern</em> に名前がマッチするファイルを探して、見つかったファイル名を取り出すための<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Enumeration.html">Enumeration</a> オブジェクトを返します。
+<p>
+
+<pre class="eg">
+printAll(shellExpand("*/*/*pnut"))
+</pre>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> ファイル操作</div>
+
+  </body>
+</html>

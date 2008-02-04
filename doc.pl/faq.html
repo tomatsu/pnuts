@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Pnuts FAQ - Najcz&#281;&#347;ciej Zadawane Pytania</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body bgcolor="#ffffff">
+    <center><h2>Pnuts FAQ - Najcz&#281;&#347;ciej Zadawane Pytania</h2></center>
+
+<!-- body start -->
+
+<h3>0. Spis tre&#347;ci</h3>
+
+<blockquote>
+<dl>
+<dt>1. Pytania og&oacute;lne</dt>
+<a href="#1.1"><div class="section">Czym jest Pnuts ?</div></a>
+<a href="#1.2"><div class="section">Czy wymagana jest znajomo&#347;&#263; programowania w Javie ?</div></a>
+<a href="#1.3"><div class="section">Jakie s&#261; wymagania aby u&#380;uwa&#263; Pnuts ?</div></a>
+<a href="#1.5"><div class="section">Czy mog&#281; u&#380;uwa&#263; Pnuts w komercyjnych produktach ?</div></a>
+
+<dt>2. Pytania techniczne</dt>
+<a href="#2.1"><div class="section">Jakie s&#261; zalety?</div></a>
+<a href="#2.2"><div class="section">Jak szybko dzia&#322;a Pnuts?</div></a>
+<a href="#2.3"><div class="section">Czemu jest inna sk&#322;adnia ni&#380; w Javie ?</div></a>
+<a href="#2.4"><div class="section">Czy mog&#281; skonwertowa&#263; skrypty Pnuts do kodu &#380;r&oacute;d&#322;owego lub kodu bajtowego Java ?</div></a>
+<a href="#2.5"><div class="section">Jak mog&#281; definiowa&#263; klasy Javy ?</div></a>
+<a href="#2.6"><div class="section">Jak mog&#281; u&#380;ywa&#263; wyra&#380;e&#324; regularnych podobnie jak w Perl ?</div></a>
+
+</dl>
+</blockquote>
+
+<h3>1. Pytania og&oacute;lne</h3>
+
+<dl>
+<a name="1.1"></a>
+<dt><b>Czym jest Pnuts ?</b>
+
+</dt><dd>
+Pnuts jest skryptowym j&#281;zykiem maj&#261;cym dost&#281;p do API Javy w spos&oacute;b interaktywny.
+Pnuts mo&#380;e by&#263; w&#322;&#261;czony do Javy jako silnik skrypt&oacute;w oraz mo&#380;e by&#263; &#322;atwo wywo&#322;ywany z kodu Javy.
+<p>
+
+<a name="1.2"></a>
+</p></dd><dt><b>Czy wymagana jest znajomo&#347;&#263; programowania w Javie ?</b>
+
+</dt><dd>To zale&#380;y od tego jak wyko&#380;ystywa&#263; b&#281;dziesz Pnuts. Je&#380;eli
+istniej&#261;ce modu&#322;y spe&#322;niaj&#261; Twoje wymagania nie potrzebujesz
+bezpo&#347;rdnio wywo&#322;ywa&#263; API i nie potrzebujesz zna&#263; Javy. Je&#380;eli chcesz
+pisa&#263; w&#322;asne modu&#322;y potrzebna b&#281;dzie podstawowa znajomo&#347;&#263; j&#281;zyka Java.
+<p>
+
+<a name="1.3"></a>
+</p></dd><dt><b>Jakie s&#261; wymagania aby u&#380;uwa&#263; Pnuts ?</b>
+
+</dt><dd>
+Pnuts dzia&#322;a na platformie Java2SE. Zosta&#322; przetestowany na nast&#281;puj&#261;cych wersjach.
+<ul>
+<li>Sun JDK1.3.1
+</li><li>Sun J2SDK1.4.2
+</li><li>Sun J2SDK1.5 beta
+</li><li>IBM JDK1.3
+</li><li>IBM JDK1.4
+</li><li>Mac OS X JDK1.4.2</li><li>Dzia&#322;a na SUN J2SDK1.6 beta2</li></ul>
+<p></p>
+<p>
+<a name="1.5"></a>
+</p></dd><dt><b>Czy mog&#281; u&#380;uwa&#263; Pnuts w komercyjnych produktach ?</b>
+
+</dt><dd>Jasne. Pod warunkami licencji <a href="../LICENSE.txt">Warunki Licencyjne</a> &nbsp;mo&#380;na dystrybu&#322;owa&#263; Pnuts.
+</dd></dl>
+
+<hr>
+
+<h3>2.&nbsp;Pytania techniczne</h3>
+
+<dl>
+<a name="2.1"></a>
+
+<dt><b>Jakie s&#261; zalety wgl&#281;dem innych j&#281;zyk&oacute;w skryptowych?</b>
+</dt><dd>
+<dl>
+<dt>vs. j&#281;zki oparte o inne skryptowe j&#281;zyki nie oparte na Javie
+</dt><dd>Pnuts ko&#380;ysta z wielu mo&#380;liwosci Javy jak wszechstronno&#347;&#263; API,
+automatyczne zwalnianie pami&#281;ci oraz mo&#380;liwo&#347;ci maszyny wirtualnej jako
+takiej. Od czasu gdy Pnuts jest napisany w Javie dzia&#322;a na ka&#380;dej
+platformie wspieranej przez Jav&#281;.
+<p>Istniej&#261;ce syetemy j&#281;zyk&oacute;w skryptowych przenoszone do Javy
+musz&#261; duplikowa&#263; modele obiektowe z powodu zachowania kompatybilnosci.
+Kiedy taki j&#281;zyk zostanie u&#380;yty w aplikacji programista musi operowa&#263;
+na typach javy i opakowuj&#261;cych je typach rodzimych danego j&#281;zyka co
+mo&#380;e powodowa&#263; spadek wydajno&#347;ci oraz czytelno&#347;ci samego programu.
+</p><p>
+</p></dd><dt>vs. inne j&#281;zyki skryptowe bazuj&#261;ce na Javie
+</dt><dd>Najwi&#281;ksz&#261; zalet&#261; jest rozsze&#380;alny system modu&#322;&oacute;w
+umo&#380;liwiaj&#261;cy pisanie kodu na wy&#380;szym poziomie abstrakcji ni&#380; w Javie.
+&nbsp;Z system modu&#322;&oacute;w uzytkownik mo&#380;e u&#380;y&#263;&nbsp; potrzebnych
+modu&#322;&oacute;w standardowych jak i swoich w&#322;asnych jak zajdzie
+potrzeba.
+</dd><dt>vs. w por&oacute;wnaniu do czystego kodu Java
+</dt><dd>Pnuts zawiera du&#380;y zas&oacute;b modu&#322;&oacute;w pozwalaj&#261;cych programowa&#263; na wy&#380;szym poziomie.&nbsp;<font class="translate">
+U&#380;ytkownik mo&#380;e u&#380;ywa&#263; funkconalno&#347;ci Javy bez uzycia samego API Javy bezpo&#347;rdnio</font>.
+Dla programist&oacute;w Javy Pnuts mo&#380;e s&#322;u&#380;y&#263; jako narz&#281;dzie
+redukuj&#261;ce poziom komplikacji system&oacute;w przez kombinacj&#281; obu
+j&#281;zyk&oacute;w w jednej aplikacji.
+</dd></dl>
+</dd>
+
+<a name="2.2"></a>
+<dt><b>Jak szybko dzia&#322;a Pnuts?</b>
+
+</dt><dd>
+Pnuts jest jednym z&nbsp; <b>najszybszych</b>
+silnik&oacute;w skryptowych bazuj&#261;cych na Javie.
+Wydajno&#347;&#263; Pnuts jest zbli&#380;ona lub nawet lepsza ni&#380; j&#281;zyk&oacute;w
+przeniesionych do Javy tj. Perl, Lua, itd. Tu znajdziemy wyniki
+test&oacute;w wydajnosci <a href="http://pnuts.org/">Strona domowaPnuts</a>.
+
+<a name="2.3"></a>
+</dd><dt><b>Czemu jest inna sk&#322;adnia ni&#380; w Javie ?</b>
+</dt><dd>
+<dl>
+<dt>W Pnuts "class <em>classname</em>" oznacza klase a w Javie zwyczajne "<em>classname</em>".
+</dt><dd>Tu jest problem kiedy zdefiniujemy globaln&#261; zmienn&#261; "java" co
+powoduje &#380;e podpakiety i klasy z pakietu "java" nie mog&#261; byc prawid&#322;owo
+odczytane. Z tak&#261; sk&#322;adni&#261; odr&oacute;&#380;niamy nazwy klas od instancji
+zmiennych, problem mo&#380;na uzna&#263; za rozwi&#261;zany.
+<p>
+
+
+</p></dd><dt>
+Pnuts uzywa "::" w dost&#281;pie do sk&#322;adnik&oacute;w statycznych.
+</dt>
+<dd>Pnuts nie posiada typ&oacute;w zniennych oraz nie ma r&oacute;&#380;nicy
+mi&#281;dzy klas&#261; a typem oraz klasa o obiektem Class. Nowa sk&#322;adnia "::"
+pozwala na dost&#281;p do klasy jako objektu.
+</dd>
+</dl>
+<p>
+<a name="2.4"></a>
+</p></dd><dt><b>Czy mog&#281; skonwertowa&#263; skrypty Pnuts do kodu &#380;r&oacute;d&#322;owego lub kodu bajtowego Java ?</b>
+</dt><dd>
+Pnuts dzia&#322;a domy&#347;lnie z kompilacj&#261; w locie do kodu bajtowego. API pozwala na kompilacj&#281; skryptu do normalnego pliku Java class.
+<p>
+
+<a name="2.5"></a>
+</p></dd><dt><b>Jak mog&#281; definiowa&#263; klasy Javy ?</b>
+</dt><dd>
+<ul>
+<li>W wersji 1.1, <a href="lang.html#subclass">wyra&#380;enie 'new'</a> pozwala na dziedziczenie klasy oraz kreacj&#281; instancji tej klasy.
+</li><li>funkcja <a href="../modules/pnuts.lib/doc/subclassing.html">classGenerator()</a>
+zdefiniowana w module&nbsp;&nbsp; pnuts.lib &nbsp; pozwala na
+definiowanie klas Javy przez mapowanie funkcji na metody lub
+definiowanie w&#322;a&#347;ciwosci JavaBeans.
+</li><li><a href="../extensions/jdtc/doc/index.html">modu&#322; jdtc</a> pozwala na kompilacj&#281; prawdziwego kodu Javy.</li><li>Od wersji 1.2 Pnuts posiada mo&#380;liwo&#347;&#263; definiowania klas, zobacz&nbsp;<a href="lang.html#classdef">Definiowanie klas</a> </li></ul>
+<p>
+
+<a name="2.6"></a>
+</p></dd><dt><b>Jak mog&#281; u&#380;ywa&#263; wyra&#380;e&#324; regularnych podobnie jak w Perl ?</b>
+
+</dt><dd>
+<tt>modu&#322; </tt><a href="../modules/pnuts.regex/doc/index.html"><tt>pnuts.regex</tt></a> posiada funkcj&#281; obs&#322;uguj&#261;ce wyra&#380;enia regularne.
+<p>
+
+</p></dd></dl>
+<p>
+
+<!-- body end -->
+
+</p><div class="footer">
+<a href="http://pnuts.org/">Strona domowa Pnuts</a>
+<tt>|</tt>
+<a href="guide.html">Podr&#281;cznik Pnuts</a>
+<tt>|</tt> <a href="lang-TOC.html">J&#281;zyk Pnuts</a>
+<tt>|</tt> <a href="quickref.html">&#346;ci&#261;gawka</a>
+<tt>|</tt>
+<a href="../apidoc/index.html">Dokumentacja API</a>
+<tt>|</tt>
+FAQ
+<tt>|</tt> <a href="http://pnuts.org/snapshot/latest/">Pobieranie</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">Licencja</a>
+<tt>|</tt>&nbsp;<a href="mailto:pnuts-admin@Japan.Sun.COM">Kontakt</a>
+</div>
+
+  </body></html>

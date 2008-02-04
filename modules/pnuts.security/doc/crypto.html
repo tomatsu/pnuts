@@ -1,0 +1,103 @@
+ <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.security module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> Cryptography</div>
+
+    <h2>Cryptography</h2>
+
+<p>
+Functions in this section simplify the usage of <a href="http://java.sun.com/products/jce/index.html">Java Cryptography Extension</a>.  Sun JCE1.2 or compatible software is required.
+</p>
+
+<div class="box">
+<div class="synopsis"><b>getSecretKey</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>algorithm</em><tt> )</tt></div>
+</div>
+
+
+<p>
+<tt>getSecretKey()</tt> creates a <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">javax.crypto.SecretKey</a> object with the specified algorithm.
+</p>
+
+<div class="eg">e.g.
+<pre>
+key = getSecretKey("DES")
+key.getEncoded()    ==> [#DE, #A0, .... ]
+</pre>
+</div>
+
+<a name=encrypt></a>
+<div class="box">
+<div class="synopsis"><b>encrypt</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt></div>
+</div>
+
+<p>
+If <em>secretkey</em> is specified as the first parameter, <tt>encrypt()</tt> reads data from <em>input</em> and encrypts them with the secretkey.  If <em>password</em> is specified as the first parameter,  <tt>encrypt()</tt> creates a secret key based on the password and encrypts the <em>inputstream</em>.
+</p>
+<p>
+If <em>output</em> is specified, the encrypted data is written to the stream.  Otherwise, <tt>encrypt()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">java.io.PipedInputStream</a> object which can be read with <a href="stream.html"><tt>read()</tt></a> function. 
+</p>
+
+<div class="eg">e.g.
+<pre>
+encrypt(key, "plain.txt", "encrypted.dat")
+</pre></div>
+
+<a name=decrypt></a>
+<div class="box">
+<div class="synopsis"><b>decrypt</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, </tt><em>input</em><tt> {, </tt><em>output</em><tt> } )</tt></div>
+</div>
+
+<p>
+If <em>secretkey</em> is specified as the first parameter, <tt>decrypt()</tt> reads data from <em>input</em> and decrypts them with the secretkey.  If <em>password</em> is specified as the first parameter,  <tt>decrypt()</tt> creates a secret key based on the password and decrypts the <em>input</em>.
+</p>
+<p>
+If <em>output</em> is specified, the decrypted data is written to the stream.  Otherwise, <tt>decrypt()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">java.io.PipedInputStream</a> object which can be read with <a href="stream.html"><tt>read()</tt></a> function. 
+</p>
+<p>
+<em>input</em> must be either InputStream, File, String (file name), or URL.
+<em>output</em> must be either File, String(file name), OutputStream.</p>
+</p>
+
+
+<div class="eg">e.g.
+<pre>
+decrypt(key, "encrypted.dat", "plain.txt")
+</pre></div>
+
+<a name=sealObject></a>
+<a name=unsealObject></a>
+<div class="box">
+<div class="synopsis"><b>sealObject</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt></div>
+<div class="synopsis"><b>unsealObject</b><tt>( <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SecretKey.html">SecretKey</a> </tt><em>secretkey</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt> or </div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>password</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Serializable.html">Serializable</a> </tt><em>object</em><tt> )</tt></div>
+</div>
+
+<p>
+If <em>secretkey</em> is specified as the first parameter, <tt>sealObject()</tt> returns a <a href="http://java.sun.com/security/JCE1.2/spec/apidoc/javax/crypto/SealedObject.html">SealedObject</a> created by encrypting <em>object</em> with the secretkey.  If <em>password</em> is specified as the first paramter,  <tt>sealObject()</tt> creates a secret key based on the password and encrypts the <em>object</em>.
+</p>
+<p>
+<tt>unsealObject()</tt> retrieves the original object from a sealed object.
+</p>
+
+<div class="eg">e.g.
+<pre>
+sealed = sealObject(key, "something secret")
+unsealObject(key, sealed)
+</pre></div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> Cryptography</div>
+
+  </body>
+</html>

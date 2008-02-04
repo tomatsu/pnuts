@@ -1,0 +1,65 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.security module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> ->
+Message Digest</div>
+
+    <h2>Message Digest - MD5, SHA</h2>
+
+<a name=md5></a>
+
+<div class="box">
+<div class="synopsis"><b>md5</b><tt>(byte[] </tt><em>array</em> <tt> {, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>md5()</tt> calculates MD5 value using the specified object and
+returns the result as a byte array.  
+</p>
+<a name=md5string></a>
+
+<div class="box">
+<div class="synopsis"><b>sha</b><tt>(byte[] </tt><em>array</em> <tt> {, int
+</tt><em>offset</em> <tt>, int </tt><em>length</em><tt> } )</tt>or </div> 
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>input</em><tt>) or</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>string</em><tt>)</tt></div>
+</div>
+
+
+<p>
+<tt>sha()</tt> calculates SHA value using the specified object and
+returns the result as a byte array.
+<p>
+
+<div class="eg">e.g.
+<pre>
+md5("foo")   ==> [#9A, #87, #42, #07, #6E, #F9, #FF, #A5, #59, #1F, #63, #37, #04, #C2, #28, #6B]
+
+sha("foo")   ==> [#C5, #F4, #E7, #20, #32, #50, #17, #36, #75, #41, #74, #35, #4B, #E3, #C6, #47, #D9, #71, #B8, #08]
+
+hex(md5("foo")) ==> "9a8742076ef9ffa5591f633704c2286b"
+hex(sha("foo")) ==> "c5f4e72032501736754174354be3c647d971b808"
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.security</tt></a> ->
+Message Digest</div>
+
+  </body>
+</html>
+

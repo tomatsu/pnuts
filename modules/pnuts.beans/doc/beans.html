@@ -1,0 +1,252 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.beans module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.beans</tt></a> -> Functions</div>
+
+<a name="1"></a>
+<h3>Accessing Bean Properties</h3>
+
+<a name=getBeanProperty></a>
+<a name=setBeanProperty></a>
+<div class="box">
+<div class="synopsis"><b>getBeanProperty</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>property</em> <tt>)</tt></div>
+<div class="synopsis"><b>setBeanProperty</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>property</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>value</em><tt>)</tt></div>
+</div>
+<p>
+<tt>getBeanProperty()</tt> reads a Bean propery of an object.
+<tt>setBeanProperty()</tt> updates a Bean propery of an object.
+</p>
+
+
+<a name=setBeanProperties></a>
+<div class="box">
+        <div class="synopsis"><b>setBeanProperties</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> [ ]</tt> <em>array</em><tt>)</tt> or</div>
+      <div class="synopsis"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> </tt><em>map</em><tt>)</tt>
+      or
+      </div>
+      <div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> </tt><em>pkg</em><tt>)</tt>
+      or
+      </div>
+      <div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>expression_list</em><tt>)</tt></div>
+</div>
+
+<p>
+If the second argument is an object array, the properties of the <em>bean</em> are set by the key-value pairs in the array.
+</p>
+
+<pre class="eg">
+c1 = JCheckBox("Button1")
+setBeanPoperties(c1, [["mnemonic", '1'],
+                      ["actionCommand", "Button1"],
+                      ["selected", true]])
+</pre>
+
+<p>
+If the second argument is a <a href="../../../apidoc/pnuts/lang/Package.html">Package</a> or a Map object, the properties of the <em>bean</em> are set by the key-value pairs in the package.
+</p>
+
+<pre class="eg">
+ta = JTextArea(row[i])
+setBeanProperties(ta, map([["alignmentX", Component::LEFT_ALIGNMENT],
+		           ["background", Color::black],
+		           ["foreground", Color::white],
+		           ["lineWrap", true],
+		           ["wrapStyleWord", true],
+		           ["editable",false]]))
+</pre>
+
+<p>
+If the second argument is a <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> object, the expression is executed in a temprary package and then key-value pairs of the package are reflected to the bean properties.
+</p>
+
+<pre class="eg">
+setBeanProperties(ta, `name="foo"; alignmentX=Component::LEFT_ALIGNMENT`) 
+</pre>
+
+<p>
+If a key object is not included in the bean properties, it is just ignored.
+</p>
+
+<a name=getBeanProperties></a>
+<div class="box">
+<div class="synopsis"><b>getBeanProperties</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>bean</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>getBeanProperties()</tt> returns a HashMap object that represents the key-value pair of the bean properties.
+</p>
+
+
+<a name="2"></a>
+<h3>Event Callback</h3>
+
+<a name=bind></a>
+<a name=unbind></a>
+
+<div class="box">
+<div class="synopsis"><b>bind</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>component</em> <tt>,</div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>action</em> <tt>,</div>
+<div class="synopsis2"></tt><em>callBackFunction</em><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/EventObject.html">EventObject</a> </tt><em>eventObject</em><tt>))</tt></div>
+<div class="synopsis"><b>unbind</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>component</em> <tt>,</div>
+<div class="synopsis2"><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>action</em> { <tt>, </div>
+<div class="synopsis2"></tt><em>callBackFunction</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/EventObject.html">EventObject</a>
+</tt><em>eventObject</em> } <tt>))</tt></div>
+</div>
+
+<p>
+<tt>bind()</tt> registers a callback function to <em>component</em>.
+When some event associated with <em>action</em> occur for <em>component</em> 
+the registered function is called with the event object as parameter.
+</p>
+
+<p>
+<tt>unbind()</tt> cancels a callback function to <em>component</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+import("java.awt.*")
+f = frame("title")
+f.setLayout(FlowLayout())
+f.add(b1 = Button("OK"))
+f.show()
+bind(b1, "actionPerformed", function (e) println("hello"))
+</pre></div>
+
+<p>
+<em>action</em> is one of the followings.
+
+<ol>
+<li>A method name of a Listener class
+<li>Full quarified name of a Listener class + "." + a method name of the class
+</ol>
+
+<div class="eg">e.g.
+<pre>
+"actionPerformed"
+"java.awt.event.ActionListener.actionPerformed"
+</pre></div>
+
+<a name="3"></a>
+<h3>Bean Descriptors</h3>
+
+<a name=properties></a>
+<a name=events></a>
+<a name=methods></a>
+
+
+<div class="box">
+        <div class="synopsis"><b>properties</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>)</tt></div>
+        <div class="synopsis"><b>events</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>)</tt></div>
+        <div class="synopsis"><b>methods</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>)</tt></div>
+</div>
+
+<p>
+These functions return lists of Bean descriptors.
+</p>
+
+<pre class="eg">
+properties(class java.awt.Component)
+  ==> ["enabled", "foreground", "visible", "background", "font", "name"]
+
+events(class java.awt.Button)
+  ==> ["action"]
+</pre>
+
+<a name="4"></a>
+<h3>Listener Type and Method Names</h3>
+
+<a name=listenerType></a>
+<a name=listenerMethodNames></a>
+
+<div class="box">
+        <div class="synopsis"><b>listenerType</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>eventName</em>)</tt></div>
+        <div class="synopsis"><b>listenerMethodNames</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>eventName</em>)</TT></div>
+</div>
+
+<p>
+<tt>listenerType()</tt> returns a the event listener class of an Beans event.
+</p>
+<p>
+<tt>listenerMethodNames()</tt> returns a list of callback method names.
+</p>
+
+<pre class="eg">
+listenerType (class java.awt.Button, "action")   ==> java.awt.event.ActionListener interface
+listenerMethodNames (class java.awt.Button, "action")   ==> ["actionPerformed"]
+</pre>
+
+<a name=6></a>
+<h3>Encoding/Decoding Beans</h3>
+
+<a name=encodeBean></a>
+<a name=decodeBean></a>
+<div class="box">
+<div class="synopsis"><b>encodeBean</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+</tt><em>bean</em> <tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em> }<tt>)</tt></div>
+<div class="synopsis"><b>decodeBean</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>encodeBean()</tt> generates a XML representation from the
+specified bean object. If <em>output</em> is specified, the XML document is written
+to the output stream.  Otherwise, <tt>encodeBean()</tt> returns an
+InputStream that contains the generated XML document.
+<p>
+<tt>decodeBean()</tt> re-constructs a Bean object from the specified input stream of encoded data.
+</p>
+<p>
+<em>These functions are available on j2sdk1.4.0 or newer.</em>
+</p>
+
+<a name=7></a>
+<h3>Generating Bean Class</h3>
+
+<a name=generateBeanClass></a>
+<div class="box">
+<div class="synopsis"><b>generateBeanClass</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+</tt><em>typeMap</em> <tt>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>className</em> { , ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> )
+</tt><em>superClass</em> { , ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String[]</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class[]</a> )
+</tt><em>interfaces</em> { , (
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStram.html">OutputStream</a> </tt><em>outputStream</em> |
+<tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>  </tt><em>destinationFile</em> | <tt>
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">String</a> </tt><em>destinationFile</em> )
+ } } }<tt>)</tt>
+</div>
+</div>
+
+<p>
+<tt>generateBeanClass()</tt> generates a bean class on the fly.
+<em>typeMap</em> must be a Map of {property's name, property's type}.
+If 5th argument is specified, the generated byte code is
+written to the object.  Otherwise, the byte code is loaded and
+returns the generated class.  If <em>superClass</em> and/or <em>interfaces</em> is
+specified, it is used as the super class/interfaces of the class to generate.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.beans</tt></a> -> Functions</div>
+
+  </body>
+</html>

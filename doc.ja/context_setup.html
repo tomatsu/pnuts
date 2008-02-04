@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Contextのセットアップ
+</div>
+
+<!-- body start -->
+
+<h2>Contextのセットアップ</h2>
+
+<p>
+「<a href="pnutsImpl.html">インタプリタ実装のカスタマイズ</a>」、「<a href="configuration.html">Java APIアクセスのカスタマイズ</a>」で説明したように、<a href="../apidoc/pnuts/lang/Context.html">Context</a>オブジェクトはスクリプトの実行の仕方をカスタマイズすることができます。Contextオブジェクトを生成したあとで、<tt>setImplementation()</tt>メソッドや、<tt>setConfiguration()</tt>メソッド等を一つずつ呼び出すことで、Contextオブジェクトを希望どおりにセットアップすることもできますが、手順が長くなり、また柔軟性に欠けるので、もう少し便利な方法が用意されています。
+</p>
+
+<h3>1. プロパティによる設定</h3>
+<p>
+Pnuts APIが最初にロードされる時に、<a href="command.html#properties">所定のシステムプロパティ</a>
+が設定されていると、その一部はContextのセットアップに利用されます。たとえば、<tt>pnuts.lang.defaultPnutsImpl</tt>プロパティには、デフォルトのPnutsImplオブジェクトのクラス名を指定できます。
+</p>
+<pre class="eg">
+% java -Dpnuts.lang.defaultPnutsImpl=pnuts.compiler.CompilerPnutsImpl <em>メインクラス</em>
+</pre>
+<p>
+Contextクラスがロードされる前に<a href="../apidoc/pnuts/lang/Pnuts.html#setDefaults(java.util.Properties)"><tt>Pnuts.setDefaults()</tt></a>メソッドでプロパティ(java.util.Properties)を指定すると、システムプロパティをオーバーライドする形でそれらのプロパティが使われます。
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static void <b>setDefaults</b>( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a> </tt><em>properties</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.util.*;
+import java.io.*;
+
+public class Test {
+    public static void main(String[] args){
+        try {
+	    Properties p = new Properties();
+	    p.load(Test.class.getResourceAsStream("test.properites"));
+            Pnuts.setDefaults(p);
+	    Context context = new Context();
+            ...
+	} catch (IOException e){
+	    ...
+	}
+    }
+}
+</pre>
+
+<p>
+この方法では、プログラムを変更することなく、プロパティファイルに設定を変更することで、Contextのセットアップの仕方を変更することができます。
+<p>
+注) Pnuts API(特にContextクラス)が一旦ロードされるとデフォルトの設定を変更することができません。
+</p>
+
+
+<h3>2. コンストラクタ<tt>Context(Context)</tt>による設定の複製</h3>
+
+<p>
+Contextクラスのコンストラクタ<tt>Context(Context)</tt>は、与えられたContextの設定をそのまま受け継ぐContextオブジェクトを新たに作ります。
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+public class Test {
+    static Context defaultContext;
+    static {
+       defaultContext = new Context();
+       defaultContext.usePackage("hibernate");
+    }
+
+    public Object execute(String script){
+	Context context = new Context(defaultContext);
+	try {
+	    return Pnuts.load(script, context);
+	} catch (Exception e){
+	    e.printStackTrace();
+        }
+    }
+}
+</pre>
+
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Contextのセットアップ
+</div>
+
+  </body>
+</html>

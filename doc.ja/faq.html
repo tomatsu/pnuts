@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts FAQ</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+    <center><h2>Pnuts FAQ</h2></center>
+
+<h3>0. Table of Contents</h3>
+
+<blockquote>
+<dl>
+<dt>1. 一般的な質問</dt>
+<a href="#1.1"><div class=section>Pnuts とは何ですか?</div></a>
+<a href="#1.2"><div class=section>Java プログラミングの知識は必要ですか?</div></a>
+<a href="#1.3"><div class=section>Pnuts が動作する環境は?</div></a>
+<a href="#1.4"><div class=section>Sun の製品との関係は?</div></a>
+<a href="#1.5"><div class=section>Pnuts を組み込んだ製品を販売できますか?</div></a>
+
+<dt>2. 技術的な質問</dt>
+<a href="#2.1"><div class=section>他の言語と比べてメリットは何ですか?</div></a>
+<a href="#2.2"><div class=section>実行性能はどうですか</div></a>
+<a href="#2.3"><div class=section>なぜ Java と違うシンタックスを導入したのですか?</div></a>
+<a href="#2.4"><div class=section>Java のコードに変換したり、バイトコードにコンパイルできますか?</div></a>
+<a href="#2.5"><div class=section>Java のクラスを定義するにはどうすればよいですか?</div></a>
+<a href="#2.6"><div class=section>Perl のような正規表現を利用したいのですが</div></a>
+</dl>
+</blockquote>
+
+
+<h3>1. 一般的な質問</h3>
+
+<dl>
+<a name="1.1"></a>
+<dt><b>Pnuts とは何ですか?</b>
+<dd>
+Pnuts は、対話的に Java API にアクセスできるスクリプト言語です。
+Java プログラムに Pnuts のパッケージを埋め込んで Pnuts のプログラムを簡単に呼び出すことができます。
+<p>
+<a name="1.2"></a>
+<dt><b>Java プログラミングの知識は必要ですか?</b>
+
+<dd>
+それは、どのようにPnutsを使うかによります。
+Pnuts のモジュールを利用したスクリプトを書くだけであれば、Java API を直接呼び出すことがないため、Java API の知識は必要ありません。
+新たにモジュールを作成する場合や、既存のモジュールで提供されていない機能を利用する場合には、Java API の知識が必要になります。ただし、Java プログラミングに要求されるオブジェクト指向の知識や Java 言語の細かい知識は必要ありません。
+<p>
+
+<a name="1.3"></a>
+<dt><b>Pnuts が動作する環境は?</b>
+
+<dd>
+Pnuts は Java で記述されており、J2SEに準拠する環境で動作します。動作確認を行った環境は、以下の通りです。
+
+<ul>
+<li>Sun JDK1.3.1
+<li>Sun J2SDK1.4.2
+<li>Sun J2SDK1.5.0 beta
+<li>IBM JDK1.3
+<li>IBM JDK1.4
+<li>Mac OS X JDK1.4.2
+</ul>
+</p>
+
+<a name="1.4"></a>
+<dt><b>Sun の製品との関係は?</b>
+<dd>
+いずれも Sun Microsystems Inc. が Copyright を所有していること以外、関係ありません。Pnuts に関するお問い合わせはすべて <a href="mailto:pnuts-admin@Japan.Sun.COM">pnuts-admin@Japan.Sun.COM</a> まで。
+<p>
+
+
+<a name="1.5"></a>
+<dt><b>Pnuts を組み込んだ製品を販売できますか?</b>
+
+<dd>
+はい。使用許諾にしたがって使用料なしで Pnuts を再配布することができます。
+</dl>
+
+<hr>
+
+<h3>2. 技術的な質問</h3>
+
+<dl>
+<a name="2.1"></a>
+<dt><b>他の言語と比べてメリットは何ですか?</b>
+
+<dd>
+
+<dl>
+<dt>(1) 既存のスクリプト言語と比べて</dt>
+<dd>
+Pnuts はJavaプラットフォームの機能を有効に活用することができます。最適化された最新のJVMを利用することができるので、独自に開発されるVMに比べて性能面において有利です。
+また、PnutsはJavaだけで記述されているので、Javaがサポートされている環境では変更なしで動作します。
+<p>
+既存のスクリプト言語をJavaに移植したものは、互換性を保つためにどうしてもJavaと重複するオブジェクトモデルを持たざるを得ませんが、 Pnutsは新たに設計された言語なので、Javaのオブジェクトをそのまま（ラッパーなしで）利用できます。
+<dt>(2) 他のJavaベースの言語と比べて</dt>
+<dd>
+Pnutsの特徴は、ハイレベルの記述を可能にするモジュールおよびモジュールシステムがあることです。
+モジュールを活用すると、アプリケーションに応じて使用する関数(のグループ)を取捨選択することができますし、ユーザが独自のモジュールを追加することもできます。
+</dd>
+<dt>(3) Java言語と比べて</dt>
+<dd>
+Pnutsは、モジュール(スクリプトのためのレイヤ)が充実しているため、Java APIを直接使わないハイレベルなプログラミングが可能です。
+このため、Pnutsは、Java言語を習得していないユーザを含めた、より幅広いユーザ層をターゲットにしています。
+<p>
+また、PnutsとJavaを組合せた開発は、Javaだけで開発する場合にくらべて開発効率がよいので、経験豊富なJavaプログラマーは、システムの複雑さを軽減させるためのツールとしてPnutsを使うことができます。
+</dd>
+</dl>
+
+<a name="2.2"></a>
+<dt><b>実行性能はどうですか?</b>
+
+<dd>
+Pnutsの実行性能は、Perl, Python, luaなどのスクリプト言語に比べて遜色ありません。
+同じJavaベースのスクリプト言語の中でもPnutsはもっとも性能のよいシステムの１つです。
+<a href="http://pnuts.org/">Pnutsホーム</a>にベンチマーク結果へのリンクがあります。
+</dd>
+
+<a name="2.3"></a>
+<dt><b>なぜ Java と違うシンタックスを導入したのですか?</b>
+<dd>
+<dl>
+<dt>
+Pnuts では、クラスを指定する際に "class クラス名" というシンタックスを導入してい
+ます。
+<dd>
+仮に "java" というグローバル変数が定義されたときに "java" パッケー
+      ジのクラス名が正しく参照できなくなるという問題があります。クラス名とインスタンス変数の境界がはっきりするようなシンタック
+      スを導入すればこの問題をすっきりと解決できます。
+</dd>
+
+
+<dt>
+Pnuts では static フィールドを参照するために "::" という記号を使います。
+</dt>
+<dd>
+      Pnuts には、変数の型がないので、型としてのクラスと Class オブジェクトを区別なく使っています。Class オブジェクトも通常のオブジェクトと同様に操作できるようにするために Java と異なるシンタックスを採用しました。
+</dd>
+</dl>
+</blockquote>
+
+<a name="2.4"></a>
+<dt><b>Java のコードに変換したり、バイトコードにコンパイルできますか</b>
+<dd>
+Pnutsは、デフォルトで自動的にスクリプトをバイトコードに変換しながら実行します。また、Pnuts APIを使うと、プログラムからスクリプトをコンパイルすることができます。
+<p>
+<a name="2.5"></a>
+<dt><b>Java のクラスを定義するにはどうすればよいですか</b>
+<dd>
+<ul>
+<li>バージョン1.2では、<a href="lang.html#classdef">クラス定義</a>の文法を利用してクラスを定義することができます。
+<li>バージョン1.1では、<a href="lang.html#subclass">'new'式</a>を使って、サブクラスを定義してインスタンスを生成することができます。
+<li><a href="../modules/pnuts.lib/doc.ja/index.html">pnuts.libモジュール</a>の<a href="../modules/pnuts.lib/doc.ja/subclassing.html">classGenerator()</a>関数を利用する方法
+<li><a href="../extensions/jdtc/doc.ja/index.html">jdtcモジュール</a>を利用して本物のJavaプログラムをコンパイルする方法
+</ul>
+</dd>
+
+<a name="2.6"></a>
+<dt><b>Perl のような正規表現を利用したいのですが</b>
+<dd>
+Pnutsは、<a href="../modules/pnuts.regex/doc.ja/index.html"><tt>pnuts.regex</tt></a>モジュールで正規表現をサポートしています。
+
+
+</dl>
+</p>
+
+<!-- body end -->
+
+<div class="footer">
+<a href="http://pnuts.org/">Pnuts ホーム</a>
+<tt>|</tt>
+<a href="guide.html">ユーザーズガイド</a>
+<tt>|</tt>
+<a href="lang-TOC.html">Pnuts 言語</a>
+<tt>|</tt>
+<a href="quickref.html">クイックリファレンス</a>
+<tt>|</tt>
+<a href="../apidoc/index.html">API doc</a>
+<tt>|</tt>
+FAQ
+<tt>|</tt>
+<a href="/">ダウンロード</a>
+<tt>|</tt>
+<a href="../LICENSE.txt">ライセンス</a>
+<tt>|</tt>
+<a href="mailto:pnuts-admin@Japan.Sun.COM">お問い合わせ</a>
+</div>
+  </body>
+</html>

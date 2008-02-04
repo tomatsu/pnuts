@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> On-The-FlyコンパイラとASTインタプリタ
+</div>
+
+<!-- body start -->
+
+<h2>On-The-FlyコンパイラとASTインタプリタ</h2>
+
+<p>
+PnutsのOn-The-Fly(動的)コンパイラとは、スクリプトを実行する時にJavaのバイトコードをメモリ上に生成して読み込むことで、処理速度を速くするための仕組みです。<a href="command.html"><tt>pnuts</tt></a>コマンドは、デフォルトでOn-The-Flyコンパイラを使います。
+</p>
+一方、AST(Abstract Syntax Tree)インタプリタとは、スクリプトをコンパイルすることなく実行するしくみです。</p>
+
+
+<h3>pnutsコマンドのオプション</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts { -pure } { スクリプト }</tt></div>
+</div>
+
+<pre class="eg">
+C:\&gt; pnuts
+Pnuts version 1.0rc2 (04/16/2002), 1.3.1_02 (Sun Microsystems Inc.)
+Java HotSpot(TM) Client VM (mixed mode)
+&gt; getContext().getImplementation()
+pnuts.compiler.CompilerPnutsImpl@df503
+</pre>
+
+
+<p>
+ASTインタプリタでも、スクリプトを選択的にコンパイルすることができます。
+<a href="performance.html#choose">"パフォーマンス向上のためのヒント"</a>
+を参照。
+</p>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts { -O } { スクリプト }</tt></div>
+</div>
+
+<p>On-The-Flyコンパイラを用いる場合、<tt>-O</tt>オプションを指定すると、実行速度を優先します。この場合、エラーが起きたときの行番号は表示されません。
+</p>
+
+
+<!-- body end -->
+
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> On-The-FlyコンパイラとASTインタプリタ
+</div>
+
+  </body>
+</html>

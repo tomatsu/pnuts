@@ -1,0 +1,898 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <BODY>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Collections</div>
+
+    <h2>Collections</h2>
+<H3>Creating a Collection object</H3>
+<a name=list></a>
+
+<div class="box">
+<div class="synopsis"><b>list</b><tt>(</tt><tt> { </tt><em>elements</em><tt> {, </tt><em>type</em><tt> }} )</tt></div>
+</div>
+
+<P><TT>list() </TT>creates a <CODE>java.util.List</CODE> object, which represents an ordered collection.</P>
+<P>The first parameter defines the initial elements
+included in the collection object. <CODE>list()</CODE> takes either an array, an int, a Collection, or a Generator object as the first parameter. The meaning
+of each parameter is described below.</P>
+<P>The second parameter specifies the implementation
+of the collection type. For example, <CODE>list([1], &quot;L&quot;)</CODE> creates an LinkedList object with one element.
+If the second parameter is omitted, the default
+implementation, ArrayList, is selected.</P>
+
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 1st parameter</th>
+<th bgcolor=#eeeeee>The action</th>
+</tr>
+<tr class=wb>
+      <td>int</td>
+      <td>Create a List object specifying the initial capacity.</td>
+<tr class=wb>
+      <td>Collection, Iterator, Enumeration, <em>array</em>, Generator</TD>
+      <td>Create a List object with the elements.</td>
+    </TR>
+  </table>
+</BLOCKQUOTE>
+<p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 2nd parameter</th>
+<th bgcolor=#eeeeee>The List Type</th>
+</tr>
+<tr class=wb>
+     <td>&quot;A&quot; (default)</td>
+     <td>ArrayList</td>
+</tr>
+<tr class=wb>
+
+      <td>&quot;a&quot;</td>
+      <td>Array::asList()</td>
+</tr>
+<tr class=wb>
+      <td>&quot;V&quot;</td>
+      <td>Vector</td>
+</tr>
+<tr class=wb>
+      <td>&quot;L&quot;</td>
+     <td>LinkedList</td>
+</tr>
+</table>
+</blockquote>
+
+
+
+<a name=vector></a>
+
+<div class="box">
+<div class="synopsis"><b>vector</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>vector()</tt> is a short-cut for <tt>list([], "V")</tt>.
+See <a href="#list"><tt>list()</tt></a>.
+</p>
+
+<a name=set></a>
+
+<div class="box">
+<div class="synopsis"><b>set</b><tt>(</tt><tt> { </tt><em>elements</em><tt> {, </tt><em>type</em><tt> }} ) </tt></div>
+</div>
+
+<P><TT>set() </TT>creates a <CODE>java.util.Set</CODE> object, which
+represents a collection that
+contains no duplicate elements.</P>
+<P>The first parameter defines the initial elements
+included in the collection object. <CODE>set()</CODE> takes either an array, int, Collection, or Generator object as the first parameter. The meaning
+of each parameter is described below.</P>
+<P>The second parameter specifies the implementation
+of the collection type. For example, set([1],
+&quot;T&quot;) creates an TreeSet object
+with one element. If the second parameter
+is omitted, the default implementation, HashSet,
+is selected.</P>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 1st parameter</th>
+<th bgcolor=#eeeeee>The action</th>
+</tr>
+<tr class=wb>
+      <td>int</td>
+      <td>Create a Set object specifying the initial
+      capacity.</td>
+    </tr>
+<tr class=wb>
+      <TD>Collection, Iterator, Enumeration, <em>array</em></TD>
+      <td>Create a Set object with the elements.</td>
+   </TR>
+  </table>
+</BLOCKQUOTE>
+<p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 2nd parameter</th>
+<th bgcolor=#eeeeee>The Set Type</th>
+</tr>
+<tr class=wb>
+      <td>&quot;H&quot; (default)</td>
+<td>HashSet</td>
+</tr>
+<tr class=wb>
+      <td>&quot;T&quot;</td>
+<td>TreeSet</td>
+</tr>
+<tr class=wb>
+      <td>&quot;LH&quot;</td>
+<td>LinkedHashSet</td>
+</tr>
+<tr class=wb>
+      <td><em>function(x)</em></td>
+<td>TreeSet</td>
+</tr>
+  </table>
+</blockquote>
+
+<p>
+When a <em>function</em> is specified as 2nd parameter, the elements of returned TreeSet are sorted based on the results of <em>function</em> call.
+</p>
+<pre class="eg">
+set([1,2,3,4,5,6,7,8,9,10], function (x) -x) ==> [10,9,8,7,6,5,4,3,2,1]
+</pre>
+
+  <a name=map></a>
+
+<div class="box">
+<div class="synopsis"><b>map</b><tt>(</tt><tt> { </tt><em>elements</em><tt> {, </tt><em>type</em><tt> }} ) </tt></div>
+</div>
+
+<P><TT>map() </TT>creates a <CODE>java.util.Map</CODE> object, which represents a key-value mappings.</P>
+<P>The first parameter defines the initial elements
+included in the collection object. <CODE>map()</CODE> takes either a String, an array, int, or
+Map object as the first parameter. The meaning
+of each parameter is described below.</P>
+<P>The second parameter specifies the implementation
+of the collection type. For example, map(&quot;a=1&quot;,
+&quot;T&quot;) creates an TreeMap object
+with one element. If the second parameter
+is omitted, the default implementation, HashMap,
+is selected.</P>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 1st parameter</th>
+<th bgcolor=#eeeeee>The action</th>
+</tr>
+<tr class=wb>
+      <td><I>array</I></td>
+      <td>Interprets each element as a [key, value]
+      pair and define them in a Map object</td>
+    </tr>
+<tr class=wb>
+      <td>int</td>
+      <td>Creates a Map object specifying the initial
+      capacity.</td>
+    </tr>
+<tr class=wb>
+      <TD>Map</TD>
+      <TD>Copies the specifed Map.</TD>
+    </TR>
+<tr class=wb>
+      <td>java.lang.String</td>
+      <td>Evaluates the string in a temporaray package,
+      then puts the symbol-value pairs into
+      a Map
+      object.</td>
+    </tr>
+</table>
+</BLOCKQUOTE>
+<p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=75%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 2nd parameter</th>
+<th bgcolor=#eeeeee>The Map Type</th>
+</tr>
+<tr class=wb>
+      <td>&quot;H&quot; (default)</td>
+<td>HashMap</td>
+</tr>
+<tr class=wb>
+      <td>"HT"</td>
+<td>Hashtable</td>
+</tr>
+<tr class=wb>
+      <td>"T"</td>
+<td>TreeMap</td>
+</tr>
+<tr class=wb>
+      <TD>"WH"</TD>
+      <TD>WeakHashMap</TD>
+    </TR>
+<tr class=wb>
+      <TD>"LH"</TD>
+      <TD>LinkedHashMap (J2sdk1.4.0 or higher)</TD>
+    </TR>
+<tr class=wb>
+      <TD>"IH"</TD>
+      <TD>IdentityHashMap (J2sdk1.4.0 or higher)</TD>
+    </TR>
+<tr class=wb>
+      <TD>&quot;P&quot;</TD>
+      <TD>Properties</TD>
+    </TR>
+  </table>
+</blockquote>
+
+
+
+<div class="eg">e.g.
+<pre>p = set()
+p.add(&quot;foo&quot;)
+p.add(&quot;bar&quot;)
+for (i : p) println(i)</pre></div>
+
+
+
+<a name=hashTable></a>
+
+<div class="box">
+<div class="synopsis"><b>hashTable</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>hashTable()</tt> is a short-cut for <tt>map([], "HT")</tt>.
+See <a href="#map"><tt>map()</tt></a>.
+</p>
+
+<h3>Basic Operations on Collection</h3>
+
+<a name=isEmpty></a>
+
+<div class="box">
+<div class="synopsis"><b>isEmpty</b><tt>(</tt><em>elements</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>isEmpty()</tt> returns true if <em>elements</em> is empty. <em>elements</em> must be either Collection, Map, Array, or pnuts.lang.Package.
+</p>
+
+<a name=size></a>
+
+<div class="box">
+<div class="synopsis"><b>size</b><tt>(</tt><em>obj</em><tt>)</tt></div>
+</div>
+<p>
+The following table shows the mapping of the parameter types to the expected results.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Parameter</th>
+<th bgcolor=#eeeeee>Return</th>
+</tr>
+<tr class=wb><td>Array</td><td>Array size</td></tr>
+<tr class=wb><td>Collection</td><td>Collection's size</td></tr>
+<tr class=wb><td>Map</td><td>Map size</td></tr>
+<tr class=wb><td>String</td><td>Number of characters</td></tr>
+<tr class=wb><td>StringBuffer</td><td>Number of characters</td></tr>
+<tr class=wb><td>File</td><td>File size</td></tr>
+<tr class=wb><td>null</td><td>0</td></tr>
+</table>
+</blockquote>
+
+
+<a name="count"></a>
+
+<div class="box">
+<div class="synopsis"><b>count</b><tt>(</tt><em>obj</em><tt>)</tt></div>
+</div>
+
+<p>
+The following table shows the mapping of the parameter types to the expected results.
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Parameter</th>
+<th bgcolor=#eeeeee>Return</th>
+</tr>
+<tr class=wb><td>Enumeration</td><td>Number of Elements</td></tr>
+<tr class=wb><td>Iterator</td><td>Number of Elements</td></tr>
+<tr class=wb><td>Generator</td><td>Number of generated objects</td></tr>
+<tr class=wb><td>InputStream</td><td>Number of bytes read until EOF is seen</td></tr>
+<tr class=wb><td>Reader</td><td>Number of characters read until EOF is seen</td></tr>
+<tr class=wb><td>Other</td><td>size()</td></tr>
+</table>
+</blockquote>
+
+<a name=contains></a>
+
+<div class="box">
+<div class="synopsis"><b>contains</b><tt>(</tt><em>elements</em><tt>, </tt><em>elem</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>contains()</tt> returns whether <em>elem</em> is in <em>elements</em>, which can be either array, Collection, String, or CharSequence.
+</p>
+
+
+<div class="eg">e.g.
+<pre>
+contains([1,2,3], 1)
+   ==> true
+contains([1,2,3], 5)
+   ==> false
+</pre>
+</div>
+
+<a name=sort></a>
+<a name=rsort></a>
+
+<div class="box">
+<div class="synopsis"><b>sort</b><tt>(</tt><em>arrayOrCollection</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Comparator.html">Comparator</a> </tt><em>comparator</em><tt> } ) or</tt></div>
+<div class="synopsis2"><tt>(</tt><em>arrayOrCollection</em><tt> {, </tt><em>func</em><tt> (element) } )</tt></dd></div>
+<div class="synopsis"><b>rsort</b><tt>(</tt><em>arrayOrCollection</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Comparator.html">Comparator</a> </tt><em>comparator</em><tt> } ) or</tt></div>
+<div class="synopsis2"><tt>(</tt><em>arrayOrCollection</em><tt> {, </tt><em>func</em><tt> (element) } )</tt></div>
+</div>
+
+<p>
+<tt>sort()</tt> sorts the specified array or <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a>.  <tt>rsort()</tt> sorts in reverse order.
+<p>
+
+If <em>comparator</em> is specified, it is used to compare two elements
+  in the array (or List).
+If <em>func</em> is specified, the function is called with each
+  element of the array (or List), and the results are compared by the
+  default comparison operators of Pnuts.
+  When either of them is not specified, elements are compared by the default comparison operators <, >, =.
+
+<div class="eg">e.g.
+<pre>
+a = [5, 2, 3]
+sort(a) ==> [2, 3, 5]
+a       ==> [2, 3, 5]
+</pre>
+</div>
+
+<pre class="eg">
+v = Vector()
+v.addElement(2)
+v.addElement(3)
+v.addElement(1)
+sort(v)
+v       ==> [1, 2, 3]
+</pre>
+
+
+<pre class="eg">
+a = [5, 2, 3]
+sort(a, function (x) x % 4) ==> [5, 2, 3]
+a       ==> [5, 2, 3]
+</pre>
+
+<a name=reverse></a>
+<div class="box">
+<div class="synopsis"><b>reverse</b><tt>(</tt><em>arrayOrListOrMap</em><tt> )</tt></div>
+</div>
+
+<p>
+When an array or a list is specified, it reverses the order of the elements.
+</p>
+
+<pre class="eg">
+x = [1,2,3,4]
+reverse(x) ==> [4,3,2,1]
+</pre>
+
+<p>
+When a Map object is given as the parameter, it returns a Map object that reverses the key-value relationship.
+</p>
+<pre class="eg">
+x = map()
+x.a = 1
+x.b = 2
+x.c = 2
+reverse(x)  => {2=[c, b], 1=[a]}
+</pre>
+
+<a name="binarySearch"></a>
+<div class="box">
+<div class="synopsis"><b>binarySearch</b><tt>(</tt><em>arrayOrList</em>, <em>key</em><tt> )</tt></div>
+</div>
+<p>
+Searches the specified array or List for the specified value using the binary search algorithm.
+</p>
+
+<a name=filter></a>
+<div class="box">
+<div class="synopsis"><b>filter</b><tt>(</tt><em>array</em><tt> [], </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a>
+<em>collection</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a> <em>enum</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html">Iterator</a> <em>it</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a> <em>generator</em><tt>, </tt><em>condition</em><tt> )</tt></div>
+</div>
+
+
+<p>
+When either of array, Collection, Enumeration, or Iterator is given as the first argument, <tt>filter()</tt> returns an Iterator object, from which the elements that satisfy <em>condition</em> can be retrieved.
+</p>
+
+<em>condition</em> can be either a one-argument function that returns a boolean, or a string that represents a boolean expression.
+</p>
+
+<div class="eg">
+e.g.
+<pre>
+> for (i : filter([1, 2, 3], function (x)  x > 1)) println(i)
+2
+3
+</pre>
+</div>
+
+When a string is given as the condition, the leftmost identifier is interpreted as a field (a bean property) of each element.
+
+<div class="eg">
+e.g.
+<pre>
+x = set()
+x.add(date())
+x.add(date())
+
+filter(x, "time % 2 == 0")
+</pre>
+</div>
+
+<p>
+When a Generator is specified as the first argument, it returns a Generator object that generates the only objects that will be generated by the specified Generator and satisfy <em>condition</em>.
+</p>
+
+<div class="eg">
+e.g.
+<pre>
+function g() for (i: 1..10) yield i
+g2 = filter(g(), function (x) x % 2 == 0)
+printAll(g2)
+2
+4
+6
+8
+10
+</pre>
+</div>
+
+<a name=collect></a>
+
+<div class="box">
+<div class="synopsis"><b>collect</b><tt>(</tt><em>array</em><tt> [], </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a>
+<em>collection</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a> <em>enum</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html">Iterator</a> <em>it</em><tt>, </tt><em>condition</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a> <em>gen</em><tt>, </tt><em>condition</em><tt> )</tt></div>
+</div>
+<p>
+<tt>collect()</tt> returns a List object, while <tt>filter()</tt> returns an Iterator.
+<tt>collect()</tt> is defined as follows.
+<pre class=eg>
+function collect(c, cond) list(filter(c, cond))
+</pre>
+
+<div class="eg">
+e.g.
+<pre>
+x = set()
+x.add(date())
+x.add(date())
+
+collect(x, "time % 2 == 0")
+</pre>
+</div>
+
+<a name="join"></a>
+<div class="box">
+<div class="synopsis"><b>join</b><tt>(</tt><em>delimiter</em><tt>, </tt><em>array</em><tt> [] { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a></tt> <em>collection</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Iterator.html">Iterator</a></tt> <em>iter</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Enumeration.html">Enumeration</a></tt> <em>enum</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>delimiter</em><tt>, <a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a></tt> <em>generator</em><tt> { , </tt><em>callback(elem)</em> }<tt> )</tt></div>
+</div>
+<p>
+When <em>callback</em> is not given, this function joins a collection of objects into a single string with fields separated by the specified <em>delimiter</em>, and returns that new string.
+</p>
+<div class="eg">
+e.g.
+<pre>
+join(":", [1,2,3])               ---> "1:2:3"
+</pre>
+</div>
+
+<p>
+When <em>callback</em> is given, this function call the function passing each element and the specified delimiter in turn.
+<div class="eg">
+e.g.
+<pre>
+join(":", [1,2,3], println)
+1
+:
+2
+:
+3
+</pre>
+</div>
+
+<a name="reduce"></a>
+
+<div class="box">
+<div class="synopsis"><b>reduce</b><tt>(</tt><em>f (arg1, arg2)</em><tt>, </tt><em>elements</em><tt> { ,</tt> <em>first</em> <tt>} )</tt></div>
+</div>
+
+<p>
+Returns <em>f</em><tt> (</tt><em>f</em><tt> (</tt><em>f</em><tt> (</tt><em>f</em><tt> (</tt>elem1, elem2<tt>)</tt>, elem3<tt>)</tt>, elem4<tt>)</tt>, ...<tt>)</tt>.
+When <em>first</em> is specified, this function returns <em>f</em><tt> (</tt><em>f</em><tt> (</tt></em>f</em><tt> (</tt><em>f</em><tt> (</tt><em>first</em>, elem1<tt>)</tt>, elem2<tt>)</tt>, elem3<tt>)</tt>, ...<tt>)</tt>.
+</p>
+
+<div class="eg">
+e.g.
+<pre>
+reduce(function (x, y) x + y, [1,2,3,4]) // --> 10
+reduce(function (x, y) x * y, [1,2,3,4]) // --> 24
+</pre>
+</div>
+
+<a name="call"></a>
+<a name="applyFunction"></a>
+<div class="box">
+<div class="synopsis"><b>call</b><tt>(</tt><em>callable</em><tt>(</tt><em>arg</em>,
+...<tt>) { , </tt><em>arguments</em> } <tt>)</tt></div>
+<div class="synopsis"><b>applyFunction</b><tt>(</tt><em>callable</em><tt>(</tt><em>arg</em>,
+...<tt>) { , </tt><em>arguments</em> } <tt>)</tt></div>
+</div>
+<p>
+<tt>call()</tt> calls the specified function or class constructor (represented by the class) with <em>arguments</em>, which must be either an array, List, Iterator, Enumeration, or Generator.
+</p>
+<p>
+<tt>applyFunction()</tt> is deprecated and replace by <tt>call()</tt>.
+<p>
+
+</p>
+<div class="eg">e.g.
+<pre>
+func = println
+call(func, ["hello"])
+
+call(Object)
+
+call(int, ["100"])
+</pre>
+</div>
+
+<H3>Creating a Generator</H3>
+
+<a name=generator></a>
+<div class="box">
+<div class="synopsis"><b>generator</b><tt>(</tt> <em>elements</em> <tt>)</tt></div>
+</div>
+<p>
+Converts an array or a collection to a generator.
+</p>
+
+<div class="eg">
+e.g.
+<pre>
+g = generator([1,2,3])
+printAll(g[function (x) x < 2])
+</pre>
+</div>
+
+
+<a name=range></a>
+<div class="box">
+<div class="synopsis"><b>range</b><tt>(</tt> <em>start</em>, <em>end</em> <tt>)</tt></div>
+</div>
+<p>
+Returns a generator that generates integers from <em>start</em> to <em>end</em>.
+</p>
+
+<div class="eg">
+e.g.
+<pre>
+g = range(1, 100)
+printAll(g[function (x) x < 10])
+</pre>
+</div>
+
+<h3>Operations on LinkedList</h3>
+
+<a name=push></a>
+<a name=pop></a>
+<a name=shift></a>
+<a name=unshift></a>
+
+<div class="box">
+<div class="synopsis"><b>push</b><tt>( </tt><em>collection</em><tt>, </tt><em>element</em><tt> )</tt></div>
+<div class="synopsis"><b>pop</b><tt>( </tt><em>linkedListOrStack</em><tt> )</tt></div>
+<div class="synopsis"><b>shift</b><tt>( </tt><em>linkedList</em><tt> )</tt></div>
+<div class="synopsis"><b>unshift</b><tt>( </tt><em>linkedList</em><tt>, </tt><em>element</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>push()</tt> adds an <em>element</em> to the end of <em>collection</em>.
+<tt>pop()</tt> removes the last element of <em>linkedListOrStack</em> and returns it.
+<tt>shift()</tt> removed the first element of <em>linkedList</em> and returns it.
+<tt>unshift()</tt> adds an <em>element</em> to the beginning of <em>linkedList</em>.
+</p>
+<p>
+<tt>shift()</tt> and <tt>unshift()</tt>
+take a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/LinkedList.html">java.util.LinkedList</a>
+object.
+<tt>pop()</tt> takes <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/LinkedList.html">java.util.LinkedList</a>
+object or a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Stack.html">java.util.Stack</a> object.
+<tt>push()</tt> can take
+a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">java.util.Collection</a> object.
+</p>
+
+
+<h3>Operations on Map</h3>
+
+<a name=mapget></a>
+<a name=mapput></a>
+
+<div class="box">
+<div class="synopsis"><b>mapget</b><tt>(</tt><em>map</em><tt>, </tt><em>key</em><tt>)</tt></div>
+<div class="synopsis"><b>mapput</b><tt>(</tt><em>map</em><tt>, </tt><em>key</em><tt>, </tt><em>value</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>mapget()</tt> returns the value associated with the <em>key</em> in <em>map</em>.
+<p>
+<tt>mapput()</tt> binds the <em>value</em> for the <em>key</em> in <em>map</em>.
+</p>
+
+
+<h3>List Processing</h3>
+
+<a name="project"></a>
+
+<div class="box">
+<div class="synopsis"><b>project</b><tt>(</tt><em>elements</em><tt> , </tt><em>func</em><tt>(</tt><em>elem</em><tt>))</tt></div>
+</div>
+<p>
+<tt>project()</tt> takes either array, List, Set, Iterator, Enumeration, or Generator and returns an object of the same type.  
+<p>
+When <em>elements</em> is an array, it returns an immutable List object that each element is converted by <em>func</em> call.
+<p>
+When <em>elements</em> is a List, it returns an immutable List object that each element is converted by <em>func</em> call.
+<p>
+When <em>elements</em> is a Set, it returns an immutable Set object that each element is converted by <em>func</em> call.
+<p>
+When <em>elements</em> is an Iterator, it returns an Iterator object that each element is converted by <em>func</em> call.
+<p>
+When <em>elements</em> is an Enumeration, it returns an Enumeration object that each element is converted by <em>func</em> call.
+<p>
+When <em>elements</em> is a Generator, it returns a Generator that generates the results of <em>func</em> calls to the objects that will be generated by the specified Generator.
+</p>
+<p>
+When <em>elements</em> is a Map, it returns an immutable Map object that each value is converted by <em>func</em> call.
+</p>
+<p>
+If <em>elements</eM> is <tt>null</tt>, it returns <tt>null</tt>.
+<p>
+Note that the result of this function is immutable.
+</p>
+
+<div class="eg">
+e.g.
+<pre>
+printAll(project(range(1, 5), {x->x*100}))
+100
+200
+300
+400
+500
+</pre>
+</div>
+
+
+<a name="mapFunction"></a>
+
+<div class="box">
+<div class="synopsis"><b>mapFunction</b><tt>(</tt><em>func</em><tt>(</tt><em>elem</em><tt>),
+</tt><em>elements</em> { , <em>dest</em> }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>mapFunction()</tt> applies <em>func</em> to each of
+<em>elements</em>, which can be either Collection, Iterator,
+Enumeration, Map, pnuts.lang.Package, or pnuts.lang.Generator.
+When a Map or a Package is specified, <em>func</em> must take 2 arguments;
+a key and the value.
+<p>
+If a Collection object is specified to <em>dest</em>, the each result
+is added to it.  When <em>dest</em> is not given, the results of the function calls are discarded.
+
+<div class="eg">e.g.
+<pre>
+> mapFunction(function (x)  x * 100, [1, 2, 3], l = list())
+null
+> l
+[100, 200, 300]
+</pre>
+</div>
+
+<h3>Operations on Arrays</h3>
+
+<h4>Copy</h4>
+
+<a name=arraycopy></a>
+<div class="box">
+<div class="synopsis"><b>arraycopy</b><tt>(</tt><em>src</em><tt> [], </tt><em>dst</em><tt> [] )</tt></div>
+<div class="synopsis"><b>arraycopy</b><tt>(</tt><em>src</em><tt> [], int </tt><em>idx0</em> <tt>,
+	      </tt><em>dst</em><tt> [], int </tt><em>idx1</em> <tt>, int </tt><em>length</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>arraycopy()</tt> calls the <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/System.html#arraycopy(java.lang.Object, int, java.lang.Object, int, int)">System.arraycopy()</a> method to copy the specified source array to the destination array.
+</p>
+
+<div class="eg">e.g.
+<pre>
+a = [1, 2, 3]
+b = [0, 0, 0, 4, 5]
+arraycopy(a, b)
+b      ==> [1, 2, 3, 4, 5]
+</pre>
+</div>
+
+<p>
+To just create a copy of an array, concatenate an empty array.
+</p>
+<div class="eg">e.g.
+<pre>
+a = [1, 2, 3]
+b = a + []
+b      ==> [1, 2, 3]
+</pre>
+</div>
+
+<h4>Sublist</h4>
+
+<div class="box">
+<div class="synopsis"><em>arrayOrList</em><tt> [ </tt><em>start</em><tt> .. </tt><em>end</em><tt> ]</tt></div>
+<div class="synopsis"><em>arrayOrList</em><tt> [ </tt><em>start</em><tt> ]</tt></div>
+</div>
+
+<p>
+<em>arrayOrList</em><tt>[start..end]</tt> returns a partial list of <em>arrayOrList</em>.
+When <em>length</em> is omitted, it returns a partial list from <em>start</em> to the end.
+</p>
+
+<div class="eg">e.g.
+<pre>
+a = [1,2,3,4]
+a[1..2]    ==> [2, 3]
+a[1..]    ==> [2, 3, 4]
+</pre>
+</div>
+
+<h4>Conversion to Primitive Array Type</h4>
+
+<pre class="eg">
+(int[])[1,2,3,4,5]
+(float[])[1,2,3,4,5]
+(byte[])[#1,#2,#3,#4,#5]
+(char[])['a', 'b']
+(boolean[])[true, false]
+</pre>
+<p>
+Type cast to an array type makes a new array of the specified type and
+copy the elements to it.  If one of the elements cannot assign to the resulting array, ClassCastException is thrown.
+<p>
+Array concatenation can be used for the same purpose.
+</p>
+
+<div class="box">
+<pre class="wb">
+int[0] + [1,2,3,4,5]
+float[0] + [1,2,3,4,5]
+byte[0] + [#1,#2,#3,#4,#5]
+char[0] + ['a', 'b']
+boolean[0] + [true, false]
+</pre>
+</div>
+
+<h3>Aggregate Mode - Elements as a Whole</h3>
+
+<a name=aggregateMode></a>
+
+<div class="box">
+<div class="synopsis"><b>aggregateMode</b><tt>(</tt>{ <em>mode</em> }<tt>)</tt></div>
+</div>
+
+<p>
+When aggregate mode is <tt>true</tt>, field access of a Collection object (i.e. collection.field ) applies the operation to each element and returns the results.
+</p>
+
+
+<div class="eg">
+e.g.
+<pre>
+s = set()
+s.add(date(1))
+s.add(date(2))
+s.add(date(3))
+s.add(date(4))
+
+aggregateMode() ==> false
+s.time      ==> error
+s[time % 2 == 0].time ==> 2
+
+aggregateMode(true)
+s.time      ==> [1, 2, 3, 4]
+s[time % 2 == 0].time ==> [2, 4]
+</pre>
+</div>
+
+Also,  assignment expressions such as
+
+<pre class="eg">
+ <em>collection</em><tt>[</tt><em>predicate</em>(elem)...] = value
+</pre>
+
+replaces the elements of <em>collection</em> that satisfy <em>predicate</em> with the right-hand-side value. 
+
+<pre class="eg">
+<em>collection</em>.<em>name</em> = value
+</pre>
+
+assigns the right-hand-side value to the <em>name</em> field of all elements of <em>collection</em>.
+
+<div class="eg">
+e.g.
+<pre>
+s = list()
+s.add(date(1))
+s.add(date(2))
+s.add(date(3))
+
+aggregateMode(true)
+
+s[time % 2 == 1].time = 4
+s.time           ==> [4, 2, 4]
+s.time = 0
+s.time           ==> [0, 0, 0]
+</pre>
+</div>
+
+<p>
+When no arguments is specified, <tt>aggregateMode()</tt> checks if the current context is in aggregate mode, and returns <tt>true</tt> or <tt>false</tt>.
+When a boolean value is specified, it changes the aggregate mode of the current context.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Collections</div>
+
+  </BODY>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Event-Dispatcherスレッドを使ったスクリプトの実行</div>
+
+    <h2>Event-Dispatcherスレッドを使ったスクリプトの実行</h2>
+
+<a name="useEventThread"></a>
+<div class="box">
+<div class="synopsis"><b>useEventThread</b><tt>( boolean <em>flag</em> )</tt></div>
+</div>
+
+<p>
+<em>flag</em>が<tt>true</tt>の場合、pnuts.awt.EventQueueConfigurationつまり、それ以降スクリプトの中のメソッド(コンストラクタ)呼び出しやフィールド・アクセスは Event-Dispatcher スレッドで実行されます。
+<em>flag</em>が<tt>false</tt>の場合、<tt>useEventThread(true)</tt>を実行したスレッドが使われます。
+</p>
+
+<pre class="eg">
+useEventThread(true)
+Thread::currentThread()    ==> Thread[AWT-EventQueue-0,6,main]
+useEventThread(false)
+Thread::currentThread()    ==> Thread[main,5,main]
+</pre>
+<p>
+Event-Dispatcherスレッドで定義された関数は、mainスレッドから呼び出された場合でもEvent-Dispatcherスレッドで実行されます。mainスレッドで定義された関数は、Event-Dispatherスレッドから呼び出された場合でもmainスレッドで実行されます。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Event-Dispatcherスレッドを使ったスクリプトの実行</div>
+
+  </body>
+</html>

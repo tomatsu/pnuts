@@ -1,0 +1,187 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xml module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> Digesting XML Documents</div>
+
+    <h2>Digesting XML Documents</h2>
+
+<p>
+<a
+href="../../apidoc/pnuts/xml/DigestReader.html">pnuts.xml.DigestReader</a>
+class provides a mechanism to register callback actions for the
+specified paths of
+XML elements, which are executed as the parser traverses the
+corresponding elements.
+</p>
+<p>
+This section explains the details of DigestReader and DigestAction class, which are
+the most important classes to digest XML documents.  
+The pnuts.xml.action package provides a set of predefined DigestAction
+classes, which are described in <a href="digest_action.html">'Predefined DigestActions'</a>.  Also, <a href="digest_usage.html">'Example Usages of DigestReader'</a>
+illustrates how to use those actions.
+</p>
+
+<h3><a
+href="../../apidoc/pnuts/xml/DigestReader.html">pnuts.xml.DigestReader</a>
+class</h3>
+
+<h4>Configuring Rules</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>setRules</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[][]
+<em>rules</em>)</dt>
+</dl>
+</blockquote>
+
+<p>
+The rule is specified with this method in the
+standard format, which is an array of the following information.
+</p>
+<blockquote>
+[<em>Action</em>, <em>Path</em> {, <em>Keyword</em> }]
+</blockquote>
+
+<blockquote>
+<dl>
+<dt><em>Action</em>
+<dd>Defines what happens when the parser traverses the associated
+<em>Path</em>.  <em>Action</em> must be either an instance of <a
+href="#DigestAction">DigestAction</a> class, which is described in the
+next section, or an alias of the instance.  An alias can be defined with the
+<a href="../../apidoc/pnuts/xml/DigestReader.html#setAliases(java.util.Map)">setAlias()</a> method.
+<dt><em>Path</em>
+<dd><a href="">'Qualified Names</a> separated by /. Wildcard '*' can be used instead of actual names.  When <em>Path</em>
+starts with '//', it is used to match sub-elements. (e.g., /a/b/c, /a/*/c, //b/c, //*)
+<dt><em>Keyword</em> (optional)
+<dd>If specified, it is used to reference the results of <em>Action</em>.  If omitted, the relative
+path name from the closest parent path in the rule is used. If there
+is no parent path in the rule,  <em>Path</em> is used as the keyword.
+</dl>
+</blockquote>
+
+<p>
+When two or more actions are to be registered for a path, only the last action is taken.
+</p>
+
+<h4>Action Alias</h4>
+
+<p>
+<a href="../../apidoc/pnuts/xml/DigestReader.html">DigestReader</a> class allows to define aliases of <em>Actions</em>, which is stored in a
+Map object. DigestReader class provides the setter/getter methods of
+the Map object.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setAliases</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+<em>aliases</em> )</dt>
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> <b>getAliases</b> ( )</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Parsing</h4>
+<p>
+parse() method parses a XML document.  If any rule is defined for
+the elements that the parser traverses, DigestReader calls the actions according to the rules.  Initially <em>initialValue</em>
+is pushed onto the stack.  If it is omitted, an empty Map object is used as the initial value.  The value is returned after the parsing.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>parse</b> (</tt> ( <a href="http://java.sun.com/products/jdk/1.4.2/docs/api/org/xml/sax/InputSource.html">InputSource</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> ) <em>input</em> {, <a href="http://java.sun.com/j2se/1.4/java/lang/Object.html">Object</a> <em>initialValue</em> }<tt>)</tt></dt>
+<dd> throws SAXException, IOException</dd>
+</dl>
+</blockquote>
+
+<a name="DigestAction"></a>
+<h3><a
+href="../../apidoc/pnuts/xml/DigestAction.html">pnuts.xml.DigestAction</a>
+class</h3>
+<p>
+This class defines an <em>Action</em> in a rule.  The methods of this
+class are useful when implementing a subclass. 
+</p>
+
+<h4>Callback Methods</h4>
+
+<p>
+DigestAction's subclass should override at least one of the following
+methods.  The start() method is called when the parser reaches the beginning of
+the element that the <em>path</em> matches.
+The end() method is called when the parser reaches the end of the
+element that the <em>path</em> matches.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>start</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>path</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>key</em>, <a
+href="http://java.sun.com/products/jdk/1.4.2/docs/api/java/util/Map.html">Map</a>
+<em>attributeMap</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>top</em> <tt>);</tt></dt>
+<dt><tt>public void <b>end</b> (</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>path</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>key</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>text</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>top</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Stack Operations</h4>
+
+<p>
+An action may push/pop a value from/to the stack in a callback operation.
+The push() method can take an extra <em>path</em> argument, which is
+associated with the value.
+</p>
+<blockquote>
+<dl>
+<dt><tt>protected void <b>push</b> (</tt> { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>path</em>, } <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>value</em> )
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>pop</b> (  )</tt>
+</dl>
+</blockquote>
+
+<blockquote>
+<dl>
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getStackTopValue</b>()</tt></dt>
+<dd>Returns the value of stack top.
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <b>getStackTopPath</b>()</tt></dt>
+<dd>Returns the path with which the stack top value was pushed.
+</dl>
+</blockquote>
+
+<h4>List Management</h4>
+
+To be able to bind a List object to a series of elements, DigestReader
+maintains List objects on a stack during parsing.
+
+<blockquote>
+<dl>
+<dt><tt>protected void <b>registerListPath</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>path</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>list</em>)</tt></dt>
+<dd>Registers the <em>list</em> for the specified <em>path</em>.
+The <em>list</em> is unregistered when a different branch from the one
+the <em>list</em> was registered with, or an element of a parent path is found by the parser.
+<dt><tt>protected boolean <b>listAlive</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>path</em>)</tt></dt>
+<dd>Checks if the list registered with <em>path</em> is still managed by the DigestReader.
+<dt><tt>protected <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>currentListValue</b>()</tt></dt>
+<dd>Returns the most recent managed <em>list</em>.
+</dl>
+</blockquote>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> Digesting XML Documents</div>
+
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> コンソール</div>
+
+
+<h2>コンソール</h2>
+
+<h3>コンソールへの出力</h3>
+
+<p>
+標準的なメッセージを表示するために、<tt>pnuts.lib</tt>モジュールに以下の関数が定義されています。
+関数の名前は java.io.PrintWriter クラスのメソッドと同じ名前です。
+</p>
+
+<a name=println></a>
+<a name=print></a>
+<a name=write></a>
+<a name=flush></a>
+<div class="box">
+<div class="synopsis"><b>println</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>, ...)</tt></div>
+<div class="synopsis"><b>print</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>, ...)</tt></div>
+<div class="synopsis"><b>printAll</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Enumeration.html">Enumeration</a> </tt><em>enum</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Iterator.html">Iterator</a> </tt><em>iterator</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="../../../apidoc/pnuts/lang/Generator.html">Generator</a> </tt><em>generator</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a> </tt><em>collection</em><tt>)</tt></div>
+<div class="synopsis"><b>write</b><tt>(byte[] </tt><em>array</em> <tt>, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt>) or </tt></div>
+<div class="synopsis2"><tt>(char[] </tt><em>array</em> <tt>, int </tt><em>offset</em> <tt>, int </tt><em>length</em><tt>)</tt></div>
+<div class="synopsis"><b>write</b><tt>(byte[] </tt><em>array</em><tt>) or </tt></div>
+<div class="synopsis2"><tt>(char[] </tt><em>array</em><tt>)</tt></div>
+<div class="synopsis"><b>flush</b><tt>()</tt></div>
+</div>
+
+
+<p>
+<tt>print()</tt> は<em>objects</em>を一つずつ表示します。
+<tt>println()</tt> は、print()と同様ですが"line.separator" をストリームに追記します。
+<tt>write()</tt>は、ストリームクラスの <tt>write</tt>メソッドを呼び出します。
+</p>
+<p>
+<tt>flush()</tt>は、バッファの内容をフラッシュします。
+</p>
+<p>
+<tt>printAll()</tt>はパラメータの要素をすべて表示します。
+</p>
+
+
+<a name="getWriter"></a>
+<div class="box">
+<div class="synopsis"><b>getWriter</b><tt>()</div>
+</div>
+
+<p>
+<tt>getWriter()</tt>は、現在のコンソールメッセージ出力用のPrintWriterオブジェクトを返します。
+</p>
+
+<h3>エラーの表示</h3>
+
+<a name=error></a>
+<div class="box">
+<div class="synopsis"><b>error</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>string</em><tt> {, <a href="../../../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt> }</tt><tt>)</tt></div>
+</div>
+
+<p>
+<tt>error()</tt>は、エラーメッセージを表示します。<em>context</em>が指定された場合は、そのコンテクストのエラー出力にメッセージが表示されます。
+</p>
+
+<a name="getErrorWriter"></a>
+<div class="box">
+<div class="synopsis"><b>getErrorWriter</b><tt>()</div>
+</div>
+
+<p>
+<tt>getErrorWriter()</tt>は、現在のエラーメッセージ出力用のPrintWriterオブジェクトを返します。
+</p>
+
+<a name="setVerbose"></a>
+<div class="box">
+<div class="synopsis"><b>setVerbose</b><tt>( boolean <em>verbose</em> )</div>
+</div>
+
+<p>
+<tt>setVerbose()</tt> は、冗長モードを有効化または無効化します。
+</p>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> コンソール</div>
+
+  </body>
+</html>

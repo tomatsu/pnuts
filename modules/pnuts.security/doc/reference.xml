@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="md5">md5.html#md5</function>
+ <function name="sha">md5.html#sha</function>
+ <function name="decrypt">crypto.html#decrypt</function>
+ <function name="encrypt">crypto.html#encrypt</function>
+ <function name="getSecretKey">crypto.html#getSecretKey</function>
+ <function name="sealObject">crypto.html#sealObject</function>
+ <function name="unsealObject">crypto.html#unsealObject</function>
+ <function name="getPublicKey">sign.html#getPublicKey</function>
+ <function name="getPrivateKey">sign.html#getPrivateKey</function>
+ <function name="sign">sign.html#sign</function>
+ <function name="verifyObject">sign.html#verifyObject</function>
+ <function name="permissions">permissions.html#permissions</function>
+ <function name="secureFunc">permissions.html#secureFunc</function>
+</reference>

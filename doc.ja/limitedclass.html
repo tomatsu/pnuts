@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Java APIアクセスのカスタマイズ
+</div>
+
+<!-- body start -->
+
+<h2>公開クラス/メソッドを限定する</h2>
+
+<p>
+例えば、次のようなクラスがあったとして、<tt>test</tt>メソッドだけを公開したいとします。
+</p>
+
+<pre class="eg">
+public class MyClass {
+       public void test(){
+	      System.out.println("test");
+       }
+       public String getName(){
+	      return "foo";
+       }
+}
+</pre>
+
+<p>
+公開するメソッドを指定するには、JavaBeansのBeanInfoでメソッドディスクリプタを定義します。たとえば、<tt>MyClass</tt>クラスのメソッドディスクリプタを定義するには、<tt>MyClassBeanInfo</tt>クラスを<tt>java.beans.SimpleBeanInfo</tt>クラスのサブクラスとして次のように定義します。
+</p>
+
+<pre class="eg">
+import java.beans.*;
+
+public class MyClassBeanInfo extends SimpleBeanInfo {
+    public MethodDescriptor[] getMethodDescriptors(){
+	try{
+	    return new MethodDescriptor[]{
+		new MethodDescriptor(MyClass.class.getMethod("test", new Class[]{}))
+	    };
+	} catch (NoSuchMethodException e){
+	    return new MethodDescriptor[]{};
+	}
+    }
+}
+</pre>
+
+<p>
+<tt>pnuts.ext.LimitedClassesConfiguration</tt>オブジェクトに対して、<tt>registerClass()</tt>メソッドで、<tt>MyClass</tt>クラスを登録した上で、<tt>Context.setConfiguration()</tt>メソッドで設定すると、<tt>MyClass</tt>クラスの<tt>test</tt>メソッドだけを呼び出すことができるコンテクストができます。
+</p>
+
+<pre class="eg">
+import pnuts.ext.LimitedClassesConfiguration;
+
+Configuration conf = new JavaBeansConfiguration(false);
+conf.registerClass(MyClass.class);
+Context c = new Context();
+c.setConfiguration(conf);
+
+Pnuts.load(file, c);
+</pre>
+
+<p>
+<tt>pnuts.ext.LimitedClassesConfiguration</tt>オブジェクトが設定されたコンテクストでは、フィールドアクセスの式はBeanプロパティへのアクセスだと解釈されます。
+</p>
+
+<pre class="eg">
+myobj = MyClass()
+myobj.test()  ===> "test" と表示
+myobj.getName() ===> 例外
+myobj.name    ===> "foo"
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Java APIアクセスのカスタマイズ
+</div>
+
+  </body>
+</html>

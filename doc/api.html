@@ -1,0 +1,751 @@
+<html>
+    <head>
+      <title>Pnuts User's Guide</title>
+      <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Pnuts API Overview
+</div>
+
+<h2>Pnuts API Overview</h2>
+
+<h3>Introduction</h3>
+<p>
+Pnuts API is a set of classes that provides methods to use the scripting
+      functionalities of Pnuts.  No initialization step is
+      required to use the API and it can be called at any place in a Java program.
+
+      Pnuts interpreter shares the thread resource and the object
+      heap with the Java program that call the API.
+</p>
+
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Class</th>
+<th bgcolor=#eeeeee>Description</th>
+<tr class="wb">
+  <td class=wb>pnuts.lang.Pnuts</td>
+  <td class=wb>provides public static methods to execute scripts</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.Context</td>
+  <td class=wb>environment of script execution</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.Package</td>
+  <td class=wb>non-local name space</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.PnutsFunction</td>
+  <td class=wb>represents a Pnuts function</td>
+</tr>
+<tr class="wb">
+  <td class=wb>pnuts.lang.PnutsException</td>
+  <td class=wb>exception during script execution</td>
+</tr>
+</table>
+<center>Core classes of Pnuts API</center>
+</blockquote>
+
+<h3><a href="../apidoc/pnuts/lang/Pnuts.html">pnuts.lang.Pnuts</a></h3>
+
+<p>
+pnuts.lang.Pnuts class has static methods which starts an interpreter.
+<tt>Pnuts.eval()</tt> and <tt>Pnuts.load()</tt> are two of the most important methods to call Pnuts script from Java.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Object <b>eval</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>exp</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> in , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> <em>in</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> <em>scriptURL</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public static Object <b>load</b> (</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>rsrc</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>) throws FileNotFoundException;</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+The following example illustrates a simple usage of <tt>Pnuts.eval()</tt> method.
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.math.*;
+
+class Foo {
+   public static void main(String arg[]){
+       Context context = new Context();
+       BigInteger bint = (BigInteger)<b>Pnuts.eval</b>("1<<100", context);
+       ...
+   }
+}
+</pre>
+
+<p>
+<tt>pnuts.lang.Pnuts</tt> class can be instantiated only by <tt>Pnuts::parse(InputStream/Reader)</tt> methods.  The instance of <tt>pnuts.lang.Pnuts</tt> can be executed by <tt>run(Context)</tt> method.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> <em>in</em> <tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> <em>in</em> <tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+<em>in</em>, Object <em>scriptSource</em>, <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>) throws ParseException;</tt></dt>
+<dt><tt>public Object <b>run</b>(</tt> <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+The following program illustrates how to parse a Pnuts script first and execute it later.
+</p>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.io.*;
+
+class ParseTest {
+  public static void main(String a[]){
+     Pnuts p = null;
+     try {
+        p = Pnuts.parse(new FileInputStream(a[0]));
+     } catch (ParseException e1){
+        ...
+     } catch (IOException e2){
+        ...
+     }
+     ...
+     p.run(new Context());
+  }
+}
+</pre>
+
+<a name="ParseEnvironment"></a>
+<h4>Handling Multiple Parse Errors</h4>
+<p>
+One of the following methods is used to handle multiple parse errors.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a> <em>in</em> , <a href="../apidoc/pnuts/lang/ParseEnvironment.html">ParseEnvironment</a> <em>env</em><tt>) throws ParseException;</tt></dt>
+<dt><tt>public static Pnuts <b>parse</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+<em>in</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>scriptSource</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em>, <a href="../apidoc/pnuts/lang/ParseEnvironment.html">ParseEnvironment</a> <em>env</em><tt>) throws ParseException;</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.io.*;
+
+public class Test {
+    public static void main(String[] args) throws IOException {
+	try {
+	    FileReader r = new FileReader(args[0]);
+	    Pnuts.parse(r, new ParseEnvironment(){
+		    public void handleParseException(ParseException e) throws ParseException {
+			System.out.println(e);
+		    }
+		});
+	} catch (ParseException e){
+	    throw new Error(); // never happens
+	}
+    }
+}
+</pre>
+
+<h4>Script Source</h4>
+<p>
+Script source is an attribute of Pnuts object, which denotes the
+origin of the script, usually a URL object.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>getScriptSource</b>();</tt></dt>
+<dt><tt>public void <b>setScriptSource</b>(Object </tt><em>scriptSource</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+Script source information is mainly used by debugger.
+</p>
+
+<h3><a href="../apidoc/pnuts/lang/PnutsFunction.html">pnuts.lang.PnutsFunction</a></h3>
+
+<p>
+PnutsFunction is another entry point into the Pnuts interpreter.  It is used to
+      call a Pnuts function from Java.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Object <b>call</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>name</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>args</em>[], <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+class Foo {
+   public static void main(String arg[]){
+       Context context = new Context();
+       Pnuts.eval("function foo() 100", context);
+       ...
+       System.out.println(<b>PnutsFunction.call</b>("foo", new Object[]{}, context));
+   }
+}
+</pre>
+
+If a Java program holds a reference to PnutsFunction object, the function can be called directly by the following instance methods.
+
+<blockquote>
+<dl>
+<dt><tt>public Object <b>call</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+
+class Foo {
+   public static void main(String arg[]){
+       Context context = new Context();
+       PnutsFunction func = (PnutsFunction)Pnuts.eval("function foo() 100", context);
+       ...
+       System.out.println(<b>func.call</b>(new Object[]{}, context));
+   }
+}
+</pre>
+
+<p>
+The following methods retrieve the function definition from a PnutsFunction object.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public String <b>unparse</b>(</tt>int <em>narg</em><tt>);</tt></dt>
+<dd>The body of function definition.
+<dt><tt>public String[] <b>getImportEnv</b>(</tt>int <em>narg</em><tt>);</tt></dt>
+<dd>Array of imported Java package names and class names
+<dt><tt>public Package <b>getPackage</b>();</tt></dt>
+<dd>Package in which the function is defined.
+</dl>
+</blockquote>
+
+<pre class="eg">
+function f(n) n * n
+
+f.unparse(1) ==> "function f(n) n * n"
+f.getPackage() ==> package ""
+f.getImportEnv(1) ==> ["java.lang.*", "*"]
+</pre>
+
+<p>
+See also <a href="function.html">"Defining Functions in Java"</a>.
+</P>
+
+<a name="package"></a>
+<h3><a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a></h3>
+<p>
+Package is a name space which can be used for preventing name conficts
+among scripts.  Each Package has a symbol table to store non-local names.
+</p>
+
+<h4>Package Hierarchy</h4>
+
+<p>
+Package class has consturctors that takes the package name and the parent Package as the parameters. 
+A <a href="lang.html#package_hierarchy">package hierarchy</a> is implicitly or explicitly created by calling a
+constructor.  
+</p>
+<blockquote>
+<dl>
+<dt><tt>public <b>Package</b>();</tt></dt>
+<dt><tt>public <b>Package</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em><tt>);</tt></dt>
+
+<dt><tt>public <b>Package</b>(</tt><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a href="../apidoc/pnuts/lang/Package.html">Package</a>
+<em>parent</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>
+<b>Root package</b> is the topmost package in a package hierarchy.
+If <tt>null</tt> is specified as the <em>parent</em>, it becomes a new root package.
+When a script file is loaded, it is executed with the root package as
+the current package.
+</p>
+<p>
+When <em>parent</em> is not explicitly specified, the
+global package is used as the parent Package.  
+<tt>pnuts</tt> command uses the global package as the default root
+package.  As long as <tt>pnuts</tt> command is used, there is almost
+no need to create a new root package.
+</p>
+<p>
+Root packages need to be created to build <a href="isolation.html">multiple isolated scripting
+environments</a>.  For each isolated scripting environment, a root package is created. 
+Each root package builds a separate package tree. Non-local names used by
+each scripting environment are stored in some package of a package
+tree, in such a way that variables in a scripting environment do not interfere with other
+scripting environments.
+</p>
+<p>
+The global package is the default root package provided by Pnuts
+API. It is referenced by a static field of <a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a>
+class.  Therefore, the global package is never reclaimed by GC.  Other
+root packages can be reclaimed by GC if they are no longer referenced and ready
+for GC.
+</p>
+
+<h4>Sub-Package</h4>
+
+<p>
+The following method is used for creating a Package.  If
+Package with the name <em>pkgName</em> does not exists it creates the
+Package.  The created package is managed by the root package (of the
+current package) and identified by the package name.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public static Package <b>getPackage</b>(</tt><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>pkgName</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<h4>Access to the Symbol Table</h4>
+
+<p>
+The following methods are access methods to the symbol table in a Package. 
+</p>
+
+
+<blockquote>
+<dl>
+<dt><tt>public Object <b>get</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>set</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> value , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public boolean <b>defined</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>clear</b>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> , <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<P>
+Note that  <em>symbol</em> in these methods must be an interned String object.
+</P>
+<p>
+
+<h4>AutoloadHook</h4>
+
+<p>
+
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>autoload</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>file</em>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> <tt>);</tt></dt>
+<dt><tt>public void <b>autoload</b>(</tt> <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em>, <a href="../apidoc/pnuts/lang/AutoloadHook.html">AutoloadHook</a> <em>hook</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+
+If the variable is undefined in the symbol table when <a href="../apidoc/pnuts/lang/Package.html#get(java.lang.String,
+pnuts.lang.Context)"><tt>Package.get(String, Context)</tt></a> method is
+called, and a AutoloadHook for the variable has been registered by <a
+href="../apidoc/pnuts/lang/Package.html#autoload(java.lang.String, pnuts.lang.AutoloadHook)"><tt>autoload()</tt></a> method, the
+AutoloadHook is invoked.  When either no AutoloadHook is registered for the
+variable or the variable was not defined by invoking the AutoloadHook,
+<a href="../apidoc/pnuts/lang/Package.html#get(java.lang.String, pnuts.lang.Context)"><tt>Package.get(String, Context)</tt></a> method does the same thing for the parent Package.
+
+<h4>Modules and Packages</h4>
+
+<p>
+When <a
+href="../apidoc/pnuts/lang/Context.html#usePackage(java.lang.String)"><tt>Context.usePackage()</tt></a>
+method is called to install a module, the module initialization script
+is executed.  A sub-package bound to the module is created if it does
+not exist, and the module functions are stored in the package.
+</p>
+<p>
+Package objects maintains a list of exported names, when the package
+is used as a module.  Module initialization scripts should register
+the exported names with <a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)"><tt>Package.export()</tt></a>
+method.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>export</b>(</tt> <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> <tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>
+If no names are exported by the initialization script of a module,
+all named functions defined in the package is implicitly exported.
+</p>
+<p>
+When a module is implemented with <a
+href="../apidoc/pnuts/ext/ModuleBase.html"><tt>pnuts.ext.ModuleBase</tt></a>
+class, it does not have to call <tt>export()</tt> method directly, because <a
+href="../apidoc/pnuts/ext/ModuleBase.html#autoload(java.lang.String[], java.lang.String, pnuts.lang.Context)"><tt>autoload()</tt></a> method or a
+<href="../apidoc/pnuts/ext/ModuleBase.html#autoloadFunction(java.lang.String, pnuts.lang.Context)"><tt>autoloadFunction()</tt></a> method calls <tt>export()</tt> method internally.
+</p>
+
+<a name="context"></a>
+<h3><a href="../apidoc/pnuts/lang/Context.html">pnuts.lang.Context</a></h3>
+
+<p>
+A Context represents an internal state in the Pnuts runtime environment.  It holds the following information.
+</p>
+
+<ul>
+<li>Stack frame (in AST interpreter only)
+<li>Which Pnuts-package being used
+<li>Imported Java-package list
+<li>OutputStream to which <tt>write()</tt> write data
+<li>PrintWriter to which <tt>print()</tt> write data
+<li>PrintWriter to which <tt>error()</tt> write message
+<li>PrintWriter to which the prompt and the results are written
+<li>ClassLoader by which <tt>load()</tt> find a script
+<li>A <a href="pnutsImpl.html"><tt>pnuts.lang.Implementation</tt> object</a>
+<li>Context-local variables
+<li>Module list registered by <tt>use()</tt>
+<li>File list loaded by <tt>load()</tt>
+</ul>
+
+<p>
+A Context object need to be created when evaluating a script.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public <b>Context</b>();</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Package.html">Package</a> <em>pkg</em><tt>);</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Package.html">Package</a> <em>pkg</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>source</em><tt>);</tt></dt>
+<dt><tt>public <b>Context</b>(</tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> <em>template</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+<p>
+The default constructor of Context creates a Context object with the global Package.
+The constructor <tt>Context(Package </tt><em>anPackage</em><tt>)</tt> creates a
+      Context and set the default Package.  
+</p>
+
+<p>
+A Context object can be passed around several interpreters specifying
+the object as the parameter of <tt>Pnuts.eval()</tt>, <tt>Pnuts.load()</tt>, or
+<tt>Pnuts.loadFile()</tt> method.  Also a context can be used from different threads at the same time.
+</p>
+
+<a name=clone></a>
+<h4>Clones</h4>
+
+<p>
+When one of the built-in functions, <tt>eval()</tt>,<tt>load()</tt>, <tt>require()</tt>, and <tt>loadFile()</tt> is called from a script, a clone of the Context being used is made and passed to the function.
+</p>
+
+<p>
+When one of the built-in functions, <tt>load()</tt>, <tt>require()</tt>, and <tt>loadFile()</tt> is called, the specified script is executed setting the current package to the top of the package hierarchy (usually the global package).
+</p>
+
+<p>
+Some of the attributes are shared among the clones, and some of them are copied.
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee>Attribute</th>
+<th bgcolor=#eeeeee>What happens when a clone is made</th>
+<tr class="wb">
+  <td class=wb>The <a href="context.html#classloader">classloader</a> associated with the context</td>
+  <td class=wb align=center>shared</td>
+<tr class="wb">
+  <td class=wb>Modules added by <tt>use()</tt></td>
+  <td class=wb align=center>shared</td>
+<tr class="wb">
+  <td class=wb>The list of files loaded by <tt>load()</tt></td>
+  <td class=wb align=center>shared</td>
+<tr class="wb">
+  <td class=wb><a href="context.html#stream">OutputStream for messages</a></td>
+  <td class=wb align=center>copied</td>
+<tr class="wb">
+  <td class=wb><a href="context.html#contextlocal">Context-local Variables</a></td>
+  <td class=wb align=center>copied</td>
+<tr class="wb">
+  <td class=wb><a href="pnutsImpl.html">Implementation object</a></td>
+  <td class=wb align=center>copied</td>
+<tr class="wb">
+  <td class=wb><a href="#configuration">Configuration</a></td>
+  <td class=wb align=center>copied</td>
+<tr class="wb">
+  <td class=wb><a href="#encoding">Encoding</a></td>
+  <td class=wb align=center>copied</td>
+<tr class="wb">
+  <td class=wb>Imported Java package list</td>
+  <td class=wb align=center>reset</td>
+<tr class="wb">
+  <td class=wb>Current package</td>
+  <td class=wb align=center>reset</td>
+</table>
+</blockquote>
+<p>
+If all attributes need to be copied, use the constructor <a href="../apidoc/pnuts/lang/Context.html#Context(pnuts.lang.Context)"><tt>Context(Context)</tt></a> instead of <tt>clone()</tt>.
+<p>
+
+
+<h4>OutputStream for Messages</h4>
+
+<p>
+As shown below, three kinds of output stream can be specified for a Context.
+</p>
+
+<ul>
+<li>Output Stream
+<blockquote>
+<dl>
+<dt><tt>public OutputStream  <b>getOutputStream</b> ();</tt></dt>
+<dt><tt>public void <b>setOutputStream</b> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>out</em><tt>);</tt></dt>
+<dt><tt>public PrintWriter  <b>getWriter</b> ();</tt></dt>
+<dt><tt>public void <b>setWriter</b> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>writer</em><tt>);</tt></dt>
+</dl>
+</blockquote>
+
+<li>Error stream
+<blockquote>
+<dl>
+<dt><tt>public PrintWriter <b>getErrorWriter</b> ();</tt></dt> 
+<dt><tt>public void <b>setErrorWriter</b> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>out</em><tt> );</tt></dt>
+</dl>
+</blockquote>
+
+<li>Teminal stream (prompt and the result)
+<blockquote>
+<dl>
+<dt><tt>public PrintWriter <b>getTerminalWriter</b> ();</tt></dt>
+<dt><tt>public void <b>setTerminalWriter</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> <em>writer</em><tt> );</tt></dt>
+</dl>
+</blockquote>
+</ul>
+</blockquote>
+
+<a name="contextlocal"></a>
+<h4>Context-local Variables</h4>
+
+<p>
+Context-local variable is a kind of environment variable bound to a
+context.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>set</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> <tt>, Object </tt><em>value</em><tt>);</tt></dt> 
+<dt><tt>public Object <b>get</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>symbol</em> <tt>);</tt></dt> 
+</dl>
+</blockquote>
+<p>
+Note that the parameter <em>symbol</em> must be an interned string.
+</p>
+
+<p>
+Context-local variables can be accessed with field access expression on a Context object.
+</p>
+
+<pre class="eg">
+context = getContext()
+context.foo       ==> null
+context.foo = date()
+</pre>
+
+
+<a name="encoding"></a>
+<h4>Encoding</h4>
+
+<p>
+Context may declare a script encoding with setScriptEncoding() method.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setScriptEncoding</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>encodingName</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <b>getScriptEncoding</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<h4>ClassLoader</h4>
+
+<p>
+A class loader can be associated with the context. It is used to resolve class names, and finds scripts when <tt>load()</tt> function is used.
+</p>
+<blockquote>
+<dl>
+<dt><tt>public void <b>setClassLoader</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ClassLoader.html">ClassLoader</a> <em>loader</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/ClassLoader.html">ClassLoader</a> <b>getClassLoader</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<h4>Implementation Object</h4>
+
+<p>
+See <a href="pnutsImpl.html">"Customizing the Interpreter's Implementation"</a>.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public void <b>setImplementation</b> (</tt><a href="../apidoc/pnuts/lang/Implementation.html">Implementation</a> <em>impl</em> <tt>);</tt></dt> 
+<dt><tt>public <a href="../apidoc/pnuts/lang/Implementation.html">Implementation</a> <b>getImplementation</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<a name=configuration></a>
+<h4>Configuration</h4>
+
+<p>
+Configuration defines how to find method/field candidates, and semantics of field access. 
+</p>
+
+<blockquote>
+<dl>
+<dt><em>context</em> . <b>setConfiguration</b><tt> ( <a href="../apidoc/pnuts/lang/Configuration.html">Configuration</a> </tt><em>impl</em> <tt> )</tt></dt>
+<dt><em>context</em> . <b>getConfiguration</b><tt> (  )</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+See <a href="configuration.html">"Customizing the Behavior of Java API Access"</a>.
+</p>
+
+<h4>Modules</h4>
+
+<p>
+<tt>use()</tt> function registers a module to the executing context.  The registered modules are managed and shared by a family of Context clones.
+<p>
+
+<blockquote>
+<dl>
+<dt><tt>public boolean <b>usePackage</b> (</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>name</em> <tt>);</tt></dt> 
+<dt><tt>public String[] <b>usedPackages</b> ();</tt></dt> 
+<dt><tt>public void <b>clearPackages</b> ();</tt></dt> 
+</dl>
+</blockquote>
+
+<p>
+<tt>usePackage()</tt> registers a module to the context and executes
+the initialization script of the module.
+</p>
+<p>
+<tt>usedPackages()</tt> returns the list of registered module names.
+</p>
+<p>
+<tt>clearPackages()</tt> resets the module list back to empty.
+</p>
+
+
+<h4>Difference between <tt>eval()</tt> and <tt>Pnuts::eval()</tt></h4>
+
+<blockquote>
+<dl>
+<dt><tt>eval(<em>expr</em>)</tt></dt>
+<dd>Evaluates <em>expr</em> with a copy of the current Context</dd>
+<dt><tt>eval(<em>expr</em>, <em>context</em>)</tt></dt>
+<dd>Evaluates <em>expr</em> with a copy of <em>context</em></dd>
+<dt><tt>Pnuts::eval(<em>expr</em>)</tt></dt>
+<dd>Evaluates <em>expr</em> with a newly created Context<dd>
+<dd>same as <tt>Pnuts::eval(<em>expr</em>, Context())</tt></dd>
+<dt><tt>Pnuts::eval(<em>expr</em>, <em>context</em>)</tt></dt>
+<dd>Evaluates <em>expr</em> with <em>context</em></dd>
+</dl>
+</blockquote>
+
+<p>
+When a Context object is passed to <tt>Pnuts::eval(</tt><em>expr</em><tt>, </tt><em>context</em><tt>)</tt>, <tt>import()</tt> and some other functions can modify the caller's context.  On the other hand, the original Context object can not be modified by primitive function <tt>eval()</tt>, because it uses a copy of a Context.
+</p>
+
+
+<a name="exception"></a>
+<h3><a href="../apidoc/pnuts/lang/PnutsException.html">pnuts.lang.PnutsException</a></h3>
+
+<p>
+When an exception is thrown during executing script through <tt>Pnuts.eval()</tt>, <tt>Pnuts.load()</tt>, or <tt>Pnuts.loadFile()</tt> method, the exception is propagated to the caller of the methods.
+</p>
+
+<p>
+The exception is encapsulated in a <a href="../apidoc/pnuts/lang/PnutsException.html"><tt>pnuts.lang.PnutsException</tt></a> object and can be retrieved with the <a href="../apidoc/pnuts/lang/PnutsException.html#getThrowable()"><tt>PnutsException.getThrowable()</tt></a> method.
+</p>
+
+<blockquote>
+<dl>
+<dt><tt>public Throwable <b>getThrowable</b>();</tt></dt>
+</dl>
+</blockquote>
+
+<pre class="eg">
+import pnuts.lang.*;
+import java.io.*;
+
+class Foo {
+   public static void main(String arg[]){
+      try {
+         Object ret = Pnuts.eval(arg[0], new Context());
+	 System.out.println("ret = " + ret);
+      } catch (<b>PnuteException</b> e){
+	 if (e.<b>getThrowable</b>() instanceof IOException){
+	   e.printStackTrace();
+	 } else {
+	   System.out.println("caught: " + e);
+	 }
+      }
+   }
+}
+</pre>
+
+<p>
+<tt>getScriptSource()</tt> returns the source of the script where the
+error occured, which is usually a URL object.
+<tt>getLine()</tt> returns the line number where the error occured.
+<p>
+<blockquote>
+<dl>
+<dt><tt>public Object <b>getScriptSource</b>();</tt></dt>
+<dt><tt>public int <b>getLine</b>();</tt></dt>
+</dl>
+</blockquote>
+<p>
+To obtain the positional information of an error thrown by
+<tt>Pnuts.run(Context)</tt>, the script source has to be set using 
+<tt>Pnuts.setScriptSource()</tt> method before executing the script.
+<p>
+
+<div class="eg">e.g.
+<pre>
+import pnuts.lang.*;
+import java.io.*;
+
+class Foo {
+   public static void main(String arg[]) throws IOException {
+      try {
+         File file = new File(arg[0]);
+         FileInputStream in = new FileInputStream(file);
+         Pnuts expr = Pnuts.parse(in);
+	 expr.setScriptSource(file);
+	 expr.run(new Context());
+      } catch (PnutsException e){
+         System.out.println(e.getScriptSource() + ": " + e.getLine());
+      }
+   }
+}
+</pre></div>
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Pnuts API Overview
+</div>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<html>
+    <head>
+      <title>Podr&#281;cznik Pnuts</title>
+      <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body 
+	    bgcolor="#ffffff" 
+	    text="#000000" >
+
+<!-- body start -->
+
+<h3>pnuts.lang.PnutsFunction</h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/PnutsFunction.html">pnuts.lang.PnutsFunction</a> represents a set of functions that share a certain name.
+The following methods can be overriden in a subclass of <a href="../apidoc/pnuts/lang/PnutsFunction.html"><tt>pnuts.lang.PnutsFunction</tt></a>. 
+</p>
+
+<h4><tt>exec()</tt> Method</h4>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected Object <b>exec</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> [] </tt><em>args</em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+The next class is a PnutsFunction subclass which adds the functionality of checking types of arguments.
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+import pnuts.lang.*;
+
+public class MyFunc extends PnutsFunction {
+   Class[] paramTypes;
+
+   public MyFunc(String name, Class[] paramTypes){
+     super(name);
+     this.paramTypes = paramTypes;
+   }
+
+   protected Object exec(Object[] args, Context context){
+     if (args.length != paramTypes.length){
+         throw new RuntimeException("type mismatch");
+     }
+     for (int i = 0; i < paramTypes.length; i++){
+         if (!paramTypes[i].isInstance(args[i])){
+             throw new RuntimeException("type mismatch");
+	 }
+     }
+     return super.exec(args, context);
+   }
+}
+</pre></td></tr>
+</table>
+</blockquote>
+
+<p>
+If a function's name is already defined as a <a href="../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> object which has the same name, additional function definitions are added to the object.  In the next example, the overriden method <tt>exec()</tt> defined above is used when the function <tt>foo()</tt> is called.
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+foo = MyFunc("foo", [Integer])
+function foo(x) println(x + 1)
+
+foo(1)  ==> 2
+foo(1.0)  ==> error "java.lang.RuntimeException: type mismatch"
+</pre></td></tr>
+</table>
+</blockquote>
+
+<a name=added></a>
+<h4><tt>added()</tt> Method</h4>
+
+<p>
+<a href="../apidoc/pnuts/lang/PnutsFunction.html#added(int)"><tt>PnutsFunction.added()</tt></a> method can be used as a hook function which is called when a function is added to a PnutsFunction object.
+</p>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected void <b>added</b>(int </tt><em>nargs</em><tt>)</tt></dt>
+</dl>
+</blockquote>
+
+<p>
+The following class overrides the <tt>added()</tt> method so that the function is recompiled when a definition is added to an instance of the class.
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+import pnuts.lang.PnutsFunction;
+import pnuts.compiler.Compiler;
+
+public class AutoCompile extends PnutsFunction {
+    Compiler compiler;
+
+    public AutoCompile(String name){
+	super(name);
+	this.compiler = new Compiler();
+    }
+
+    private boolean flag = false;
+
+    protected void added(int nargs){
+	if (!flag){
+	    flag = true;
+	    System.out.println("compiling " + getName());
+	    compiler.compile(this);
+	    flag = false;
+	}
+    }
+}
+</pre></td></tr>
+</table>
+</blockquote>
+
+<p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+foo = AutoCompile("foo")
+function foo(n) n
+</pre></td></tr>
+</table>
+</blockquote>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<center><h3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+</body>
+</html>

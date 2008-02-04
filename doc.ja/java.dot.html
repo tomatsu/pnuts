@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title>java.* モジュール</title>
+  <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+  <meta http-equiv="content-style-type" content="text/css">
+  <link type="text/css" rel="stylesheet" href="stylesheet.css">
+</head>
+
+<body>
+
+<div class="nav">
+<a href="guide.html">Pnutsユーザーズガイド</a> -> java.* モジュール
+</div>
+
+<!-- body start -->
+
+<h2><tt>java.*</tt>モジュール</h2>
+
+<P>
+<tt>pnuts</tt>コマンドでスクリプトを実行する場合、デフォルトでは<tt>pnuts.tools</tt>モジュールが使われますが、
+その結果としてjava.net, java.util, java.ioモジュールが使われます。
+</P>
+
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=95%>
+<tr class=wb>
+<th bgcolor=#eeeeee width=10%>モジュール名</th>
+<th bgcolor=#eeeeee>クラス</th>
+</tr>
+
+<tr class=wb>
+<td class="G12"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/package-summary.html">java.net</a></td>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URI.html">URI</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/Socket.html">Socket</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/ServerSocket.html">ServerSocket</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/MulticastSocket.html">MulticastSocket</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/Authenticator.html">Authenticator</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/DatagramSocket.html">DatagramSocket</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/DatagramPacket.html">DatagramPacket</a></td>
+</tr>
+
+<tr class=wb>
+<td class="G12"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/package-summary.html">java.util</a></td>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/BitSet.html">BitSet</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Calendar.html">Calendar</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Hashtable.html">Hashtable</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Vector.html">Vector</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Stack.html">Stack</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/List.html">List</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Set.html">Set</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collection.html">Collection</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Collections.html">Collections</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Arrays.html">Arrays</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Random.html">Random</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Locale.html">Locale</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/TimeZone.html">TimeZone</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Enumeration.html">Enumeration</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Iterator.html">Iterator</a></td>
+</tr>
+
+<tr class=wb>
+<td class="G12"><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/package-summary.html">java.io</a></td>
+<td><a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/IOException.html">IOException</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a></td>
+</tr>
+</table>
+
+<p>
+importされたクラス名よりもモジュールの名前の方が優先度が高いので、import関数でこれらのクラスで別のクラスを参照するようにすることはできません。
+したがって、たとえば、Listという名前で、java.util.Listではなくjava.awt.Listを参照したい場合は、
+</p>
+<pre class="eg">
+unuse("java.util")
+import java.awt.List
+</pre>
+とする必要があります。
+<p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnutsユーザーズガイド</a> -> java.* モジュール
+</div>
+
+</body>

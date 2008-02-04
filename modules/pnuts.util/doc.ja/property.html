@@ -1,0 +1,68 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> プロパティ</div>
+
+    <h2>プロパティ</h2>
+
+<h3>システムプロパティ</h3>
+
+<a name=getProperty></a>
+<a name=setProperty></a>
+
+<div class="box">
+<div class="synopsis"><b>getProperty</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>property</b></em><tt>)</tt></div>
+<div class="synopsis"><b>setProperty</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>property</b></em> <tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>value</b></em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getProperty()</tt>はシステムプロパティの値を求めます。<tt>setProperty()</tt>はシステムプロパティを定義します。
+</P>
+
+<div class="eg">例:
+<pre>
+&gt; getProperty("java.version")
+1.1.5
+
+&gt; getProperty("line.separator").toCharArray()
+['\n']
+</pre></div>
+
+<a name=isJava2></a>
+
+<div class="box">
+<div class="synopsis"><b>isJava2</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>isJava2()</tt> は、動作中のJVMがJ2SE, J2EE, J2ME/CDCのいずれかに準拠している場合にtrueを返します。
+</p>
+
+<h3>プロパティの読み込み</h3>
+
+<a name=loadProperties></a>
+
+<div class="box">
+<div class="synopsis"><b>loadProperties</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>resource</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a> </tt><em>properties</b></em><tt> })</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a> </tt><em>file</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a> </tt><em>properties</em><tt> })</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> </tt><em>input</b></em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a> </tt><em>properties</em><tt> })</tt></div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Properties.html">Properties</a> </tt><em>properties</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>loadProperties()</tt> はリソースファイル、ファイル、InputStream、URL からプロパティ定義を読み込みます。
+<em>properties</em> が指定された場合は、読み込まれたプロパティが<em>properties</em>に追加されます。
+</p>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> プロパティ</div>
+
+  </body>
+</html>

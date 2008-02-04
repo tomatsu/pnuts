@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.nio module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.nio</tt></div>
+
+
+<h2><tt>pnuts.nio</tt> module</h2>
+
+<p>
+This module provides a couple of function that requires java.nio package, which was introduced in j2sdk1.4.0.
+</p>
+
+<ul>
+<li><a href="#scanLines">scanLines</a>
+<li><a href="#charset">charset</a>
+<li><a href="#charsets">charsets</a>
+<li><a href="#mapFile">mapFile</a>
+</ul>
+
+
+<a name="scanLines"></a>
+<div class="box">
+<div class="synopsis"><b>scanLines</b><tt> ( </tt><em>input </em><tt> { , </tt><em>handler</em><tt>
+	(</tt><em>line</em><tt>) {, boolean </tt><I>includeLineSeparator</I><tt>
+	}})</tt></div>
+</div>
+
+<p>
+When just <em>input</em> is specified, it returns a generator object that generates the all lines in turn.
+</p>
+<p>
+<tt>scanLines()</tt> reads each line of a text file (<I>input</I>),
+and call <I>handler</I> passing a CharSequence object that represents
+each line.  The differnece from <a href="../../pnuts.text/doc/index.html#readLines"><tt>readLines()</tt></a> is
+that the CharSequence object of a particular line will be broken or
+become inconsistent after the callback handler is called. 
+</p>
+<p>
+<em>input</em> must be either Reader, URL, File, or String object that represents a file name.
+</p>
+<p>
+If <I>includeLineSeparator</I> is specified <CODE>true</CODE>, the
+line separator (\r, \n, or \r\n) is kept in the parameter object; by default,
+the line separator is stripped.</p>
+
+<div class="eg">e.g.
+<pre>
+for (line : scanLines(&quot;template.txt&quot;){
+   if (match(pattern, line)){
+     println(line)
+     break
+   }
+}
+</pre>
+</div>
+
+
+<a name="charset"></a>
+<div class="box">
+<div class="synopsis"><b>charset</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>name</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>charset()</tt> returns a <a
+href="http://java.sun.com/jdk/1.4/docs/api/java/nio/charset/Charset.html">java.nio.charset.Charset</a>
+object that matches the specified charset <em>name</em>.  It returns <tt>null</tt> if no charset is found.
+</p>
+
+<div class="eg">e.g.
+<pre>charset("utf8")</pre>
+</div>
+
+<a name="charsets"></a>
+<div class="box">
+<div class="synopsis"><b>charsets</b><tt> ( )</tt></div>
+</div>
+<p>
+<tt>charsets()</tt> returns a Map object that contains all available charsets; {charset_name -> <a href="http://java.sun.com/jdk/1.4/docs/api/java/nio/charset/Charset.html">Charset</a> object}.
+</p>
+
+<a name="mapFile"></a>
+<div class="box">
+<div class="synopsis"><b>mapFile</b><tt> ( ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+) </tt><em>file</em><tt> { , <em>mode</em> } )</tt></div>
+</div>
+
+<p>
+<tt>mapFile()</tt> creates a memory mapped file. 
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>The 2nd argument (<em>mode</em>)</th>
+<th bgcolor=#eeeeee>The file mode</th>
+</tr>
+<tr class=wb align=center>
+      <td>"r" or "R"</td>
+      <td>Read Only</td>
+<tr class=wb align=center>
+      <td>"w" or "W"</TD>
+      <td>Read/Write</td>
+    </TR>
+<tr class=wb align=center>
+      <td>default</TD>
+      <td>Read Only</td>
+    </TR>
+  </table>
+</BLOCKQUOTE>
+
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.nio</tt></div>
+
+  </body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.io module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> General Stream Support</div>
+
+
+    <h2>General Stream Support</h2>
+
+<h3>Basic Operation</h3>
+
+<a name=open></a>
+
+<div class="box">
+<div class="synopsis"><b>open</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>fileName</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mode</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>file</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mode</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>url</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mode</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(byte[] </tt><em>bytes</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>mode</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>open()</tt> creates <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> or <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a>, depending on the 2nd parameter <em>mode</em>, from the specified file name.
+If the 2nd parameter is not specified "r" is implicitly passed.
+</p>
+
+<dl>
+<dt>"r"
+<dd>FileInputStream(<em>fileName</em>)
+<dt>"w"
+<dd>FileOutputStream(<em>fileName</em>)
+<dt>"a"
+<dd>FileOutputStream(<em>fileName</em>, true)
+</dl>
+<p>
+When "w" or "a" is given, the directory in which the specified file is included
+is made if it does not exist.
+</p>
+
+<a name=read></a>
+
+<div class="box">
+<div class="synopsis"><b>read</b><tt>(</tt><em>input</em><tt> {, </tt><em>output</em><tt> })</tt></div>
+<div class="synopsis"><b>read</b><tt>(</tt><em>reader</em><tt> {, </tt><em>writer</em><tt> })</tt></div>
+</div>
+
+<p>
+Reads data from <em>input</em> until EOF is seen, and writes the data to <em>output</em>.
+</p>
+<p>
+<em>input</em> should be either InputStream, Reader, File, URL, or String that represents a file name.  <em>output</em> should be either OutputStream, Writer, File, or String that represents a file name.
+</p>
+<p>
+When the second parameter is omitted the output stream of the executing context is used.
+When the second parameter is <tt>null</tt>, the data read is just discarded.
+</p>
+
+<a name=setCharacterEncoding></a>
+<a name=getCharacterEncoding></a>
+
+<div class="box">
+<div class="synopsis"><b>setCharacterEncoding</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>input_encoding</em> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <em>output_encoding</em> }<tt>)</tt></div>
+<div class="synopsis"><b>getCharacterEncoding</b><tt>()</tt></div>
+</div>
+<p>
+<tt>setCharacterEncoding()</tt> specifies which character encoding is used by functions that convert data from InputStream to Reader, or from OutputStream to Writer.  When <tt>null</tt> is specified, platform's default encoding is used.
+</p>
+<p>
+<tt>getCharacterEncoding()</tt> returns a pair of character encoding names, as an array, that have been set by <tt>setCharacterEncoding()</tt>.
+</p>
+<pre class="eg">
+setCharacterEncoding("JISAutoDetect", null)
+</pre>
+
+<a name=readBytes></a>
+<div class="box">
+<div class="synopsis"><b>readBytes</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> <em>inputStream</em>, byts[] <em>array</em> { , int <em>offset</em>, int <em>length</em> }<tt>)</tt></div>
+</div>
+
+<p>
+<tt>readBytes()</tt> reads data from <em>inputStream</em>, copies them
+into <em>array</em>, and returns the total number of bytes.  If
+<em>offset</em> and <em>length</em> are specified, data of <em>length</em> bytes is copied to the portion of the <em>array</em>.
+</p>
+
+<a name=writeBytes></a>
+<div class="box">
+<div class="synopsis"><b>writeBytes</b><tt>(</tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>outputStream</em><tt>, byts[] </tt><em>array</em><tt> { , int </tt><em>offset</em><tt>, int </tt><em>length</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>writeBytes()</tt> writes data in <em>array</em> to <em>outputStream</em>, and returns the total number of bytes.  If <em>offset</em> and <em>length</em> are specified, the data of the portion of the <em>array</em> is written.
+</p>
+
+<a name=openURL></a>
+
+<div class="box">
+<div class="synopsis"><b>openURL</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>urlString</em><tt>)</tt> or </div>
+<div class="synopsis2">(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+</tt><em>file</em><tt>)</tt> or </div>
+<div class="synopsis2">(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+</tt><em>url</em><tt>)</tt> or </div>
+</div>
+
+<p>
+<tt>openURL()</tt> opens a stream of a URL document.
+</p>
+
+<pre class="eg">
+setProperty("proxyHost", "machine") // proxy
+setProperty("proxyPort", "8080")
+stream = openURL("http://java.sun.com/index.html")
+read(stream)
+</pre>
+
+<h3>Reader, Writer</h3>
+
+<a name=reader></a>
+<a name=writer></a>
+<div class="box">
+<div class="synopsis"><b>reader</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>input</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> } )</tt></div>
+<div class="synopsis"><b>writer</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>output</em><tt> {, <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>encoding</em><tt> })</tt></div>
+</div>
+
+<p>
+<tt>reader()</tt> creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/BufferedReader.html">BufferedReader</a> from the specified input.  When <em>encoding</em> is specified, the Reader object is constructed with the encoding.
+<p>
+<tt>writer()</tt> creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PrintWriter.html">PrintWriter</a> from the specified output.  When <em>encoding</em> is specified, the Writer object is constructed with the encoding.
+<p>
+
+<div class="eg">e.g.
+<pre>
+rd = reader(open("large.txt"))
+while ((line = rd.readLine()) != null){
+  println(line)
+}
+</pre></div>
+
+<a name=stringReader></a>
+<a name=stringWriter></a>
+<div class="box">
+<div class="synopsis"><b>stringReader</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>str</em><tt>)</tt></div>
+<div class="synopsis"><b>stringWriter</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>stringReader()</tt> creates a <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/StringReader.html">StringReader</a> object from the specified string. 
+<p>
+<tt>stringWriter()</tt> creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/StringWriter.html">StringWriter</a>
+object.
+<p>
+
+<div class="eg">e.g.
+<pre>
+sr = stringReader("abc\ndef")
+while ((line = sr.readLine()) != null){
+  println(line)
+}
+</pre></div>
+
+
+<a name=readText></a>
+<div class="box">
+      <div class="synopsis">
+        <b>readText</b><tt> ( </tt><em>input</em><tt> {, </tt><em>encoding</em><tt>} )</tt>
+      </div>
+</div>
+
+<p>
+<tt>readText()</tt> reads a text file (<I>input</I>) and returns the
+content as a String object.
+ The <I>input</I> is either a filename String, InputStream, Reader, or URL.</p>
+
+<div class="eg">e.g.
+<pre>
+template = readText("template.txt")
+</pre></div>
+
+<a name=writeText></a>
+<div class="box">
+        <div class="synopsis"><b>writeText</b><tt> ( </tt><em>text</em><tt>, </tt><em>output</em><tt> {, </tt><em>encoding</em><tt>} )</tt></div>
+</div>
+
+<p>
+<tt>writeText()</tt> writes a text to the specified
+<I>output</I> object, which must be either a filename String, OutputStream, or Writer.</p>
+
+<div class="eg">e.g.
+<pre>
+writeText("foo...", "foo.txt")
+</pre></div>
+
+<h3>Buffer</h3>
+
+<a name=openByteArray></a>
+<a name=openCharArray></a>
+<div class="box">
+<div class="synopsis"><b>openByteArray</b><tt>()</tt></div>
+<div class="synopsis"><b>openByteArray</b><tt>(byte[] </tt><em>array</em><tt>)</tt></div>
+<div class="synopsis"><b>openCharArray</b><tt>()</tt></div>
+<div class="synopsis"><b>openCharArray</b><tt>(char[] </tt><em>array</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>openByteArray()</tt>, if no parameter is given,  creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/ByteArrayOutputStream.html">ByteArrayOutputStream</a>. Otherwise it creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/ByteArrayInputStream.html">ByteArrayInputStream</a> which contains the specified byte array.
+<p>
+<tt>openCharArray()</tt>, if no parameter is given, creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/CharArrayWriter.html">CharArrayWriter</a>. Otherwise, it creates a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/CharArrayReader.html">CharArrayReader</a> which contains the specified char array.
+
+<div class="eg">e.g.
+<pre>
+buf = openByteArray()
+read(open("foo.txt"), buf)
+buf.toByteArray()
+
+read(open("bar.txt"), buf)
+buf.writeTo(fd = open("baz.txt", "w"))
+fd.close()
+</pre></div>
+<p>
+
+<a name=getByteArray></a>
+<a name=getCharArray></a>
+
+<div class="box">
+<div class="synopsis"><b>getByteArray</b><tt>(</tt><em>input</em><tt>)</tt></div>
+<div class="synopsis"><b>getCharArray</b><tt>(</tt><em>input</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getByteArray()</tt> reads data from <em>input</em> and returns a byte array.
+</p>
+<p>
+<tt>getCharArray()</tt> reads data from <em>input</em> and returns a char array.
+</p>
+<p>
+<em>input</em> must be either InputStream, Reader, File, String (file name), or URL.
+</p>
+
+<h3>Pipe I/O</h3>
+
+<a name=pipe></a>
+<div class="box">
+<div class="synopsis"><b>pipe</b><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>,
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a>), <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>in</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>func</em><tt>(<an
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>,
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a>), <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a>
+</tt><em>out</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>), <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+</tt><em>reader</b></em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>(</tt><em>func</em><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>),
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>
+</tt><em>writer</b></em><tt> )</tt></div>
+</div>
+
+<p>
+When InputStream is specified as the 2nd parameter, it is passed as the first parameter of <em>func</em> on a separate thread.  For the second paramter of <em>func</em>, internally used <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedOutputStream.html">PipedOuputStream</a> is passed.  Then <b>pipe</b>() returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">PipedInputStream</a> object that is connected to the <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedOutputStream.html">PipedOutputStream</a>.
+</p>
+<p>
+When OutputStream is specified, it is passed as the second parameter of <em>func</em> on a separate thread.  For the first parameter of <em>func</em>, internally used <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">PipedInputStream</a> is passed.  <b>pipe</b>() returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedOutputStream.html">PipedOutputStream</a> that is connected to the <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedInputStream.html">PipedInputStream</a>.
+</p>
+<p>
+When Reader is specified as the 2nd parameter, it is passed as the first parameter of <em>func</em> on a separate thread.  For the second paramter of <em>func</em>, internally used <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedWriter.html">PipedWriter</a> is passed.  Then <b>pipe</b>() returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedReader.html">PipedReader</a> object that is connected to the <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedWriter.html">PipedWriter</a>.
+</p>
+<p>
+When Writer is specified, it is passed as the second parameter of <em>func</em> on a separate thread.  For the first parameter of <em>func</em>, internally used <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedReader.html">PipedReader</a> is passed.  <b>pipe</b>() returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedWriter.html">PipedWriter</a> that is connected to the <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/PipedReader.html">PipedReader</a>.
+</p>
+
+<p>
+The following script encodes (in BASE64) the contents of "test.dat",
+then save the gzip-compressed data in "test.gz".
+</p>
+
+<div class="eg">e.g.
+<pre>
+pin = pipe(base64encode, open("test.dat"))
+
+read(pin, pout = pipe(gzip, open("test.gz", "w")))
+pout.close()
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.io</tt></a> -> General Stream Support</div>
+
+  </body>
+</html>

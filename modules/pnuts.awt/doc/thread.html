@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Executing in the Event-Dispatcher Thread</div>
+
+    <h2>Executing in the Event-Dispatcher Thread</h2>
+
+<a name="useEventThread"></a>
+<div class="box">
+<div class="synopsis"><b>useEventThread</b><tt>( boolean </tt><em>flag</em><tt> )</tt></div>
+</div>
+
+<p>
+If <em>flag</em> is true, subsequent scripts are executed in
+pnuts.awt.EventQueueConfiguration, i.e.  method/constructor calls and field access in
+subsequent scripts are executed in the event dispatcher thread.
+If <em>flag</em> is false, the previous Configuration which was used when <tt>useEventThread(true)</tt> was used.
+</p>
+
+<pre class="eg">
+useEventThread(true)
+Thread::currentThread()    ==> Thread[AWT-EventQueue-0,6,main]
+useEventThread(false)
+Thread::currentThread()    ==> Thread[main,5,main]
+</pre>
+<p>
+Functions defined in EventQueueConfiguration are executed in the
+same configuration even if it is called from somewhere in a different
+configuration. 
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> Executing in the Event-Dispatcher Thread</div>
+
+  </body>
+</html>

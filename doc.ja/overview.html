@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> はじめに
+</div>
+
+<!-- body start -->
+
+<h1>はじめに</h1>
+
+<p>
+この Pnuts ユーザーズガイドは Pnuts 環境の基本的な使い方を説明します。どんな関数があるか、どうやってPnutsをJavaアプリケーションに統合していくかがわかります。
+<p>
+ここでは、Pnuts ユーザーズガイドの各章に進む前に確認しておくべき事柄をまとめます。
+</p>
+
+<h3>実行環境</h3>
+<p>Pnutsは JDK1.2以降の Java の実行環境の上で動作します(JDK1.3以降を推奨します)。Pnutsの配布パッケージにはJava の実行環境は含まれていません。したがって、Javaの実行環境がインストールされていない場合は、あらかじめインストールしておく必要があります。Javaの実行環境(JRE)が複数インストールされている場合には、環境変数PATHの設定によってJREを選んでPnutsを実行することができます。<p>Pnuts を利用するためには Java の実行環境以外にpnuts.jar ファイルが最低限必要になります。pnuts.jarファイルには、Pnuts API を実装するクラスが含まれています。Pnuts API は Pnuts インタプリタを動作させるために使われているだけでなく、ユーザがPnuts をライブラリとして単体のプログラムやサーバアプリケーションの一部として使うこともできます。
+
+<h3>関数</h3>
+
+<p>
+Pnuts の関数は、組み込み関数とそれ以外に分類されます。それらを区別することは大切です。<a href="lang.html#builtin">組み込み関数</a>は、モジュールやスクリプトを読み込んでいないときでも利用できます。
+組み込み関数は、<a href="lang.html#builtin">「Pnuts 言語」</a> で定義されています。</p>
+<H3>モジュール</H3>
+<P><a href="lang.html#modules"><b>モジュール</b></a>とは、目的ごとに、あるいは、互いに関連しあう関数をグループ化したものです。Pnutsの実行時に、必要なモジュールを選択すると、それらのモジュールに含まれる関数が利用できるようになります。通常、各モジュールは、それぞれJARファイルになっていて、CLASSPATHに設定するか、所定のディレクトリ($PNUTS_HOME/modules)に配置しておきます。</P>
+<P>Pnutsの配布パッケージには、いくつかのモジュールが含まれています。デフォルトの設定では、Pnutsインタプリタの起動時に、いくつかの汎用的なモジュールがあらかじめ利用できるようになっています。Pnutsが提供するモジュールについては<a href="std.html">「pnuts.*モジュール」</a>を参照。
+モジュールの作りかたについては<A href="module.html">「モジュール」</A>を参照。
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> はじめに
+</div>
+
+  </body>
+</html>

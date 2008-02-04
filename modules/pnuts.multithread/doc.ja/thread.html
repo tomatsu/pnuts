@@ -1,0 +1,98 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> マルチスレッド</div>
+
+    <h2>マルチスレッド</h2>
+
+<a name=fork></a>
+<a name=createThread></a>
+
+<div class="box">
+<div class="synopsis"><b>createThread</b><tt>(<a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> </tt><em>function</em><tt> { , int</tt> <em>priority</em><tt> { , boolean</tt> <em>daemon</em><tt> } })</tt></div>
+<div class="synopsis"><b>fork</b><tt>(<a href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a> </tt><em>function</em><tt> { , int</tt> <em>priority</em><tt> { , boolean</tt> <em>daemon</em><tt> } })</tt></div>
+</div>
+
+<p>
+<tt>createThread()</tt>は、関数<em>function</em>を実行するスレッドを作ります(<tt>start()</tt>を呼ぶまでは開始しません)。<tt>fork()</tt>は、関数<em>function</em>を実行するスレッドを作り処理を開始します。
+</p>
+
+<a name=sleep></a>
+
+<div class="box">
+<div class="synopsis"><b>sleep</b><tt>(int </tt><em>msec</em><tt>)</tt></div>
+</div>
+
+<p>
+<em>msec</em>ミリ秒 sleep() する。
+<tt>Thread::sleep(</tt><em>msec</em><tt>)</tt>と同じです。
+</p>
+
+<a name=currentThread></a>
+
+<div class="box">
+<div class="synopsis"><b>currentThread</b><tt>()</tt></div>
+</div>
+
+<p>
+実行中のスレッドを表す Thread オブジェクトを求めます。
+</p>
+
+<a name=getPriority></a>
+<a name=setPriority></a>
+
+<div class="box">
+<div class="synopsis"><b>getPriority</b><tt>()</tt></div>
+<div class="synopsis"><b>setPriority</b><tt>(int </tt><em>prio</em><tt>)</tt></div>
+</div>
+
+<p>
+実行中のスレッドのプライオリティを求めたり設定したりします。
+</p>
+
+<div class="eg">例:
+<pre>
+fork(function (){
+    for (i : 0..9){
+	println(i)
+	flush()
+	sleep(500)
+    }
+})
+</pre></div>
+
+<a name=threadGroup></a>
+
+<div class="box">
+<div class="synopsis"><b>threadGroup</b><tt>()</tt></div>
+</div>
+
+<p>現在のスレッドグループのリストを表示します。</p>
+
+<div class="eg">例:
+<pre>
+> threadGroup()
+java.lang.ThreadGroup[name=system,maxpri=10]
+    Thread[Clock,12,system],daemon
+    Thread[Idle thread,0,system],daemon
+    Thread[Async Garbage Collector,1,system],daemon
+    Thread[Finalizer thread,1,system],daemon
+    java.lang.ThreadGroup[name=main,maxpri=10]
+        Thread[main,5,main]
+        Thread[Terminal,2,main]
+null
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> マルチスレッド</div>
+
+  </body>
+</html>

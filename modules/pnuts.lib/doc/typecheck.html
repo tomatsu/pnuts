@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Type Check/</div>
+
+<h2>Type Check</h2>
+
+<a name="isArray"></a>
+<a name="isFunction"></a>
+<a name="isGenerator"></a>
+<a name="iterable"></a>
+<div class="box">
+<div class="synopsis"><b>isArray</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt> <em>object</em>)</div>
+<div class="synopsis"><b>isFunction</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>object</em> <tt> { , int </tt><em>narg</em> } )</div>
+<div class="synopsis"><b>isGenerator</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt> <em>object</em> <tt>)</tt></div>
+<div class="synopsis"><b>iterable</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt> <em>object</em> <tt>)</tt></div>
+</div>
+
+
+<p>
+<tt>isArray()</tt> checks if the object is an array.
+</p>
+<div class="eg">e.g.
+<pre>
+isArray([1, 2]) ==> true
+isArray(null) ==> false
+</pre>
+</div>
+
+<p>
+<tt>isFunction()</tt> checks if the object is a function. When <em>narg</em> is
+      specified checks if the function can be called with <em>narg</em> parameters.
+<tt>-1</tt> is used for arbitrary number of parameters.
+</p>
+
+<div class="eg">e.g.
+<pre>
+isFunction(println, 0) ==> true
+isFunction(println, -1) ==> true
+</pre>
+</div>
+
+<p>
+<tt>isGenerator()</tt> checks if the object is a generator.
+</p>
+<div class="eg">e.g.
+<pre>
+isGenerator(range(1, 100))   ==> true
+</pre>
+</div>
+
+<p>
+<tt>iterable()</tt> checks if the object can be used in '<tt>for</tt>' statement.
+</p>
+<div class="eg">e.g.
+<pre>
+if (iterable(obj)){
+   for (i : obj){
+     handler(i)
+   }
+}
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Type Check/</div>
+
+  </body>
+</html>

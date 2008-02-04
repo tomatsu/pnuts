@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.math module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.math</tt></div>
+
+    <h2><tt>pnuts.math</tt> module</h2>
+
+<p>
+The <tt>pnuts.math</tt> module defines functions for the basic numeric operations which are defined in <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html">java.lang.Math</a> class.  See <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html">API document</a> for more detail.
+</p>
+
+<a name="sin"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#sin(double)"><b>sin</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the trigonometric sine of an angle.
+</p>
+
+
+<a name="cos"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#cos(double)"><b>cos</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the trigonometric cosine of an angle.
+</p>
+
+<a name="tan"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#tan(double)"><b>tan</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the trigonometric tangent of an angle.
+</p>
+
+<a name="asin"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#asin(double)"><b>asin</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the arc sine of an angle, in the range of -<i>pi</i>/2 through
+<i>pi</i>/2.
+</p>
+
+<a name="acos"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#acos(double)"><b>acos</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the arc cosine of an angle, in the range of 0.0 through
+ <i>pi</i>.
+</p>
+
+<a name="atan"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#atan(double)"><b>atan</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the arc tangent of an angle, in the range of -<i>pi</i>/2
+through <i>pi</i>/2.
+</p>
+
+<a name="atan2"></a>
+<div class="box">
+<div class="synopsis"><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#atan2(double, double)"><b>atan2</b></a><tt>
+( double </tt><em>d1</em> , double </tt><em>d2</em> )</tt></div>
+</div>
+<p>
+Converts rectangular coordinates (<code>x</code>,&nbsp;<code>y</code>)
+to polar (r,&nbsp;<i>theta</i>).
+This method computes the phase <i>theta</i> by computing an arc tangent
+of <code>y/x</code> in the range of -<i>pi</i> to <i>pi</i>.
+</p>
+
+<a name="toRadians"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#toRadians(double)"><b>toRadians</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Converts an angle measured in degrees to an approximately
+equivalent angle measured in radians.  The conversion from
+degrees to radians is generally inexact.
+</p>
+
+<a name="toDegrees"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#toDegrees(double)"><b>toDegrees</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Converts an angle measured in radians to an approximately
+equivalent angle measured in degrees.  The conversion from
+radians to degrees is generally inexact; users should
+<i>not</i> expect <code>cos(toRadians(90.0))</code> to exactly
+equal <code>0.0</code>.
+</p>
+
+<a name="exp"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#exp(double)"><b>exp</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns Euler's number <i>e</i> raised to the power of a
+<code>double</code> value.
+</p>
+
+<a name="log"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#log(double)"><b>log</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the natural logarithm (base <i>e</i>) of a <code>double</code>
+value.
+</p>
+
+<a name="sqrt"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#sqrt(double)"><b>sqrt</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the correctly rounded positive square root of a 
+<code>double</code> value.
+</p>
+
+<a name="IEEEremainder"></a>
+<div class="box">
+<div class="synopsis"><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#IEEEremainder(double, double)"><b>IEEEremainder</b></a><tt>
+( double </tt><em>d1</em>, double </tt><em>d2</em> <tt>)</tt></div>
+</div>
+<p>
+Computes the remainder operation on two arguments as prescribed 
+by the IEEE 754 standard.
+The remainder value is mathematically equal to 
+<code>f1&nbsp;-&nbsp;f2</code>&nbsp;&times;&nbsp;<i>n</i>,
+where <i>n</i> is the mathematical integer closest to the exact 
+mathematical value of the quotient <code>f1/f2</code>, and if two 
+mathematical integers are equally close to <code>f1/f2</code>, 
+then <i>n</i> is the integer that is even. If the remainder is 
+zero, its sign is the same as the sign of the first argument. 
+</p>
+<a name="ceil"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#ceil(double)"><b>ceil</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the smallest (closest to negative infinity)
+<code>double</code> value that is greater than or equal to the
+argument and is equal to a mathematical integer.
+</p>
+
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#floor(double)"><b>floor</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the largest (closest to positive infinity)
+<code>double</code> value that is less than or equal to the
+argument and is equal to a mathematical integer.
+</p>
+
+<a name="rint"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#rint(double)"><b>rint</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the <code>double</code> value that is closest in value
+to the argument and is equal to a mathematical integer. If two
+<code>double</code> values that are mathematical integers are
+equally close, the result is the integer value that is
+even.
+</p>
+
+<a name="pow"></a>
+<div class="box">
+<div class="synopsis"><a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#pow(double,
+double)"><b>pow</b></a><tt> ( double </tt><em>d1</em> , double <em>d2</em><tt>)</tt></div>
+</div>
+<p>
+Returns the value of the first argument raised to the power of the
+second argument.
+</p>
+
+<a name="round"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#round(double)"><b>round</b></a><tt> ( double </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the closest <code>int</code> to the argument. The 
+result is rounded to an integer by adding 1/2, taking the 
+floor of the result, and casting the result to type <code>int</code>. 
+In other words, the result is equal to the value of the expression:
+<p>
+<pre class="eg">floor(a + 0.5)</pre>
+
+<a name="abs"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#abs(double)"><b>abs</b></a><tt> ( Number </tt><em>d</em> )</tt></div>
+</div>
+<p>
+Returns the absolute value of the specified number.
+If the argument is not negative, the argument is returned.
+If the argument is negative, the negation of the argument is returned. 
+</p>
+
+<a name="max"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#max(double)"><b>max</b></a><tt> ( </tt><em>num1</em>, <em>num2</em> )</tt> or</div>
+<div class="synopsis2"><tt>( </tt><em>collectionOrArray</em><tt> {,</tt> <em>comparator</em> <tt>|</tt> <em>f(arg)</em><tt> })</tt></div>
+</div>
+<p>
+Returns the greater of two numbers.
+</p>
+<p>
+If a Collection object or an array is specified as the 1st argument, this function returns the maximum element of the Collection/Array object. The optional 2nd argument is used for comparing the elements.
+</p>
+<pre class="eg">
+max([1,2,-6,4], abs)  -> -6
+</pre>
+
+<a name="min"></a>
+<div class="box">
+<div class="synopsis"><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Math.html#min(double)"><b>min</b></a><tt> ( </tt><em>num1</em>, <em>num2</em> )</tt> or</div>
+<div class="synopsis2"><tt>( </tt><em>collectionOrArray</em><tt> {,</tt> <em>comparator</em> <tt>|</tt> <em>f(arg)</em><tt> })</tt></div>
+</div>
+<p>
+Returns the smaller of two numbers.
+</p>
+<p>
+If a Collection object or an array is specified as the 1st argument, this function returns the minimum element of the Collection/Array object. The optional 2nd argument is used for comparing the elements.
+</p>
+<pre class="eg">
+min([1,2,-6,4], abs)  -> 1
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.math</tt></div>
+
+  </body>
+</html>

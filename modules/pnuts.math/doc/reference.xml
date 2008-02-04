@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="sin">index.html#sin</function>
+ <function name="cos">index.html#cos</function>
+ <function name="tan">index.html#tan</function>
+ <function name="asin">index.html#asin</function>
+ <function name="acos">index.html#acos</function>
+ <function name="atan">index.html#atan</function>
+ <function name="atan2">index.html#atan2</function>
+ <function name="toRadians">index.html#toRadians</function>
+ <function name="toDegrees">index.html#toDegrees</function>
+ <function name="exp">index.html#exp</function>
+ <function name="log">index.html#log</function>
+ <function name="sqrt">index.html#sqrt</function>
+ <function name="IEEEremainder">index.html#IEEEremainder</function>
+ <function name="ceil">index.html#ceil</function>
+ <function name="floor">index.html#floor</function>
+ <function name="rint">index.html#rint</function>
+ <function name="pow">index.html#pow</function>
+ <function name="round">index.html#round</function>
+ <function name="abs">index.html#abs</function>
+ <function name="max">index.html#max</function>
+ <function name="min">index.html#min</function>
+</reference>

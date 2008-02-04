@@ -1,0 +1,455 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xml module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> Functions</div>
+
+    <h2><tt>pnuts.xml</tt> module</h2>
+
+<a name="parseXML"></a>
+<div class="box">
+<div class="synopsis"><b>parseXML</b><tt>( <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a>
+| <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/InputSource.html">org.xml.sax.InputSource</a>
+)
+</tt><em>input</b></em><tt> ,<br>&nbsp;
+ ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+| <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ContentHandler.html">org.xml.sax.ContentHandler</a>)
+</tt><em>handler</b></em><tt> <br>&nbsp; { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+</tt><em>properties</em><tt>  { , (<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/validation/Schema.html">Schema</a>
+) </tt><em>schama</em><tt> } } )</tt></div>
+</div>
+
+<p>
+<tt>parseXML()</tt> parses a XML documents reading from
+<em>input</em>. Notification from the parser is handled by <em>handler</em>.
+<p>
+When <em>handler</em> is a Map object, the keys must be a method name
+of <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/helpers/DefaultHandler.html">org.xml.sax.helpers.DefaultHandler</a>, and the values must be a function that
+has the same number of arguments as the method.
+
+</p>
+<blockquote>
+<dl>
+<dt>function startDocument() 
+<dt>function startElement(uri, localName, qName, attributes)
+<dt>function endElement(uri, localName, qName) 
+<dt>function characters(charArray, startIndex, length)
+<dt>function endDocument() 
+<dt>function error(exception) 
+<dt>function fatalError(exception) 
+...
+</dl>
+</blockquote>
+<p>
+<em>properties</em> are used for configuring the parser, which can include the following boolean properties.
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>namespaceAware
+<dt>validating
+</dl>
+</blockquote>
+</font>
+
+<p>
+When <em>properties</em> includes other key-value mappings, they are treated as SAX parser's properties.
+</p>
+
+<p>
+When <em>schama</em> is specified, the XML document is parsed with schama validation (as of JDK1.5.0).
+</p>
+<pre class="eg">
+function validate(doc, schema){
+  parseXML(doc, null, null, schema)
+}
+validate("address.xml", "address.xsd")
+</pre>
+
+<a name="readDocument"></a>
+<div class="box">
+<div class="synopsis"><b>readDocument</b><tt>( <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/InputSource.html">org.xml.sax.InputSource</a>
+)
+</tt><em>input</b></em><tt> <br>&nbsp; { , 
+( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> |
+<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ErrorHandler.html">org.xml.sax.ErrorHandler</a>)
+</tt><em>errorHandler</b></em><tt> { ,
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+</tt><em>properties</em><tt>   { , (<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/validation/Schema.html">Schema</a>
+)
+</tt><em>schama</em><tt> } } } )</tt></div>
+</div>
+
+<p>
+<tt>readDocument()</tt> reads a XML document and returns a DOM object
+as a <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Document.html">org.w3c.dom.Document</a> object.
+<p>
+<em>properties</em> can include the following boolean properties,
+which are Bean properties of <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/parsers/DocumentBuilderFactory.html">javax.xml.parsers.DocumentBuilderFactory</a>.
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>namespaceAware
+<dt>validating
+<dt>ignoringElementContentWhitespace
+<dt>expandEntityReferences
+<dt>ignoringComments
+<dt>coalescing
+</dl>
+</blockquote>
+</font>
+</p>
+
+<p>
+When <em>properties</em> includes other key-value mappings, they are
+treated as DOM builder's attributes.
+</p>
+
+<p>
+When <em>schama</em> is specified, the XML document is parsed with schama validation.
+</p>
+
+<a name="newDocument"></a>
+<div class="box">
+<div class="synopsis"><b>newDocument</b><tt>( { <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> <em>properties</em> }  )</tt></div>
+</div>
+<p>
+<tt>newDocument()</tt> creates a new instance of a DOM object to build a DOM tree with,
+and return the instance.
+</p>
+<em>properties</em> can include the following boolean properties,
+which are Bean properties of <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/parsers/DocumentBuilderFactory.html">javax.xml.parsers.DocumentBuilderFactory</a>.
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>namespaceAware
+<dt>validating
+<dt>ignoringElementContentWhitespace
+<dt>expandEntityReferences
+<dt>ignoringComments
+<dt>coalescing
+</dl>
+</blockquote>
+</font>
+</p>
+
+<a name="writeDocument"></a>
+<div class="box">
+<div class="synopsis"><b>writeDocument</b><tt>( <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> |
+<a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Source.html">javax.xml.transform.Source</a> )
+ </tt><em>document</b></em><tt> , <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a>
+)</tt>
+<em>output</em> <br>&nbsp; { , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a>
+<em>properties</em> <tt> } )</tt></div>
+</div>
+
+<p>
+<tt>writeDocument()</tt> writes a XML document to <em>output</em>.
+</p>
+<p>
+<em>properties</em>, when specified, can include the attributes
+defined in <a href="http://www.w3.org/TR/xslt#output">Section 16 of
+the XSL Transformation (XSLT) W3C Recommendation</a>
+</p>
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>method
+<dt>version
+<dt>encoding
+<dt>omit-xml-declaration
+<dt>standalone
+<dt>doctype-public
+<dt>doctype-system
+<dt>cdata-section-elements
+<dt>indent
+<dt>media-type
+</dl>
+</blockquote>
+</font>
+
+<a name="traverseDocument"></a>
+<div class="box">
+<div class="synopsis"><b>traverseDocument</b><tt>(</tt></div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</b></em><tt> ,  </tt><em>enterFunc</em> (<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</em> ) {, <em>exitFunc</em> (<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</em> ) } ) or </div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</b></em><tt> ,  </tt> ( <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ContentHandler.html">org.xml.sax.ContentHandler</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> ) <em>handler</em>) or </div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</b></em><tt> ,  </tt><a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a> <em>result</em> )</div>
+</div>
+
+<p>
+If a function is specified as the 2nd argument,
+<tt>traverseDocument()</tt> traverses elements of a XML document calling a function <em>func</em>. <p>
+If a <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ContentHandler.html">org.xml.sax.ContentHandler</a>
+object is specified, the SAX events generated from the <em>document</em> are handled by the <em>handler</em>.
+</p>
+<p>
+When <em>handler</em> is a Map object, the keys must be a method name
+of <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/helpers/DefaultHandler.html">org.xml.sax.helpers.DefaultHandler</a>, and the values must be a function that
+has the same number of arguments as the method.
+</p>
+<p>
+If a <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a> object is specified as the 2nd argument, the specified document is transformed into the <em>result</em>.
+</p>
+
+<a name="transformXSL"></a>
+<div class="box">
+<div class="synopsis"><b>transformXSL</b><tt>( <br>&nbsp;
+( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Source.html">javax.xml.transform.Source</a>
+) </tt><em>source</em><tt>,<br>&nbsp; 
+( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Source.html">javax.xml.transform.Source</a>
+) </tt><em>xsl</em>  <br>&nbsp;<tt> {,
+( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a>
+) </tt><em>output</em><tt> }
+)</tt></div>
+</div>
+
+<p>
+<tt>transformXSL()</tt> transforms a XML document with XSL
+information.  If <em>output</em> is specified,  the resulting document
+is written to the <em>output</em>.  Otherwise the resulting document
+is returned as a <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Document.html">org.w3c.dom.Document</a> object.
+</p>
+
+<a name="selectSingleNode"></a>
+<div class="box">
+<div class="synopsis"><b>selectSingleNode</b><tt>( <br>&nbsp; <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a>
+</tt><em>document</b></em><tt> ,<br>&nbsp;
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>xpath</em> <br>&nbsp; <tt>{, 
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a></tt>
+<em>namespace</em><tt> }
+)</tt>
+</div>
+</div>
+
+<p>
+<tt>selectSingleNode()</tt> selects a single node using a XPath string.
+</p>
+Note that Apache Xalan-j 2.X will be required on JDK1.4.X or older versions.
+
+<a name="selectNodeList"></a>
+<div class="box">
+<div class="synopsis"><b>selectNodeList</b><tt>( <br>&nbsp; <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a>
+</tt><em>document</b></em><tt> ,<br>&nbsp;
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+</tt><em>xpath</em> <br>&nbsp; {, 
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>namespace</em> }
+)
+</div>
+</div>
+
+<p>
+<tt>selectNodeList()</tt> selects a nodelist using a XPath string.
+</p>
+Note that Apache Xalan-j 2.X will be required on JDK1.4.X or older versions.
+
+<a name="nodeAccess"></a>
+<div class="box">
+<div class="synopsis"><b>nodeAccess</b><tt>( { </tt><em>boolean</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>nodeAccess(true)</tt> changes the Configuration of the current
+context to <a href="../../apidoc/pnuts/xml/XMLConfiguration.html">pnuts.xml.XMLConfiguration</a>, so that
+elements of a <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/NodeList.html">NodeList</a> object can be accessed with [<em>number</em>] and those
+elements can be retrieved by <em>for/foreach</em> statement.
+</p>
+<tt>nodeAccess(false)</tt> resets the configuration possibly set by <tt>nodeAccess(true)</tt>.
+<p>
+<tt>nodeAccess()</tt> with no parameter returns true if <a
+href="../../apidoc/pnuts/xml/XMLConfiguration.html">pnuts.xml.XMLConfiguration</a>
+is being used on the current context.
+</p>
+
+<a name="element"></a>
+<div class="box">
+<div class="synopsis"><b>element</b><tt>( { <em>namespaceURI</em> , }  <em>tagName</em> )</tt></div>
+</div>
+<p>
+Returns a function that creates a XML element of the specified tagName.
+When a String object is specified as the parameter, it becomes the content element.
+</p>
+<pre class="eg">
+html = element("html")
+body = element("body")
+doc = html(body("hello"))   // --> &lt;html&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;
+doc().getClass()  // --> org.apache.crimson.tree.ElementNode class
+</pre>
+
+When an Element object or a Document object is specified as the parameter, it is appended as a child element.
+
+<pre class="eg">
+mset = element("module-set")
+m = readDocument("module.xml")
+mset(m)()
+</pre>
+
+
+When a Map object is passed to element(), attributes are defined using the Map object.
+<pre class="eg">
+address = element(address)
+doc = address({"zip" => "1111111", "city" => "Jakarta"})
+writeDocument(doc())   // --> &lt;address zip="1111111" city="Jakarta"/&gt;
+</pre>
+
+<a name="defineTags"></a>
+<div class="box">
+<div class="synopsis"><b>defineTags</b><tt>( <em>tagName</em>, ... )</tt></div>
+</div>
+<p>
+Defines a function that creates a XML element of the specified tag in the current package.
+</p>
+<pre class="eg">
+defineTags("html", "body")
+doc = html(body("hello"))   // --> &lt;html&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;
+doc().getClass()  // --> org.apache.crimson.tree.ElementNode class
+</pre>
+
+<a name="nodeEdit"></a>
+
+<div class="box">
+<div class="synopsis"><b>nodeEdit</b><tt>( { <em>boolean</em> } )</tt></div>
+</div>
+
+<p>
+<tt>nodeEdit(true)</tt> changes the Configuration of the current
+context to <a href="../../apidoc/pnuts/xml/NodeEditingConfiguration.html">pnuts.xml.NodeEditingConfiguration</a>, so that
+undefined top-level variables are interpreted as functions that create XML elements.
+</p>
+<tt>nodeEdit(false)</tt> resets the configuration possibly set by <tt>nodeEdit(true)</tt>.
+<p>
+<tt>nodeEdit()</tt> with no parameter returns true if <a
+href="../../apidoc/pnuts/xml/NodeEditingConfiguration.html">pnuts.xml.NodeEditingConfiguration</a>
+is being used on the current context.
+</p>
+<pre class="eg">
+nodeEdit(true)
+html(body(p("hello")))     // --> &lt;html&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> Functions</div>
+
+  </body>
+</html>

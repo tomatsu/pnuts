@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<reference>
+ <function name="getMatch">regex.html#getMatch</function>
+ <function name="getMatches">regex.html#getMatches</function>
+ <function name="getMatchStart">regex.html#getMatchStart</function>
+ <function name="getMatchEnd">regex.html#getMatchEnd</function>
+ <function name="getMatchCount">regex.html#getMatchCount</function>
+ <function name="getNumberOfGroup">regex.html#getNumberOfGroup</function>
+ <function name="match">regex.html#match</function>
+ <function name="matchAll">regex.html#matchAll</function>
+ <function name="formatMatch">regex.html#formatMatch</function>
+ <function name="regex">regex.html#regex</function>
+ <function name="split">regex.html#split</function>
+ <function name="substitute">regex.html#substitute</function>
+ <function name="whichRegexAPI">regex.html#whichRegexAPI</function>
+</reference>

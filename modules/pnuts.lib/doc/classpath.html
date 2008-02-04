@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Changing Classpath</div>
+
+    <h2>Changing Classpath</h2>
+
+<a name="setClassPath"></a>
+<h3><tt>setClassPath()</tt></h3>
+
+<a name=setClassPath></a>
+<div class="box">
+<dt><b>setClassPath</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] </tt><em>directoryOrJarFile</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>setClassPath()</tt> changes the classpath with which Pnuts resolves class and resource names before the system environment variable <em>CLASSPATH</em>.
+When the parameter of this function is an array, directories and JAR (ZIP) files in the array will be included in the resulting classpath.
+</p>
+<p>
+To reset the class path setting, specify <tt>null</tt> to the parameter.
+</p>
+
+<div class="eg">e.g.
+<pre>
+setClassPath(["k1.jar", "c:\\home"])
+</pre>
+</div>
+
+<a name=addClassPath></a>
+
+<div class="box">
+<div class="synopsis"><b>addClassPath</b><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>path</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a> </tt><em>path</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">URL</a> </tt><em>path</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>addClassPath()</tt> adds a <em>path</em> to the current <em>CLASSPATH</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+addClassPath("foo.jar")
+   => [file:/foo.jar]
+
+addClassPath("bar.jar")
+   => [file:/bar.jar, file:/foo.jar]
+</pre>
+</div>
+
+<a name=getClassPath></a>
+
+<div class="box">
+<div class="synopsis"><b>getClassPath</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getClassPath()</tt> function gets the class path setting.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Changing Classpath</div>
+
+  </body>
+</html>

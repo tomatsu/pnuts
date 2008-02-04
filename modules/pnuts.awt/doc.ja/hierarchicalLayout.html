@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.awt モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> 階層的レイアウト</div>
+
+    <h2>階層的レイアウト</h2>
+
+<p>
+Java の GUI プログラミングではコンポーネントを配置するために多くのコードを書かなければなりません。コンポーネントの配置は通常次のような手順で行います。
+<ol>
+<li>コンテナを作る。
+<li>レイアウトマネージャを設定する。
+<li>コンポーネントを貼り付ける。
+</ol>
+
+<p>
+しかし、画面の部品を作成するコードとレイアウトのコードが分離していないため、プログラムが見難くなり、後でレイアウトだけ変更するのが難しくなりがちです。特にコンポーネントの包含関係が階層的である場合には、コードが読みにくくなります。
+</p>
+
+<div class="eg">例:
+<pre>
+Panel panel1 = new Panel();
+panel1.setLayout(LayoutManagerA);
+panel1.add(component1);
+...
+Panel panel2 = new Panel();
+ppanel2.setLayout(LayoutManagerB);
+panel2.add(component3);
+...
+panel1.add(panel2);
+...
+add(panel1);
+</pre></div>
+
+<p>
+階層的レイアウトは、配列を使って階層的な包含関係を直感的に表す方法です。
+</p>
+<div class="eg">例:
+<pre>
+Object[] format = new Object[]{ LayoutManagerA.class, component1,
+                    new Object[]{ LayoutManagerB.class,  component2, ... }, ...
+                  };
+Layout.layout(container, format);
+</pre></div>
+
+<h3>pnuts.awt.Layout</h3>
+
+<tt>pnuts.awt.Layout</tt> クラスは、階層的レイアウトを行うためのマネージャクラスです。ほとんどの場合、必要なのは次のメソッドだけです。
+
+<blockquote>
+<dl>
+<dt><tt>public static Container</tt> <b>layout</b><tt>(Container</tt> <i>container</i><tt>, Object[]</tt> <i>format</i><tt>)</tt></dt>
+<dd><i>format</i>を使って<i>container</i>にコンポーネントを配置し、その<i>container</i>を返す。</dd>
+</dl>
+</blockquote>
+
+<p>
+配列の最初の要素が<tt>java.awt.LayoutManager</tt>クラスのサブクラスを表す<tt>Class</tt>オブジェクトの場合、
+そのクラスに対して登録されているレイアウト規則を使って、配列の構造からレイアウトを作成します。
+</p>
+
+<p>
+<tt>Layout</tt>クラスには、次のレイアウトマネージャのマッピングがあらかじめ登録されています(後述)。
+</p>
+
+<ul>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/BorderLayout.html">BorderLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/FlowLayout.html">FlowLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/GridLayout.html">GridLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/GridBagLayout.html">GridBagLayout</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/awt/CardLayout.html">CardLayout</a>
+<li><a href="PnutsLayout.html">PnutsLayout</a>
+</ul>
+
+
+<p>
+配列の最初の要素がClassオブジェクトでない場合、次の規則に従います。
+<ul>
+<li>配列の要素がComponentオブジェクトならば、そのComponentをContainer.add(Component)メソッドで<em>container</em>に追加します。
+<li>配列の要素がComponentオブジェクトで始まる配列の場合には、Container.add(Component, Object)メソッドで、最初の要素のComponentを<em>container</em>に追加します。
+</ul>
+
+<div class="eg">例:
+<pre>
+Layout.layout(new JTabbedPane(), new Object[]{
+     new Object[]{new JLabel("One"), "One"},
+     new Object[]{new JLabel("Two"), "Two"}
+});
+</pre></div>
+
+<h3>BorderLayout のマッピング</h3>
+
+<div class="eg">例:
+<pre>
+Layout.layout(panel, new Object[]{
+  BorderLayout.class, new Object[]{new Integer(5), new Integer(5)},
+  new Object[]{ "Center", new Button("Center") },
+  new Object[]{ "South", new Button("South") },
+  new Object[]{ "North", new Button("North") }
+});
+</pre></div>
+
+<p>
+配列の最初の要素が<tt>BorderLayout.class</tt> の場合、２番目の要素は<tt>BorderLayout</tt>クラスのコンストラクタのパラメータを表す配列になります。残りの要素は、次のいずれかです。
+<ul>
+<li>要素が2つの配列のリストで、それらの1つ目の要素は"North", "South", "East", "West", "Center" のいずれかで、2つ目の要素はコンテナに貼り付けるコンポーネント。
+<li>Class オブジェクトを先頭に持つ Object の配列。この部分は再帰的に処理される。
+</ul>
+</p>
+
+<h3>FlowLayout のマッピング</h3>
+
+<div class="eg">例:
+<pre>
+Layout.layout(panel, new Object[]{
+  FlowLayout.class, new Object[]{},
+  new Button("One"),
+  new Button("Two"),
+  new Button("Three")
+});
+</pre></div>
+
+<p>
+配列の最初の要素が<tt>FlowLayout.class</tt> の場合、２番目の要素は<tt>FlowLayout</tt>クラスのコンストラクタのパラメータを表す配列になります。残りの要素は、次のいずれかです。
+<ul>
+<li>コンテナに貼り付けるコンポーネント。
+<li>Class オブジェクトを先頭に持つ Object の配列。この部分は再帰的に処理される。
+</ul>
+</p>
+
+<h3>GridLayout のマッピング</h3>
+
+<div class="eg">例:
+<pre>
+Layout.layout(panel, new Object[]{
+  GridLayout.class, new Object[]{},
+  new Button("One"),
+  new Button("Two"),
+  new Button("Three"),
+  new Button("Four")
+});
+</pre></div>
+
+<p>
+配列の最初の要素が<tt>GridLayout.class</tt> の場合、２番目の要素は<tt>GridLayout</tt>クラスのコンストラクタのパラメータを表す配列になります。残りの要素は、次のいずれかです。
+<ul>
+<li>コンテナに貼り付けるコンポーネント。
+<li>Class オブジェクトを先頭に持つ Object の配列。この部分は再帰的に処理される。
+</ul>
+</p>
+
+
+<h3>GridBagLayout のマッピング</h3>
+
+<div class="eg">例:
+<pre>
+Layout.layout(panel, new Object[]{
+  GridBagLayout.class,
+  new Object[]{"gridx=0, ...", new Button("One")},
+  new Object[]{"gridx=0, ...", new Button("Two")},
+  new Object[]{"gridx=0, ...", new Button("Three")},
+  new Object[]{"gridx=0, ...", new Button("Four")}
+});
+</pre></div>
+
+<p>
+配列の最初の要素が<tt>GridBagLayout.class</tt> の場合、２番目の要素は次の2つの要素をもつ配列になります。
+<ul>
+<li>GridBagConstraints を作るための文字列( "フィールド名=値" をカンマ(,)で区切ったリスト)
+<li>Component または、Class オブジェクトを先頭に持つ配列。(再帰的に処理される。)
+</ul>
+</p>
+
+<p>
+fill と anchor には、static 変数の名前を指定します。insets には 0:0:0:0 のように4つの整数をコロン(:)でつなげたものを指定します。
+</p>
+
+<h3>CardLayout のマッピング</h3>
+
+<div class="eg">例:
+<pre>
+Layout.layout(panel, new Object[]{
+  CardLayout.class, new Object[]{},
+  new Object[]{"1", new Button("One")},
+  new Object[]{"2", new Button("Two")},
+  new Object[]{"3", new Button("Three")}
+});
+</pre></div>
+
+<p>
+配列の最初の要素が<tt>CardLayout.class</tt> の場合、２番目の要素は<tt>CardLayout</tt>クラスのコンストラクタのパラメータを表す配列になります。残りの要素は、次のいずれかです。
+<ul>
+<li>要素が2つの配列のリストで、それらの1つ目の要素は add() メソッドのパラメータで指定するキーワード。
+2つ目の要素はコンテナに貼り付けるコンポーネント。
+<li>Class オブジェクトを先頭に持つ Object の配列。この部分は再帰的に処理される。
+</ul>
+</p>
+
+<h3><a href="PnutsLayout.html">PnutsLayout</a> のマッピング</h3>
+
+<div class="eg">例:
+<pre>
+Layout.layout(panel, new Object[]{
+  PnutsLayout.class, "columns=2",
+  button1,
+  "label",
+  null,
+  new Object[]{
+    button2, "colspan=2, padding=10:0"
+  }
+});
+</pre></div>
+
+<p>
+配列の最初の要素が<tt>PnutsLayout.class</tt> の場合、２番目の要素は <tt>PnutsLayout</tt>クラスのコンストラクタのパラメータになります。残りの要素はコンテナに貼り付けるコンポーネントを一つ一つを表します。それらは、<tt>Component</tt> オブジェクトか、<tt>String</tt> オブジェクトか、<tt>Object</tt> の配列か、<tt>null</tt> のいずれかです。
+<ul>
+<li><tt>Component</tt> オブジェクトの場合は、そのオブジェクトが add() されます。
+<li><tt>String</tt> オブジェクトの場合は、その文字列をラベルとする<tt>java.awt.Label</tt> オブジェクトが作られ add()されます。
+<li><tt>null</tt>の場合は、コンテナと同じクラスのオブジェクトが作られ add()されます。
+<li><tt>Object</tt> の配列の場合、次の手順で配置されます:
+<ul>
+<li>配列の1番目の要素が<tt>Class</tt> オブジェクトの場合、その部分が再帰的に処理されます。
+<li>配列の1番目の要素が<tt>Component</tt> オブジェクトの場合、2 番目の要素を指定して add() されます。
+<li>配列の1番目の要素が<tt>String</tt> オブジェクトの場合、<tt>Label</tt> オブジェクトが作られ、2 番目の要素を指定して add() されます。
+<li>配列の1番目の要素が<tt>null</tt>の場合、コンテナと同じクラスのオブジェクトが作られ、2 番目の要素を指定して add() されます。
+</ul>
+</ul>
+</p>
+<p>
+したがって、前の例は次のように解釈されます。
+</p>
+
+<pre class="eg">
+setLayout(new PnutsLayout("columns=2"));
+add(button1, "");
+add(new Label("label"));
+add(new Panel());
+add(button2, "colspan=2, padding=10:0");
+</pre>
+
+例:
+<table cellpadding=10>
+<tr>
+<td>
+<img src="../doc/image/11.gif"></img>
+</td>
+<td>
+<pre class="eg">
+Frame f = new Frame("11");
+Layout.layout(f,
+   new Object[]{PnutsLayout.class, "columns=2,pading=5",
+              new Object[]{PnutsLayout.class, "halign=left",
+		 new Checkbox("8 points"),
+		 new Checkbox("10 points"),
+		 new Checkbox("12 points"),
+		 new Checkbox("24 points")},
+              new Object[]{PnutsLayout.class, "halign=left",
+		 new Checkbox("Bold"),
+		 new Checkbox("Italic"),
+		 new Checkbox("Underline")}});
+f.pack();
+f.show();
+</pre>
+</td>
+</tr>
+</table>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.awt</tt></a> -> 階層的レイアウト</div>
+
+  </body>
+</html>

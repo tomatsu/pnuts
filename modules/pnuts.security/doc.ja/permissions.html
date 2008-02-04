@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.securityモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> パミッション利用</div>
+
+    <h2>パミッション</h2>
+
+
+<a name="permissions"></a>
+
+<div class="box">
+<div class="synopsys"><b>permissions</b><tt>( </tt><em>permitted</em><tt> { ,</tt><em>notPermitted</em><tt>} )</tt></div>
+</div>
+
+<p>
+<tt>permissions()</tt> は、許可したいパミッション<em>permitted</em>と拒否したパミッション<em>notPermitted</em>から<a href="http://java.sun.com/j2se/1.4/docs/api/java/security/PermissionCollection.html">PermissionCollection</a> オブジェクトを作ります。
+<em>permitted</em> と <em>notPermitted</em> には、
+<ul>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/security/Permission.html">java.security.Permission</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/security/PermissionCollection.html">java.security.PermissionCollection</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">java.lang.Class</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/net/URL.html">java.net.URL</a>
+<li><a href="http://java.sun.com/j2se/1.4/docs/api/java/security/CodeSource.html">java.security.CodeSource</a>
+<li><tt>null</tt>
+</ul>
+またはそれらのオブジェクトの、配列/Collection/Generatorを指定します。
+</p>
+<P>
+<tt>null</tt>が指定された場合は、Pnutsのランタイム・クラスのパミッションを返します。
+</P>
+<p>
+次のコードは、VMを終了する許可を除くすべてのパミッションを追加したPermissionCollectionを作ります。
+</p>
+<div class="eg">例：
+<pre>
+noExitPermissions = permissions(new java.security.AllPermission(), RuntimePermission("exitVM"))
+</pre></div>
+
+
+<a name="secureFunc"></a>
+
+<div class="box">
+<div class="synopsys"><b>secureFunc</b><tt>( </tt><em>func(...)</em><tt>, </tt><em>permissions</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>secureFunc()</tt> は、指定されたパミッションで<em>func</em>を呼び出す関数を返します。下のスクリプトは、VMの終了を防ぐ方法を示しています。
+</p>
+
+<div class="eg">例：
+<pre>
+function mayExit(){
+   // ..
+   exit()
+}
+
+noexit = secureFunc(mayExit, noExitPermissions)
+
+noexit()
+</pre></div>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.security</tt></a> -> 暗号の利用</div>
+
+  </body>
+</html>

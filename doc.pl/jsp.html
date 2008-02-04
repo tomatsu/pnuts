@@ -1,0 +1,79 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Podr&#281;cznik Pnuts</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+
+<!-- body start -->
+
+<h3>JSP Tag Library for Pnuts</h3>
+
+<p>
+The tag library of <a href="http://java.sun.com/products/jsp/">Java Server Pages</a> to execute Pnuts script is included in Pnuts (<tt>pnuts-taglib.jar</tt>).
+</p>
+
+<a name=setClassPath></a>
+<table border=1 width=90% cellpadding=10>
+<tr>
+<td>
+<pre>
+&lt;%@ taglib uri="/pnuts-taglib.jar" prefix="pnuts" %&gt;
+
+&lt;pnuts:eval&gt;
+  <em>expression</em>
+&lt;/pnuts:eval&gt;
+
+</pre>
+</td>
+</tr>
+</table>
+
+<p>
+The &lt;pnuts:eval&gt; tag evaluates the <em>expression</em> and is replaced the element by the output of the evaluation.
+</p>
+
+<blockquote>np. (${TOMCAT}/webapps/test/test.jsp)
+<table cellpadding=20>
+<tr>
+<td bgcolor=f2f2f2>
+<pre>
+&lt;%@ taglib uri="/pnuts-taglib.jar" prefix="pnuts" %&gt;
+&lt;HTML&gt;
+&lt;HEAD&gt;
+&lt;TITLE&gt;&lt;/TITLE&gt; 
+&lt;/HEAD&gt;
+&lt;BODY BGCOLOR="#FFFFFF"&gt; 
+
+&lt;pnuts:eval&gt;
+  use("pnuts.util")
+  foo = 100
+&lt;/pnuts:eval&gt;
+
+&lt;pnuts:eval&gt;
+  println(foo)
+&lt;/pnuts:eval&gt;
+&lt;/BODY&gt; 
+&lt;/HTML&gt;
+</pre>
+</td>
+</tr>
+</table><br>
+</blockquote>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+
+  </body>
+</html>

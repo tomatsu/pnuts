@@ -1,0 +1,311 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xmlモジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a href="digest.html">XML文書のダイジェスト</a> -> DigestReaderの使用例 (Java)</div>
+
+    <h2>DigestReaderの使用例</h2>
+
+<h4>目次</h4>
+<ul>
+<li><a href="#1">1. 特定のパスの要素の内容に対してコールバックを呼び出す</a>
+<li><a href="#2">2. 要素の属性を使ってコールバックを呼び出す</a>
+<li><a href="#3">3. 要素の属性から引数リストを作ってコールバックを呼び出す</a>
+<li><a href="#4">4. 子供の要素の情報から引数リストを作ってコールバックを呼び出す</a>
+<li><a href="#5">5. Map/Listで構成される構造を作る</a>
+<li><a href="#6">6. 子供の要素の情報をプロパティとするJavaBeansを作る</a>
+<li><a href="#7">7. 要素の属性をプロパティとするJavaBeansを作る</a>
+</ul>
+
+<a name="1"></a>
+<h4>1. 特定のパスの要素の内容に対してコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.DigestAction;
+import java.io.*;
+
+class MyAction extends DigestAction {
+    public void end(String path, String key, String text, Object top){
+        System.out.println(text);
+    }
+
+    public static void main(String[] args) throws Exception{
+        DigestReader dr = new DigestReader();
+	dr.setRules(new Object[][]{
+          {new MyAction(), "/addressbook/address/name"}
+	});
+        dr.parse(new FileInputStream(args[0]));
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="2"></a>
+<h4>2. 要素の属性を使ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.DigestAction;
+import java.io.*;
+import java.util.*;
+
+class MyAction2 extends DigestAction {
+    public void start(String path, String key, Map amap, Object top){
+	for (Iterator it = amap.entrySet(); it.hasNext(); ){
+	    Map.Entry entry = (Map.Entry)it.next();
+	    System.out.println(entry.getKey() + " = " + entry.getValue());
+	}
+    }
+
+    public static void main(String[] args) throws Exception{
+        DigestReader dr = new DigestReader();
+	dr.setRules(new Object[][]{
+          {new MyAction2(), "/addressbook/address"}
+	});
+        dr.parse(new FileInputStream(args[0]));
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address name="James" phone="111-2222"/&gt;
+  &lt;address name="Ken" phone="333-4444"/&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="3"></a>
+<h4>3. 要素の属性から引数リストを作ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.action.SimpleCallAction;
+import java.io.*;
+
+class MyAction3 extends <a href="../../apidoc/pnuts/xml/action/SimpleCallAction.html">SimpleCallAction</a> {
+
+    MyAction3(){
+	super(new String[]{"name", "phone"});
+    }
+
+    public void call(Object[] args){
+	System.out.println(args[0] +  " : " + args[1]); 
+    }
+
+    public static void main(String[] args) throws Exception{
+        DigestReader dr = new DigestReader();
+	dr.setRules(new Object[][]{
+          {new MyAction3(), "/addressbook/address"}
+	});
+        dr.parse(new FileInputStream(args[0]));
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address name="James" phone="111-2222"/&gt;
+  &lt;address name="Ken" phone="333-4444"/&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="4"></a>
+<h4>4. 子供の要素の情報から引数リストを作ってコールバックを呼び出す</h4>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.action.*;
+import java.io.*;
+
+class MyAction4 extends <a href="../../apidoc/pnuts/xml/action/CallAction.html">CallAction</a> {
+
+    MyAction4(){
+	super(new String[]{"name", "phone"});
+    }
+
+    public void call(Object[] args){
+	System.out.println(args[0] +  " : " + args[1]); 
+    }
+
+    public static void main(String[] args) throws Exception{
+        DigestReader dr = new DigestReader();
+	DigestAction paramAction = new <a href="../../apidoc/pnuts/xml/action/ParameterAction.html">ParameterAction</a>();
+	dr.setRules(new Object[][]{
+	    {new MyAction4(), "/addressbook/address"},
+	    {paramAction, "/addressbook/address/name", "name"},
+	    {paramAction, "/addressbook/address/phone", "phone"}
+	});
+        dr.parse(new FileInputStream(args[0]));
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="5"></a>
+<h4>5. Map/Listで構成される構造を作る</h4>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.action.*;
+import java.io.*;
+
+class MyAction5  {
+    public static void main(String[] args) throws Exception {
+        DigestReader dr = new DigestReader();
+	DigestAction listAction = new <a href="../../apidoc/pnuts/xml/action/ListAction.html">ListAction</a>();
+	DigestAction textAction = new <a href="../../apidoc/pnuts/xml/action/TextAction.html">TextAction</a>();
+	dr.setRules(new Object[][]{
+	    {listAction, "/addressbook/address", "address"},
+	    {textAction, "/addressbook/address/name"},
+	    {textAction, "/addressbook/address/phone"}
+	});
+        Object result = dr.parse(new FileInputStream(args[0]));
+	System.out.println("result = " + result);
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="6"></a>
+<h4>6. 子供の要素の情報をプロパティとするJavaBeansを作る</h4>
+
+<pre class="eg">
+public class Address {
+    private String name;
+    private String phone;
+
+    public String getName(){
+	return name;
+    }
+
+    public void setName(String name){
+	this.name = name;
+    }
+
+    public String getPhone(){
+	return phone;
+    }
+
+    public void setPhone(String phone){
+	this.phone = phone ;
+    }
+}
+</pre>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.DigestAction;
+import pnuts.xml.action.*;
+import java.io.*;
+import java.util.*;
+
+class MyAction6  {
+    public static void main(String[] args) throws Exception {
+        DigestReader dr = new DigestReader();
+	DigestAction bean = new <a href="../../apidoc/pnuts/xml/action/BeanPropertyAction.html">BeanPropertyAction</a>(Address.class);
+	DigestAction list = new <a href="../../apidoc/pnuts/xml/action/ListAction.html">ListAction</a>();
+	dr.setRules(new Object[][]{
+	    {list, "/addressbook/address", "address"},
+	    {bean, "/addressbook/address/name"},
+	    {bean, "/addressbook/address/phone"}
+	});
+        Map result = (Map)dr.parse(new FileInputStream(args[0]));
+	List addresses = (List)result.get("address");
+	for (Iterator it = addresses.iterator(); it.hasNext();){
+	    Address addr = (Address)it.next();
+	    System.out.println(addr.getName() + " : " + addr.getPhone());
+	}
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address&gt;
+    &lt;name&gt;James&lt;/name&gt;
+    &lt;phone&gt;111-2222&lt;/phone&gt;
+  &lt;/address&gt;
+  &lt;address&gt;
+    &lt;name&gt;Ken&lt;/name&gt;
+    &lt;phone&gt;333-4444&lt;/phone&gt;
+  &lt;/address&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<a name="7"></a>
+<h4>7. 要素の属性をプロパティとするJavaBeansを作る</h4>
+
+<pre class="eg">
+import pnuts.xml.DigestReader;
+import pnuts.xml.DigestAction;
+import pnuts.xml.action.*;
+import java.io.*;
+import java.util.*;
+
+class MyAction7  {
+    public static void main(String[] args) throws Exception {
+        DigestReader dr = new DigestReader();
+	DigestAction a = new <a href="../../apidoc/pnuts/xml/action/BeanAction.html">BeanAction</a>(Address.class);
+	dr.setRules(new Object[][]{
+	    {a, "/addressbook/address", "address"}
+	});
+	List list = new ArrayList();
+        dr.parse(new FileInputStream(args[0]), list);
+	for (Iterator it = list.iterator(); it.hasNext();){
+	    Address addr = (Address)it.next();
+	    System.out.println(addr.getName() + " : " + addr.getPhone());
+	}
+    }
+}
+</pre>
+<pre class="eg">
+&lt;addressbook&gt;
+  &lt;address name="James" phone="111-2222"/&gt;
+  &lt;address name="Ken" phone="333-4444"/&gt;
+&lt;/addressbook&gt;
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> <a
+href="digest.html">XML文書のダイジェスト</a> -> DigestReaderの使用例 (Java)</div>
+
+  </body>
+</html>

@@ -1,0 +1,109 @@
+<html>
+    <head>
+      <title>Pnuts ユーザーズガイド</title>
+      <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body 
+	    bgcolor="#ffffff" 
+	    text="#000000" >
+
+<!-- body start -->
+
+<h3>pnuts.lang.Package</h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a> のサブクラスを定義する場合、次のメソッドを定義します。
+</p>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected Value <b>lookup</b>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>symbol</em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+<dd>パッケージの変数を読む処理は、<tt>lookup(</tt><em>symbol</em> <tt>, </tt><em>context</em><tt>).get()</tt> になります。
+<dt><p><tt>public void <b>set</b>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>symbol</em><tt>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>obj</em><tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+<dd>代入文 <tt>"</tt><em>symbol</em><tt> = </tt><em>obj</em><tt>"</tt> は
+		<tt>set(</tt><em>symbol</em> <tt>, </tt><em>obj</em><tt>, </tt><em>context</em><tt>)</tt>に相当します。</p>
+</dl>
+</blockquote>
+
+<p>
+次のメソッドは必要な場合にオーバーライドします。
+</p>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected void <b>init</b>()</tt></dt>
+<dd>データ構造を初期化し、変数を定義します。</p>
+<dt><p><tt>protected void <b>init</b>(<a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+<dd>当該パッケージがカレントパッケージになるときに呼ばれます。</p>
+</dl>
+</blockquote>
+
+<p>
+たとえば、Hashtable を使って実装されるパッケージは次のようになります。
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+import pnuts.lang.*;
+import pnuts.lang.Package;
+import java.util.*;
+
+public class SimplePackage extends Package {
+   Hashtable table;
+
+
+   public SimplePackage(){
+   }
+
+   public SimplePackage(String name){
+      super(name);
+   }
+
+   public SimplePackage(String name, Package parent){
+      super(name, parent);
+   }
+
+   protected void init(){
+      table = new Hashtable()
+   }
+
+   protected void init(Context context){
+      System.out.println("init(Context) is called");
+      super.init(context);
+   }
+
+   protected Value lookup(String symbol, Context context){
+      final Object obj = table.get(symbol);
+      if (obj != null){
+         return new Value(){
+            public Object get(){
+              return obj;
+            }
+         };
+      } else {
+         return null;
+      }
+   }
+
+   public void set(String symbol, Object value, Context context){
+      table.put(symbol, value);
+   }
+}
+</pre></td></tr>
+</table>
+</blockquote>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<center><h3>
+<a href="guide.html">戻る</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+</body>
+</html>

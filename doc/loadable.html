@@ -1,0 +1,78 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Implementing Loadable Classes in Java
+</div>
+
+<!-- body start -->
+
+<a name=module></a>
+<h3>Implementing Loadable Classes in Java</h3>
+
+<p>
+When the suffix <tt>'.pnut'</tt> is omitted in <tt>load()</tt> call, Pnuts interpreter
+tries to load a corresponding Java class as a precompiled script.  In
+this case, the class must be a class that implements <a href="../apidoc/pnuts/lang/Executable.html"><tt>pnuts.lang.Executable</tt></a> interface.
+</p>
+
+<p>
+  The class name is the script name that replaces <tt>'/'</tt> with
+ <tt>'.'</tt>.  For instance, a script name is "<tt>lib/stream</tt>", <tt>lib.stream</tt> class is
+loaded if it exists.  If the class is not found, then <tt>lib/stream.pnut</tt> is loaded.
+</p>
+
+<P>
+In an implementation class of <a href="../apidoc/pnuts/lang/Runtime.html"><tt>pnuts.lang.Executable</tt></a> interface, <tt>run(Context)</tt> method must be defined.
+</P>
+
+<pre class="eg">
+package my.package;
+import pnuts.lang.*;
+
+public class init implements Executable {
+    public Object run(Context context){
+      ...
+    }
+}
+</pre>
+
+<p>
+Then <tt>load("my/package/init")</tt> loads this class and executes the <tt>run(Context)</tt> method.
+</p>
+
+<p>
+To know if precompiled scripts are used, give <tt>-v</tt> option to the <tt>pnuts</tt> command
+or set the property <tt>"pnuts.verbose"</tt> true.
+</p>
+
+<div class="eg">In case a precompiled script is used.
+<pre>
+% pnuts -v -r my/package/init
+[loading my.package.init class]
+</pre>
+</div>
+
+<div class="eg">In case no precompiled script is used.
+<pre>
+% pnuts -v -r my/package/init
+[loading file:/C:/test/my/package/init.pnut]
+</pre>
+</div>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Implementing Loadable Classes in Java
+</div>
+
+  </body>
+</html>

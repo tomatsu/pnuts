@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> 型検査</div>
+
+<h2>型検査</h2>
+
+<a name="isArray"></a>
+<a name="isFunction"></a>
+<a name="isGenerator"></a>
+<a name="iterable"></a>
+<div class="box">
+<div class="synopsis"><b>isArray</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt> <em>object</em>)</div>
+<div class="synopsis"><b>isFunction</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt><em>object</em> <tt> { , int </tt><em>narg</em> } )</div>
+<div class="synopsis"><b>isGenerator</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt> <em>object</em> <tt>)</tt></div>
+<div class="synopsis"><b>iterable</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Object.html">Object</a> </tt> <em>object</em> <tt>)</tt></div>
+</div>
+
+<p>
+<tt>isArray()</tt> は、オブジェクトが配列かどうかを検査します。
+</p>
+
+<div class="eg">
+例：
+<pre>
+isArray([1, 2]) ==> true
+isArray(null) ==> false
+</pre></div>
+
+<p>
+<tt>isFunction()</tt> は、指定されたオブジェクトが関数かどうかを検査します。
+<em>narg</em> が指定された場合は、その関数が<em>narg</em> 個の引数を受け取れるかどうかを検査します。
+可変長の引数は、-1で表されます。
+</p>
+
+<div class="eg">例：
+<pre>
+isFunction(println, 0) ==> true
+isFunction(println, -1) ==> true
+</pre></div>
+
+
+<p>
+<tt>isGenerator()</tt>は、指定されたオブジェクトがジェネレータかどうかを検査します。
+</p>
+
+
+<div class="eg">例：
+<pre>
+isGenerator(range(1, 100)) ==> true
+</pre>
+</div>
+
+<p>
+<tt>iterable()</tt> は、オブジェクトがfor文による繰り返し処理の対象となるかどうかを返します。
+</p>
+
+<div class="eg">
+例：
+<pre>
+if (iterable(obj)){
+  for (i : obj){
+    handler(i)
+  }
+}
+</pre></div>
+
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> 型検査</div>
+
+  </body>
+</html>

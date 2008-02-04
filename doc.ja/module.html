@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> モジュール
+</div>
+
+<!-- body start -->
+
+<a name=module></a>
+<h2>モジュール</h2>
+
+<p>
+<a href="lang.html#modules">モジュール</a>は、再利用性可能なスクリプトを作成するためのツールです。各モジュールは通常別々のJARファイルにパッケージ化されます。そして、そのJARファイルはCLASSPATHに追加されるか${PNUTS_HOME}/modules/にコピーしておきます。
+<p>
+ここでは、モジュールの作り方について説明します。モジュールの概念や仕組みに関する詳細は、<a href="lang.html#modules">「Pnuts言語」</a>を参照。
+</p>
+
+
+<h4>モジュールの作成手順</h4>
+
+<p>
+モジュールは、Pnutsでも、Javaでも、あるいはその両方を使って作成することができます。
+</p>
+
+<p>
+ここでは、Pnutsだけでモジュールを作成する方法について説明します。Javaでモジュールを作成する方法については、<a href="module_java.html">「Javaによるモジュールの実装」</a>を参照。
+</p>
+
+<ol>
+<li>対応するパッケージの名前を決めます。例： "<tt>org.acme.util</tt>"
+<div>モジュールはこの名前で識別されることになります。</div>
+<li>初期化スクリプトを編集します。この例では<tt>org/acme/util/init.pnut</tt>というファイルです。
+このファイルが読みこまれるとき、カレントパッケージは"<tt>org.acme.util</tt>"にセットされます。
+このファイルが読み込まれた結果として、<tt>org.acme.util</tt>パッケージの関数が定義されるようにします。
+<li>他のモジュールに依存する場合は、 <tt>org/acme/util/init.pnut</tt>
+でモジュールリストをリセットした後でuse(モジュール名)を呼び出します。
+たとえば、<tt>org.acme.util</tt> が <tt>pnuts.lib</tt> に依存している
+場合、次のように<tt>use(null)</tt>および<tt>use("pnuts.lib")</tt>を呼び出します。
+
+<pre class="eg">
+use(null)
+use("pnuts.lib")
+
+package("org.acme.util")
+
+function hello(){
+  println("hello")
+}
+</pre>
+
+
+</ul>
+
+<li>
+配布する場合は、JAR ファイルに固めます。モジュールから利用されるJavaのクラスも同じJARファイルに含めます。
+
+</ol>
+
+
+<h4>autoloadの利用</h4>
+
+<p>
+モジュールの関数の数が多い場合、autoloadの機能を利用して、関数が最初に使われるときに初めて関数が定義されるようにすることができます。
+</p>
+
+<ul>
+<li><tt>package("org.acme.util")</tt>　を各スクリプトファイルの先頭に挿入します。
+<li>スクリプトファイルを<tt>org/acme/util/*.pnut</tt>として保存します。
+<li><tt>org/acme/util/init.pnut</tt>で、<em>context</em><tt>.autoload()</tt>により、モジュールのスクリプトファイルを登録します。たとえば、<tt>play()</tt> 関数が <tt>org/acme/util/cdplayer.pnut</tt> で定義されている場合、次のように<tt>autoload()</tt> を呼び出します。
+</ul>
+
+<div class="eg">
+org/acme/util/init.pnut
+<pre>
+autoload("play", "org/acme/util/cdplayer")
+</pre>
+</div>
+
+<pre class="eg">
+> use("org.acme.util")
+...
+> play("something")
+...
+</pre>
+
+<p>
+autoload()で読み込まれるスクリプトは、autoload()が呼び出されたときのモジュール・リストを使って実行されます。 
+</p>
+
+<h4>エクスポートするシンボルを定義する</h4>
+
+<p>
+デフォルトでは、シンボルが同じ名前の関数を参照している場合に、そのシンボルが自動的にエクスポートされます。デフォルトでエクスポートされないオブジェクトをエクスポートしたい場合や、デフォルトでエクスポートされる関数をエクスポートされないようにしたい場合は、<a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)"><tt>Package.export()</tt></a>を使ってシンボルを明示的にエクスポートします。
+<p>
+
+<pre class="eg">
+pkg = package()
+pkg.export("play")
+</pre>
+
+<p>
+エクスポートする名前は、<a href="../apidoc/pnuts/lang/Package.html#export(java.lang.String)"><tt>Package.export()</tt></a>が呼ばれた時点で、定義済であるかautoload()されていなければならないことに注意してください。
+</p>
+
+<p>
+<tt>pnuts.ext.ModuleBase</tt>クラスを利用する場合には、もっと簡単な方法が提供されます。次のような記法で、変数のエクスポートと初期化を同時に行うことができます。
+</p>
+
+<pre class="eg">
+EXPORTS.play = &lt;<em>オブジェクト</em>&gt;
+</pre>
+
+
+<h4>Javaによるモジュールの初期化</h4>
+<p>
+Load可能なクラスをJavaで実装することができるので、モジュールの初期化もJavaで行うことができます。
+</p>
+<p>
+<a href="loadable.html">「Load可能なクラス」</a> と <a
+href="module_java.html">「Javaによるモジュールの実装」</a>を参照。
+</p>
+
+<h4>モジュールのバージョン情報</h4>
+
+<p>
+モジュールのバージョン情報は、あるモジュールの仕様と実装のバージョンを識別するために使われます。このバージョン情報は、モジュール間の依存関係を定義するときに使うことができます。
+また、この情報を使うことで、より有用なバグレポートが可能になります。
+<p>
+モジュールにバージョン情報を付加するには、JARファイルに、<a
+href="http://java.sun.com/j2se/1.3/ja/docs/ja/guide/versioning/index.html">パッケージのバージョンID</a>を定義します。
+</p>
+<p>
+たとえば、次のようなManifestファイルを用意します。<tt>Specification-Version</tt>に仕様のバージョン、<tt>Implementation-Version</tt>に実装のバージョンを数字とピリオド(.)で指定します。
+</p>
+
+<pre class="eg">
+Manifest-version: 1.0
+Name: org.acme.util
+Specification-Title: Acme Library Functions
+Specification-Version: 1.0
+Specification-Vendor: Foo Bar, Inc.
+Implementation-Title: org.acme.util
+Implementation-Version: 20020704000000
+Implementation-Vendor: Foo Bar, Inc.
+</pre>
+
+<p>
+JARファイルに、このManifestファイルを追加するには、<tt>jar</tt>コマンドの<tt>m</tt>オプションで指定します。
+</p>
+
+<pre class="eg">
+% jar cfm module.jar manifest.mf *
+</pre>
+
+<p>
+実行時にモジュールのバージョンを取り出すには、<a
+href="../modules/pnuts.util/doc.ja/manifest.html#versionInfo"><tt>versionInfo()</tt></a>か、<a
+href="../modules/pnuts.util/doc.ja/manifest.html#manifest"><tt>manifest()</tt></a>を使います。
+</p>
+
+<a name="dynamic_modules"></a>
+<h2>動的なモジュール</h2>
+<p>
+ここまで説明してきたモジュールは、スクリプト実行前に作成され、名前で識別されるモジュールでした。
+動的なモジュールとは、スクリプト実行中に定義されるモジュールで、必ずしも名前では識別されないものです。
+</p>
+<p>
+動的なモジュールの作成は、次のような手順になります。
+<ol>
+<li><a href="../modules/pnuts.lib/doc.ja/package_op.html#createPackage">createPackage()</a>等でpnuts.lang.Packageオブジェクトを作成する
+<li>そのPackageに名前を定義する。
+<li><a href="lang.html#use">use()</a>でそのPackageを指定する
+<li>公開したい名前にたいしてPackage.export()を呼び出す
+</ol>
+</p>
+<pre class="eg">
+p = createPackage()
+p.add = function (x, y) x + y
+use(p)
+p.export("add")
+
+add(2, 3) ==> 5
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> モジュール
+</div>
+
+  </body>
+</html>

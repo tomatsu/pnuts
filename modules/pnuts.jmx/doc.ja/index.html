@@ -1,0 +1,151 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.jmx モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt> モジュール</a> -> <tt>pnuts.jmx</tt></div>
+
+    <h2><tt>pnuts.jmx</tt> モジュール</h2>
+
+<a name="mbeanConnection"></a>
+<div class="box">
+<div class="synopsis"><b>mbeanConnection</b><tt> ( )</tt> or</div>
+<div class="synopsis2"><tt> ( MBeanServerConnection <em>connection</em> )</tt> or</div>
+<div class="synopsis2"><tt> ( int <em>pid</em> )</tt> or</div>
+<div class="synopsis2"><tt> ( String <em>serviceURL</em> )</tt> or</div>
+<div class="synopsis2"><tt> ( JMXServiceURL <em>serviceURL</em> )</tt></div>
+</div>
+<p>
+Connect to an existing MBeanServer.  When called with no argument, connect to Platform MXBean
+of running VM.
+</p>
+<blockquote>
+<dl>
+<dt><em>connection</em> . <b>mbean</b>( <em>name</em> )</dt>
+<dd>Create MBean of the specified name</dd>
+<dt><em>connection</em> . <b>mbeanInfo</b>( <em>name</em> )</dt>
+<dd>MBeanInfo of the specified MBean</dd>
+<dt><em>connection</em> . <b>queryNames</b>()</dt>
+<dd>Get all MBean names</dd>
+<dt><em>connection</em> . <b>mbeanServerConnection</b></td>
+<dd>MBeanServerConnection object</dd>
+<dt><em>connection</em> . <b>addNotificationListener</b>(<em>name</em>, <em>callback</em>(a,b))</dt>
+<dd>Add a notification listener that calls <em>callback</em></dd>
+</dl>
+</blockquote>
+</p>
+<p>
+The following script illustrates how to connect to a platform MXBean of a running VM.
+</p>
+<div class="eg">e.g.
+<pre>
+c = mbeanConnection()    // connect to the current VM
+c.queryNames() ---> [java.lang:type=Compilation, ...]
+project(c.mbeanInfo("java.lang:type=OperatingSystem").attributes, {x->x.name})
+   --> ["AvailableProcessors", "TotalSwapSpaceSize", "FreeSwapSpaceSize", "Arch", "Version", ...]
+
+os = c.mbean("java.lang:type=OperatingSystem")
+os.AvailableProcessors
+   --> ?
+</pre>
+</div>
+<p>
+The following script illustrates how to connect to JVM process specifying <em>pid</em>.
+</p>
+<div class="eg">e.g.
+<pre>
+% jps -v
+% pnuts
+
+c = mbeanConnection(2724)
+javax.management.remote.rmi.RMIConnector$RemoteMBeanServerConnection@1b15692
+c.queryNames() ---> ...
+c.mbean("java.lang:type=Runtime").InputArguments
+</pre></div>
+
+<a name="dynamicMBean"></a>
+<div class="box">
+<div class="synopsis"><b>dynamicMBean</b><tt> ( (Map | Package ) <em>map</em> {, Collection <em>monitoredVars</em> } )</tt></div>
+</div>
+<p>
+Create a DynamicMBean.  Functions in the <em>map</em> represent MBean's operations, and the others represent MBean's attributes.   If <em>monitoredVars</em> is specified, Notification event is delivered when any attribute in <em>monitoredVars</em> is updated.
+</p>
+<div class="eg">e.g.
+<pre>
+count = 0
+mbean = dynamicMBean(package(), ["count"])  // when <tt>count</tt> is updated, notification event is delivered
+</pre>
+</div>
+
+<a name="mbeanServer"></a>
+<div class="box">
+<div class="synopsis"><b>mbeanServer</b><tt> ( )</tt></div>
+</div>
+<p>
+Create a controller object that can register objects to be managed.
+</p>
+<blockquote>
+<dl>
+<dt><em>connection</em> . <b>mbean</b>( <em>name</em> )</dt>
+<dd>Create MBean of the specified name</dd>
+<dt><em>connection</em> . <b>mbeanInfo</b>( <em>name</em> )</dt>
+<dd>MBeanInfo of the specified MBean</dd>
+<dt><em>connection</em> . <b>queryNames</b>()</dt>
+<dd>Get all MBean names</dd>
+<dt><em>connection</em> . <b>mbeanServer</b></td>
+<dd>MBeanServer object</dd>
+<dt><em>connection</em> . <b>addNotificationListener</b>(<em>name</em>, <em>callback</em>(a,b))</dt>
+<dd>Add a notification listener that calls <em>callback</em></dd>
+<dt><em>connection</em> . <b>registerMBean</b>(<em>object</em>, <em>name</em>)</td>
+<dd>Register a MBean</dd>
+<dt><em>connection</em> . <b>unregisterMBean</b>(<em>name</em>)</td>
+<dd>Unregister a MBean</dd>
+<dt><em>connection</em> . <b>startService</b></td>
+<dd>Start remote service</dd>
+<dt><em>connection</em> . <b>stopService</b></td>
+<dd>Stop remote service</dd>
+</dl>
+</blockquote>
+</p>
+<p>
+The following script illustrates how to handle notification event issued by remote MBean.
+</p>
+
+</p>
+<div class="eg">e.g.
+<pre>
+count = 0
+mbean = dynamicMBean(package(), ["count"])  // when <tt>count</tt> is updated, notification event is delivered
+
+mbs = mbeanServer()
+mbs.registerMBean(mbean, "test:type=test")
+mbs.addNotificationListener("test:type=test", {a,b-> println("changed to ", a.newValue);flush()})
+
+test = mbs.mbean("test:type=test")
+test.count++
+
+mbs.startService()      ---> "service:jmx:rmi://...."
+</pre>
+</div>
+
+<div class="eg">
+<pre>
+c = mbeanConnection("service:jmx:rmi://....")
+c.addNotificationListener("test:type=test", {a,b-> println("changed to ", a.newValue);flush()})
+test = c.mbean("test:type=test")
+test.count++
+</pre>
+</div>
+
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc.ja/std.html"><tt>pnuts.*</tt> モジュール</a> -> <tt>pnuts.jmx</tt></div>
+
+  </body>
+</html>

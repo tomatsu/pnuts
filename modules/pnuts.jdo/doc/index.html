@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+<title>pnuts.jdo module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.jdo</tt></div>
+
+    <h2><tt>pnuts.jdo</tt> module</h2>
+
+<p>
+The <tt>pnuts.jdo</tt> module defines high level functions on top of <A href="http://access1.sun.com/jdo/">Java Data Object</A> API.</P>
+
+<ul>
+<li><a href="#openJDO">openJDO</a>
+<li><a href="#add"><em>jdo</em> . add</a>
+<li><a href="#find"><em>jdo</em> . find</a>
+<li><a href="#list"><em>jdo</em> . list</a>
+<li><a href="#delete"><em>jdo</em> . delete</a>
+<li><a href="#update"><em>jdo</em> . update</a>
+<li><a href="#query"><em>jdo</em> . query</a>
+<li><a href="#currentTransaction"><em>jdo</em> . currentTransaction</a>
+<li><a href="#transaction"><em>jdo</em> . transaction</a>
+<li><a href="#getPersistenceManager"><em>jdo</em> . getPersistenceManager</a>
+<li><a href="#close"><em>jdo</em> . close</a>
+</ul>
+
+<a name=openJDO></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> = </tt><b>openJDO</b><tt> ( <A href="http://java.sun.com/j2se/1.4/docs/api/java/util/Properties.html">Properties</A> </tt><EM>properties</EM><tt> ) </tt></div>
+</div>
+<p>
+Open a JDO connection.
+</p>
+
+<div class="eg">
+<pre>jdo = openJDO(loadProperties("lido_mysql.properties"))</pre>
+</div>
+
+<a name=add></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>add</b><tt> ( javax.jdo.PersistenceCapable </tt><em>object</em><tt> { , boolean </tt><em>transaction</em><tt> } )</tt></div>
+</div>
+
+<P>Add a persisntent object to the JDO storage.</P>
+
+<P>If the second parameter is <tt>true</tt>, this operation is executed during a new transaction.
+The default value is false.</P>
+
+<div class="eg">
+<pre>
+account = Account()
+account.name = &quot;Foo&quot;
+account.email = &quot;foo@bar&quot;
+jdo.add(account, true)
+</pre>
+</div>
+
+<div class="eg">e.g.
+<pre>
+tran = jdo.currentTransaction()
+tran.begin()
+catch(JDOException, function (e) tran.rollback())
+account = Account()
+account.name = "Foo"
+account.email = "foo@bar"
+jdo.add(account, false)
+...
+tran.commit()
+</pre>
+</div>
+
+
+<a name=find></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>find</b><tt> ( Class </tt><em>class</em><tt> , String </tt><em>filter_expression</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>( Query </tt><em>query</em><tt> )</tt></div>
+</div>
+<p>
+Search a persistent object of <em>class</em> that satisfies the <em>filter_expression</em> and return the first one if any. Returns null if no objects are found.
+</p>
+<div class="eg">
+<pre>
+user = jdo.find(Account, `name=="John"`)
+</pre>
+</div>
+
+<div class="box">
+<div>
+<tt>
+== != > < >= <= & && | || ~ + - * / !
+</tt>
+<div><tt>String.startsWith()</tt></div>
+<div><tt>String.endsWith()</tt></div>
+<div><tt>Collection.isEmpty()</tt></div>
+<div><tt>Collection.contains()</tt></div>
+</DIV>
+</div>
+<center>Operators in <EM>filter_expression</EM></center>
+
+<P>The parameter can be a Query object which
+can be obtained from jdo.query() function
+described below.</P>
+<div class="eg">
+<pre>
+q = jdo.query(Account)
+q.filter = `name==&quot;John&quot;`
+user = jdo.find(q)
+</pre>
+</div>
+
+
+
+<a name=delete></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>delete</b><tt> ( javax.jdo.PersistenceCapable </tt><em>object</em><tt> { ,  boolean </tt><em>transaction</em><tt> } )</tt> or</div>
+<div class="synopsis2"><tt>( <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Collection.html">Collection</a> </tt><em>collection</em><tt> { ,  boolean </tt><em>transaction</em><tt> } )</tt></div>
+</div>
+
+<P>Delete a persistent object, or a collection
+of persistent objects, from the JDO storage.</P>
+<div class="eg">
+<pre>
+john = jdo.find(Account, `name=="John"`)
+jdo.delete(john)
+</pre>
+</div>
+
+<a name=update></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>update</b><tt> ( Class </tt><em>class</em><tt> , String </tt><em>filter_expression</em><tt> , </tt><em>update_properties</em><tt> { , boolean </tt><em>transaction</em><tt> } )</tt></div>
+</div>
+
+<p>
+Update the properties of a persistent object, or a collection of persistent objects.
+</p>
+<p>
+<em>new_properties</em> must be one of the followings.</p>
+<dl>
+<dt>Map
+  <dd>Defines the properties to be modified.
+  <dt>String
+  <dd>Defines new properties as a Pnuts expression.
+  <dt>Pnuts function
+  <dd>Specifies a function that takes a persistent object.
+</dl>
+<div class="eg">
+<pre>
+jdo.update(john, map([["email", "john@new"]]))
+jdo.update(john, `email="john@new"`)
+jdo.update(john, function(record) record.setEmail("john@new"))
+</pre>
+</div>
+
+<a name=query></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>query</b><tt> ( Class </tt><em>class</em><tt> {, String </tt><em>query_properties</em><tt> } )</tt></div>
+</div>
+<P>Returns a Query object that can be used with
+other functions, such as <CODE>find()</CODE> and <CODE>list()</CODE>.</P>
+<p>The Query object has the following properties
+that characterize the query.</p>
+
+<BLOCKQUOTE>
+<dl>
+  <dt>ordering
+  <dd>Set the ordering specification for the result Collection.
+  <dt>filter
+  <dd>Set the filter for the query. 
+  <dt>ignoreCache
+  <dd>Specify whether the query should execute entirely in the back end, instead of in the cache.
+</dl>
+</BLOCKQUOTE>
+<div class="eg">
+<pre>
+q = jdo.query(Account)
+q.filter = `name.startsWith("john")`
+q.ordering = `ascending age`
+john = jdo.find(q)
+</pre>
+</div>
+<P>If the 2nd parameter <EM>query_properties</EM> is specified, it must be a Map or a Pnuts
+expression that defines the query properties.</P>
+<div class="eg">
+<pre>q = jdo.query(Account, map([[&quot;filter&quot;, `name.startsWith(&quot;john&quot;)`]])
+john = jdo.find(q)
+
+q = jdo.query(Account, `filter = name.startsWith(&quot;john&quot;)`)
+john = jdo.find(q)</pre>
+</div>
+
+<a name=list></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>list</b><tt> ( Class </tt><em>class</em><tt> , String </tt><em>query_properties</em><tt> )</tt> or</div>
+<div class="synopsis2"><tt>( Query </tt><em>query</em><tt> )</tt></div>
+</div>
+<p>
+Execute a query and returns the result as a collection of persistent objects. 
+</p>
+<div class="eg"><pre>
+q = jdo.query(Account, "age < 20")
+kids = jdo.list(q)
+printAll(kids)
+</pre>
+</div>
+
+<a name=currentTransaction></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>currentTransaction</b><tt> ( ) </tt></div>
+</div>
+<p>
+<tt>currentTransaction()</tt> returns the current transaction of the persistence manager.
+</dl>
+
+<div class="eg"><pre>
+tran = jdo.currentTransaction()
+tran.begin()
+catch(Exception, function (e) tran.rollback())
+for (i : 0..num - 1){
+  jdo.add(account[i], false)
+}
+tran.commit()
+</pre>
+</div>
+
+<a name=transaction></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>transaction</b><tt> ( </tt><em>func(PersistenceManager)</em><tt> ) </tt></div>
+</div>
+<p>
+<tt>transaction()</tt> executes the specified function during a transaction.
+</p>
+
+<div class="eg"><pre>
+jdo.transaction(function (jdo){
+  for (i : 0..num - 1){
+    jdo.add(account[i])
+}
+})
+</pre>
+</div>
+
+<a name=getPersistenceManager></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>getPersistenceManager</b><tt> ( )</tt></div>
+</div>
+<p>
+Returns a PersistenceManager object which represents the current JDO connection.
+</p>
+
+<a name=close></a>
+<div class="box">
+<div class="synopsis"><em>jdo</em><tt> . </tt><b>close</b><tt> ( ) </tt></div>
+</div>
+<p>
+Close the JDO connection.
+</p>
+
+<div class="eg"><pre>
+jdo.close()
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.jdo</tt></div>
+
+  </body>
+</html>

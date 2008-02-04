@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Date/Time</div>
+
+    <h2>Date/Time</h2>
+
+
+<a name=currentTimeMillis></a>
+<div class="box">
+<div class="synopsis"><b>currentTimeMillis</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>currentTimeMillis()</tt> returns the current time in millisenconds.
+</p>
+
+
+<a name=date></a>
+<div class="box">
+<div class="synopsis"><b>date</b><tt>()</tt> or</div>
+<div class="synopsis2"><tt>(long </tt><em>timeMillis</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>dateString</em><tt> { , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>pattern</em><tt> })</tt> or</div>
+<div class="synopsis2"><tt>(int </tt><em>year</em><tt>, int </tt><em>month</em><tt>, int </tt><em>day</em><tt> { , int </tt><em>hour</em><tt>, int </tt><em>minute</em><tt>, int </tt><em>second</em><tt> } )</tt></div>
+</div>
+<p>
+<tt>date()</tt> returns a <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html"><tt>java.util.Date</tt></a> object.  If no argument is given, it returns a object that represents the current time.
+</p>
+<p>
+When <em>dateString</em> is specified, it is parsed under the rule described at
+<a href="http://java.sun.com/j2se/1.4/docs/api/java/text/SimpleDateFormat.html">SimpleDateFormat</a>.
+The default value of <em>pattern</em> is "MM/dd/yyyy".
+</P>
+<div class="eg">e.g.
+<pre>
+date("2000/10/27", "yyyy/MM/dd")
+</pre>
+</div>
+
+<p>
+
+<a name=getYear></a>
+<a name=getMonth></a>
+<a name=getDayOfYear></a>
+<a name=getDayOfMonth></a>
+<a name=getDayOfWeek></a>
+<a name=getHour></a>
+<a name=getMinute></a>
+<a name=getSecond></a>
+<a name=getMillisecond></a>
+<a name=getMaxDayOfMonth></a>
+<a name=getMaxDayOfYear></a>
+
+<div class="box">
+<div class="synopsis"><b>getYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em></tt>)</tt></div>
+<div class="synopsis"><b>getMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getDayOfYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getDayOfMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getDayOfWeek</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getHour</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getMinute</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getSecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getMillisecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getMaxDayOfYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+<div class="synopsis"><b>getMaxDayOfMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>)</tt></div>
+</div>
+
+<p>
+Gets the value for a given time field.
+</p>
+<p>
+<table border>
+<tr>
+<td>DayOfWeek</td><td>1=Sunday, ... 7=Saturday</td>
+</tr>
+<tr>
+<td>Month</td><td>1=January, ... 12=December</td>
+</tr>
+</table>
+</p>
+
+<a name=addYear></a>
+<a name=addMonth></a>
+<a name=addWeek></a>
+<a name=addDay></a>
+<a name=addHour></a>
+<a name=addMinute></a>
+<a name=addSecond></a>
+<a name=addMillisecond></a>
+
+<div class="box">
+<div class="synopsis"><b>addYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addWeek</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addDay</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addHour</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addMinute</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addSecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+<div class="synopsis"><b>addMillisecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date</em><tt>, int </tt><em>number</em><tt>)</tt></div>
+</div>
+
+<p>
+Return a date to which a specified time interval has been added. 
+</p>
+
+<a name=diffYear></a>
+<a name=diffMonth></a>
+<a name=diffDay></a>
+<a name=diffWeek></a>
+<a name=diffHour></a>
+<a name=diffMinute></a>
+<a name=diffSecond></a>
+<a name=diffMillisecond></a>
+
+<div class="box">
+<div class="synopsis"><b>diffYear</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffMonth</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffWeek</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffDay</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffHour</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffMinute</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffSecond</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+<div class="synopsis"><b>diffMillisecond</b><tt>(<a href
+="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date1</em><tt>, <a href
+="http://java.sun.com/j2se/1.4/docs/api/java/util/Date.html">Date</a> </tt><em>date2</em><tt>)</tt></div>
+</div>
+<p>
+Returns the number of intervals between two dates.  If <em>date2</em> is older than <em>date1</em>, these functions return a negative number.
+</p>
+
+<a name=setTimeZone></a>
+<a name=getTimeZone></a>
+<div class="box">
+<div class="synopsis"><b>getTimeZone</b><tt>( { <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>timeZoneName</em><tt> } )</tt></div>
+<div class="synopsis"><b>setTimeZone</b><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>timeZoneName</em><tt>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href ="http://java.sun.com/j2se/1.4/docs/api/java/util/TimeZone.html">TimeZone</a> </tt><em>timeZone</em><tt>)</tt></div>
+</div>
+
+<p>
+Gets/sets the TimeZone of the current context.
+</p>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> Date/Time</div>
+
+  </body>
+</html>

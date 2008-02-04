@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Inspecting Class Definition</div>
+
+    <h2>Inspecting Class Definition</h2>
+
+<a name=dumpclass></a>
+<div class="box">
+<div class="synopsis"><b>dumpclass</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>dumpclass()</tt> displays all public members of <em>class</em>.
+</p>
+
+<div class="eg">e.g:
+<pre>
+&gt; dumpclass(Object)
+
+--- constructors  -----------------------
+ Object()
+
+--- instance methods -----------------------
+ Class getClass()
+ int hashCode()
+ boolean equals(Object)
+ String toString()
+ void notify()
+ void notifyAll()
+ void wait(long)
+ void wait(long,int)
+ void wait()
+</pre>
+</div>
+
+<a name=supertypes></a>
+<div class="box">
+<div class="synopsis"><b>supertypes</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> </tt><em>class</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>supertypes()</tt> displays all superclasses and interfaces of <em>class</em>.
+</p>
+
+<div class="eg">e.g:
+<pre>
+&gt; supertypes(class java.util.Vector)
+
+java.util.AbstractList class
+java.util.AbstractCollection class
+java.lang.Object class
+java.util.List interface
+java.util.Collection interface
+java.lang.Cloneable interface
+java.io.Serializable interface
+java.util.List interface
+java.util.Collection interface
+java.util.Collection interface
+null
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Inspecting Class Definition</div>
+
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> コマンドラインからコンパイル
+</div>
+
+<!-- body start -->
+
+    <h2>コマンドラインからコンパイル</h2>
+
+<h3><tt>pnutsc</tt>コマンド</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> <b>pnutsc</b> { -d </tt><em>directory</em><tt> | -o
+	      </tt><em>output_jar_file</em><tt> } { -v } { -main
+	      <em>mainClass</em> { -m <em>moduleName</em> } } {
+	      -prefix </tt><em>name</em><tt> }{ </tt><tt>-no_proxy } {
+	      { -C </tt><em>base_directory</em><tt> }
+	      </tt><em>script_file</em> | <em>input_jar_file</em> } <tt>...</tt></div>
+</div>
+
+<p>
+<tt>pnutsc</tt>コマンドは、指定された<em>script_file</em>または<em>input_jar_file</em>に含まれるスクリプトファイルをコンパイルします。
+</p>
+<p>
+<tt>-o </tt><em>output_jar_file</em> が指定された場合、コンパイルされたクラスファイルは <em>output_jar_file</em>にの中に保存されます。<em>output_jar_file</em>がすでにあれば、コンパイルされたクラスはそのJARファイルに追加されます。
+<p>
+<tt>-o </tt>が指定されない場合、コンパイルされたクラスファイルは <tt>-d</tt>の後の<em>directory</em> に保存されます。<tt>-d</tt> が指定されない場合は、カレントディレクトリに保存されます。
+</p>
+
+<p>
+<tt>-v</tt> は冗長な表示を行うモードを意味します。生成されたクラス名やクラスファイル名が表示されます。
+</p>
+
+<p>
+<tt>-no_proxy</tt> が指定された場合、生成されたコードは、pnuts.compiler パッケージに依存しないようになります。ただし、メソッド呼び出しが最適化されません。
+</p>
+
+<p>
+<tt>-prefix </tt><em>name</em> が設定される場合は、その値がクラス名のプレフィックス(接頭語)になります。
+</p>
+
+<pre class="eg">
+D:\pnuts> pnutsc -o pnuts-precompiled.jar pnuts/util/*.pnut pnuts/lib/*.pnut
+</pre>
+
+
+<p>
+<tt>-C</tt>オプションが指定されると、カレントディレクトリが<em>base_directory</em>に変更されたのちに<em>script_files</em>がコンパイルされます。
+</p>
+
+<p>
+<tt>-main</tt> オプションをつけると、<tt>main()</tt> メソッドと<tt>run(Context)</tt>メソッドが定義される<em>mainClass</em>が生成されます。
+</p>
+
+<pre class="eg">
+public class mainClass extends Runtime {
+   public Object run(Context ctx){
+      ctx.usePackage(module1);
+      ctx.usePackage(module2);
+      ...
+      new className1().run((Context)ctx.clone());
+      new className2().run((Context)ctx.clone());
+      ...
+   }
+   public static void main(String args[]){
+      Pnuts.set("$args", args);
+      new mainClass().run(new Context());
+   }
+ }
+</pre>
+
+<div class="eg">
+例：
+hello.pnut
+<pre>
+println("hello")
+</pre></div>
+
+<pre class="eg">
+C:\> pnutsc -o hello.jar -main Hello -m pnuts.lib hello.pnut
+C:\> java -classpath "hello.jar;pnuts.jar;pnuts-modules.jar" Hello
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> コマンドラインからコンパイル
+</div>
+
+  </body>
+</html>

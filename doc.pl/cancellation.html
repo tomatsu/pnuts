@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html lang="pl"><head>
+      
+      <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <meta http-equiv="Content-Style-Type" content="text/css">
+      <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+    <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Przerywanie wykonywania skryptu
+</div>
+
+<h2>Przerywanie wykonywania skryptu</h2>
+
+<h3><tt>Context.updateLine(int)</tt></h3>
+<p>W czasie wykonywania skrypty interpreter &#347;ledzi numer linii kodu
+kt&oacute;r&#261; wykonuje, mo&#380;e ona by&#263; wyswietlona w momencie wyst&#261;pienia
+b&#322;&#281;du. W momencie zmiany numeru linii wywo&#322;ywana jest metoda
+kontekstu&nbsp;
+Context.updateLine(int). Przez przedefinioanie tej metody w podklasie
+jets mo&#380;iwe przerwania wykonywania skryptu w przypadku wyst&#261;pienia
+jaki&#347; warunk&oacute;w.
+</p>
+
+<p>Uzycie tego mechanizmu ma par&#281; niedogodno&#347;ci The:
+</p><ul>
+<li>metoda Context.updateLine(int) jest cz&#281;sto wywo&#322;ywana
+</li><li>Wszystkie wywo&#322;ania API&nbsp; Javy wywo&#322;uj&#261; powroty
+</li><li>Nie s&#261; tworzone w&#261;tki
+</li></ul>Kod najtowy generowany przez kompilator nie wywo&#322;uj&#281; metody
+do czasu zmiany numeru linii. Je&#380;eli p&#281;tla for lub while jest
+jednoliniow&#261; instrukcj&#261; nie ma mo&#380;liwo&#347;ci zatrzymania skryptu przy jej
+wykonywaniu. Aby pomin&#261;&#263; ten problem nale&#380;y ustawi&#263; w&#322;a&#347;ciwo&#347;&#263; <tt>pnuts.compiler.traceMode</tt> na true aby metoda&nbsp; updateLine() by&#322;a wo&#322;ana przy ka&#380;dym wyra&#380;eniu.
+<p>Interpreter AST wywo&#322;uj&#281; t&#261; metod&#261; przy ka&#380;dym wyra&#380;eniu nawet jak wyra&#380;enia s&#261; w jednej linii kodu.
+</p>
+<p>Poni&#380;szy kod pokazuje jak zatrzyma&#263; skrypt po up&#322;ywie okre&#347;lonego czasu.
+</p>
+
+
+<pre class="eg">public class MyContext extends Context {<br>  long endTime;<br><br>  public MyContext(long endTime){<br>    this.endTime = endTime;<br>  }<br>  protected void updateLine(int line){<br>    if (System.currentTimeMillis() &gt; endTime){<br>      throw new Jump(null);  // return null<br>    }<br>  }<br>}<br></pre>
+<pre class="eg">Context context = new MyContext(System.currentTimeMillis() + 10 * 1000)); // 10 seconds later<br>Pnuts.eval(expression, context);<br></pre>
+<p>Do puki metoda Since Pnuts.eval(String,Context) method domy&#347;lnie
+ewalu&#322;uje skrypty przy pomocy interpretera AST nie jest potzrebne
+ustawianie w&#322;a&#347;ciwo&#347;ciby&nbsp; <tt>pnuts.compiler.traceMode</tt>.
+</p>
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt;&nbsp;Przerywanie wykonywania skryptu
+</div>
+</body></html>

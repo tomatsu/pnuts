@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.lib module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> String Representation of Objects</div>
+
+<h3>String Representation of Objects</h3>
+
+<a name=hex></a>
+<a name=string></a>
+<a name=format></a>
+
+<div class="box">
+<div class="synopsis"><b>hex</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a></tt>
+<em>integerOrByteArray</em><tt>)</tt></div>
+<div class="synopsis"><b>string</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>)</tt></div>
+<div class="synopsis"><b>format</b><tt>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>object</em><tt>)</tt></div>
+</div>
+
+
+<p>
+<tt>hex()</tt> returns a hexiadecimal format string constructed from the specified integer or byte array.
+</p>
+
+<p>
+<tt>string()</tt> returns a String representation of the specified
+object.  An empty string is returned if <em>object</em> is null.
+</p>
+
+<p>
+<tt>format()</tt> returns a formatted string constructed from the
+specified object.  
+</p>
+
+<div class="eg">e.g.
+<pre>
+string([1,2,3]) ==> "[Ljava.lang.Object;@17a37c"
+format([1,2,3]) ==> "[1, 2, 3]"
+hex(10) ==> "a"
+hex((byte[])[#ca, #fe, #ba, #be]) ==> "cafebabe"
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> String Representation of Objects</div>
+
+  </body>
+</html>

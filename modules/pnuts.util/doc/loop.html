@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.util module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Loop</div>
+
+    <h2>Loop</h2>
+
+<a name=loopEnum></a>
+<div class="box">
+<div class="synopsis"><b>loopEnum</b><tt>(int </tt><em>n</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>loopEnum()</tt> returns a java.util.Enumeration object that can be used for <em>n</em> loop
+used for a <em>n</em> loop.
+</p>
+
+<div class="eg">e.g:
+<pre>
+for (always_null : loopEnum(1000)){
+    ..
+}
+</pre>
+</div>
+
+
+<a name="rangeEnum"></a>
+<div class="box">
+<dt><b>rangeEnum</b><tt>(int </tt><em>start</em><tt> , int </tt><em>end</em><tt> {, int </tt><em>step</em><tt> } )</tt></div>
+</div>
+
+<p>
+<tt>rangeEnum()</tt> returns a java.util.Enumeration object that returns integers from <em>start</em> to <em>end</em> as the elements.  When <em>step</em> is specified, the returned elements would be <em>start</em>, <em>start</em> + <em>step</em>, <em>start</em> + <em>step</em> * 2,  ... .  When <em>step</em> is not specified, the implicit value of <em>step</em> is -1 when <em>start</em> is larger than <em>end</em>, otherwise 1.
+</p>
+
+<div class="eg">e.g:
+<pre>
+for (i : rangeEnum(0, 100, 30)){
+   println(i)
+}
+
+0
+30
+60
+90
+</pre>
+</div>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.util</tt></a> -> Loop</div>
+
+  </body>
+</html>

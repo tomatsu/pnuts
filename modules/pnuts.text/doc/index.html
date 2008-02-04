@@ -1,0 +1,221 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+  <head>
+    <title>pnuts.text module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.text</tt></div>
+
+
+    <h2><tt>pnuts.text</tt> module</h2>
+
+<p>
+The <tt>pnuts.text</tt> module defines functions for the text I/O operations.
+</p>
+<ul>
+<li>Functions
+<ul>
+<li><a href="#applyTemplate">applyTemplate</a>
+<li><a href="#formatTemplate">formatTemplate</a>
+<li><a href="#printf">printf</a>
+<li><a href="#readLine">readLine</a>
+<li><a href="#readLines">readLines</a>
+<li><a href="#sprintf">sprintf</a>
+<li><a href="#template">template</a>
+<li><a href="#textGrab">textGrab</a>
+</ul>
+<li><a href="../../apidoc/pnuts/text/package-summary.html">API Documents</a>
+</ul>
+
+<a name=printf></a>
+<div class="box">
+<div class="synopsis"><b>printf</b><tt> ( </tt><I>format</I><tt> {, </tt><em>args</em><tt> ...} )</tt></div>
+<div class="synopsis"><b>sprintf</b><tt> ( </tt><I>format</I><tt> {, </tt><em>args</em><tt> ...} )</tt></div>
+</div>
+
+<p>
+<tt>printf</tt> and <tt>sprintf</tt> emulate the C functions, <tt>printf</tt>
+and <tt>sprintf</tt>. 
+
+<p>
+<tt>sprintf()</tt> returns the formatted
+string. <tt>printf()</tt> prints the result of <tt>sprintf()</tt>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+sprintf("(%s)(%s)", "foo", "bar") ==> "(foo)(bar)"
+</pre>
+</div>
+
+
+<a name=readLine></a></blockquote>
+<div class="box">
+<div class="synopsis"><b>readLine</b><tt> (</tt> <a
+        href="http://java.sun.com/j2se/1.4/docs/api/java/io/Reader.html">Reader</a>
+        </tt><em>input</em><tt> ) or</div>
+<div class="synopsis2"><tt> ( </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/io/InputStream.html">InputStream</a> </tt><em>input</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>readLine()</tt> reads one line from <em>input</em> and returns the
+line as a String.
+</p>
+
+<a name=readLines></a></blockquote>
+<div class="box">
+<div class="synopsis"><b>readLines</b><tt> ( </tt><em>input</em><tt> , </tt><em>handler</em><tt>
+	(String </tt><em>line</em><tt>) {, boolean </tt><I>includeLineSeparator</I><tt>
+	})</tt> or</div>
+<div class="synopsis2"><tt> ( </tt><em>input</em><tt> , </tt><em>collection</em><tt> {, boolean </tt><I>includeLineSeparator</I><tt>})</tt> or</div>
+<div class="synopsis2"><tt> ( </tt><em>input</em><tt> )</tt></div>
+</div>
+
+<p>
+When only <em>input</em> is specified, it returns a generator object that generates the all lines in turn (see the example below).
+<p>
+If <I>handler</I> is specified, it is called for each line. When EOF is seen, <tt>readLines()</tt> returns the number of lines that have been processed.
+<p>
+If <em>collection</em> is specified, this function adds all lines to the specified <em>collection</em> and returns the number of lines.
+</p>
+<p>
+<em>input</em> must be either Reader, URL, File, or String object that represents a file name.
+</p>
+<p>
+If <I>includeLineSeparator</I> is specified <CODE>true</CODE>, the line separator (\r, \n, or \r\n) is kept in the parameter object; by default, the line separator is stripped.</p>
+<p>
+<div class="eg">e.g.
+<pre>
+for (line : readLines(&quot;template.txt&quot;)){
+   println(line)
+}
+</pre>
+</div>
+
+<a name=template></a>
+<div class="box">
+<div class="synopsis"><b>template</b><tt> ( </tt><I>text</I><tt>, </tt><I>pattern</I><tt> )</tt></div>
+</div>
+
+<p>template() creates a template object which will be passed to 
+<tt>formatTemplate()</tt> to substitute <I>pattern</I> in <I>text</I>
+with something. <I>pattern</I> must be a valid regular expression with one group.
+</p>
+
+<a name=formatTemplate></a>
+<div class="box">
+<div class="synopsis"><b>formatTemplate</b><tt> ( </tt><I>template</I><tt>, java.util.Map</tt> <I>map</I><tt> {, java.io.Writer</tt> <I>writer</I><tt> })</tt></div>
+</div>
+
+<p>
+This function, first, gets the <em>value</em> associated with a subgroup($1) of
+the template pattern.
+
+Then it performs the following process.
+<p>
+<ol>
+<li>When <em>value</em> is a function, it embeds the result of the function call into the template.
+<li>When <em>value</em> is either an array, java.util.List,
+java.util.Iterator, or java.util.Enumeration, it applies the objects
+retrieved from the <em>value</em> recursively to these rules.
+<li>Otherwise, it embeds the string converted from the object into the template.
+</ol>
+
+<p>When <I>writer</I> is specified, the formatted text is written to
+the writer. Otherwise, this function returns the formatted template as
+a String object.
+</p>
+
+<pre class="eg">
+templ = template("${key} - ${value}", `\$\{([A-Za-z]+)\}`)
+formatTemplate(templ, map([["key", "foo"], ["value", "bar"]]))
+    ==> "foo - bar"
+</pre>
+
+<a name=applyTemplate></a>
+<div class="box">
+<div class="synopsis"><b>applyTemplate</b><tt> ( </tt><I>template</I><tt>, java.util.Map</tt> <I>map</I><tt> )</tt></div>
+</div>
+
+<p><tt>applyTemplate()</tt> returns a function that prints the formatted template.
+The resulting function can take zero or one argument
+(<em>writer</em>). The formatted template is written to the <em>writer</em> if it is
+specified, or the value of <tt>context.getWriter()</tt>, otherwise.
+</p>
+<p>
+<tt>applyTemplate()</tt> formats <em>template</em> in the same way as <a href="#formatTemplate"><tt>formatTemplate()</tt></a>.
+</p>
+<p>
+For example, the
+following two expressions print the same result.
+</p>
+
+<pre class="eg">
+print(formatTemplate(<em>template</em>, <em>map</em>))
+</pre>
+
+
+<pre class="eg">
+applyTemplate(<em>template</em>, <em>map</em>))()
+</pre>
+
+<p>
+This function can format templates efficiently even if the template
+has a nested structure. 
+If a value in <em>map</em> is a function, it is called when the
+outermost function is called. 
+Unlike <tt>formatTemplate()</tt>, it does not need temporary buffers
+allocated for intermediate results.
+</p>
+
+<pre class="eg">
+templ = template("${key} - ${value}", `\$\{([A-Za-z]+)\}`)
+tmp = applyTemplate(templ, map([["key", "bar"], ["value", "baz"]]))
+result = applyTemplate(templ, map([["key", "foo"], ["value", tmp]]))
+result()
+  => foo - bar - baz
+</pre>
+
+Here is another example:
+
+<pre class="eg">
+templ1 = template("&lt;option value=\"%value%\"&gt;%value%&lt;/option&gt;\n", `%([A-Za-z0-9_]+)%`)
+x = list()
+for (i : 0..2){
+   x.add(applyTemplate(templ1, map([["value", string(i)]])))
+}
+templ2 = template(`%list%`, `%([A-Za-z0-9_]+)%`)
+applyTemplate(templ2, map([["list", x]]))()
+  => &lt;option value="0"&gt;0&lt;/option&gt;
+     &lt;option value="1"&gt;1&lt;/option&gt;
+     &lt;option value="2"&gt;2&lt;/option&gt;
+</pre>
+
+<a name=textGrab></a>
+<div class="box">
+<div class="synopsis"><b>textGrab</b><tt> ( </tt><I>func</I><tt> )</tt></div>
+</div>
+
+<p>
+<tt>textGrab()</tt> returns a function that returns the text printed by calling <em>func</em>.
+The returned function can take the same number of arguments as <em>func</em>.
+</p>
+
+<pre class="eg">
+function hello(who) { print("Hello "); print(who) }
+helloText = textGrab(hello)
+helloText("Fumi")
+    ==> "Hello Fumi"
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> Modules</a> -> <tt>pnuts.text</tt></div>
+
+
+  </body>
+</html>

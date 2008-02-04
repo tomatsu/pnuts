@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xml module</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> Using DOM Objects</div>
+
+<h2>Using DOM Objects</h2>
+
+<h3>Read-access to DOM Objects</h3>
+
+<a href="functions.html#readDocument">readDocument()</a> function reads a XML document and creates a DOM object.
+Then Document.getDocumentElement() method is used to get the outermost element of the document.
+
+<pre class="eg">
+ssdoc = readDocument("XML file")
+elem = doc.getDocumentElement()
+</pre>
+
+<a href="functions.html#nodeAccess">nodeAccess(true)</a> is called in order to make access to DOM objects easier.
+
+<pre class="eg">
+nodeoAccess(true)
+</pre>
+
+If <a href="functions.html#nodeAccess">nodeAccess(true)</a> has been called, Element object 
+getChild() and getChildren() method available for org.w3c.dom.Element objects.
+<p>
+getChild() method looks for a sub-elements which have the specified tag name, and returns
+the first one.  The following expressions have the same meaning.
+
+<pre class="eg">
+elem.getChild("tag")
+</pre>
+
+<pre class="eg">
+child = elem.tag
+(child != null) ? child[0] : null
+</pre>
+
+getChildren() method, when called with no argument, returns a List of its sub-elements.
+<p>
+When the method is called with one argument, it returns a List of the elements of the specified tag name.
+If no elements were found, the method returns an empty list.
+
+<pre class="eg">
+elem.getChildren()
+elem.getChildren("tag")
+</pre>
+
+Expression '<tt>element.tag</tt>' also returns a List of such elements, but it returns null when no elements were found.
+
+<pre class="eg">
+elem.name
+</pre>
+
+Expression '<tt>element.text</tt>' returns an element content as a String object.
+
+<pre class="eg">
+elem.text
+</pre>
+
+Text can be modified as the following assignment expression.
+
+<pre class="eg">
+<tt>element.text = <em>whatever</em></tt>
+</pre>
+
+Expression '<tt>element.textTrim</tt>' returns an element content as a trimed String object.
+
+<pre class="eg">
+elem.textTrim
+</pre>
+
+<tt>getAttribute()</tt> method returns the value of specified attribute.
+
+<pre class="eg">
+elem.getAttribute("name")
+</pre>
+
+Expression '<tt>element.attributes</tt>' returns the attributes as a java.util.Map object.
+
+<pre class="eg">
+elem.attributes
+</pre>
+
+The returned Map object can also be used to define attributes.
+
+<pre class="eg">
+elem.attributes.<em>myattr</em> = "value"
+</pre>
+
+Expression '<tt>element.@name</tt>' can also be used to set and get attributes.
+
+<pre class="eg">
+elem.@myattr
+elem.@myattr = "value"
+</pre>
+
+<h3>Creating DOM Objects</h3>
+
+<a href="functions.html#element">element()</a> function defines element's tag.
+
+<pre class="eg">
+html = element("html")
+body = element("body")
+a = element("a")
+</pre>
+
+Results of <a href="functions.html#element">element()</a> are used to build XML document hierarchy.
+Element content can be specified as a String in the parameter.
+
+<pre class="eg">
+x = html(body("hello"))
+</pre>
+
+Attributes can be specified as a Map in the parameter.
+
+<pre class="eg">
+x = html(body(a({"href"=>"http://java.sun.com/"}, "Java home"))
+</pre>
+
+Finally, the result must be called with 0 argument to create XML element.
+
+<pre class="eg">
+elem = x()   // or call(x)
+writeDocument(elem)
+</pre>
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's Guide</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> Using DOM Objects</div>
+
+  </body>
+</html>

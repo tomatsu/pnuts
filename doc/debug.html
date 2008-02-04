@@ -1,0 +1,179 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Debugging Scripts
+</div>
+
+<!-- body start -->
+
+    <h2>Debugging Scripts</h2>
+
+<h3>Terminal Debugger</h3>
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts -d { </tt><em>script</em><tt> }</tt></div>
+<div class="synopsis"><tt>C:\> pnuts -d:</tt><em>file</em><tt> </tt> <em>scriptFile</em></div>
+<div class="synopsis"><tt>C:\> pnuts -d:</tt><em>file</em><tt> </tt> -e <em>expression</em></div>
+</div>
+
+<p>
+<tt>-d</tt> option of <tt>pnuts</tt> command executes Pnuts interpreter in
+debug mode.  The debug commands are described <a href="#commands">below</a>.
+</p>
+
+<p>
+The debugger only works with the AST interpreter (not the compiler).
+</p>
+
+<div class="eg">e.g.
+<pre>
+C:\> pnuts -d
+Pnuts interpreter Version 1.0, 1.2.2 (Sun Microsystems Inc.)
+> 1
+# Stopped at ?:1
+ >>> 1
+debug>
+</pre>
+</div>
+
+<p>
+If <tt>-d:</tt><em>file</em> is specified, debug commands are read from the <em>file</em>.
+</p>
+
+<div class="eg">e.g.
+<pre>
+C:\> pnuts -d:trace.dbg -e 'getProperty("java.version")'
+reading /tmp/trace.dbg
+# Stopped at ?:1
+ >>> getProperty("java.version")
+debug> trace
+on
+debug> cont
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:1 >>> import("java.lang.System")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:2 >>> import("java.util.Properties")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:3 >>> import("java.io.InputStream")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:4 >>> import("java.io.File")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:5 >>> import("java.io.FileInputStream")
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:7 >>> function setProperty(name, val) {
+ prop = System::getProperties()
+ if (val == null) {
+  prop.remove(name)
+ } else {
+  prop.put(name, val)
+ }
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:16 >>> function getProperty(name) {
+ System::getProperty(name)
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:20 >>> function loadProperties(resourceOrStream) {
+ loadProperties(resourceOrStream, Properties())
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:24 >>> function loadProperties(input, prop) {
+ if (input instanceof String) {
+  url = getResource(input)
+  if (url == null) {
+   return null
+  }
+  prop.load(openURL(url))
+ } else if (input instanceof File) {
+  prop.load(fd = open(input))
+  fd.close()
+ } else if (input instanceof InputStream) {
+  prop.load(input)
+ } else {
+  throw(IllegalArgumentException(string(input)))
+ }
+ prop
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:16 >>> {
+ System::getProperty(name)
+}
+jar:file:/usr/local/pnuts/modules/pnuts-modules.jar!/pnuts/util/property.pnut:17 >>> System::getProperty(name)
+# Returns "1.4.2"
+</pre>
+</div>
+
+<div class="eg">trace.dbg
+<pre>
+trace
+cont
+</pre>
+</div>
+
+<a name="commands"></a>
+<h4>Debug Commands</h4>
+<blockquote>
+<dl>
+<dt><tt>stop at {FILE:}LINENO</tt>
+<dd>Stop execution at the LINENO</dd>
+<dt><tt>stop in FUNC{:NARGS}</tt>
+<dd>Stop execution when FUNC is called.  When NARGS is specified, stop when FUNC with NARGS is called.
+<dt><tt>clear</tt>
+<dd>Clear all breakpoints
+<dt><tt>cont</tt>
+<dd>Continue execution
+<dt><tt>trace</tt>
+<dd>Toggle trace mode.  The default is false.
+<dt><tt>trace function {FUNCTION}</tt>
+<dd>Toggle trace function mode.  The default is false.
+<dt><tt>step {NUM}</tt>
+<dd>Single step NUM lines.  The default number is 1.
+<dt><tt>step up</tt>
+<dd>Step out of the current function
+<dt><tt>next {NUM}</tt>
+<dd>Step NUM line (step OVER calls).  The default number is 1.
+<dt><tt>help</tt>
+<dd>Print a summary of commands
+<dt><tt>?</tt>
+<dd>Same as <tt>help</tt>.
+<dt>&lt;Any other word&gt;
+<dd>Evaluate the word as a Pnuts script
+</dl>
+</blockquote>
+
+
+<a name="visualDebug"></a>
+<h3>Visual Debugger</h3>
+
+<p>
+When -vd option is given to the pnuts command, the graphical debugger is used instead of the terminal-style debugger.  See also <a href="command.html#pnuts.debugger">"Properties"</tt></a> on <tt>pnuts.debugger</tt> property.
+</p>
+
+
+
+<div class="box">
+<div class="synopsis"><tt>C:\> pnuts -vd { </tt><em>script</em><tt> }</tt></div>
+</div>
+
+<p>
+<center>
+<img src="images/debugger.png"></img>
+</center>
+
+<p>
+The light blue line is the current position. Orange color shows a breakpoint is set at the line.
+To set (or reset) a breakpoint, right click on the line.
+</p>
+
+<center>
+<img src="images/breakpoint.png"></img>
+</center>
+<p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Debugging Scripts
+</div>
+
+  </body>
+</html>

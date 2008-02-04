@@ -1,0 +1,70 @@
+<html>
+    <head>
+     <title>Pnuts ユーザーズガイド</title>
+     <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+     <META Http-Equiv="Content-Style-Type" Content="text/css">
+     <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body> 
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> スクリプト実行のキャンセル
+</div>
+
+<!-- body start -->
+
+<h2>スクリプト実行のキャンセル</h2>
+
+<h3><tt>Context.updateLine(int)</tt></h3>
+
+<p>
+スクリプトが実行される間、Pnutsインタプリタは実行中の行番号を管理していて、エラーが発生するとその時点の行番号が表示されます。
+実行中の行番号が変化するたびに呼び出される、Context.updateLine(int)メソッドを、Contextクラスのサブクラスでオーバーライドすることで、一行ごとに行う処理を定義することができます。したがって、このメソッドの中で例外を発生させれば、任意の条件でスクリプトの実行をキャンセルすることができるわけです。
+</p>
+
+<p>
+この仕組みを利用してスクリプト実行をキャンセルする方法には、いくつかの前提があります。
+<ul>
+<li>Context.updateLine(int)メソッドがある程度頻繁に呼ばれること
+<li>Java APIの実行は常にreturnすること
+<li>スレッドを生成しないこと
+</ul>
+
+バイトコードコンパイラによる実行では、デフォルトの設定では、行番号が変化しないかぎりContext.updateLine(int)メソッドは呼び出されません。もし、forループやwhileループが一行で書かれていた場合は、ループを抜けるまで実行をキャンセルできません。この問題を回避するためには、起動時プロパティ<tt>pnuts.compiler.traceMode</tt>にtrueを指定し、式を評価するたびにこのメソッドが呼び出されるようにします。
+<p>
+ASTインタプリタによる実行では、実行中の行番号が変化しなくても、式を評価するたびにこのメソッドが呼び出されます。
+</p>
+<p>
+次の例は、スクリプトの実行を約10秒後にキャンセルする例です。
+</p>
+
+
+<pre class="eg">
+public class MyContext extends Context {
+  long endTime;
+
+  public MyContext(long endTime){
+    this.endTime = endTime;
+  }
+  protected void updateLine(int line){
+    if (System.currentTimeMillis() > endTime){
+      throw new Jump(null);  // return null
+    }
+  }
+}
+</pre>
+<pre class="eg">
+Context context = new MyContext(System.currentTimeMillis() + 10 * 1000)); // １０秒後
+Pnuts.eval(式, context);
+</pre>
+<p>
+Pnuts.eval(String,Context)メソッドは、デフォルトの設定では、ASTインタプリタを使って式を評価するので、起動時プロパティpnuts.compiler.traceModeを設定する必要はありません。
+</p>
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Pnuts API の概略
+</div>
+
+</body>
+</html>

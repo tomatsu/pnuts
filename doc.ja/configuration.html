@@ -1,0 +1,217 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts ユーザーズガイド</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Java APIアクセスのカスタマイズ
+</div>
+
+<!-- body start -->
+
+<h2>基本的な式のカスタマイズ</h2>
+
+<p>
+フィールドアクセス、インデックスアクセス、コンストラクタ、メソッド呼び出し、二項/単項演算の動作はContextの属性(configuration)を設定することでカスタマイズすることができます。
+</p>
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=45%>
+<tr class=wb>
+<td><b>フィールドアクセス</td></b>
+<td><tt>
+<div>target . field</div>
+<div>target :: field</div>
+</tt></td>
+</tr>
+<tr class=wb>
+<td><b>インデックスアクセス</b></td>
+<td><tt>target [ index ]</tt></td>
+</tr>
+<tr class=wb>
+<td><b>コンストラクタ呼び出し</b></td>
+<td><tt>
+<div>target (...)</div>
+</tt></td>
+</tr>
+<tr class=wb>
+<td><b>メソッド呼び出し</b></td>
+<td><tt>
+<div>target . method (...)</div>
+<div>target :: method (...)</div>
+</tt></td>
+</tr>
+<tr class=wb>
+<td><b>二項/単項演算</b></td>
+<td><tt>+</tt>,<tt>-</tt>,<tt>*</tt>,<tt>/</tt>,<tt>&</tt>,<tt>|</tt>,<tt>^</tt>,<tt>&lt;&lt;</tt>,<tt>&gt;&gt;</tt>,<tt>&gt;&gt;&gt;</tt>,<tt>&&</tt>,<tt>||</tt>,<tt>++</tt>,<tt>--</tt></td>
+</tr>
+</table>
+</blockquote>
+
+<h3>Configurationの設定</h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/Context.html#setConfiguration(pnuts.lang.Configuration)"><tt>Context.setConfiguration(Configuration)</tt></a>メソッドで、Context にConfigurationオブジェクトを登録することができます。
+</p>
+
+<pre class="eg">
+Context context = new Context();
+context.setConfiguration(new NonPublicMemberAccessor());
+...
+</pre>
+
+<h3><tt>pnuts.lang.Configuration</tt> クラス</h3>
+
+<p>
+<a href="../apidoc/pnuts/lang/Configuration.html"><tt>pnuts.lang.Configuration</tt></a>クラスは、基本的な式の振舞いを定義します。Configurationのサブクラスは次のメソッドのうち必要なものだけを定義します。
+</p>
+
+<h4>フィールドアクセス</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em> );</tt></dt>
+<dt><tt>public void <b>putField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em> );</tt></dt>
+
+
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getStaticField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em> );</tt></dt>
+<dt><tt>public void <b>putStaticField</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>
+<em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+<em>name</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em> );</tt></dt>
+</dl>
+</blockquote>
+
+<h4>コンストラクタ呼び出し</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>callConstructor</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a> <em>c</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[] <em>types</em> );</tt></dt>
+
+</dl>
+</blockquote>
+
+<h4>メソッド呼び出し</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>callMethod</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> <em>context</em> ,
+<a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>target</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>[] <em>args</em> , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Class.html">Class</a>[]
+<em>types</em> );</tt></dt>
+
+</dl>
+</blockquote>
+
+<h4>インデックスアクセス</h4>
+
+<blockquote>
+<dl>
+<dt><tt>public <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <b>getElement</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>key</em>  );</tt></dt>
+<dt><tt>public void <b>setElement</b>( <a
+href="../apidoc/pnuts/lang/Context.html">Context</a> context , <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>target</em> , <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> <em>key</em>, <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a>
+<em>value</em>);</tt></dt>
+</dl>
+</blockquote>
+
+<h4>二項/単項演算</h4>
+
+二項/単項演算は、次のprotectedな変数をコンストラクタで設定することでカスタマイズできます。
+
+<blockquote>
+<dl>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/BinaryOperator.html">BinaryOperator</a> _add, _subtract, _multiply, _divide, _mod, _and, _or, _xor, _shiftLeft, _shiftRight, _shiftArithmetic;</tt>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/UnaryOperator.html">UnaryOperator</a> _add1, _subtract1, _negate, _not;</tt>
+<dt><tt>protected <a href="../apidoc/pnuts/lang/BooleanOperator.html">BooleanOperator</a> _lt, _le, _gt, _ge, _eq;</tt>
+</dl>
+</blockquote>
+
+
+<h3>既定義のConfiguration</h3>
+<p>
+Java APIのアクセスの振舞いを定義する次のクラスが用意されています。
+</p>
+<blockquote>
+<dl>
+<dt><a href="../apidoc/pnuts/lang/Configuration.html"><b><tt>pnuts.lang.Configuration</tt></b></a>
+<dd>デフォルトの設定。Beansプロパティ、Beansメソッド、コンテクスト・ローカル変数、pnuts.lang.Propertyの属性にアクセスできる。Java2の環境ではMapエントリにもアクセスできる。
+<dt><a href="../apidoc/pnuts/ext/PublicMemberAccessor.html"><b><tt>pnuts.ext.PublicMemberAccessor</tt></b></a>
+<dd>デフォルトの設定と同様、ただし、BeanメソッドとBeanプロパティのかわりにpublicなメンバーにアクセスするために用いられる。
+<dt><a href="../apidoc/pnuts/ext/NonPublicMemberAccessor.html"><b><tt>pnuts.ext.NonPublicMemberAccessor</tt></b></a>
+<dd>すべての(publicに限らない)メンバーにアクセスするために用いられる。Java2の環境が必要。
+<dt><a href="../modules/pnuts.awt/apidoc/pnuts/awt/EventQueueConfiguration.html"><b><tt>pnuts.awt.EventQueueConfiguration</tt></b></a>
+<dd>Java APIへのアクセスを、イベントスレッドで実行する。
+</dl>
+</blockquote>
+
+<h3>プロパティ <tt>pnuts.lang.defaultConfiguration</tt></h3>
+<p>
+Pnuts APIが最初に読み込まれる時に、プロパティ<tt>pnuts.lang.defaultConfiguraion</tt>がConfigurationのサブクラスである場合、そのクラスがデフォルトのConfigurationとして使われます、
+</p>
+<p>
+たとえば、次のようにインタープリタを起動すると、すべてのクラスメンバー(publicに限らない)へのアクセスが可能になります。
+</p>
+
+<pre class="eg">
+% java -Dpnuts.lang.defaultConfiguration=pnuts.ext.NonPublicMemberAccessor <em>メインクラス</em>
+</pre>
+
+「<a href="context_setup.html">Contextのセットアップ</a>」を参照。
+
+<h3>関数定義とConfiguration</h3>
+<p>
+スクリプト中のフィールドアクセス式は、暗黙的にいずれかのConfigurationを仮定して書かれるので、定義時のConfigurationと実行時のConfigurationが一致していないと、正しい動作が期待できません。したがって、スクリプト中で定義される関数は、定義時のコンテクストに設定されていたConfigurationを使って実行されます。
+</p>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts ユーザーズガイド</a> -> Java APIアクセスのカスタマイズ
+</div>
+
+  </body>
+</html>

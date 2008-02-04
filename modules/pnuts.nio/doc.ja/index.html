@@ -1,0 +1,121 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.nio モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> モジュール</a> -> <tt>pnuts.nio</tt></div>
+
+<h2><tt>pnuts.nio</tt>モジュール</h2>
+
+<p>
+このモジュールは、j2sdk1.4.0で導入されたjava.nio パッケージに依存する関数を提供します。
+</p>
+
+<ul>
+<li><a href="#scanLines">scanLines</a>
+<li><a href="#charset">charset</a>
+<li><a href="#charsets">charsets</a>
+<li><a href="#mapFile">mapFile</a>
+</ul>
+
+
+<a name="scanLines"></a>
+<div class="box">
+<div class="synopsis"><b>scanLines</b><tt> ( </tt><em>input </em><tt> { , </tt><em>handler</em><tt>
+	(</tt><em>line</em><tt>) {, boolean </tt><I>includeLineSeparator</I><tt>
+	}})</tt></div>
+</div>
+
+<p>
+単に<em>input</em>が指定された場合は、<em>input</em>の各行を for 文で取りだすことのできるジェネレータを返します。
+</p>
+<p>
+関数<I>handler</I>が指定された場合は、各行に対してCharSequenceオブジェクトを引数にして指定された<I>handler</I>をよび出します。
+</p>
+<p>
+<tt>scanLines()</tt>は<a href="../../pnuts.text/doc.ja/index.html#readLines"><tt>readLines()</tt></a>と違い、ある行の内容を表すCharSequenceオブジェクトは<em>handler</em>を呼んだ後で壊れます。そのかわり行ごとにStringオブジェクトを生成しないため、より効率がよいかもしれません。
+</p>
+<p>
+<em>input</em>には、Reader, URL, File, ファイル名を表すStringのいずれかを指定します。
+</p>
+<p>
+<I>includeLineSeparator</I> にtrueが指定された場合、そのパラメータの改行文字(\r, \n, or \r\n) は保存されます(デフォルトでは、改行文字は削除されます)。</p>
+</p>
+
+<div class="eg">例:
+<pre>
+for (line : scanLines(&quot;template.txt&quot;){
+   if (match(pattern, line)){
+     println(line)
+     break
+   }
+}
+</pre>
+</div>
+
+
+<a name="charset"></a>
+<div class="box">
+<div class="synopsis"><b>charset</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>charset_name</em><tt> )</tt></div>
+</div>
+
+<p>
+<tt>charset()</tt>は、指定された<em>charset_name</em>にマッチする<a href="http://java.sun.com/jdk/1.4/docs/api/java/nio/charset/Charset.html">java.nio.charset.Charset</a>オブジェクトを返します。指定した名前のCharsetが見つからなかった場合は<tt>null</tt>を返します。
+</p>
+
+<div class="eg">例:
+<pre>charset("utf8")</pre>
+</div>
+
+<a name="charsets"></a>
+<div class="box">
+<div class="synopsis"><b>charsets</b><tt> ( )</tt></div>
+</div>
+<p>
+<tt>charsets()</tt>は、利用可能なすべてのcharsetを含むMapオブジェクト{charset名 -> <a href="http://java.sun.com/jdk/1.4/docs/api/java/nio/charset/Charset.html">Charset</a>オブジェクト}を返します。
+</p>
+
+<a name="mapFile"></a>
+<div class="box">
+<div class="synopsis"><b>mapFile</b><tt> ( ( <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/io/File.html">File</a>
+) </tt><em>file</em><tt> { , <em>mode</em> } )</tt></div>
+</div>
+
+<p>
+<tt>mapFile()</tt> はmemory-mappedファイルを作成します。
+</p>
+
+<blockquote>
+<table border=0 cellspacing=1 cellpadding=3 class=bg2 width=55%>
+<tr class=wb>
+<th bgcolor=#eeeeee>第2引数(<em>mode</em>)</th>
+<th bgcolor=#eeeeee>ファイルモード</th>
+</tr>
+<tr class=wb align=center>
+      <td>"r" or "R"</td>
+      <td>Read Only</td>
+<tr class=wb align=center>
+      <td>"w" or "W"</TD>
+      <td>Read/Write</td>
+    </TR>
+<tr class=wb align=center>
+      <td>default</TD>
+      <td>Read Only</td>
+    </TR>
+  </table>
+</BLOCKQUOTE>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts ユーザーズガイド</a> -> <a href="../../../doc/std.html"><tt>pnuts.*</tt> モジュール</a> -> <tt>pnuts.nio</tt></div>
+
+  </body>
+</html>

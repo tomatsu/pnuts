@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body bgcolor=ffffff>
+<!-- body start -->
+
+
+<h2>Codesource-based Secure Scripting</h2>
+
+<p>
+Security policy in Java is defined in terms of code source, which is characterized by digital signatures on the code and the origin of the mobile code
+(See <a href="http://java.sun.com/j2se/1.3/docs/guide/security/index.html">Java2 Security</a>).
+Security policy is defined in <a href="http://java.sun.com/j2se/1.3/docs/guide/security/PolicyFiles.html">Policy files</a>.
+</p>
+
+<p>
+The <tt>-s</tt> option of the <tt>pnuts</tt> command allows you to execute scripts safely under a certain security policy.
+</p>
+
+<h3>Secure Scripting with Pnuts API</h3>
+
+<p>
+<a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a> class is a wrapper class of Implementation class which adds a security functionality using <a href="http://java.sun.com/j2se/1.4/docs/guide/security/">JDK1.2 security</a>.
+This class, by default, allows safe execution of remote scripts just as Java applet.
+In addition, security policy can be defined based on the code source of the script.
+</p>
+
+<p>
+To execute a script safely, a security manager must be registered.  To
+register a security manager, either give
+<tt>-Djava.security.manager</tt> option to the <tt>java</tt> command
+or execute '<tt>System.setSecyrityManager(new SecurityManager())</tt>'
+before executing the script.
+</p>
+<p>
+In addition, <a href="http://java.sun.com/j2se/1.4/docs/api/java/security/AllPermission.html"><tt>java.security.AllPermission</tt></a> must be givent to the URL of the <tt>pnuts.jar</tt> file.   One of the following steps is needed.
+</p>
+<ul>
+<li>Copy <tt>pnuts.jar</tt> to <tt>${JAVA_HOME}/jre/lib/ext/</tt>.
+<li>Specify <tt>pnuts.jar</tt> to the <tt>-Xbootclasspath</tt> option of <tt>java</tt> command
+<li>Explicitly define a policy
+
+<div class="eg">e.g. ${user.home}/.java.policy
+<pre>
+grant codebase "file:/c:/pnuts/pnuts.jar" {
+    permission java.security.AllPermission;
+};
+</pre></div>
+
+</ul>
+
+<p>
+When a script is executed with a context to which a SecurePnutsImpl is
+set as follows, the scripts is executed safely under Java2 security.
+</p>
+
+
+<pre class="eg">
+context.setImplementation(SecurePnutsImpl(context.getImplementation()));
+</pre>
+
+
+<h3>Example</h3>
+
+<p>
+Suppose you have the following script.
+</p>
+
+<div class="eg">file:/${user.home}/test1.pnut
+<pre>
+println(getProperty("java.home"))
+</pre>
+</div>
+
+<p>
+To execute the script in the Java2 security, set SecurePnutsImpl to a context and pass it to <tt>loadFile()</tt> call.
+</p>
+
+<div class="eg">test.pnut
+<pre>
+import pnuts.lang.*;
+import pnuts.security.*;
+
+...
+if (System.getSecurityManager() == null){
+   System.setSecurityManager(new SecurityManager());
+}
+Context context = new Context();
+context.setImplementation(new SecurePnutsImpl(context.getImplementation()));
+
+Pnuts.loadFile("test1.pnut", context);
+</pre>
+</div>
+
+<p>
+Since java.util.PropertyPermission is required in the security policy
+in order to read the property "java.home", <a
+href="http://java.sun.com/j2se/1.4/docs/api/java/security/AccessControlException.html">AccessControlException</a>
+is thrown if no security policy is explicitly specified.
+</p>
+
+<p>
+The script would work if the following policy file is defined.
+</p>
+
+<div class="eg">${user.home}/.java.policy
+<pre>
+grant codebase "file:${user.home}/-" {
+   permission java.util.PropertyPermission "java.home", "read";
+};
+</pre>
+</div>
+
+<p>
+This policy gives a permission to read "<tt>java.home</tt>" property for scripts under the directory that the "<tt>user.home</tt>" property indicates.
+Save this policy file as <tt>${user.home}/.java.policy</tt>, or specify the file name as <code>-Djava.security.policy=</code> option of the <tt>java</tt> command.
+</p>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+  </body>
+</html>

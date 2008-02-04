@@ -1,0 +1,108 @@
+<html>
+    <head>
+      <title>Pnuts User's Guide</title>
+      <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+      <META Http-Equiv="Content-Style-Type" Content="text/css">
+      <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+    </head>
+    <body 
+	    bgcolor="#ffffff" 
+	    text="#000000" >
+
+<!-- body start -->
+
+<h3>pnuts.lang.Package</h3>
+
+<p>
+To extend <a href="../apidoc/pnuts/lang/Package.html">pnuts.lang.Package</a> class, the following methods should be defined by the subclass.
+</p>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected Value <b>lookup</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>symbol</em> <tt>, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+<dd>Reading values of a package is translated into '<tt>lookup(</tt><em>symbol</em> <tt>, </tt><em>context</em><tt>).get()</tt>'.</p>
+<dt><p><tt>public void <b>set</b>(<a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>symbol</em><tt>, </tt><a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/Object.html">Object</a> </tt><em>obj</em><tt>, </tt><a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+<dd>An assignment expression <tt>"</tt><em>symbol</em><tt> = </tt><em>obj</em><tt>"</tt> corresponds to '<tt>set(</tt><em>symbol</em> <tt>, </tt><em>obj</em><tt>, </tt><em>context</em><tt>)</tt>'</p>
+</dl>
+</blockquote>
+
+<p>
+The following methods can be overriden if needed.
+</p>
+
+<blockquote>
+<dl>
+<dt><p><tt>protected void <b>init</b>()</tt></dt>
+<dd>This method initializes the data structure and defines variables.</p>
+<dt><p><tt>protected void <b>init</b>(<a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em>context</em><tt>)</tt></dt>
+<dd>This method is called when the package becomes the current package. </p>
+</dl>
+</blockquote>
+
+<p>
+For example, a package which is implemented with Hashtable would be like:
+</p>
+
+<blockquote>
+<table width=90% cellpadding=10>
+<tr><td bgcolor=f2f2f2>
+<pre>
+import pnuts.lang.*;
+import pnuts.lang.Package;
+import java.util.*;
+
+public class SimplePackage extends Package {
+   Hashtable table;
+
+   public SimplePackage(){
+   }
+
+   public SimplePackage(String name){
+      super(name);
+   }
+
+   public SimplePackage(String name, Package parent){
+      super(name, parent);
+   }
+
+   protected void init(){
+      table = new Hashtable()
+   }
+
+   protected void init(Context context){
+      System.out.println("init(Context) is called");
+      super.init(context);
+   }
+
+   protected Value lookup(String symbol, Context context){
+      final Object obj = table.get(symbol);
+      if (obj != null){
+         return new Value(){
+            public Object get(){
+              return obj;
+            }
+         };
+      } else {
+         return null;
+      }
+   }
+
+   public void set(String symbol, Object value, Context context){
+      table.put(symbol, value);
+   }
+}
+</pre></td></tr>
+</table>
+</blockquote>
+
+<!-- body end -->
+
+<HR noshade size="1">
+<P>
+<CENTER><H3>
+<a href="guide.html">Back</a>
+</H3></CENTER>
+<P>
+<HR noshade size="1">
+</body>
+</html>

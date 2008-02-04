@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+<body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; Kontekst
+</div>
+
+<!-- body start -->
+
+    <h2>Kontekst (Context)</h2>
+
+<em>Context</em> jest wewn&#281;trznym stanem czasu wykonania w Pnuts reprezentowanym przez klas&#281;&nbsp; <a href="../apidoc/pnuts/lang/Context.html"><tt>pnuts.lang.Context</tt></a>&nbsp;. Kontekst zawiera nast&#281;puj&#261;ce dane:
+
+<ul>
+<li>Rank&#281; stosu (tylko interpreter AST)
+</li><li>U&#380;yte pakiety-modu&#322;y
+</li><li>List&#281; importowanych pakiet&oacute;w Javy
+</li><li>OutputStream gdzie komenda <tt>print()</tt> wypisuje komunikaty
+</li><li>OutputStream gdzie komenda <tt>error()</tt> wypisuje b&#322;&#281;dy
+</li><li>OutputStream gdzie wypisywane s&#261; wyniki komend
+</li><li>ClassLoader gdzie komenda<tt>load()</tt> szuka skrypt&oacute;w
+</li><li><a href="pnuts_engine.html#impl">Objekt implementacji</a>
+</li><li><a href="#contextlocal">Lokalne zmienne Kontekstu</a>
+</li><li>Modu&#322;y dodane przez komend&#281; <tt>use()</tt>
+</li><li><span style="font-family: monospace;">List&#281; plik&oacute;w czytanych przez </span><tt>load()</tt>
+</li><li><a href="#configuration">Konfiguracj&#281;</a>
+</li></ul>
+
+<p>Zobacz "<a href="api.html#context">Przegl&#261;d API Pnuts</a>".
+</p>
+
+<a name="getContext"></a>
+
+<div class="box">
+<div class="synopsis"><b>getContext</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>getContext()</tt> zwraca referencje do aktualnego kontekstu
+kt&oacute;ry zosta&#322; stworzony w sesji interaktywnej. Wszystkie
+odwo&#322;ania dotycz&#261; aktualnego kontekstu.
+</p>
+
+
+<div class="box">
+<div class="synopsis"><b>eval</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> <span style="font-family: Verdata,Geneva,Arial,Helvetica,sans-serif;">wyra&#380;enie</span></tt> <tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em><span style="font-family: monospace;">kontekst</span></em><tt> } )</tt></div>
+<div class="synopsis"><b>load</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>plikSkryptu</em> <tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em><span style="font-family: monospace;">kontekst</span></em><tt> } )</tt></div>
+<div class="synopsis"><b>loadFile</b><tt> ( <a href="http://java.sun.com/j2se/1.4/docs/api/java/lang/String.html">String</a> </tt><em>plikSkryptu</em> <tt> {, <a href="../apidoc/pnuts/lang/Context.html">Context</a> </tt><em><span style="font-family: monospace;">kontekst</span></em><tt> } )</tt></div>
+</div>
+
+<p>Gdy <em>kontekst</em> jest podany w wywo&#322;aniu tych funkcji tworzony jest klon tego kontekstu i na tej kopi dzia&#322;aja te funkcje.
+</p>
+
+<p>Gdy <em>kontekst</em> nie jest podany klonowany jest bie&#380;&#261;cy kontekst i na nim dzia&#322;aj&#261; funkcje. Funkcja <tt>import()</tt> stan kontekstu jest resetowany do stanu domy&#347;lnego.
+</p>
+
+<a name="stream"></a>
+<h3>Strumie&#324; wyj&#347;cia (OutputStream) dla komunikat&oacute;w (Messages)</h3>
+
+<p>Ka&#380;dy kontekst mo&#380;e mie&#263; ustawione:.
+</p>
+
+<ul>
+<li>Standardowe wyj&#347;cie(Writer / OutputStream)
+</li><li>Wyj&#347;cie b&#322;&#281;d&oacute;w(Writer)
+</li><li>Gdzie maj&#261; by&#263; drukowane rezultaty wyra&#380;e&#324;(Writer)
+</li></ul>
+
+<div class="box">
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt> . </tt><b>setOutputStream</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/OutputStream.html">OutputStream</a> </tt><em>anOutputStream</em><tt>)</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>getOutputStream</b><tt>()</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>setWriter</b><tt> (<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>aWriter</em><tt> )</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>getWriter</b><tt>()</tt></div>
+
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>setErrorWriter</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>writer</em><tt>)</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>getErrorWriter</b><tt>()</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>setTerminalWriter</b><tt>
+		(<a href="http://java.sun.com/j2se/1.4/docs/api/java/io/Writer.html">Writer</a> </tt><em>writer</em><tt>)</tt></div>
+<div class="synopsis"><em><span style="font-family: monospace;">kontekst</span></em><tt>&nbsp;. </tt><b>getTerminalWriter</b><tt>()</tt></div>
+</div>
+
+
+<a name="contextlocal"></a>
+<h3>Kontekst - zmienne lokalne</h3>
+
+
+<div class="box">
+<div class="synopsis"><em>kontekst</em>. symbol</div>
+</div>
+
+<p>Zmienne lokalne kontekstu s&#261; zmiennymi &#347;rodowiskowymi przypisanymi
+do kontekstu.Zmienne kontekstu s&#261; typowo u&#380;ywane gdy jakie&#347; warto&#347;ci
+powinny by&#263; zapami&#281;tywane pomi&#281;dzy r&oacute;&#380;nymi wywo&#322;aniami funkcji.
+</p>
+
+<div class="eg">np.
+<pre>function foo(){<br>  getContext().foo = true<br>}<br><br>function bar(){<br>  if (getContext().foo != null){<br>    println("foo has been called")<br>  }<br>}<br></pre></div>Inne atrybuty kontekstu s&#261; opisane w&nbsp; <a href="api.html#context">Przegl&#261;d Pnuts API</a>.
+
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a>&nbsp;-&gt; Kontekst
+</div>
+
+  </body></html>

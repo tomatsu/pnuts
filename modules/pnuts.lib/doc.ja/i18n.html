@@ -1,0 +1,270 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.lib モジュール</title>
+    <meta Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <meta Http-Equiv="Content-Style-Type" Content="text/css">
+    <link Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> 国際化のサポート</div>
+
+    <h2>国際化のサポート</h2>
+
+<h3>ロケール情報</h3>
+
+<a name=getLocale></a>
+
+<div class="box">
+<div class="synopsis"><b>getLocale</b><tt>()</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>locale_string</em>)</tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Locale.html">Locale</a>
+
+<em>locale</em>)</tt></div>
+</div>
+
+<p>
+<tt>getLocale()</tt>は、ユーザの実行環境の<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Locale.html">Locale</a>を返します。
+</p>
+<p>
+<em>locale_string</em>を指定する場合は、言語、国、それ以外の情報を'_'で連結した文字列を指定します。
+</p>
+<p>
+
+<em>locale</em>が指定された場合は、そのままの値が返ります。
+
+</p>
+
+<pre class="eg">
+loc = getLocale()
+println("言語: ", loc.language)
+println("国: ", loc.country)
+</pre>
+
+
+<a name=setLocale></a>
+
+<div class="box">
+<div class="synopsis"><b>setLocale</b><tt>()</tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+
+<em>locale_string</em>)</tt> or</div>
+<dd><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Locale.html">Locale</a>
+<em>locale</em>)</tt></div>
+</div>
+
+<p>
+カレント・コンテクストのロケールを変更します。
+</p>
+
+<h3>リソースのローカライズ</h3>
+
+<a name=getLocalizedResource></a>
+
+<div class="box">
+<div class="synopsis"><b>getLocalizedResource</b><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>rsrcName</em> { , <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+
+<em>language</em> {, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+
+<em>country</em> } })</tt> or</div>
+<div class="synopsis2"><tt>(<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>rsrcName</em>, <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Locale.html">Locale</a>
+
+<em>locale</em> )</tt></div>
+
+</div>
+
+
+<p>
+<tt>getLocalizedResource()</tt>は、指定された<em>resourceName</em>とロケール情報を使って、ローカライズされたリソースを求めます。
+ローカライズされたリソースの候補は、次の規則で作られます。
+</p>
+
+<ol>
+<li> basename + "_" + language + "_" + country + "." + extension
+
+<li> basename + "_" + language + "." + extension
+<li> basename + extension
+
+</ol>
+
+<p>
+例えば、デフォルトロケールがfr_FRで、"hello.txt"というリソースファイルをローカライズしたいとします。
+</p>
+
+<pre class="eg">
+getLocalizedResource("hello.txt")
+</pre>
+
+<p>
+hello_fr_FR.txt" がある場合、<tt>getLocalizedResource()</tt>は、 そのファイルをURLオブジェクトとして返します。
+
+<p>
+"hello_fr.txt"があって、"hello_fr_FR.txt"がない場合、<tt>getLocalizedResource()</tt>は、"hello_fr.txt"をURLオブジェクトとして返します。
+
+<p>
+"hello_fr_FR.txt" も "hello_fr.txt" もない場合、<tt>getLocalizedResource()</tt>は、"hello.txt"をURLオブジェクトとして返します。
+</p>
+
+<h3>メッセージの国際化</h3>
+
+<a name=formatMessage></a>
+
+<div class="box">
+<div class="synopsis"><b>formatMessage</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>bundleName</em>, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>key</em> <tt>{, parameters ...} )</tt></div>
+
+</div>
+
+<p>
+リソースバンドル(<em>bundleName</em>)から <em>key</em> の値を求めます。
+<em>parameters</em>が一つ以上指定された場合は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/text/MessageFormat.html#format(java.lang.String, java.lang.Object[])">MessageFormat::format()</a>メソッドでメッセージを作ります。
+</p>
+
+<pre class="eg">
+
+formatMessage("pnuts/lang/pnuts", "autoload.failed")
+
+   ==> ResourceBundle::getBundle("pnuts/lang/pnuts", Locale::getDefault()).getObject("autoload.failed")
+
+formatMessage("pnuts/lang/pnuts", "autoload.failed", "foo.pnut")
+
+   ==> MessageFormat::format(
+           ResourceBundle::getBundle("pnuts/lang/pnuts", LC).getObject("autoload.failed"),
+          ["foo.pnut"])
+
+</pre>
+
+
+<a name="getResourceBundle"></a>
+
+<div class="box">
+<div class="synopsis"><em>bundle = </em> <b>getResourceBundle</b><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a> </tt><em>url</em>, 
+<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>bundleName</em> { , ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">Locale</a> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>  ) <em>locale</em> } )</tt></div>
+<div class="synopsis"><em>bundle</em><tt>.formatMessage(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>key</em> { , <em>parameters</em> ...} )</div>
+</div>
+<p>
+<em>url</em>に指定されたJARファイルに含まれるリソースバンドルを使って、国際化されたメッセージをフォーマットします。
+</p>
+<pre class="eg">
+b = getResourceBundle("pnuts.jar", "pnuts/lang/pnuts")
+println(b.formatMessage("not.defined", "foo"))
+</pre>
+
+<h3>ロケールに依存する数のフォーマット</h3>
+
+<a name=formatNumber></a>
+<a name=formatCurrency></a>
+<a name=formatPercent></a>
+
+<div class="box">
+<div class="synopsis"><b>formatNumber</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>fmin</em><tt> }) </tt> or</div>
+<div class="synopsis2"><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt>, String </tt><em>format</em><tt> ) </tt> or</div>
+
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>imin</em> <tt>, int </tt><em>imax</em> <tt>, int </tt><em>fmin</em> <tt>, int </tt><em>fmax</em><tt> } )</tt></div>
+
+<div class="synopsis"><b>formatCurrency</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>fmin</em><tt> }) </tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>imin</em> <tt>, int </tt><em>imax</em> <tt>, int </tt><em>fmin</em> <tt>, int </tt><em>fmax</em><tt> } )</tt></div>
+
+<div class="synopsis"><b>formatPercent</b><tt> (<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>fmin</em><tt> }) </tt> or</div>
+<div class="synopsis2"><tt>(<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/Number.html">Number</a> </tt><em>number</em><tt> {, int </tt><em>imin</em> <tt>, int </tt><em>imax</em> <tt>, int </tt><em>fmin</em> <tt>, int </tt><em>fmax</em><tt> } )</tt></div>
+
+</div>
+
+<p>
+それぞれ、数、金額、パーセンテージをフォーマットした文字列を返します。
+<p>
+<em>imin, imax, fmin, fmax</em> は整数部分と少数部分の桁数を設定します。
+値が -1 の場合はデフォルトの値を意味します。
+</p>
+
+<blockquote>
+<dl>
+<dt><em>imin</em>
+<dd>整数部分の桁数の最小値
+<dt><em>imax</em>
+
+<dd>整数部分の桁数の最大値
+<dt><em>fmin</em>
+<dd>少数部分の桁数の最小値
+<dt><em>fmax</em>
+<dd>少数部分の桁数の最大値
+</dl>
+</blockquote>
+
+<pre class="eg">
+fmt1 = formatNumber(12345)
+fmt2 = formatCurrency(12345)
+fmt3 = formatPercent(0.12, 3)
+</pre>
+
+<tt>formatNumber(<em>number</em>, <em>format</em>)</tt>の<em>format</em>は、<a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/text/DecimalFormat.html">java.text.DecimalFormat</a>クラスが定義するフォーマット文字列を指定できます。
+
+<pre class="eg">
+formatNumber(123.456, "0000")
+</pre>
+
+<a name=formatDate></a>
+<a name=formatTime></a>
+
+<a name=formatDateTime></a>
+
+<div class="box">
+<div class="synopsis"><b>formatDate</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> </tt><em>aDate</em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>style</em><tt> } )</tt></div>
+
+<div class="synopsis"><b>formatTime</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> </tt><em>aDate</em><tt> {, <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a> </tt><em>style</em><tt> } )</tt></div>
+
+<div class="synopsis"><b>formatDateTime</b><tt> ( <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Date.html">Date</a> </tt><em>aDate</em><tt>
+
+{, ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>style</em> , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+</tt><em>style</em><tt> | <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a></tt> <em>pattern</em><tt> ) } )</tt></div>
+
+</div>
+
+
+<p>
+それぞれ、日付､時刻、両方をフォーマットした文字列を返します。
+<p>
+<em>style</em> が省略された場合、"DEFAULT" が渡されます。
+<em>style</em> は次のいずれかです(大文字小文字の区別はなし）。
+
+<ul>
+<li>"full"
+<li>"long"
+<li>"medium"
+
+<li>"short"
+
+</ul>
+</p>
+
+<p>
+<tt>formatDateTime()</tt>に2引数が与えられた場合は、<em>pattern</em>を
+使って日付時刻をフォーマットします。<em>pattern</em>の書式は、<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/text/SimpleDateFormat.html">java.text.SimpleDateFormat</a>で定義されます。
+</p>
+
+<pre class="eg">
+formatDate(date(), "full")
+formatTime(date(), "short")
+formatDateTime(date())
+
+</pre>
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズ
+ガイド</a> -> <a href="index.html"><tt>pnuts.lib</tt></a> -> 国際化のサポート</div>
+
+  </body>
+</html>

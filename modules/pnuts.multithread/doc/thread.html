@@ -1,0 +1,107 @@
+ <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.multithread module</title>
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Multithreading</div>
+
+    <h2>Multithreading</h2>
+
+<a name=fork></a>
+<a name=createThread></a>
+<div class="box">
+<div class="synopsis"><b>createThread</b><tt>(<a
+href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a>
+</tt><em>function</em><tt> { , int</tt> <em>priority</em><tt> { , boolean</tt> <em>daemon</em><tt> } })</tt></div>
+<div class="synopsis"><b>fork</b><tt>(<a
+href="../../../apidoc/pnuts/lang/PnutsFunction.html">PnutsFunction</a>
+</tt><em>function</em><tt> { , int</tt> <em>priority</em><tt> { , boolean</tt> <em>daemon</em><tt> } })</tt></div>
+</div>
+
+<p>
+<tt>createThread()</tt> creates a thread to call <em>function</em> (it
+don't start, until start() method is explicitly called).
+<tt>fork()</tt> creates a thread to call <em>function</em> and start it.
+<tt>createThread()</tt> and <tt>fork()</tt> return the corresponding Thread object.
+</p>
+
+<a name=sleep></a>
+<div class="box">
+<div class="synopsis"><b>sleep</b><tt>(int </tt><em>msec</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>sleep()</tt> sleeps <em>msec</em> milli seconds
+, just as <tt>Thread::sleep(</tt><em>msec</em><tt>)</tt>.
+</p>
+
+<a name=currentThread></a>
+<div class="box">
+<div class="synopsis"><b>currentThread</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>currentThread()</tt> refers to a Thread object associated with the
+      current execution.
+</p>
+
+<a name=getPriority></a>
+<a name=setPriority></a>
+<div class="box">
+<div class="synopsis"><b>getPriority</b><tt>()</tt></div>
+<div class="synopsis"><b>setPriority</b><tt>(int </tt><em>prio</em><tt>)</tt></div>
+</div>
+
+<p>
+<tt>getPriority()</tt> gets the priority of the current thread.
+<tt>setPriority()</tt> changes the priority of the current thread.
+</p>
+
+<div class="eg">e.g.
+<pre>
+fork(function (){
+    for (i : 0..9){
+	println(i)
+	flush()
+	sleep(500)
+    }
+})
+</pre>
+</div>
+
+<a name=threadGroup></a>
+<div class="box">
+<div class="synopsis"><b>threadGroup</b><tt>()</tt></div>
+</div>
+
+<p>
+<tt>threadGroup()</tt> displays a list of the current thread group.
+</p>
+
+<div class="eg">e.g.
+<pre>
+> threadGroup()
+java.lang.ThreadGroup[name=system,maxpri=10]
+    Thread[Clock,12,system],daemon
+    Thread[Idle thread,0,system],daemon
+    Thread[Async Garbage Collector,1,system],daemon
+    Thread[Finalizer thread,1,system],daemon
+    java.lang.ThreadGroup[name=main,maxpri=10]
+        Thread[main,5,main]
+        Thread[Terminal,2,main]
+null
+</pre>
+</div>
+
+
+<div class="nav2"><a href="../../../doc/guide.html">Pnuts User's
+Guide</a> -> <a href="index.html"><tt>pnuts.multithread</tt></a> -> Multithreading</div>
+
+  </body>
+</html>

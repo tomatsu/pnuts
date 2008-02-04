@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>Pnuts User's Guide</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Pnuts User's Guide</a> -> Customizing the Interpreter's Implementation
+</div>
+
+<!-- body start -->
+
+<h2>Customizing the Interpreter's Implementation</h2>
+
+<p>
+Pnuts scripts are typically compiled into Java bytecode when they are
+executed.  The way of executing scripts can be customized by setting an attribute (pnutsImpl) of the Context.  For example, Pnuts scripts
+can be executed without compiling, or compiled once and cached for subsequent executions.
+</p>
+
+<h3>pnuts.lang.Implementation Object</h3>
+<p>
+<a href="../apidoc/pnuts/lang/Implementation.html"><tt>pnuts.lang.Implementation</tt></a> interface defines the interface of script interpreter's implementation.  
+An instance of the Implementation interface is associated with a <a href="context.html">Context</a>.  A pair of methods <a href="../apidoc/pnuts/lang/Context.html#setImplementation(pnuts.lang.Implementation)"><tt>Context.setImplementation()</tt></a> and <a href="../apidoc/pnuts/lang/Context.html#getImplementation()"><tt>Context.getImplementation()</tt></a> are the settter/getter method respectively.
+<p>
+
+<h3>Predefined Implementation Classes</h3>
+
+ The following classes are the implementation classes of the interface provided in the Pnuts distribution.
+<p>
+<blockquote>
+<dl>
+<dt><a href="../apidoc/pnuts/lang/PnutsImpl.html"><tt>pnuts.lang.PnutsImpl</tt></a>
+<dd>The AST interpreter.
+<dt><a href="../apidoc/pnuts/compiler/CompilerPnutsImpl.html"><tt>pnuts.compiler.CompilerPnutsImpl</tt></a>
+<dd>The on-the-fly Compiler.  The default class for <tt>pnuts</tt> command.
+<dt><a href="../apidoc/pnuts/ext/CachedPnutsImpl.html"><tt>pnuts.ext.CachedPnutsImpl</tt></a>
+<dd>Mixed mode, which caches compiled (or parsed) scripts and reuse them.  The default class for <a href="servlet.html">Pnuts Servlet</a>.
+<dt><a href="../apidoc/pnuts/security/SecurePnutsImpl.html"><tt>pnuts.security.SecurePnutsImpl</tt></a>
+<dd>Secure mode, which executes scripts safely using Java2 Security API
+<dt><a href="../apidoc/pnuts/security/JAASPnutsImpl.html"><tt>pnuts.security.JAASPnutsImpl</tt></a>
+<dd>Secure mode, which executes scripts safely using JAAS.
+</dl>
+</blockquote>
+
+<p>
+See <a href="performance.html#choose">Performance Hints</a> on how to choose Implementation class in terms of efficiency.
+</p>
+
+
+<pre class="eg">
+import pnuts.lang.*;
+import pnuts.ext.*;
+
+Context context = new Context();
+context.setImplementation(new CachedPnutsImpl());
+Pnuts.loadFile(fileName, context);
+</pre>
+
+<p>
+<a
+href="../apidoc/pnuts/security/SecurePnutsImpl.html">SecurePnutsImpl</a>
+and <a
+href="../apidoc/pnuts/security/JAASPnutsImpl.html">JAASPnutsImpl</a>
+are wrapper classes of other Implementation classes to add securty
+functionalities.  See <a href="secure.html">Building Secure Scripting
+Environment</a> for more detail.
+
+<pre class="eg">
+context.setImplementation(new SecurePnutsImpl(new CompilerPnutsImpl()));
+Pnuts.load(new URL("..."), context);
+</pre>
+
+<a name="defaultPnutsImpl"></a>
+<h3>The <code>pnuts.lang.defaultPnutsImpl</code> Property</h3>
+<p>
+If the system property, <tt>pnuts.lang.defaultPnutsImpl</tt>, is a class that implements Implementation
+interface when Pnuts API is first loaded, an instance of the specified class is
+create with the default constructor and used as the default Implementation.
+</p>
+<p>
+Since <a href="../apidoc/pnuts/security/SecurePnutsImpl.html">SecurePnutsImpl</a> and <a
+href="../apidoc/pnuts/security/JAASPnutsImpl.html">JAASPnutsImpl</a> do not have the default
+constructor, they can not be specified for the property.
+</p>
+<p>
+To see what Implementation is being used, call <code>Context.getImplementation()</code>.
+</p>
+
+<pre class="eg">
+&gt; getContext().getImplementation()
+pnuts.compiler.CompilerPnutsImpl@1764be1
+&gt; 
+</pre>
+
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Pnuts User's Guide</a> -> Customizing the Interpreter's Implementation
+</div>
+
+  </body>
+</html>

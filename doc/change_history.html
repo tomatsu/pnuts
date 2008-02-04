@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+  <TITLE>The Pnuts Language</TITLE>
+  <META Http-Equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+  <META Http-Equiv="Content-Style-Type" Content="text/css">
+  <LINK Type="text/css" Rel="stylesheet" Href="stylesheet.css">
+</head>
+<body>
+<div class="nav"><a href="lang-TOC.html">Table of Contents</a> -> Change History</div>
+
+<h2>Changes since 1.2</h2>
+<ul>
+<li><a href="lang.html#beandef">A new syntax for creating JavaBeans</a>
+<pre class="eg">
+      btn = java.awt.Button {
+              label : "OK"
+            }
+</pre>
+The example above is interpreted as follows.
+<pre class="eg">
+      btn = new java.awt.Button()
+      btn.label = "OK"
+      btn
+</pre>
+<li>Expression can be embedded in <a href="lang.html#string">String literal</a>
+<pre class="eg">
+       "Date: \( date() \)"
+</pre>
+<li><a href="lang.html#parallel_assign">Parallel assignment returns null</a>
+<pre class="eg">
+       a,b = [1,2]       --> null
+</pre>
+<li><a href="lang.html#classdef">Type declaration in class field definition can be omitted only when initial value is assigned</a>
+<pre class="eg">
+     class A {
+       name2 = null   // In previous versions, this had to be 'Object name2 = null'
+     }
+</pre>
+</ul>
+
+<h2>Changes since 1.1</h2>
+<ul>
+<li><a href="lang.html#classdef">Syntax for class definition</a>
+<pre class="eg">
+package util
+import java.util.*
+import java.io.*
+class mymap extends TreeMap implements Serializable {
+  get(key){
+    if ((v = super.get(key)) == null){
+      super.put(key, v = set())
+    }
+    v
+  }
+}
+</pre></li>
+<li><a href="lang.html#closure">Compact syntax for anonymous function</a>
+<pre class="eg">
+{a, b -> a + b}
+</pre>
+</li>
+<li><a href="lang.html#parallel_assign">Parallel Assignment</a>
+<pre class="eg">
+a, b = [1, 2]
+for (key, value : {1 => 2}){ ... }
+</pre>
+</li>
+<li><a href="lang.html#arrayIndex">Negative index of Arrays</a>
+<pre class="eg">
+a[-n]@@// same as a[size(a) - n]
+</pre></li>
+
+<li><a href="lang.html#vararg">vararg function can have one or more parameters</a>
+<pre class="eg">
+function f(a,b,c[]) c
+f(1,2) --> []
+f(1,2,3) --> [3]
+f(1,2,3,4) --> [3,4]
+</pre>
+<li><a href="lang.html#concatenation">Binary operator (+, -, *, <, <=, >, >=) for arrays and collections</a>
+<pre class="eg">
+{1, 2} + {3}
+{1, 2} - {2, 4}
+{1, 2} > [2]
+</pre></li>
+
+<li><a href="lang.html#list">Native syntax for List</a>
+<pre class="eg">
+{e1, e2, e3}
+</pre></li>
+<li>implicit conversion between primitive types
+<pre class="eg">
+Thread.sleep(100.0)
+</pre></li>
+<li>Arrays <-> List implicit conversion
+<pre class="eg">
+String({65})
+</pre></li>
+</ul>
+
+<h3>Changes since 1.0</h3>
+<ul>
+<li>New reserved keywords:
+<pre class="eg">
+  new
+  do
+  try
+  finally
+  import
+  yield
+  =>
+</pre>
+
+<li><a href="lang.html#new"><tt>'new'</tt> expression</a> to create an instance specifying a type literal
+
+<div class="eg">e.g.
+<pre>
+new java.util.ArrayList()
+new int[10]
+new int[]{1, 2, 3}
+</pre>
+</div>
+</li>
+<li><a href="lang.html#subclass"><tt>'new'</tt> expression</a> to create subclasses
+
+<div class="eg">e.g.
+<pre>
+new WindowAdapter(){
+   windowClosing(e){
+      ...
+   }
+}
+</pre>
+</div>
+</li>
+<li><a href="lang.html#import"><tt>import</tt> statement</a>, as an alternative to the import() function.
+
+<div class="eg">e.g.
+<pre>
+import java.util.*
+import java.rmi.Remote
+import static java.awt.Color.*
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#yield"><tt>yield</tt> statement</a> to define a generator function
+<div class="eg">e.g.
+<pre>
+function integers(min, max){
+   for (i: min..max) yield i
+}
+
+for (i : integers(0, 3)) println(i)
+</pre>
+</div>
+
+</li>
+
+<li><a href="lang.html#throw"><tt>throw</tt> statement</a>
+<div class="eg">
+<pre>
+throw new java.io.IOException("message")
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#cast">Cast expression</a> and <a href="lang.html#instanceof"><tt>instanceof</tt> expression</a> now take a type literal, rather than a Class object.
+
+<p>
+In 1.0, cast expression takes a Class object to specify the type that the target object is casted to.
+In 1.1 or higher, cast expression now takes a <em>type literal</em>, as in Java language.
+</p>
+</li>
+
+<li><a href="lang.html#try"><tt>try</tt>/<tt>catch</tt>/<tt>finally</tt> statement</a>
+<div class="eg">e.g.
+<pre>
+try {
+  ...
+} catch (java.io.IOException e){
+  e.printStackTrace()
+}
+</pre>
+</div>
+</li>
+</li>
+
+<li><a href="lang.html#dowhile"><tt>do</tt>/<tt>while</tt> statement</a>
+<div class="eg">e.g.
+<pre>
+i = 0
+do {
+  i++
+} while (i < 10)
+</pre>
+</div>
+</li>
+
+<li><a href="lang.html#ternary"><tt><em>condition</em> ? expr : expr</tt></a>
+<div class="eg">e.g.
+<pre>
+pnuts_version.startsWith("1.1") ? 1 : 0
+</pre>
+</div>
+
+<li>When an instance method of a Class object was called but the method was not found, the static method of the class is called.
+<div class="eg">e.g.
+<pre>
+System.gc()
+</pre>
+</div>
+
+<li><a href="lang.html#map">Map expression</a>
+<pre class="eg">
+{ "name"=>"Sae",  "age" => 1 }
+</pre>
+
+<li><a href="lang.html#array">Array expression</a>
+<pre class="eg">
+{ "name",  "age" }       // same as ["name", "age"]
+</pre>
+
+<li><a href="lang.html#scope">Scope Rules</a> are clarified</li>
+<p>
+<div class="eg">Old:
+<pre>
+import java.awt.*
+swing = false
+function f(){
+  if (swing){
+    Menu = JMenu
+  }
+  Menu   // java.awt.Menu
+}
+</pre>
+</div>
+
+<div class="eg">New:
+<pre>
+import java.awt.*
+swing = false
+function f(){
+  if (swing){
+    Menu = JMenu
+  }
+  Menu   // null
+}
+</pre>
+<div>
+
+</ul>
+
+<div class="nav2"><a href="lang-TOC.html">Table of Contents</a> -> Change History</div>
+</body>
+</html>

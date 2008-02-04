@@ -1,0 +1,432 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>pnuts.xml モジュール</title>
+    <META Http-Equiv="Content-Type" content="text/html; charset=EUC-JP">
+    <META Http-Equiv="Content-Style-Type" Content="text/css">
+    <LINK Type="text/css" Rel="stylesheet" Href="../../stylesheet.css">
+  </head>
+
+  <body>
+
+<div class="nav"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> 関数</div>
+
+<a name="parseXML"></a>
+<div class="box">
+<div class="synopsis"><b>parseXML</b><tt>( <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a>
+| <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/InputSource.html">org.xml.sax.InputSource</a>
+)
+</tt><em>input</b></em><tt> , <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> |
+<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ContentHandler.html">org.xml.sax.ContentHandler</a>)
+</tt><em>handler</b></em><tt> <br>&nbsp; { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>
+<em>properties</em>  { , (<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/validation/Schema.html">Schema</a>
+)
+<em>schama</em> }  })</tt></div>
+</div>
+
+<p>
+<tt>parseXML()</tt> は、XML文書を<em>input</em>から読み込んでパーズし、SAXイベントを<em>handler</em>で処理します。
+<p>
+<em>handler</b></em>がMapオブジェクトの場合、キーは<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/helpers/DefaultHandler.html">org.xml.sax.helpers.DefaultHandler</a> のメソッド名で、値はそのメソッドのパラメータの数と同じ引数を取る関数でなければなりません。
+</p>
+<blockquote>
+<dl>
+<dt>function startDocument() 
+<dt>function startElement(uri, localName, qName, attributes)
+<dt>function endElement(uri, localName, qName) 
+<dt>function characters(charArray, startIndex, length)
+<dt>function endDocument() 
+<dt>function error(exception) 
+<dt>function fatalError(exception) 
+</dl>
+</blockquote>
+<p>
+<em>properties</em> は次のBooleanプロパティを含むことができます。
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>namespaceAware
+<dt>validating
+</dl>
+</blockquote>
+</font>
+<p>
+<em>properties</em> が他のkey-valueマッピングを含む場合は、SAXパーザのプロパティとして扱われます。
+</p>
+<p>
+<em>schema</em> が指定された場合は、そのスキーマでXML文書の正当性を検証します(JDK1.5以降)。
+</p>
+<pre class="eg">
+function validate(doc, schema){
+  parseXML(doc, null, null, schema)
+}
+validate("address.xml", "address.xsd")
+</pre>
+
+<a name="readDocument"></a>
+
+<div class="box">
+<div class="synopsis"><b>readDocument</b><tt>( <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/InputSource.html">org.xml.sax.InputSource</a>
+)
+</tt><em>input</b></em><tt> <br>&nbsp; { , 
+( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> |
+<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ErrorHandler.html">org.xml.sax.ErrorHandler</a>)
+</tt><em>errorHandler</b></em><tt> {,
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>
+<em>properties</em> { , (<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+| <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+| <a
+href="http://java.sun.com/j2se/1.5.0/docs/api/javax/xml/validation/Schema.html">Schema</a>
+)
+<em>schama</em> } } } )</tt></div>
+</div>
+
+<p>
+<tt>readDocument()</tt> はXML文書を読み込んで、<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Document.html">org.w3c.dom.Document</a> オブジェクトとしてDOMオブジェクトを返します。
+<p>
+<em>properties</em> は次のBooleanプロパティを含むことができます。
+これらは<a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/parsers/DocumentBuilderFactory.html">javax.xml.parsers.DocumentBuilderFactory</a>のBeanプロパティです。
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>namespaceAware
+<dt>validating
+<dt>ignoringElementContentWhitespace
+<dt>expandEntityReferences
+<dt>ignoringComments
+<dt>coalescing
+</dl>
+</blockquote>
+</font>
+</p>
+<p>
+<em>properties</em> が他のkey-valueマッピングを含む場合は、DOMビルダの属性として扱われます。
+</p>
+<p>
+<em>schema</em> が指定された場合は、そのスキーマでXML文書の正当性を検証します。
+</p>
+
+<a name="newDocument"></a>
+<div class="box">
+<div class="synopsis"><b>newDocument</b><tt>( { <a href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a> <em>properties</em> } )</tt></div>
+</div>
+<p>
+<tt>writeDocument()</tt>は、DOM木を構築するためのDOMオブジェクトを新たに生成して返します。
+</p>
+<em>properties</em> は次のBooleanプロパティを含むことができます。
+これらは<a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/parsers/DocumentBuilderFactory.html">javax.xml.parsers.DocumentBuilderFactory</a>のBeanプロパティです。
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>namespaceAware
+<dt>validating
+<dt>ignoringElementContentWhitespace
+<dt>expandEntityReferences
+<dt>ignoringComments
+<dt>coalescing
+</dl>
+</blockquote>
+</font>
+</p>
+
+<a name="writeDocument"></a>
+
+<div class="box">
+<div class="synopsis"><b>writeDocument</b><tt>( <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> |
+<a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Source.html">javax.xml.transform.Source</a> )
+</tt><em>document</b></em><tt> , <br>&nbsp; ( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a>
+)
+<em>output</em> <br>&nbsp; { , <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/util/Map.html">Map</a>
+<em>properties</em>  } )</tt></div>
+</div>
+
+<p>
+<tt>writeDocument()</tt> は、XML文書を<em>output</em>に書き込みます。
+</p>
+<p>
+<em>properties</em>が指定される場合、<a
+href="http://www.w3.org/TR/xslt#output">Section 16 of the XSL
+Transformation (XSLT) W3C Recommendation</a>で定義される属性を含むことができます。
+</p>
+
+<font size=-1>
+<blockquote>
+<dl>
+<dt>method
+<dt>version
+<dt>encoding
+<dt>omit-xml-declaration
+<dt>standalone
+<dt>doctype-public
+<dt>doctype-system
+<dt>cdata-section-elements
+<dt>indent
+<dt>media-type
+</dl>
+</blockquote>
+</font>
+
+<a name="traverseDocument"></a>
+<div class="box">
+<div class="synopsis"><b>traverseDocument</b><tt>(</tt></div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</b></em><tt> ,  </tt><em>enterFunc</em> (<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</em> ) {, <em>exitFunc</em> (<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</em> ) } ) or </div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</b></em><tt> ,  </tt> ( <a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ContentHandler.html">org.xml.sax.ContentHandler</a> | <a href="http://java.sun.com/j2se/1.4/docs/api/java/util/Map.html">Map</a> ) <em>handler</em>) or </div>
+<div class="synopsis2"><a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a> <em>node</b></em><tt> ,  </tt><a href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a> <em>result</em> )</div>
+</div>
+
+<p>
+第2引数に関数が指定された場合、<tt>traverseDocument()</tt>はXML文書内の要素をたどったときに<em>enterFunc</em>を呼び出し、<em>exitFunc</em>が指定された場合はたどり終わった要素を引数にしてその関数を呼び出します。
+<p>
+第2引数に<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/ContentHandler.html">org.xml.sax.ContentHandler</a>オブジェクトが指定された場合、<em>document</em>から生成されたSAXイベントが<em>handler</em>によって処理されます。</p>
+<p>
+<em>handler</b></em>がMapオブジェクトの場合、キーは<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/xml/sax/helpers/DefaultHandler.html">org.xml.sax.helpers.DefaultHandler</a> のメソッド名で、値はそのメソッドのパラメータの数と同じ引数を取る関数でなければなりません。
+</p>
+<p>
+第2引数に<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a>オブジェクトが指定された場合、<em>document</em>をそのResultオブジェクトに転送します。
+</p>
+
+<a name="transformXSL"></a>
+
+<div class="box">
+<div class="synopsis"><b>transformXSL</b><tt>( <br>&nbsp;
+( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Source.html">javax.xml.transform.Source</a>
+) <em>source</em>,<br>&nbsp;
+( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/InputStream.html">InputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Reader.html">Reader</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/net/URL.html">URL</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Source.html">javax.xml.transform.Source</a>
+) <em>xsl</em>  <br>&nbsp; {,
+( <a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/OutputStream.html">OutputStream</a> |
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/Writer.html">Writer</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/io/File.html">File</a>
+|
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/javax/xml/transform/Result.html">javax.xml.transform.Result</a>
+) <em>output</em>
+} )</tt></div>
+</div>
+
+<p>
+<tt>transformXSL()</tt>は、XSLを使ってXML文書を整形します。
+<em>output</em>が指定される場合、結果の文書は<em>output</em>に書き込まれます。
+指定されない場合は、結果の文書が<a href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Document.html">org.w3c.dom.Document</a> オブジェクトとして返されます。
+</p>
+
+<a name="selectSingleNode"></a>
+
+<div class="box">
+<div class="synopsis"><b>selectSingleNode</b><tt>( <br>&nbsp; <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a>
+</tt><em>document</b></em><tt> ,<br>&nbsp;
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>xpath</em> <br>&nbsp; {, 
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>namespace</em> }
+)</tt>
+</div>
+</div>
+
+<p>
+<tt>selectSingleNode()</tt>は、XPath文字列を使ってXML文書のノードを選択します。
+</p>
+※JDK1.5より古いバージョンでは、Xalan-j 2.Xが必要になります。
+
+<a name="selectNodeList"></a>
+
+<div class="box">
+<div class="synopsis"><b>selectNodeList</b><tt>( <br>&nbsp; <a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/Node.html">org.w3c.dom.Node</a>
+</tt><em>document</b></em><tt> ,<br>&nbsp;
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>xpath</em> <br>&nbsp; {, 
+<a
+href="http://java.sun.com/j2se/1.4/ja/docs/ja/api/java/lang/String.html">String</a>
+<em>namespace</em> }
+)
+</tt></div>
+</div>
+
+<p>
+<tt>selectSingleNode()</tt>は、XPath文字列を使ってXML文書のノードリストを選択します。
+</p>
+※JDK1.5より古いバージョンでは、Xalan-j 2.Xが必要になります。
+
+<a name="nodeAccess"></a>
+
+<div class="box">
+<div class="synopsis"><b>nodeAccess</b><tt>( { <em>boolean</em> } )</tt></div>
+</div>
+
+<p>
+<tt>nodeAccess(true)</tt> は、実行コンテクストのConfigurationを<a
+href="../../apidoc/pnuts/xml/XMLConfiguration.html">pnuts.xml.XMLConfiguration</a>に変更することで、
+<a
+href="http://java.sun.com/j2se/1.4.1/docs/api/org/w3c/dom/NodeList.html">NodeList</a>
+オブジェクトの要素が [<em>number</em>] という式でアクセスできるようにします。また、それらの要素は<em>for/foreach</em>文で取り出せるようになります。
+</p>
+<tt>nodeAccess(false)</tt>は、<tt>nodeAccess(true)</tt>で設定されたConfigurationをリセットします。
+<p>
+引数なしの<tt>nodeAccess()</tt>は、<a href="../../apidoc/pnuts/xml/XMLConfiguration.html">pnuts.xml.XMLConfiguration</a>が、実行コンテクストで使われているかどうかをtrueまたはfalseで返します。
+</p>
+
+<a name="element"></a>
+<div class="box">
+<div class="synopsis"><b>element</b><tt>( { <em>namespaceURI</em>, } <em>tagName</em> )</tt></div>
+</div>
+<p>
+指定されたタグのXML要素を作成する関数を返します。
+element()を呼び出した結果の関数に文字列を指定すると、その文字列を内容とする要素ができます。
+</p>
+<pre class="eg">
+html = element("html")
+body = element("body")
+doc = html(body("hello"))
+writeDocument(doc())   // --> &lt;html&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+また、element()の呼び出し結果の関数に別の要素(ElementまたはDocument)を指定すると、その要素を含む要素になります。
+<pre class="eg">
+m = readDocument("module.xml")
+mset = element("module-set")
+mset(m)()
+</pre>
+
+element()を呼び出した結果の関数にMapを指定すると属性を定義できます。
+<pre class="eg">
+address = element(address)
+doc = address({"zip" => "1111111", "city" => "Jakarta"})
+writeDocument(doc())   // --> &lt;address zip="1111111" city="Jakarta"/&gt;
+</pre>
+
+<a name="defineTags"></a>
+<div class="box">
+<div class="synopsis"><b>defineTags</b><tt>( <em>tagName</em>, ... )</tt></div>
+</div>
+<p>
+指定されたタグのXML要素を作成する関数をカレントパッケージに定義します。
+</p>
+<pre class="eg">
+defineTags("html", "body")
+doc = html(body("hello"))   // --> &lt;html&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;
+doc().getClass()  // --> org.apache.crimson.tree.ElementNode class
+</pre>
+
+<a name="nodeEdit"></a>
+
+<div class="box">
+<div class="synopsis"><b>nodeEdit</b><tt>( { <em>boolean</em> } )</tt></div>
+</div>
+
+<p>
+<tt>nodeEdit(true)</tt> は、実行コンテクストのConfigurationを<a
+href="../../apidoc/pnuts/xml/NodeEditingConfiguration.html">pnuts.xml.NodeEditingConfiguration</a>に変更することで、
+トップレベルの未定義の変数が自動的にXMLノード作成関数になります。
+</p>
+<tt>nodeEdit(false)</tt>は、<tt>nodeEdit(true)</tt>で設定されたConfigurationをリセットします。
+<p>
+引数なしの<tt>nodeEdit()</tt>は、<a href="../../apidoc/pnuts/xml/NodeEditingConfiguration.html">pnuts.xml.NodeEditingConfiguration</a>が、実行コンテクストで使われているかどうかをtrueまたはfalseで返します。
+</p>
+<pre class="eg">
+nodeEdit(true)
+html(body(p("hello")))     // --> &lt;html&gt;&lt;body&gt;hello&lt;/body&gt;&lt;/html&gt;
+</pre>
+
+
+<div class="nav2"><a href="../../../doc.ja/guide.html">Pnuts ユーザーズガイド</a> -> <a href="index.html"><tt>pnuts.xml</tt></a> -> 関数</div>
+
+  </body>
+</html>

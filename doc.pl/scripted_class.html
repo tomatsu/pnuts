@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html lang="pl"><head>
+    
+    <title>Podr&#281;cznik Pnuts</title><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <link type="text/css" rel="stylesheet" href="stylesheet.css"></head>
+
+  <body>
+
+<div class="nav">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; U&#380;ywanie skryptowych klas z kodu Javy
+</div>
+
+<!-- body start -->
+
+    <h2>U&#380;ywanie skryptowych klas z kodu Javy</h2>
+
+<p>Skryptowe klasy mog&#261; by&#263; u&#380;yte z poziomu kodu Javy post&#281;puj&#261;c wg przedstwionych krok&oacute;w.
+</p>
+
+<h3>Kroki</h3>
+
+<h4>1. Ustanowi&#263; kontekst kt&oacute;ry b&#281;dzie u&#380;yty do wykonywania skrypt&oacute;w</h4>
+
+<p>
+W tym kroku kontekst kt&oacute;ry b&#281;dzie u&#380;yty przy wykonywaniu
+skrypt&oacute;w zostanie przypisany do bierz&#261;cego w&#261;tku przez
+Runtime.setThreadContext().
+</p>
+
+<div class="eg">
+<pre>import pnuts.lang.Context;<br>import pnuts.lang.Runtime;<br><br>Context context = new Context();<br>Runtime.setThreadContext(context);<br>context.usePackage("pnuts.tools"); // kt&oacute;ry modu&#322; b&#281;dzie u&#380;yty<br></pre>
+</div>
+
+<h4>2. Stworzenie instancji PnutsClassLoader</h4>
+
+<p>W tym kroku tworzony jest obiekt klasy&nbsp; PnutsClassLoader kt&oacute;ry mo&#380;e parsowa&#263;/kompilowa&#263; skryptowe klasy.
+</p>
+
+<div class="eg">
+<pre>import org.pnuts.lang.PnutsClassLoader;<br><br>ClassLoader classLoadser = new PnutsClassLoader(context);<br>Thread.currentThread().setContextClassLoader(classLoader);<br>Class cls = classLoader.loadClass(<em>className</em>);<br></pre>
+</div>
+
+<h3>Przyk&#322;ad</h3>
+
+<div class="eg">mymap.pnc
+<pre>import java.util.*<br>class mymap extends TreeMap {<br>  get(key){<br>    if ((v = super.get(key)) == null){<br>      super.put(key, v = set())<br>    }<br>    v<br>  }<br>}<br></pre>
+</div>
+
+<div class="eg">MyTest.java
+<pre>import pnuts.lang.Context;<br>import pnuts.lang.Runtime;<br>import org.pnuts.lang.PnutsClassLoader;<br>import java.util.Map;<br> <br>public class MyTest {<br>   static Context setupContext(){<br>      Context context = new Context();<br>      context.usePackage("pnuts.tools");<br>      return context;<br>   }<br>   public static void main(String[] args) throws Exception {<br>      Context context = setupContext();<br>      Runtime.setThreadContext(context);<br>      ClassLoader parent = Thread.currentThread().getContextClassLoader();<br>      ClassLoader cloader = new PnutsClassLoader(parent, context);<br>      Thread.currentThread().setContextClassLoader(cloader);<br>      Class cls = cloader.loadClass(args[0]);<br>      Map m = (Map)cls.newInstance();<br>      System.out.println(m.get("no_such_key"));<br>   }<br>}<br></pre>
+</div>
+
+<div class="eg">
+<pre>C:\&gt; set CLASSPATH=pnuts.jar;pnuts-modules.jar;.<br>C:\&gt; java MyTest mymap<br></pre>
+</div>
+<!-- body end -->
+
+<div class="nav2">
+<a href="guide.html">Podr&#281;cznik Pnuts</a> -&gt; U&#380;ywanie skryptowych klas z kodu Javy
+</div>
+
+  </body></html>
